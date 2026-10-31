@@ -28,10 +28,15 @@
 *[hard fork]: A coordinated rule change that every node adopts at an agreed point
 *[Yellow Paper]: Ethereum's formal specification, by Gavin Wood
 
-# Deliberately NOT defined here:
-#
-#   state, transaction, account, block, ether, wei, gwei
-#
-# These appear dozens of times per page — tooltipping every occurrence
-# would put a dotted underline under half the prose. They're in the
-# glossary, and pages link to them explicitly on first use instead.
+<!--
+  This file is appended to every page, so anything here that isn't a
+  *[term]: definition line renders as page content. Use HTML comments
+  only. Markdown has no # comment syntax — a # line becomes a top-level
+  heading at the foot of every page on the site.
+
+  Deliberately NOT defined here: state, transaction, account, block,
+  ether, wei, gwei. They appear dozens of times per page, and tooltipping
+  every occurrence would underline half the prose. They're in the
+  glossary, and pages link to them explicitly on first use instead.
+-->
+

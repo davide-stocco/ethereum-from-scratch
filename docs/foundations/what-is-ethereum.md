@@ -266,9 +266,3 @@ Listed in the order the claims they support appear on the page.
 
 </div>
 
-!!! warning "Verify before publishing"
-
-    I have not personally checked every citation above against the original
-    text. Confirm each one — author list, year, venue, and that it says what
-    this page claims it says — before this page goes public. A wrong citation
-    is worse than none.
