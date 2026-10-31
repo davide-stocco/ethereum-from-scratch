@@ -109,10 +109,14 @@ than maintaining two versions that drift apart.
    snippet.
 2. **Accessible main prose.** No unexplained jargon. This is the default
    reading path, and it must stand alone.
-3. **`??? abstract "The formal version"`** — a *collapsed* block wherever there
-   is a precise definition worth stating: specification notation, exact field
-   widths, edge cases. Collapsed by default, so a beginner skips it and a
-   specialist opens it. This is the layering mechanism.
+3. **Collapsed blocks** for anything a reader can skip without losing the
+   thread. This is the layering mechanism — one page serves both audiences,
+   instead of two pages that drift apart. Two kinds:
+      - `??? abstract "The formal version"` — specification notation, exact
+        field widths, edge cases.
+      - `??? info "Optional history: …"` — how something used to work and why it
+        changed. Often the clearest justification for the current design, and
+        the fork policy's "teach changes as history" in practice.
 4. **Footnotes** for citations attached to specific claims (`[^key]`).
 5. **A `## Sources` section** at the end, wrapped in
    `<div class="sources" markdown>`. Papers, specifications and EIPs —

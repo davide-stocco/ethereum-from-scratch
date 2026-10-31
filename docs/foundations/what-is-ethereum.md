@@ -34,9 +34,11 @@ This isn't a metaphor invented to help beginners, incidentally. Ethereum's forma
     the same output — which is the formal statement of the "no need to trust
     anyone" property described above.
 
-    At the block level the same idea applies with a block **B** in place of a
-    single transaction, via a block-level function **Π** that applies each of the
-    block's transactions in order and then finalises the result:
+    The same idea applies one level up, at the level of a **block** — a batch of
+    transactions, bundled together and added to the chain as a single unit.
+    (Blocks get a section of their own later; for now, a batch is all you need.)
+    Writing **B** for a block, there is a block-level function **Π** that applies
+    each of the block's transactions in order and then finalises the result:
 
     ```
     σ(t+1)  ≡  Π(σ(t), B)
@@ -72,11 +74,44 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     for its code. They need some groundwork to explain, so they wait for the
     [accounts](../accounts/accounts.md) page.
 
-    **State is committed per block, not per transaction.** Transactions really
-    are applied one at a time, and the diagram above is the right way to think
-    about it. But Ethereum only finalises a new state once per *block* —
-    the intermediate states between transactions exist during execution and are
-    never canonical.
+    **State is recorded per block, not per transaction.** Transactions really
+    are applied one at a time, exactly as the diagram shows. But transactions
+    travel in **blocks** — batches of a hundred or two, added to the chain as a
+    single unit — and Ethereum only *records* the state once per block, after
+    every transaction in it has run.
+
+    It's the difference between typing and saving. Every keystroke changes your
+    document; only hitting **Save** writes anything to disk. The states in
+    between genuinely existed, but nothing kept them.
+
+    So the states between transactions are real, and no one has a record of
+    them. Only the state at a block boundary is permanent and agreed on — which
+    is why the **block** is the unit the network agrees about, and why you'll see
+    everything from finality to reorganisations discussed per block rather than
+    per transaction.
+
+??? info "Optional history: why not record state per transaction? They tried."
+
+    It's a fair question, and Ethereum's first answer was the opposite of the
+    current one.
+
+    Before the **Byzantium** upgrade in 2017, every transaction carried its own
+    post-transaction state root — exactly the per-transaction snapshot the
+    design now lacks. You really could point at a single transaction and prove
+    the state immediately after it.
+
+    **EIP-658** [^eip658] removed that and replaced it with a one-bit
+    success-or-failure status code. The reasoning was practical: computing and
+    storing a full state fingerprint after every single transaction was
+    expensive, and almost nothing used them.
+
+    So the answer to "why not per transaction?" is that they did, and it wasn't
+    worth the cost.
+
+    One thing *is* still kept per transaction: its **receipt**, recording gas
+    used, any logs emitted, and whether it succeeded. So per-transaction
+    **outcomes** are committed; per-transaction **state snapshots** are not.
+    That's the precise line.
 
 ## What makes it different from Bitcoin
 
@@ -185,6 +220,12 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
 - Buterin, V., & Griffith, V. (2017). *Casper the Friendly Finality Gadget.* arXiv:1710.09437. The consensus layer's finality mechanism.
 - Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A. (2019). *Flash Boys 2.0: Frontrunning, Transaction Reordering, and Consensus Instability in Decentralized Exchanges.* IEEE S&P 2020. Evidence base for the transaction-ordering and censorship concerns noted above.
 - EIP-3675: *Upgrade consensus to Proof-of-Stake.* The specification of The Merge. <https://eips.ethereum.org/EIPS/eip-3675>
+
+[^eip658]:
+    EIP-658: *Embedding transaction status code in receipts.* Byzantium, 2017.
+    Replaced the intermediate post-transaction state root in each receipt with a
+    success/failure status code.
+    <https://eips.ethereum.org/EIPS/eip-658>
 
 </div>
 
