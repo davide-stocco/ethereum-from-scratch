@@ -67,12 +67,17 @@ graph LR
 
 That's Ethereum. Everything else on this site is detail about what's inside the state, what's inside a transaction, and how thousands of computers agree on which transactions happened and in what order.
 
-!!! note "Two simplifications I'll correct later"
+!!! note "Two simplifications"
 
-    **Accounts have four fields, not three.** Alongside the nonce and balance
-    there are two 32-byte fingerprints — one for the account's stored data, one
-    for its code. They need some groundwork to explain, so they wait for the
-    [accounts](../accounts/accounts.md) page.
+    **The address isn't one of the account's fields.** It's the key you look an
+    account *up* by — like a name in an index — not something the account
+    stores. So that table has four columns but shows only three stored values.
+
+    An account stores exactly four things: the **nonce**, the **balance**, and
+    two 32-byte fingerprints — one standing for everything the account holds in
+    storage, one for its code. The `Code?` column above is a yes-or-no
+    stand-in for that second fingerprint. Both fingerprints need groundwork to
+    explain, so they wait for the [accounts](../accounts/accounts.md) page.
 
     **State is recorded per block, not per transaction.** Transactions really
     are applied one at a time, exactly as the diagram shows. But transactions
@@ -117,21 +122,49 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
 
 Bitcoin is also a state machine, with a narrower job.
 
-It's often said that the difference is that Ethereum has code and Bitcoin doesn't. **That's not true.** Bitcoin has a scripting language, called Script, and it's used for real things: multi-signature wallets, timelocks, hash-locked payments.
+It's often said that the difference is that Ethereum has code and Bitcoin doesn't. **That's not true.** Bitcoin has a scripting language, called Script, and it's used for real things — wallets that need several people to approve a payment, or payments that can't be collected until a particular date.
 
-The difference is what *kind* of code.
+The difference is what the code is allowed to *do*.
 
-**Bitcoin's Script is deliberately stateless and limited.** It has no loops, and a script answers exactly one question: may this particular coin be spent? It cannot remember anything between transactions.
+**A Bitcoin script answers one yes-or-no question:** may this particular piece of money be spent, by this person, right now? It runs, it gives its answer, and it forgets everything. It has nowhere to store anything, and no way to look at what happened last week.
 
-**Ethereum's contracts are stateful and Turing-complete.** They can loop, they keep their own storage, and they can read what they wrote last week. That's the real divide — not code versus no code, but *stateless and bounded* versus *stateful and general-purpose*.
+**An Ethereum program has a memory of its own.** It gets its own space to write things down, and what it writes survives — so it can keep a count, record who did what, and read back a year later something it wrote today. It also isn't confined to a single yes-or-no answer; it can work through any calculation you can describe.
+
+That's the real divide. Not code versus no code, but **a one-off check versus a program that remembers.**
+
+??? abstract "The formal version"
+
+    In the usual terminology: Bitcoin's Script is **stateless** and
+    deliberately **not Turing-complete** — it has no loops or recursion, so
+    every script provably terminates, and its only output is whether a spend is
+    authorised. Bounded execution comes free from the restricted language.
+
+    Ethereum's contracts are **stateful** — each has a persistent key–value
+    store, addressed by 32-byte keys, that survives between calls — and the
+    EVM *is* Turing-complete. Termination therefore cannot come from the
+    language, so it's imposed economically instead: every operation costs gas,
+    the caller fixes a limit in advance, and execution halts when the limit is
+    reached.
+
+    The design trade is explicit. Bitcoin buys guaranteed termination by giving
+    up expressiveness. Ethereum keeps expressiveness and buys termination with
+    metering.
 
 Two things follow from this, and both matter.
 
 ### Accounts have persistent memory
 
-In Bitcoin, coins are the state. In Ethereum, **accounts** are the state — each with a balance that goes up and down, like a bank account.
+**In Bitcoin, the state is a collection of separate chunks of money.** Each chunk was produced by some earlier payment, and each can be spent exactly once, in full. There is no stored balance anywhere: your wallet works out "you have 0.4 bitcoin" by adding up the chunks it's able to spend. Spending one destroys it and creates new chunks — one for the recipient, one returning your change.
 
-This sounds like a small implementation detail. It isn't, and it's why we cover [accounts](../accounts/accounts.md) early on this site. It means an address is a thing that *persists* and can *remember* something between transactions.
+**In Ethereum, accounts are the state.** Your balance is a single number recorded against your address, and it goes up and down. Much closer to a bank account.
+
+This sounds like a small implementation difference. It isn't, and it's why we cover [accounts](../accounts/accounts.md) early on this site. It means an address is a thing that *persists* — somewhere to attach a balance, a counter, and eventually storage and code. Bitcoin has no equivalent place to put any of that, because it has no lasting object to attach it to.
+
+!!! info "The name for Bitcoin's chunks"
+
+    Those chunks of money are called **UTXOs** — unspent transaction outputs.
+    You'll meet the term constantly in comparisons between the two systems,
+    and it's worth knowing even though nothing on Ethereum uses it.
 
 ### Accounts can hold code
 
@@ -139,7 +172,7 @@ Some accounts have a program attached. These are **[smart contracts](../glossary
 
 When you send a transaction to a contract account, you're not just moving money — you're *calling the program*, and it runs. It can check conditions, do arithmetic, store results, and send ether onward. Every node on the network runs the same code on the same state and gets the same answer.
 
-Every step of that execution is **metered and capped**. The caller pays for each individual operation and sets a ceiling in advance, so a contract cannot run forever. That's what **[gas](../glossary.md#gas)** is for, and it's the reason an infinite loop in somebody's contract can't hang the network.
+Every step of that execution is **metered and capped**. The caller pays for each individual operation, and sets a ceiling in advance on how much work they're willing to pay for. (The unit that work is counted in is called **[gas](../glossary.md#gas)**; it gets a page of its own later.) When the ceiling is reached, execution stops — which is why an infinite loop in somebody's contract can't hang the network.
 
 That's the actual novelty. Bitcoin lets you agree on *who owns what*. Ethereum lets you agree on *what a program computed*.
 
@@ -155,13 +188,15 @@ That's the actual novelty. Bitcoin lets you agree on *who owns what*. Ethereum l
 
 Because the expensive part of a lot of agreements isn't the computing — it's the trusting.
 
-If you and I bet on a football match, one of us has to hold the money, and the other has to trust them to pay out. Normally we solve this with an institution: a bank, an exchange, a court. Those work, but they cost money, take time, can refuse you, and only exist in some countries.
+Suppose you're buying a second-hand camera from a stranger in another country. You'd rather not send the money before the camera arrives. They'd rather not post it before they've been paid. Someone has to go first, and whoever goes first carries all the risk.
 
-On Ethereum you can instead put the money somewhere neither of us controls, with the payout rule written as code. Neither of us has to be trusted to hold it, and neither does any third party.
+Normally an institution solves this: a marketplace that holds the payment until delivery, a bank, a card issuer who will reverse the charge. These work — but they cost money, take time, can refuse you, and only exist in some countries.
+
+On Ethereum you can instead put the money somewhere **neither of you controls**, with the release rule written as code. Neither of you has to be trusted to hold it, and neither does any third party.
 
 ### But there's a catch, and it's a big one
 
-A contract can hold the money and release it without trusting anyone. **It cannot know who won the match.**
+A contract can hold the money and release it without trusting anyone. **It cannot know whether the camera arrived.**
 
 Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the determinism that makes the whole system work would collapse.
 
@@ -219,7 +254,14 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
 - Zhang, F., Cecchetti, E., Croman, K., Juels, A., & Shi, E. (2016). *Town Crier: An Authenticated Data Feed for Smart Contracts.* ACM CCS 2016. States the oracle problem formally and surveys why contracts cannot query external data.
 - Buterin, V., & Griffith, V. (2017). *Casper the Friendly Finality Gadget.* arXiv:1710.09437. The consensus layer's finality mechanism.
 - Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A. (2019). *Flash Boys 2.0: Frontrunning, Transaction Reordering, and Consensus Instability in Decentralized Exchanges.* IEEE S&P 2020. Evidence base for the transaction-ordering and censorship concerns noted above.
-- EIP-3675: *Upgrade consensus to Proof-of-Stake.* The specification of The Merge. <https://eips.ethereum.org/EIPS/eip-3675>
+
+### On The Merge and the two layers
+
+- EIP-3675: *Upgrade consensus to Proof-of-Stake.* The specification of The Merge itself — how the execution layer stopped running its own consensus. <https://eips.ethereum.org/EIPS/eip-3675>
+- EIP-4399: *Supplant DIFFICULTY opcode with PREVRANDAO.* A concrete illustration of what the switch changed at the execution layer. <https://eips.ethereum.org/EIPS/eip-4399>
+- Edgington, B. *Upgrading Ethereum: A technical handbook on Ethereum's move to proof of stake and beyond.* The most thorough documentation of the consensus layer available, and free to read. <https://eth2book.info>
+- Ethereum Foundation. *Consensus specifications.* The executable specification of the Beacon Chain, including the Bellatrix release that handled the transition. <https://github.com/ethereum/consensus-specs>
+- Ethereum.org. *The Merge.* Maintained overview, with dates and the reasoning behind the design. <https://ethereum.org/en/roadmap/merge/>
 
 [^eip658]:
     EIP-658: *Embedding transaction status code in receipts.* Byzantium, 2017.
