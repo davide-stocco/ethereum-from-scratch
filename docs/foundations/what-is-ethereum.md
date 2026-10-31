@@ -76,9 +76,9 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
 
     **State is recorded per block, not per transaction.** Transactions really
     are applied one at a time, exactly as the diagram shows. But transactions
-    travel in **blocks** — batches of a hundred or two, added to the chain as a
-    single unit — and Ethereum only *records* the state once per block, after
-    every transaction in it has run.
+    travel in **[blocks](../glossary.md#block)** — batches of a hundred or two,
+    added to the chain as a single unit — and Ethereum only *records* the state
+    once per block, after every transaction in it has run.
 
     It's the difference between typing and saving. Every keystroke changes your
     document; only hitting **Save** writes anything to disk. The states in
@@ -135,11 +135,11 @@ This sounds like a small implementation detail. It isn't, and it's why we cover 
 
 ### Accounts can hold code
 
-Some accounts have a program attached. These are **smart contracts**.
+Some accounts have a program attached. These are **[smart contracts](../glossary.md#smart-contract)**.
 
 When you send a transaction to a contract account, you're not just moving money — you're *calling the program*, and it runs. It can check conditions, do arithmetic, store results, and send ether onward. Every node on the network runs the same code on the same state and gets the same answer.
 
-Every step of that execution is **metered and capped**. The caller pays for each individual operation and sets a ceiling in advance, so a contract cannot run forever. That's what gas is for, and it's the reason an infinite loop in somebody's contract can't hang the network.
+Every step of that execution is **metered and capped**. The caller pays for each individual operation and sets a ceiling in advance, so a contract cannot run forever. That's what **[gas](../glossary.md#gas)** is for, and it's the reason an infinite loop in somebody's contract can't hang the network.
 
 That's the actual novelty. Bitcoin lets you agree on *who owns what*. Ethereum lets you agree on *what a program computed*.
 
@@ -165,7 +165,7 @@ A contract can hold the money and release it without trusting anyone. **It canno
 
 Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the determinism that makes the whole system work would collapse.
 
-So something outside has to report the result. That reporter is called an **oracle**, and the moment you need one, you're trusting it. You've moved the trust rather than removed it.
+So something outside has to report the result. That reporter is called an **[oracle](../glossary.md#oracle)**, and the moment you need one, you're trusting it. You've moved the trust rather than removed it.
 
 This is worth being honest about, because it's the gap most introductions skip. What smart contracts genuinely eliminate is the need to trust a **custodian** — whoever would otherwise hold the money. They do nothing about trusting whoever supplies facts about the outside world.
 
@@ -180,7 +180,7 @@ One last thing before we move on, because it explains a lot of confusing termino
 Modern Ethereum is split in two:
 
 - The **execution layer** holds the accounts and runs the code. This is the state machine described above.
-- The **consensus layer** decides the *order* of transactions, using Proof of Stake.
+- The **consensus layer** decides the *order* of transactions, using [Proof of Stake](../glossary.md#proof-of-stake).
 
 Here's how it ended up that way, because the history is counter-intuitive.
 

@@ -127,6 +127,19 @@ than maintaining two versions that drift apart.
    author, year, title, venue, link, and a line on what it supports.
 6. **Verify every citation** against the original before publishing. A wrong
    reference costs more credibility than no reference.
+7. **Unfamiliar terms get a destination.** Three mechanisms, in priority order:
+      - If the term **has its own page**, link to that page. Always better than
+        a one-line definition.
+      - If it **doesn't have a page yet**, link to its glossary entry on first
+        use — `[gas](../glossary.md#gas)`. Anchors exist for all 40 terms.
+      - **Acronyms and short jargon** get a hover tooltip automatically, from
+        `includes/abbreviations.md`, with no markup in the prose. Deliberately
+        excludes words used dozens of times per page (state, transaction,
+        account, block, ether, wei) — tooltipping those would underline half
+        the text.
+
+   Link on **first use per page** only. A page where every third word is a link
+   is unreadable.
 
 `docs/foundations/what-is-ethereum.md` is the reference implementation of all
 six.
