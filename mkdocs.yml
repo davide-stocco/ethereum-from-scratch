@@ -3,8 +3,10 @@ site_description: How Ethereum works, built up from first principles — startin
 site_author: Davide
 
 site_url: https://davide-stocco.github.io/ethereum-from-scratch/
-repo_url: https://github.com/davide-stocco/ethereum-from-scratch
-repo_name: davide-stocco/ethereum-from-scratch
+
+# No repo_url on purpose — it puts a GitHub link in the site header, and the
+# repository is private, so the link would 404 for every visitor. The about
+# page links to it in prose instead, which is easy to update at launch.
 
 theme:
   name: material
