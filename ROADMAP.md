@@ -213,18 +213,30 @@ than maintaining two versions that drift apart.
    snippet.
 2. **Accessible main prose.** No unexplained jargon. This is the default
    reading path, and it must stand alone.
-3. **Collapsed blocks** for anything a reader can skip without losing the
-   thread. This is the layering mechanism — one page serves both audiences,
-   instead of two pages that drift apart. Two kinds:
+3. **Every extra box is collapsible — `???`, never `!!!`.** This is the
+   layering mechanism: one page serves both audiences instead of two pages that
+   drift apart. Common kinds:
       - `??? abstract "The formal version"` — specification notation, exact
         field widths, edge cases.
       - `??? info "History: …"` — how something used to work and why it
         changed. Often the clearest justification for the current design, and
         the fork policy's "teach changes as history" in practice.
+      - `??? note "…"` — asides, terminology, caveats.
 
-   Both are closed by default and the main prose must stand alone without them.
-   The homepage tells readers this explicitly, so skipping a box never feels
-   like missing something.
+   **No mixing.** An always-open `!!!` box sitting beside collapsed ones reads
+   as a mistake, and a reader can't tell what the convention is. All closed by
+   default; the main prose must stand alone without any of them.
+
+   **The only `!!!` boxes are status notices about the page itself** — the
+   "Stub — not written yet" warnings and the glossary's scope note. Those are
+   not content a reader may skip, so they stay open, and the difference in
+   purpose justifies the difference in form.
+
+   **A collapsed title has to be self-describing**, since it's all the reader
+   sees. "Two simplifications in the table above" works; "Note" doesn't.
+
+   Avoid double quotes inside a title — they terminate it early. Use single
+   quotes: `??? note "Where does the 'world computer' phrase come from?"`
 4. **In-text citations, author–date style**, linking to the reference:
    `[Wood (2014)](#ref-wood-2014)` when the author is the subject of the
    sentence, `[(Nakamoto, 2008)](#ref-nakamoto-2008)` when it's parenthetical.
@@ -257,19 +269,35 @@ than maintaining two versions that drift apart.
    Keep References as one flat alphabetical list. Only group under subheadings
    past roughly a dozen entries — the `.sources h3` style exists for that, but
    a heading over four items is heavier than it's worth.
-7. **Unfamiliar terms get a destination.** Three mechanisms, in priority order:
-      - If the term **has its own page**, link to that page. Always better than
-        a one-line definition.
-      - If it **doesn't have a page yet**, link to its glossary entry on first
-        use — `[gas](../glossary.md#gas)`. Anchors exist for all 40 terms.
-      - **Acronyms and short jargon** get a hover tooltip automatically, from
-        `includes/abbreviations.md`, with no markup in the prose. Deliberately
-        excludes words used dozens of times per page (state, transaction,
-        account, block, ether, wei) — tooltipping those would underline half
-        the text.
+7. **Unfamiliar terms: one mechanism only — a link carrying a title.**
 
-   Link on **first use per page** only. A page where every third word is a link
-   is unreadable.
+   ```markdown
+   [gas](../glossary.md#gas "The unit computational work is measured in")
+   ```
+
+   With `content.tooltips` enabled, this hovers *and* clicks: the title shows
+   as a styled tooltip in place, and the link goes to the full entry. The
+   reader never has to leave the page to look something up, but can go deeper
+   when they want to.
+
+   Rules:
+      - **Link to the term's own page if it has one**, otherwise its glossary
+        anchor. A real page always beats a one-line entry.
+      - **First use per page only.** A page where every third word is a link is
+        unreadable.
+      - **Keep the title short** — a phrase, not the glossary's full definition.
+        It stays readable, and there's less to drift out of step.
+      - **Don't link terms the page defines in place.** Sending someone to a
+        one-line entry for something just explained at length is worse than no
+        link. UTXO, Beacon Chain and the account fields are unlinked for this
+        reason.
+      - **Nothing is hover-only.** If a term is marked up at all, it is
+        clickable. Plain text means no affordance and no confusion.
+
+   The `abbr` extension was used for this and **removed deliberately**. It
+   produced hover-only terms, dotted-underlined so they looked clickable,
+   sitting beside real links — two mechanisms a reader could not tell apart,
+   with native browser tooltips that truncated long definitions.
 
 `docs/foundations/what-is-ethereum.md` is the reference implementation of all
 six.

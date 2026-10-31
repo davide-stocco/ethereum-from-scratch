@@ -31,7 +31,7 @@ tier: 1
 - "Contracts can't act on their own" is the single most clarifying fact for a beginner. Give it room.
 - `storageRoot` and `codeHash` can't be fully explained yet — they need the state trie and the EVM, neither of which is published. Name the fields, say what they commit to, and promise the detail later. Don't bluff it.
 
-!!! info "One thing here is changing"
+??? info "One thing here is changing: EIP-7702"
 
     The four account fields are permanent. The clean split between the two
     *kinds* of account is softening: **EIP-7702**, which shipped in May 2025,

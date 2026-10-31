@@ -18,7 +18,7 @@ A state machine is just two things:
 
 A chess board is a state machine. The state is where the pieces are. The rules are the legal moves. Given a board and a move, everyone in the world can work out the new board and they'll all get the same answer. There's no ambiguity, and there's no need to trust the person telling you the move was made.
 
-This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the [Yellow Paper](../glossary.md#yellow-paper), [Wood (2014)](#ref-wood-2014) — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
+This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the [Yellow Paper](../glossary.md#yellow-paper "Ethereum's formal specification, by Gavin Wood"), [Wood (2014)](#ref-wood-2014) — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
 
 ??? abstract "The formal version"
 
@@ -68,13 +68,13 @@ graph LR
 
 That's Ethereum. Everything else on this site is detail about what's inside the state, what's inside a transaction, and how thousands of computers agree on which transactions happened and in what order.
 
-!!! note "Two simplifications"
+??? note "Two simplifications in the table above"
 
     **The address isn't one of the account's fields.** It's the key you look an
     account *up* by — like a name in an index — not something the account
     stores. So that table has four columns but shows only three stored values.
 
-    An account stores exactly four things: the **[nonce](../accounts/nonce.md)**, the **balance**, and
+    An account stores exactly four things: the **[nonce](../accounts/nonce.md "A per-account counter of transactions already sent")**, the **balance**, and
     two 32-byte fingerprints — one standing for everything the account holds in
     storage, one for its code. The `Code?` column above is a yes-or-no
     stand-in for that second fingerprint. Both fingerprints need groundwork to
@@ -82,7 +82,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
 
     **State is recorded per block, not per transaction.** Transactions really
     are applied one at a time, exactly as the diagram shows. But transactions
-    travel in **[blocks](../glossary.md#block)** — batches of a hundred or two,
+    travel in **[blocks](../glossary.md#block "A batch of transactions, added to the chain as one unit")** — batches of a hundred or two,
     added to the chain as a single unit — and Ethereum only *records* the state
     once per block, after every transaction in it has run.
 
@@ -102,7 +102,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     current one.
 
     Before the **Byzantium** upgrade in 2017, every transaction carried its own
-    post-transaction [state root](../glossary.md#state-root) — exactly the
+    post-transaction [state root](../glossary.md#state-root "A single 32-byte fingerprint of the entire state") — exactly the
     per-transaction snapshot the design now lacks. You really could point at a single transaction and prove
     the state immediately after it.
 
@@ -114,8 +114,9 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     So the answer to "why not per transaction?" is that they did, and it wasn't
     worth the cost.
 
-    One thing *is* still kept per transaction: its **receipt**, recording gas
-    used, any logs emitted, and whether it succeeded. So per-transaction
+    One thing *is* still kept per transaction: its
+    **[receipt](../glossary.md#receipt "The record of what a transaction did — gas used, logs, success or failure")**,
+    recording gas used, any logs emitted, and whether it succeeded. So per-transaction
     **outcomes** are committed; per-transaction **state snapshots** are not.
     That's the precise line.
 
@@ -123,7 +124,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
 
 Bitcoin is also a state machine, with a narrower job.
 
-It's often said that the difference is that Ethereum has code and Bitcoin doesn't. **That's not true.** Bitcoin has a scripting language, called [Script](../glossary.md#script), and it's used for real things — wallets that need several people to approve a payment, or payments that can't be collected until a particular date.
+It's often said that the difference is that Ethereum has code and Bitcoin doesn't. **That's not true.** Bitcoin has a scripting language, called [Script](../glossary.md#script "Bitcoin's scripting language — deliberately stateless and limited"), and it's used for real things — wallets that need several people to approve a payment, or payments that can't be collected until a particular date.
 
 The difference is what the code is allowed to *do*.
 
@@ -136,14 +137,14 @@ That's the real divide. Not code versus no code, but **a one-off check versus a 
 ??? abstract "The formal version"
 
     In the usual terminology: Bitcoin's Script is **stateless** and
-    deliberately **not [Turing-complete](../glossary.md#turing-complete)** —
+    deliberately **not [Turing-complete](../glossary.md#turing-complete "Able to express any computation, loops included")** —
     it has no loops or recursion, so
     every script provably terminates, and its only output is whether a spend is
     authorised. Bounded execution comes free from the restricted language.
 
     Ethereum's contracts are **stateful** — each has a persistent key–value
     store, addressed by 32-byte keys, that survives between calls — and the
-    EVM *is* Turing-complete. Termination therefore cannot come from the
+    [EVM](../glossary.md#evm "The Ethereum Virtual Machine, which executes contract code") *is* Turing-complete. Termination therefore cannot come from the
     language, so it's imposed economically instead: every operation costs gas,
     the caller fixes a limit in advance, and execution halts when the limit is
     reached.
@@ -158,7 +159,7 @@ Two things follow from this, and both matter.
 
 **In Bitcoin, the state is a collection of separate chunks of money** [(Nakamoto, 2008)](#ref-nakamoto-2008). Each chunk was produced by some earlier payment, and each can be spent exactly once, in full. There is no stored balance anywhere: your wallet works out "you have 0.4 bitcoin" by adding up the chunks it's able to spend. Spending one destroys it and creates new chunks — one for the recipient, one returning your change.
 
-!!! info "The name for those chunks"
+??? info "The name for those chunks: UTXOs"
 
     They're called **UTXOs** — unspent transaction outputs. You'll meet the
     term constantly in comparisons between the two systems, and it's worth
@@ -170,15 +171,15 @@ This sounds like a small implementation difference. It isn't — [Buterin (2014)
 
 ### Accounts can hold code
 
-Some accounts have a program attached. These are **[smart contracts](../glossary.md#smart-contract)**.
+Some accounts have a program attached. These are **[smart contracts](../glossary.md#smart-contract "A program stored at an account, run by the network when called")**.
 
 When you send a transaction to a contract account, you're not just moving money — you're *calling the program*, and it runs. It can check conditions, do arithmetic, store results, and send ether onward. Every node on the network runs the same code on the same state and gets the same answer.
 
-Every step of that execution is **metered and capped**. The caller pays for each individual operation, and sets a ceiling in advance on how much work they're willing to pay for. (The unit that work is counted in is called **[gas](../glossary.md#gas)**; it gets a page of its own later.) When the ceiling is reached, execution stops — which is why an infinite loop in somebody's contract can't hang the network.
+Every step of that execution is **metered and capped**. The caller pays for each individual operation, and sets a ceiling in advance on how much work they're willing to pay for. (The unit that work is counted in is called **[gas](../glossary.md#gas "The unit computational work is measured in")**; it gets a page of its own later.) When the ceiling is reached, execution stops — which is why an infinite loop in somebody's contract can't hang the network.
 
 That's the actual novelty. Bitcoin lets you agree on *who owns what*. Ethereum lets you agree on *what a program computed*.
 
-!!! note "So where does the "world computer" phrase come from?"
+??? note "So where does the 'world computer' phrase come from?"
 
     This is the kernel of truth in it. Ethereum really does execute programs, and the whole network agrees on the results.
 
@@ -200,9 +201,9 @@ On Ethereum you can instead put the money somewhere **neither of you controls**,
 
 A contract can hold the money and release it without trusting anyone. **It cannot know whether the camera arrived.**
 
-Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the determinism that makes the whole system work would collapse.
+Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the [determinism](../glossary.md#determinism "The same inputs always produce the same result, for everyone") that makes the whole system work would collapse.
 
-So something outside has to report the result. That reporter is called an **[oracle](../glossary.md#oracle)**, and the moment you need one, you're trusting it. You've moved the trust rather than removed it. [Zhang et al. (2016)](#ref-zhang-2016) set the problem out formally.
+So something outside has to report the result. That reporter is called an **[oracle](../glossary.md#oracle "A service that reports off-chain facts to a contract")**, and the moment you need one, you're trusting it. You've moved the trust rather than removed it. [Zhang et al. (2016)](#ref-zhang-2016) set the problem out formally.
 
 This is worth being honest about, because it's the gap most introductions skip. What smart contracts genuinely eliminate is the need to trust a **custodian** — whoever would otherwise hold the money. They do nothing about trusting whoever supplies facts about the outside world.
 
@@ -217,7 +218,7 @@ One last thing before we move on, because it explains a lot of confusing termino
 Modern Ethereum is split in two:
 
 - The **execution layer** holds the accounts and runs the code. This is the state machine described above.
-- The **consensus layer** decides the *order* of transactions, using [Proof of Stake](../glossary.md#proof-of-stake).
+- The **consensus layer** decides the *order* of transactions, using [Proof of Stake](../glossary.md#proof-of-stake "How Ethereum has agreed transaction order since 2022").
 
 Here's how it ended up that way, because the history is counter-intuitive.
 

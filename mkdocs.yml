@@ -17,6 +17,7 @@ theme:
     - search.suggest
     - search.highlight
     - content.code.copy        # copy button on code blocks
+    - content.tooltips         # styled tooltips instead of native browser ones
     - toc.follow
   palette:
     # Light mode
@@ -47,15 +48,14 @@ markdown_extensions:
   - tables
   - footnotes
   - def_list                   # the glossary's "term / definition" layout
-  - abbr                       # hover tooltips for acronyms
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
-  # Appends includes/abbreviations.md to every page, so acronyms get a
-  # tooltip everywhere without having to mark them up by hand.
-  - pymdownx.snippets:
-      auto_append:
-        - includes/abbreviations.md
+  - pymdownx.snippets
+  # Note: the `abbr` extension was removed deliberately. It produced
+  # hover-only terms that looked clickable but weren't, sitting alongside real
+  # glossary links — two mechanisms a reader couldn't tell apart. Now there is
+  # exactly one: a link carrying a title, which hovers AND clicks through.
   - pymdownx.superfences:
       # lets you write ```mermaid diagrams
       custom_fences:

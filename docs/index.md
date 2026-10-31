@@ -27,12 +27,14 @@ Some pages also carry **collapsible boxes**, closed by default, in two kinds:
 
 ## If a word is unfamiliar
 
-Two things to look for, and they behave differently:
+Technical terms are linked the first time each page uses one, and every link does two things:
 
-- **A coloured link** goes somewhere — either the page that explains the term properly, or its entry in the [glossary](glossary.md).
-- **A dotted underline** is hoverable, not clickable. Hold your cursor over it and a short definition appears. These are mostly acronyms, where knowing what the letters stand for is all you need.
+- **Hover it** and a short definition appears, without leaving the page. Usually that's enough to carry on reading.
+- **Click it** and you go to the full entry — either the page that explains the term properly, or the [glossary](glossary.md).
 
-The [glossary](glossary.md) has a one-line definition of every term used on the site, so it's always worth a look if something isn't landing.
+So you need never lose your place to look something up, and you can go deeper when a one-line reminder isn't enough.
+
+The [glossary](glossary.md) also stands alone: it defines every term used anywhere on the site.
 
 ---
 

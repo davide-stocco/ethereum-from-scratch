@@ -16,7 +16,7 @@ tier: 1
 - Why 20 bytes / 40 hex characters, when the hash is 32 bytes?
 - Why does every address start with `0x`? (It's just the convention for "this is hexadecimal" — not part of the address.)
 - What is the mixed-case capitalisation about? (EIP-55 checksum: the capitalisation itself encodes a checksum, so typos are detectable. An all-lowercase address is still valid.)
-- Why do contract addresses look identical to normal ones, and how are they derived differently? (From the creator's address and [nonce](../accounts/nonce.md), not from a public key.)
+- Why do contract addresses look identical to normal ones, and how are they derived differently? (From the creator's address and [nonce](../accounts/nonce.md "A per-account counter of transactions already sent"), not from a public key.)
 - Can an address exist before anyone has used it? (Yes — all 2<sup>160</sup> of them exist in principle, holding nothing.)
 
 ## Notes to self

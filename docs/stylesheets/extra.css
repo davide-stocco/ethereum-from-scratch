@@ -36,32 +36,6 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Tooltip terms vs. links
-   ---------------------------------------------------------------------------
-   Two different things look similar by default, and readers try clicking both:
-     - an <abbr> shows a definition on HOVER and goes nowhere
-     - a link GOES somewhere
-   So give abbr a faint dotted underline in the body text colour and a help
-   cursor, and never the link colour. The rule: coloured text is clickable,
-   dotted text is hoverable.
-   --------------------------------------------------------------------------- */
-
-.md-typeset abbr {
-  text-decoration: none;
-  border-bottom: 1px dotted currentColor;
-  cursor: help;
-  color: inherit;
-  opacity: 0.95;
-}
-
-/* An abbr inside a link is a linked term that also has a tooltip — let the
-   link's own styling win so it doesn't read as two different things. */
-.md-typeset a abbr {
-  border-bottom: none;
-  cursor: pointer;
-}
-
-/* ---------------------------------------------------------------------------
    Sources sections
    ---------------------------------------------------------------------------
    Each page ends with its references. Set them slightly smaller and looser
