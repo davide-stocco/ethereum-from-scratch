@@ -99,6 +99,32 @@ Note that every one of these operates on **fork-proof** material, so they won't 
 
 ---
 
+## Page conventions
+
+Every page follows the same template. The point is that a beginner and a
+specialist can read the *same* page and each get what they came for — rather
+than maintaining two versions that drift apart.
+
+1. **`description:` frontmatter** — one sentence, used as the search-result
+   snippet.
+2. **Accessible main prose.** No unexplained jargon. This is the default
+   reading path, and it must stand alone.
+3. **`??? abstract "The formal version"`** — a *collapsed* block wherever there
+   is a precise definition worth stating: specification notation, exact field
+   widths, edge cases. Collapsed by default, so a beginner skips it and a
+   specialist opens it. This is the layering mechanism.
+4. **Footnotes** for citations attached to specific claims (`[^key]`).
+5. **A `## Sources` section** at the end, wrapped in
+   `<div class="sources" markdown>`. Papers, specifications and EIPs —
+   author, year, title, venue, link, and a line on what it supports.
+6. **Verify every citation** against the original before publishing. A wrong
+   reference costs more credibility than no reference.
+
+`docs/foundations/what-is-ethereum.md` is the reference implementation of all
+six.
+
+---
+
 ## Known ordering tensions
 
 Worth staying conscious of these:

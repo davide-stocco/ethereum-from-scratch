@@ -17,7 +17,34 @@ A state machine is just two things:
 
 A chess board is a state machine. The state is where the pieces are. The rules are the legal moves. Given a board and a move, everyone in the world can work out the new board and they'll all get the same answer. There's no ambiguity, and there's no need to trust the person telling you the move was made.
 
-This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the Yellow Paper — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
+This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the Yellow Paper [^yellowpaper] — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
+
+??? abstract "The formal version"
+
+    The Yellow Paper writes the state transition as a function. If **σ** is the
+    world state and **T** a transaction:
+
+    ```
+    σ(t+1)  ≡  Υ(σ(t), T)
+    ```
+
+    **Υ** (upsilon) is the state transition function: it takes a state and a
+    transaction and returns the next state. Because Υ is a deterministic
+    function, every node computing it on the same inputs necessarily arrives at
+    the same output — which is the formal statement of the "no need to trust
+    anyone" property described above.
+
+    At the block level the same idea applies with a block **B** in place of a
+    single transaction, via a block-level function **Π** that applies each of the
+    block's transactions in order and then finalises the result:
+
+    ```
+    σ(t+1)  ≡  Π(σ(t), B)
+    ```
+
+    This is why state is committed per block rather than per transaction: Π is
+    the function whose output gets recorded, and Υ is applied internally along
+    the way.
 
 Ethereum works exactly like this. Its state is every account and what each one holds:
 
@@ -139,3 +166,31 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
 - Contracts remove the need for a trusted **custodian**. They don't remove the need to trust whoever reports facts from outside the chain.
 
 **Next:** [Ether, wei and gwei](ether.md) — the units, so the numbers on later pages mean something.
+
+---
+
+## Sources
+
+<div class="sources" markdown>
+
+[^yellowpaper]:
+    Wood, G. *Ethereum: A Secure Decentralised Generalised Transaction Ledger.*
+    Ethereum project yellow paper. The formal specification; §2 and §4 cover the
+    state transition function and account state.
+    <https://ethereum.github.io/yellowpaper/paper.pdf>
+
+- Buterin, V. (2014). *Ethereum White Paper: A Next-Generation Smart Contract and Decentralized Application Platform.* The original design rationale, including the account-versus-UTXO argument. <https://ethereum.org/en/whitepaper/>
+- Nakamoto, S. (2008). *Bitcoin: A Peer-to-Peer Electronic Cash System.* For the Bitcoin comparison and the UTXO model. <https://bitcoin.org/bitcoin.pdf>
+- Zhang, F., Cecchetti, E., Croman, K., Juels, A., & Shi, E. (2016). *Town Crier: An Authenticated Data Feed for Smart Contracts.* ACM CCS 2016. States the oracle problem formally and surveys why contracts cannot query external data.
+- Buterin, V., & Griffith, V. (2017). *Casper the Friendly Finality Gadget.* arXiv:1710.09437. The consensus layer's finality mechanism.
+- Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A. (2019). *Flash Boys 2.0: Frontrunning, Transaction Reordering, and Consensus Instability in Decentralized Exchanges.* IEEE S&P 2020. Evidence base for the transaction-ordering and censorship concerns noted above.
+- EIP-3675: *Upgrade consensus to Proof-of-Stake.* The specification of The Merge. <https://eips.ethereum.org/EIPS/eip-3675>
+
+</div>
+
+!!! warning "Verify before publishing"
+
+    I have not personally checked every citation above against the original
+    text. Confirm each one — author list, year, venue, and that it says what
+    this page claims it says — before this page goes public. A wrong citation
+    is worse than none.

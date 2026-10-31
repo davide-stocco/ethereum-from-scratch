@@ -1,0 +1,52 @@
+/* ---------------------------------------------------------------------------
+   Headings
+   ---------------------------------------------------------------------------
+   Material's default heading weight is light, which reads fine on white but
+   nearly disappears against the dark background — headings end up the same
+   visual weight as body text and the page structure stops being scannable.
+   Heavier in both themes for consistency, plus full white and a hairline
+   rule in dark mode so sections are identifiable at a glance.
+   --------------------------------------------------------------------------- */
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5 {
+  font-weight: 700;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3,
+[data-md-color-scheme="slate"] .md-typeset h4,
+[data-md-color-scheme="slate"] .md-typeset h5 {
+  color: #ffffff;
+}
+
+/* Section separator. Makes the h2 boundaries visible without relying on
+   font size alone. */
+.md-typeset h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+
+/* ---------------------------------------------------------------------------
+   Sources sections
+   ---------------------------------------------------------------------------
+   Each page ends with its references. Set them slightly smaller and looser
+   than body text, the way a bibliography reads in a paper.
+   --------------------------------------------------------------------------- */
+
+.md-typeset .sources {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.md-typeset .sources li {
+  margin-bottom: 0.5em;
+}
