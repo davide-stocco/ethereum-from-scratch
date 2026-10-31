@@ -12,6 +12,16 @@ Which means this site has an obvious caveat: **it's written by a learner, not an
 
 **More about me:** <https://sites.google.com/view/davidestocco/>
 
+## How this site is written
+
+**A large part of the prose on this site was drafted with an AI assistant** (Claude), and you should know that before deciding how much to trust it.
+
+What that looks like in practice: I decide what each page needs to cover and in what order, I question explanations that don't convince me, and I check claims against primary sources. The assistant drafts, suggests structure, and catches gaps — and I've had it argue me out of several things I had wrong, as well as putting things in that I then had to correct.
+
+I'm saying so for three reasons. It's **honest**, and a page that admits to being written by a learner shouldn't be coy about its tools. It's **relevant** — AI-drafted technical writing has a known failure mode of sounding authoritative while being subtly wrong, which is precisely why every factual claim here is tied to a reference you can check yourself. And it's **standard practice** in the research world I come from, where disclosing your tools isn't an apology, it's method.
+
+The references are the safeguard. If a claim on this site isn't cited, treat it as something I believe rather than something I've verified.
+
 ---
 
 <!--
