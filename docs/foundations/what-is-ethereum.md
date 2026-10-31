@@ -156,15 +156,15 @@ Two things follow from this, and both matter.
 
 **In Bitcoin, the state is a collection of separate chunks of money.** Each chunk was produced by some earlier payment, and each can be spent exactly once, in full. There is no stored balance anywhere: your wallet works out "you have 0.4 bitcoin" by adding up the chunks it's able to spend. Spending one destroys it and creates new chunks — one for the recipient, one returning your change.
 
+!!! info "The name for those chunks"
+
+    They're called **UTXOs** — unspent transaction outputs. You'll meet the
+    term constantly in comparisons between the two systems, and it's worth
+    knowing even though nothing on Ethereum uses it.
+
 **In Ethereum, accounts are the state.** Your balance is a single number recorded against your address, and it goes up and down. Much closer to a bank account.
 
 This sounds like a small implementation difference. It isn't, and it's why we cover [accounts](../accounts/accounts.md) early on this site. It means an address is a thing that *persists* — somewhere to attach a balance, a counter, and eventually storage and code. Bitcoin has no equivalent place to put any of that, because it has no lasting object to attach it to.
-
-!!! info "The name for Bitcoin's chunks"
-
-    Those chunks of money are called **UTXOs** — unspent transaction outputs.
-    You'll meet the term constantly in comparisons between the two systems,
-    and it's worth knowing even though nothing on Ethereum uses it.
 
 ### Accounts can hold code
 

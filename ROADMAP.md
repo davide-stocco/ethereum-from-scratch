@@ -54,6 +54,36 @@ Everything here has been true since 2015 and cannot realistically change. Write 
 - Events and logs — mechanism unchanged
 - ERC-20 and ERC-721 — finalised standards, immutable
 - Stack, memory and storage — the EVM's 256-bit word and 1024-item stack
+- **The oracle problem** — why a deterministic machine cannot read the outside
+  world. See the splitting rule below.
+- **Why transaction order has to be agreed** — the double-spend problem and why
+  a shared state needs a single ordering. Also per the splitting rule.
+
+### The problem/solution splitting rule
+
+A useful pattern turned up while scoping Proof of Stake and oracles, and it
+applies more widely:
+
+> **The problem a mechanism solves is usually fork-proof. The mechanism isn't.**
+
+Ethereum has always needed transactions put in an agreed order, and a
+deterministic machine has always been unable to query the internet. Those facts
+follow from the design and cannot change. *How* Ethereum orders transactions was
+replaced wholesale at The Merge, and oracle designs are commercial products that
+change constantly.
+
+So split the page. The **problem** belongs in Phase 1 and never needs
+maintaining; the **mechanism** belongs in Phase 2 with a date stamp. This also
+reads better — a reader who understands why ordering is hard is far better
+prepared for Proof of Stake than one who meets validators and epochs cold.
+
+Applies to: consensus, oracles, scaling (why throughput is limited vs. how
+rollups work), and fees (why metering is necessary vs. the current fee market).
+
+**Scope warning for the oracle page:** cover the problem and why it's
+unavoidable. Do *not* survey oracle providers — that's fast-moving commercial
+ecosystem content with a permanent maintenance cost, and it would be the only
+page on the site that rots.
 
 ---
 
