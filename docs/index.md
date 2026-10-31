@@ -10,6 +10,19 @@ This site tries something different, with two rules.
 
 That makes for a narrower site than it could be. It's also the part worth learning first.
 
+## How to read a page
+
+The main text of every page is written to be read start to finish with no prior knowledge, and it stands on its own.
+
+Some pages also carry **collapsible boxes**, closed by default, in two kinds:
+
+- **The formal version** — the precise, specification-level statement of what the page just explained in plain language. Exact notation, exact field widths, edge cases.
+- **History** — how something used to work, and why it changed. Often the clearest explanation of why the current design is the way it is.
+
+**If you're new to Ethereum, you can leave every one of them closed and lose nothing.** They aren't continuations of the main text, and they're not material you're expected to get through — they're there for readers who want the exact definition or the reasoning behind a decision. Open them when a page leaves you wanting more precision, and ignore them otherwise.
+
+If a term is unfamiliar, the [glossary](glossary.md) has a one-line definition of everything used on the site.
+
 ---
 
 ## Where to start

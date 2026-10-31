@@ -114,9 +114,13 @@ than maintaining two versions that drift apart.
    instead of two pages that drift apart. Two kinds:
       - `??? abstract "The formal version"` — specification notation, exact
         field widths, edge cases.
-      - `??? info "Optional history: …"` — how something used to work and why it
+      - `??? info "History: …"` — how something used to work and why it
         changed. Often the clearest justification for the current design, and
         the fork policy's "teach changes as history" in practice.
+
+   Both are closed by default and the main prose must stand alone without them.
+   The homepage tells readers this explicitly, so skipping a box never feels
+   like missing something.
 4. **Footnotes** for citations attached to specific claims (`[^key]`).
 5. **A `## Sources` section** at the end, wrapped in
    `<div class="sources" markdown>`. Papers, specifications and EIPs —

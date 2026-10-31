@@ -90,7 +90,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     everything from finality to reorganisations discussed per block rather than
     per transaction.
 
-??? info "Optional history: why not record state per transaction? They tried."
+??? info "History: why not record state per transaction? They tried."
 
     It's a fair question, and Ethereum's first answer was the opposite of the
     current one.
