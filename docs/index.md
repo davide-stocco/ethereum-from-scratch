@@ -25,7 +25,14 @@ Some pages also carry **collapsible boxes**, closed by default, in two kinds:
 
 **If you're new to Ethereum, you can leave every one of them closed and lose nothing.** They aren't continuations of the main text, and they're not material you're expected to get through — they're there for readers who want the exact definition or the reasoning behind a decision. Open them when a page leaves you wanting more precision, and ignore them otherwise.
 
-If a term is unfamiliar, the [glossary](glossary.md) has a one-line definition of everything used on the site.
+## If a word is unfamiliar
+
+Two things to look for, and they behave differently:
+
+- **A coloured link** goes somewhere — either the page that explains the term properly, or its entry in the [glossary](glossary.md).
+- **A dotted underline** is hoverable, not clickable. Hold your cursor over it and a short definition appears. These are mostly acronyms, where knowing what the letters stand for is all you need.
+
+The [glossary](glossary.md) has a one-line definition of every term used on the site, so it's always worth a look if something isn't landing.
 
 ---
 

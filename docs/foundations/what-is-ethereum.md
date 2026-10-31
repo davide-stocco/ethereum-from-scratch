@@ -18,7 +18,7 @@ A state machine is just two things:
 
 A chess board is a state machine. The state is where the pieces are. The rules are the legal moves. Given a board and a move, everyone in the world can work out the new board and they'll all get the same answer. There's no ambiguity, and there's no need to trust the person telling you the move was made.
 
-This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the Yellow Paper, [Wood (2014)](#ref-wood-2014) — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
+This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the [Yellow Paper](../glossary.md#yellow-paper), [Wood (2014)](#ref-wood-2014) — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
 
 ??? abstract "The formal version"
 
@@ -74,7 +74,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     account *up* by — like a name in an index — not something the account
     stores. So that table has four columns but shows only three stored values.
 
-    An account stores exactly four things: the **nonce**, the **balance**, and
+    An account stores exactly four things: the **[nonce](../accounts/nonce.md)**, the **balance**, and
     two 32-byte fingerprints — one standing for everything the account holds in
     storage, one for its code. The `Code?` column above is a yes-or-no
     stand-in for that second fingerprint. Both fingerprints need groundwork to
@@ -102,8 +102,8 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     current one.
 
     Before the **Byzantium** upgrade in 2017, every transaction carried its own
-    post-transaction state root — exactly the per-transaction snapshot the
-    design now lacks. You really could point at a single transaction and prove
+    post-transaction [state root](../glossary.md#state-root) — exactly the
+    per-transaction snapshot the design now lacks. You really could point at a single transaction and prove
     the state immediately after it.
 
     [EIP-658 (2017)](#ref-eip-658) removed that and replaced it with a one-bit
@@ -123,7 +123,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
 
 Bitcoin is also a state machine, with a narrower job.
 
-It's often said that the difference is that Ethereum has code and Bitcoin doesn't. **That's not true.** Bitcoin has a scripting language, called Script, and it's used for real things — wallets that need several people to approve a payment, or payments that can't be collected until a particular date.
+It's often said that the difference is that Ethereum has code and Bitcoin doesn't. **That's not true.** Bitcoin has a scripting language, called [Script](../glossary.md#script), and it's used for real things — wallets that need several people to approve a payment, or payments that can't be collected until a particular date.
 
 The difference is what the code is allowed to *do*.
 
@@ -136,7 +136,8 @@ That's the real divide. Not code versus no code, but **a one-off check versus a 
 ??? abstract "The formal version"
 
     In the usual terminology: Bitcoin's Script is **stateless** and
-    deliberately **not Turing-complete** — it has no loops or recursion, so
+    deliberately **not [Turing-complete](../glossary.md#turing-complete)** —
+    it has no loops or recursion, so
     every script provably terminates, and its only output is whether a spend is
     authorised. Bounded execution comes free from the restricted language.
 
