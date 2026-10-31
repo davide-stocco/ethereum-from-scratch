@@ -50,3 +50,17 @@
 .md-typeset .sources li {
   margin-bottom: 0.5em;
 }
+
+/* Subheadings inside a Sources list, for pages with enough references to
+   need grouping. Kept small and ruleless so they read as labels within the
+   bibliography rather than as sections of the page. */
+.md-typeset .sources h3,
+.md-typeset .sources h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 1.4em 0 0.6em;
+  border-bottom: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}

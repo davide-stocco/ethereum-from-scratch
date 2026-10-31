@@ -249,19 +249,14 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
     state transition function and account state.
     <https://ethereum.github.io/yellowpaper/paper.pdf>
 
-- Buterin, V. (2014). *Ethereum White Paper: A Next-Generation Smart Contract and Decentralized Application Platform.* The original design rationale, including the account-versus-UTXO argument. <https://ethereum.org/en/whitepaper/>
-- Nakamoto, S. (2008). *Bitcoin: A Peer-to-Peer Electronic Cash System.* For the Bitcoin comparison and the UTXO model. <https://bitcoin.org/bitcoin.pdf>
-- Zhang, F., Cecchetti, E., Croman, K., Juels, A., & Shi, E. (2016). *Town Crier: An Authenticated Data Feed for Smart Contracts.* ACM CCS 2016. States the oracle problem formally and surveys why contracts cannot query external data.
-- Buterin, V., & Griffith, V. (2017). *Casper the Friendly Finality Gadget.* arXiv:1710.09437. The consensus layer's finality mechanism.
-- Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A. (2019). *Flash Boys 2.0: Frontrunning, Transaction Reordering, and Consensus Instability in Decentralized Exchanges.* IEEE S&P 2020. Evidence base for the transaction-ordering and censorship concerns noted above.
+Listed in the order the claims they support appear on the page.
 
-### On The Merge and the two layers
-
-- EIP-3675: *Upgrade consensus to Proof-of-Stake.* The specification of The Merge itself — how the execution layer stopped running its own consensus. <https://eips.ethereum.org/EIPS/eip-3675>
-- EIP-4399: *Supplant DIFFICULTY opcode with PREVRANDAO.* A concrete illustration of what the switch changed at the execution layer. <https://eips.ethereum.org/EIPS/eip-4399>
-- Edgington, B. *Upgrading Ethereum: A technical handbook on Ethereum's move to proof of stake and beyond.* The most thorough documentation of the consensus layer available, and free to read. <https://eth2book.info>
-- Ethereum Foundation. *Consensus specifications.* The executable specification of the Beacon Chain, including the Bellatrix release that handled the transition. <https://github.com/ethereum/consensus-specs>
-- Ethereum.org. *The Merge.* Maintained overview, with dates and the reasoning behind the design. <https://ethereum.org/en/roadmap/merge/>
+- Nakamoto, S. (2008). *Bitcoin: A Peer-to-Peer Electronic Cash System.* Supports the Bitcoin comparison — the model where separate unspent outputs are the state, and Script decides whether each may be spent. <https://bitcoin.org/bitcoin.pdf>
+- Buterin, V. (2014). *Ethereum White Paper.* Supports the account-versus-outputs argument, which it makes explicitly and at length. <https://ethereum.org/en/whitepaper/>
+- Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A. (2019). *Flash Boys 2.0: Frontrunning, Transaction Reordering, and Consensus Instability in Decentralized Exchanges.* IEEE S&P 2020. Supports the claim that transaction ordering is contestable and profitable to manipulate. Note it concerns reordering rather than censorship specifically — adjacent evidence, not a direct source for the builder-concentration point.
+- Zhang, F., Cecchetti, E., Croman, K., Juels, A., & Shi, E. (2016). *Town Crier: An Authenticated Data Feed for Smart Contracts.* ACM CCS 2016. Supports the oracle section: states the problem formally and explains why a contract cannot query external data itself.
+- EIP-3675: *Upgrade consensus to Proof-of-Stake.* Supports the account of The Merge — how the execution layer stopped running its own consensus and began taking ordering from the Beacon Chain. <https://eips.ethereum.org/EIPS/eip-3675>
+- Edgington, B. *Upgrading Ethereum.* Further reading rather than a source for any specific claim here: the most thorough documentation of the consensus layer available, and free. <https://eth2book.info>
 
 [^eip658]:
     EIP-658: *Embedding transaction status code in receipts.* Byzantium, 2017.

@@ -127,6 +127,20 @@ than maintaining two versions that drift apart.
    author, year, title, venue, link, and a line on what it supports.
 6. **Verify every citation** against the original before publishing. A wrong
    reference costs more credibility than no reference.
+
+   Two further rules on citations, both learned the hard way:
+
+      - **Cite what the page claims, not what the page is about.** Every entry
+        must name the specific claim it supports. A paper cited because it's
+        topically adjacent is padding, and a reader who follows it up and finds
+        nothing relevant trusts the rest of the page less.
+      - **Say so when the fit is partial.** If a source is the best available
+        evidence but not a direct one, write that into the entry. It costs a
+        clause and buys the reader's trust.
+
+   Keep Sources as one flat list ordered by where the claims appear. Only group
+   under subheadings past roughly a dozen entries — the `.sources h3` style
+   exists for that, but a heading over four items is heavier than it's worth.
 7. **Unfamiliar terms get a destination.** Three mechanisms, in priority order:
       - If the term **has its own page**, link to that page. Always better than
         a one-line definition.
