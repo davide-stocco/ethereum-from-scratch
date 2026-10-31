@@ -44,10 +44,16 @@ markdown_extensions:
   - md_in_html
   - tables
   - footnotes
+  - def_list                   # the glossary's "term / definition" layout
+  - abbr                       # hover tooltips for acronyms
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
+  # Appends includes/abbreviations.md to every page, so acronyms get a
+  # tooltip everywhere without having to mark them up by hand.
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
   - pymdownx.superfences:
       # lets you write ```mermaid diagrams
       custom_fences:
@@ -85,6 +91,7 @@ nav:
   - Accounts:
       - Accounts: accounts/accounts.md
       - The nonce: accounts/nonce.md
+  - Glossary: glossary.md
   - About:
       - Ethereum changes: about/forks.md
       - Who's writing this: about/about-me.md
