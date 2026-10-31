@@ -1,0 +1,86 @@
+site_name: Ethereum from Scratch
+site_description: How Ethereum works, built up from first principles — starting with the parts that have never changed.
+site_author: Davide
+
+site_url: https://davide-stocco.github.io/ethereum-from-scratch/
+repo_url: https://github.com/davide-stocco/ethereum-from-scratch
+repo_name: davide-stocco/ethereum-from-scratch
+
+theme:
+  name: material
+  features:
+    - navigation.sections      # show section headings in the sidebar
+    - navigation.top           # "back to top" button
+    - navigation.footer        # prev/next links at the bottom of each page
+    - search.suggest
+    - search.highlight
+    - content.code.copy        # copy button on code blocks
+    - toc.follow
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition                 # the coloured "note" / "warning" boxes
+  - pymdownx.details           # collapsible boxes
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      # lets you write ```mermaid diagrams
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# ---------------------------------------------------------------------------
+# PHASE 1: fork-proof content only.
+#
+# Every page below has been true since Ethereum launched in 2015 and cannot
+# realistically change — altering any of it would break every wallet, library
+# and deployed contract at once.
+#
+# Fork-dependent material (gas costs, the fee market, transaction types,
+# Proof of Stake, rollups) lives in /drafts and is NOT published yet.
+# See FORKS.md for the classification, and docs/about/forks.md for the
+# reader-facing explanation.
+#
+# Order matters: nothing is explained before its prerequisites.
+# ---------------------------------------------------------------------------
+nav:
+  - Home: index.md
+  - Foundations:
+      - What is Ethereum?: foundations/what-is-ethereum.md
+      - Ether, wei and gwei: foundations/ether.md
+      - Hex and bytes: foundations/hex-and-bytes.md
+  - Cryptography:
+      - Keccak-256: crypto/keccak256.md
+      - Private keys: crypto/private-keys.md
+      - Public keys: crypto/public-keys.md
+      - Addresses: crypto/addresses.md
+  - Encoding:
+      - RLP encoding: encoding/rlp.md
+  - Accounts:
+      - Accounts: accounts/accounts.md
+      - The nonce: accounts/nonce.md
+  - About:
+      - Ethereum changes: about/forks.md

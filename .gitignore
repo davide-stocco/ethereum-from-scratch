@@ -1,0 +1,12 @@
+# MkDocs build output — generated, never committed.
+# `mkdocs gh-deploy` pushes this to the gh-pages branch instead.
+site/
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
