@@ -18,12 +18,12 @@ A state machine is just two things:
 
 A chess board is a state machine. The state is where the pieces are. The rules are the legal moves. Given a board and a move, everyone in the world can work out the new board and they'll all get the same answer. There's no ambiguity, and there's no need to trust the person telling you the move was made.
 
-This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the Yellow Paper [^yellowpaper] — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
+This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the Yellow Paper, [Wood (2014)](#ref-wood-2014) — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
 
 ??? abstract "The formal version"
 
-    The Yellow Paper writes the state transition as a function. If **σ** is the
-    world state and **T** a transaction:
+    [Wood (2014)](#ref-wood-2014) writes the state transition as a function. If
+    **σ** is the world state and **T** a transaction:
 
     ```
     σ(t+1)  ≡  Υ(σ(t), T)
@@ -106,7 +106,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     design now lacks. You really could point at a single transaction and prove
     the state immediately after it.
 
-    **EIP-658** [^eip658] removed that and replaced it with a one-bit
+    [EIP-658 (2017)](#ref-eip-658) removed that and replaced it with a one-bit
     success-or-failure status code. The reasoning was practical: computing and
     storing a full state fingerprint after every single transaction was
     expensive, and almost nothing used them.
@@ -155,7 +155,7 @@ Two things follow from this, and both matter.
 
 ### Accounts have persistent memory
 
-**In Bitcoin, the state is a collection of separate chunks of money.** Each chunk was produced by some earlier payment, and each can be spent exactly once, in full. There is no stored balance anywhere: your wallet works out "you have 0.4 bitcoin" by adding up the chunks it's able to spend. Spending one destroys it and creates new chunks — one for the recipient, one returning your change.
+**In Bitcoin, the state is a collection of separate chunks of money** [(Nakamoto, 2008)](#ref-nakamoto-2008). Each chunk was produced by some earlier payment, and each can be spent exactly once, in full. There is no stored balance anywhere: your wallet works out "you have 0.4 bitcoin" by adding up the chunks it's able to spend. Spending one destroys it and creates new chunks — one for the recipient, one returning your change.
 
 !!! info "The name for those chunks"
 
@@ -165,7 +165,7 @@ Two things follow from this, and both matter.
 
 **In Ethereum, accounts are the state.** Your balance is a single number recorded against your address, and it goes up and down. Much closer to a bank account.
 
-This sounds like a small implementation difference. It isn't, and it's why we cover [accounts](../accounts/accounts.md) early on this site. It means an address is a thing that *persists* — somewhere to attach a balance, a counter, and eventually storage and code. Bitcoin has no equivalent place to put any of that, because it has no lasting object to attach it to.
+This sounds like a small implementation difference. It isn't — [Buterin (2014)](#ref-buterin-2014) argues the case for accounts over separate outputs at length — and it's why we cover [accounts](../accounts/accounts.md) early on this site. It means an address is a thing that *persists* — somewhere to attach a balance, a counter, and eventually storage and code. Bitcoin has no equivalent place to put any of that, because it has no lasting object to attach it to.
 
 ### Accounts can hold code
 
@@ -183,7 +183,7 @@ That's the actual novelty. Bitcoin lets you agree on *who owns what*. Ethereum l
 
     But it's a terrible computer by any normal measure — it's slower than a phone from 2007, every operation costs real money, and all its data is public. It isn't useful because it's powerful. It's useful because **tampering with it is extraordinarily expensive, and no single party decides what it computed.**
 
-    Worth being precise about that, though: it's *hard* to stop, not impossible. Validators can decline to include particular transactions, and the concentration of the firms that assemble blocks is a live, openly-debated concern. Censorship resistance is a matter of cost and probability, not a guarantee.
+    Worth being precise about that, though: it's *hard* to stop, not impossible. Validators can decline to include particular transactions, and the concentration of the firms that assemble blocks is a live, openly-debated concern. [Daian et al. (2019)](#ref-daian-2019) document how profitable it is to control transaction ordering — evidence that the position is contested rather than neutral. Censorship resistance is a matter of cost and probability, not a guarantee.
 
 ## Why would anyone want this?
 
@@ -201,7 +201,7 @@ A contract can hold the money and release it without trusting anyone. **It canno
 
 Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the determinism that makes the whole system work would collapse.
 
-So something outside has to report the result. That reporter is called an **[oracle](../glossary.md#oracle)**, and the moment you need one, you're trusting it. You've moved the trust rather than removed it.
+So something outside has to report the result. That reporter is called an **[oracle](../glossary.md#oracle)**, and the moment you need one, you're trusting it. You've moved the trust rather than removed it. [Zhang et al. (2016)](#ref-zhang-2016) set the problem out formally.
 
 This is worth being honest about, because it's the gap most introductions skip. What smart contracts genuinely eliminate is the need to trust a **custodian** — whoever would otherwise hold the money. They do nothing about trusting whoever supplies facts about the outside world.
 
@@ -222,9 +222,9 @@ Here's how it ended up that way, because the history is counter-intuitive.
 
 Until 2022, Ethereum mainnet did both jobs in one system, ordering transactions by mining. Meanwhile a second, separate chain called the **Beacon Chain** had been running since December 2020 — doing Proof of Stake consensus with no accounts and no transactions on it at all. It was a consensus layer with nothing to order, deliberately run in parallel so the mechanism could be proven before anything of value depended on it.
 
-In September 2022, an upgrade called **The Merge** connected the two: the execution layer stopped running its own mining-based consensus and began taking its ordering from the beacon chain instead. Hence the name — two existing systems were joined together, which is why "merge" and not "split".
+In September 2022, an upgrade called **The Merge** connected the two: the execution layer stopped running its own mining-based consensus and began taking its ordering from the beacon chain instead [(EIP-3675, 2021)](#ref-eip-3675). Hence the name — two existing systems were joined together, which is why "merge" and not "split".
 
-You'll see this division everywhere once you notice it — it's why Ethereum has two kinds of client software, and why blocks have two sets of fields. The consensus layer isn't covered on this site yet, for reasons explained in [how this site handles forks](../about/forks.md). For now, just know that **execution and ordering are separate jobs.**
+You'll see this division everywhere once you notice it — it's why Ethereum has two kinds of client software, and why blocks have two sets of fields. The consensus layer isn't covered on this site yet, for reasons explained in [how this site handles forks](../about/forks.md); [Edgington (n.d.)](#ref-edgington) is the most thorough treatment available in the meantime. For now, just know that **execution and ordering are separate jobs.**
 
 ---
 
@@ -240,30 +240,18 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
 
 ---
 
-## Sources
+## References
 
 <div class="sources" markdown>
 
-[^yellowpaper]:
-    Wood, G. *Ethereum: A Secure Decentralised Generalised Transaction Ledger.*
-    Ethereum project yellow paper. The formal specification; §2 and §4 cover the
-    state transition function and account state.
-    <https://ethereum.github.io/yellowpaper/paper.pdf>
-
-Listed in the order the claims they support appear on the page.
-
-- Nakamoto, S. (2008). *Bitcoin: A Peer-to-Peer Electronic Cash System.* Supports the Bitcoin comparison — the model where separate unspent outputs are the state, and Script decides whether each may be spent. <https://bitcoin.org/bitcoin.pdf>
-- Buterin, V. (2014). *Ethereum White Paper.* Supports the account-versus-outputs argument, which it makes explicitly and at length. <https://ethereum.org/en/whitepaper/>
-- Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A. (2019). *Flash Boys 2.0: Frontrunning, Transaction Reordering, and Consensus Instability in Decentralized Exchanges.* IEEE S&P 2020. Supports the claim that transaction ordering is contestable and profitable to manipulate. Note it concerns reordering rather than censorship specifically — adjacent evidence, not a direct source for the builder-concentration point.
-- Zhang, F., Cecchetti, E., Croman, K., Juels, A., & Shi, E. (2016). *Town Crier: An Authenticated Data Feed for Smart Contracts.* ACM CCS 2016. Supports the oracle section: states the problem formally and explains why a contract cannot query external data itself.
-- EIP-3675: *Upgrade consensus to Proof-of-Stake.* Supports the account of The Merge — how the execution layer stopped running its own consensus and began taking ordering from the Beacon Chain. <https://eips.ethereum.org/EIPS/eip-3675>
-- Edgington, B. *Upgrading Ethereum.* Further reading rather than a source for any specific claim here: the most thorough documentation of the consensus layer available, and free. <https://eth2book.info>
-
-[^eip658]:
-    EIP-658: *Embedding transaction status code in receipts.* Byzantium, 2017.
-    Replaced the intermediate post-transaction state root in each receipt with a
-    success/failure status code.
-    <https://eips.ethereum.org/EIPS/eip-658>
+- <a id="ref-buterin-2014"></a>**Buterin, V.** (2014). *Ethereum white paper: A next-generation smart contract and decentralized application platform.* <https://ethereum.org/en/whitepaper/>
+- <a id="ref-daian-2019"></a>**Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A.** (2019). *Flash boys 2.0: Frontrunning, transaction reordering, and consensus instability in decentralized exchanges.* arXiv:1904.05234. Published in *IEEE Symposium on Security and Privacy*, 2020.
+- <a id="ref-edgington"></a>**Edgington, B.** (n.d.). *Upgrading Ethereum: A technical handbook on Ethereum's move to proof of stake and beyond.* Continuously updated. <https://eth2book.info>
+- <a id="ref-eip-658"></a>**EIP-658** (2017). *Embedding transaction status code in receipts.* Ethereum Improvement Proposals. <https://eips.ethereum.org/EIPS/eip-658>
+- <a id="ref-eip-3675"></a>**EIP-3675** (2021). *Upgrade consensus to proof-of-stake.* Ethereum Improvement Proposals. <https://eips.ethereum.org/EIPS/eip-3675>
+- <a id="ref-nakamoto-2008"></a>**Nakamoto, S.** (2008). *Bitcoin: A peer-to-peer electronic cash system.* <https://bitcoin.org/bitcoin.pdf>
+- <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Continuously revised; §2 and §4 cover the state transition function and account state. <https://ethereum.github.io/yellowpaper/paper.pdf>
+- <a id="ref-zhang-2016"></a>**Zhang, F., Cecchetti, E., Croman, K., Juels, A., & Shi, E.** (2016). *Town Crier: An authenticated data feed for smart contracts.* In *Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security* (CCS '16).
 
 </div>
 

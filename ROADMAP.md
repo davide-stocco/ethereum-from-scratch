@@ -225,26 +225,38 @@ than maintaining two versions that drift apart.
    Both are closed by default and the main prose must stand alone without them.
    The homepage tells readers this explicitly, so skipping a box never feels
    like missing something.
-4. **Footnotes** for citations attached to specific claims (`[^key]`).
-5. **A `## Sources` section** at the end, wrapped in
-   `<div class="sources" markdown>`. Papers, specifications and EIPs —
-   author, year, title, venue, link, and a line on what it supports.
+4. **In-text citations, author–date style**, linking to the reference:
+   `[Wood (2014)](#ref-wood-2014)` when the author is the subject of the
+   sentence, `[(Nakamoto, 2008)](#ref-nakamoto-2008)` when it's parenthetical.
+   This replaced footnotes — it shows the reader where a claim comes from at
+   the point they read it, rather than making them chase a number.
+5. **A `## References` section** at the end, wrapped in
+   `<div class="sources" markdown>`, **alphabetical by author surname**.
+   Each entry carries an explicit anchor so citations can link to it:
+   `- <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Title.* Venue. URL`
+
+   Anchors are written as inline HTML rather than `attr_list` because
+   `def_list` and list items don't reliably take generated ids.
+
+   EIPs are cited by number rather than author — `EIP-3675 (2021)` — because
+   that's how everyone refers to them. They sort under E.
 6. **Verify every citation** against the original before publishing. A wrong
    reference costs more credibility than no reference.
 
    Two further rules on citations, both learned the hard way:
 
-      - **Cite what the page claims, not what the page is about.** Every entry
-        must name the specific claim it supports. A paper cited because it's
-        topically adjacent is padding, and a reader who follows it up and finds
-        nothing relevant trusts the rest of the page less.
+      - **Cite what the page claims, not what the page is about.** Every
+        reference must be cited somewhere in the prose. If you can't find a
+        sentence to attach it to, it's padding — and a reader who follows it up
+        and finds nothing relevant trusts the rest of the page less. Author–date
+        citations make this self-enforcing: an uncited entry is visibly orphaned.
       - **Say so when the fit is partial.** If a source is the best available
-        evidence but not a direct one, write that into the entry. It costs a
-        clause and buys the reader's trust.
+        evidence but not a direct one, say so in the sentence that cites it.
+        Costs a clause, buys the reader's trust.
 
-   Keep Sources as one flat list ordered by where the claims appear. Only group
-   under subheadings past roughly a dozen entries — the `.sources h3` style
-   exists for that, but a heading over four items is heavier than it's worth.
+   Keep References as one flat alphabetical list. Only group under subheadings
+   past roughly a dozen entries — the `.sources h3` style exists for that, but
+   a heading over four items is heavier than it's worth.
 7. **Unfamiliar terms get a destination.** Three mechanisms, in priority order:
       - If the term **has its own page**, link to that page. Always better than
         a one-line definition.
