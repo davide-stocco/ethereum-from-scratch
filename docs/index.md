@@ -1,3 +1,7 @@
+---
+tier: meta
+---
+
 # Ethereum from Scratch
 
 Ethereum is usually explained badly. Most introductions either hand you a metaphor that falls apart the moment you look closely ("it's a world computer!") or drop you straight into Solidity code without saying what the machine underneath is actually doing.

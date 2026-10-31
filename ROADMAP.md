@@ -7,6 +7,80 @@ Two organising principles:
 
 ---
 
+# Two orderings, kept separate
+
+The single most important structural decision on this site: **tiers are a
+maintenance concern, not a reading concern.**
+
+| | Ordered by | Lives in |
+| --- | --- | --- |
+| **Reading order** | topic — problem before mechanism | `nav` in `mkdocs.yml` |
+| **Publishing order** | tier — fork-proof first | this file |
+
+These are different orderings, and that is fine. A reader should never be able
+to tell which tier a page is in; they should see a sensible path through
+Ethereum. Meanwhile you need to know exactly which pages a hard fork can
+invalidate. Conflating the two would mean readers browsing your maintenance
+schedule.
+
+So the tier never appears in the navigation. It's recorded three ways instead:
+
+- **`tier:` in each page's frontmatter** — `1`, `2`, `3`, or `meta`. Invisible
+  to readers, and it makes the post-fork review mechanical:
+  `grep -rl "^tier: 3" docs/` lists everything to re-check.
+- **A visible date stamp**, on Tier 2 and 3 pages only — "current as of
+  <upgrade>" — so readers can judge whether a page has gone stale.
+- **This file**, which holds the publishing order and what's written.
+
+## Consequence: sections appear before they're full
+
+Because the problem is Tier 1 and the mechanism is Tier 3, a section often
+publishes its first page long before the rest. *Consensus* will exist in the
+menu holding only "why transaction order has to be agreed", with Proof of Stake
+still unwritten.
+
+That's correct, not a defect — it tells a reader the topic is coming and where
+it sits. Each such page ends with a forward pointer saying the mechanism isn't
+published yet, and linking the [fork policy](docs/about/forks.md) for why.
+
+## Target structure
+
+Reading order once everything exists. **Bold** = published or Phase 1;
+everything else is Phase 2+. Note how each problem page sits directly above the
+mechanism that answers it.
+
+```
+Home
+Foundations            What is Ethereum? · Ether/wei/gwei · Hex and bytes
+Cryptography           Keccak-256 · Private keys · Public keys · Addresses
+                       Signatures
+Encoding               RLP
+                       Merkle Patricia Trie                      [tier 2]
+Accounts and state     Accounts · The nonce
+                       State                                     [tier 2]
+Transactions           Why metering is necessary                  <- problem
+                       Transactions                              [tier 2]
+                       Gas and the fee market                    [tier 3]
+Blocks                 Blocks · The block header                 [tier 3]
+Consensus              Why order has to be agreed                 <- problem
+                       Proof of Stake · validators · finality    [tier 3]
+The EVM                The EVM · opcodes · storage · the ABI
+                       Gas costs per operation                   [tier 2]
+Limits                 The oracle problem                         <- problem
+                       Why throughput is limited                  <- problem
+                       Rollups and blobs                         [tier 3]
+Reference              Gas costs table · Fork history            [tier 2/3]
+Glossary
+About                  Ethereum changes · Who's writing this
+```
+
+Two things to notice. The **Reference** section is where every fork-dependent
+*number* is centralised, so repricings touch one file. And **Limits** groups the
+inherent constraints — a genuine topic, not a tier bucket: readers do look for
+"what can't this do", and all three pages there are about the same thing.
+
+---
+
 # Phase 1 — the fork-proof core *(published)*
 
 Everything here has been true since 2015 and cannot realistically change. Write these once; they never need revisiting.

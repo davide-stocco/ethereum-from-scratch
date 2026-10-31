@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # Keccak-256
 
 !!! warning "Stub — not written yet"

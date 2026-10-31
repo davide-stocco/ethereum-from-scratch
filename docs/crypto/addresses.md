@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # Addresses
 
 !!! warning "Stub — not written yet"

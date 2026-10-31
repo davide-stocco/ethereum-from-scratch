@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # The nonce
 
 !!! warning "Stub — not written yet"

@@ -1,3 +1,7 @@
+---
+tier: meta
+---
+
 # Who's writing this
 
 I'm **Davide Stocco**. I'm learning Ethereum, and this site is how I'm doing it.

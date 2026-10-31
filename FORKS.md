@@ -98,6 +98,15 @@ These *are* fork output. Expect to rewrite them, and date-stamp them clearly.
 
 ## Maintenance checklist
 
+Every page carries its tier in frontmatter, so the review list is mechanical
+rather than remembered:
+
+```bash
+grep -rl "^tier: 3" docs/     # rewrite-likely — check all of these
+grep -rl "^tier: 2" docs/     # check the numbers and field lists
+grep -rl "^tier: 1" docs/     # never needs reviewing
+```
+
 After each hard fork, review only:
 
 - [ ] the gas-costs reference — any repricings?

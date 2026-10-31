@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # Ether, wei and gwei
 
 !!! warning "Stub — not written yet"

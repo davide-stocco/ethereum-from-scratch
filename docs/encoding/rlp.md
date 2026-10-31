@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # RLP encoding
 
 !!! warning "Stub — not written yet"

@@ -1,4 +1,5 @@
 ---
+tier: meta
 description: Short definitions of every Ethereum term used on this site, each linking to the page that explains it properly.
 ---
 

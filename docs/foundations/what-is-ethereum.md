@@ -1,4 +1,5 @@
 ---
+tier: 1
 description: Ethereum explained as a state machine — a shared state plus deterministic rules for changing it, and why that makes trust unnecessary.
 ---
 

@@ -1,3 +1,7 @@
+---
+tier: meta
+---
+
 # Ethereum changes — how this site handles it
 
 Ethereum is not finished, and it was never meant to be. It upgrades through **hard forks**: coordinated rule changes that every node on the network adopts at an agreed point. There have been roughly twenty since 2015, and more are planned.

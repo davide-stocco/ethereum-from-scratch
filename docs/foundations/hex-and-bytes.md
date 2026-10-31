@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # Hex and bytes
 
 !!! warning "Stub — not written yet"

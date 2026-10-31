@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # Accounts
 
 !!! warning "Stub — not written yet"

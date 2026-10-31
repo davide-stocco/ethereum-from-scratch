@@ -1,3 +1,7 @@
+---
+tier: 1
+---
+
 # Private keys
 
 !!! warning "Stub — not written yet"
