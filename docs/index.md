@@ -44,11 +44,12 @@ They're also the parts that **change at hard forks** — so they need a differen
 
 [How this site handles forks](about/forks.md) explains the approach in full.
 
-!!! note "Written in public"
+---
 
-    I'm building this while learning Ethereum myself — see
-    [who's writing this](about/about-me.md). Pages marked *stub* are outlines
-    I haven't filled in yet.
+## Who's writing this
 
-    If you spot a mistake, I'd genuinely like to know — corrections are the most
-    useful thing you can offer. Open an issue on the repository.
+I'm **Davide Stocco**, and I'm learning Ethereum — this site is how I'm doing it. My reasoning is that you don't really understand something until you can explain it in an order that makes sense to someone who knows nothing, so instead of taking notes I'm writing the explanation I wanted when I started.
+
+The obvious caveat follows: **this is written by a learner, not an expert.** Pages marked *stub* are outlines I haven't filled in yet, and if you find a mistake I'd genuinely rather know — corrections are the most useful thing you can send me.
+
+[More about me →](about/about-me.md){ .md-button } [My website →](https://sites.google.com/view/davidestocco/){ .md-button }
