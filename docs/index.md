@@ -46,8 +46,9 @@ They're also the parts that **change at hard forks** — so they need a differen
 
 !!! note "Written in public"
 
-    I'm building this while learning Ethereum myself. Pages marked *stub* are
-    outlines I haven't filled in yet.
+    I'm building this while learning Ethereum myself — see
+    [who's writing this](about/about-me.md). Pages marked *stub* are outlines
+    I haven't filled in yet.
 
     If you spot a mistake, I'd genuinely like to know — corrections are the most
     useful thing you can offer. Open an issue on the repository.
