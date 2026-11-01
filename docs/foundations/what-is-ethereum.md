@@ -230,7 +230,7 @@ Until 2022, Ethereum mainnet did both jobs in one system, ordering transactions 
 
 In September 2022, an upgrade called **The Merge** connected the two: the execution layer stopped running its own mining-based consensus and began taking its ordering from the beacon chain instead [(EIP-3675, 2021)](#ref-eip-3675). Hence the name — two existing systems were joined together, which is why "merge" and not "split".
 
-You'll see this division everywhere once you notice it — it's why Ethereum has two kinds of client software, and why blocks have two sets of fields. The consensus layer isn't covered on this site yet, for reasons explained in [how this site handles forks](../about/forks.md); [Edgington (n.d.)](#ref-edgington) is the most thorough treatment available in the meantime. For now, just know that **execution and ordering are separate jobs.**
+You'll see this division everywhere once you notice it — it's why Ethereum has two kinds of client software, and why blocks have two sets of fields. The consensus layer isn't covered on this site yet, for reasons explained in [how this site handles forks](../about/forks.md); [Edgington's *Upgrading Ethereum*](#ref-edgington) is the most thorough treatment available in the meantime. For now, just know that **execution and ordering are separate jobs.**
 
 ---
 
@@ -253,7 +253,7 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
 
 - <a id="ref-buterin-2014"></a>**Buterin, V.** (2014). *Ethereum white paper: A next-generation smart contract and decentralized application platform.* <https://ethereum.org/en/whitepaper/>
 - <a id="ref-daian-2019"></a>**Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A.** (2019). *Flash boys 2.0: Frontrunning, transaction reordering, and consensus instability in decentralized exchanges.* arXiv:1904.05234. Published in *IEEE Symposium on Security and Privacy*, 2020. <https://arxiv.org/abs/1904.05234>
-- <a id="ref-edgington"></a>**Edgington, B.** (n.d.). *Upgrading Ethereum: A technical handbook on Ethereum's move to proof of stake and beyond.* Continuously updated. <https://eth2book.info>
+- <a id="ref-edgington"></a>**Edgington, B.** *Upgrading Ethereum: A technical handbook on Ethereum's move to proof of stake and beyond.* Continuously updated; accessed November 2026. <https://eth2book.info>
 - <a id="ref-eip-658"></a>**EIP-658** (2017). *Embedding transaction status code in receipts.* Ethereum Improvement Proposals. <https://eips.ethereum.org/EIPS/eip-658>
 - <a id="ref-eip-3675"></a>**EIP-3675** (2021). *Upgrade consensus to proof-of-stake.* Ethereum Improvement Proposals. <https://eips.ethereum.org/EIPS/eip-3675>
 - <a id="ref-nakamoto-2008"></a>**Nakamoto, S.** (2008). *Bitcoin: A peer-to-peer electronic cash system.* <https://bitcoin.org/bitcoin.pdf>

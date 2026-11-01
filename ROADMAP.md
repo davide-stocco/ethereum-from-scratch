@@ -357,6 +357,22 @@ than maintaining two versions that drift apart.
 
    EIPs are cited by number rather than author — `EIP-3675 (2021)` — because
    that's how everyone refers to them. They sort under E.
+
+   **Never write "n.d."** for a living online source. It claims there's no date
+   when the truth is that the date is "always now", and it tells the reader
+   nothing useful. Use whichever of these the source supports:
+
+      - **A pinned version**, where one exists. Software documentation is the
+        common case: cite `(Solidity documentation, v0.8.26)` and link the
+        versioned URL, not `/latest/`. More rigorous than any date — the
+        reader sees exactly the text you read, and `latest` would silently
+        move under them. The Solidity entry notes that `szabo` and `finney`
+        were removed in earlier versions, which is precisely why pinning
+        matters.
+      - **An access date in the entry**, where there's no version: *"continuously
+        updated; accessed November 2026."* In the prose, cite it by title
+        rather than year — *Edgington's "Upgrading Ethereum"* — so no empty
+        year slot appears at all.
 6. **Verify every citation** against the original before publishing. A wrong
    reference costs more credibility than no reference.
 

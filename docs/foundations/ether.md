@@ -126,7 +126,9 @@ So the rule, and it's a consequence rather than a preference:
 
 **One gwei is 10<sup>9</sup> wei** — a billion wei. The prefix is *giga*, so written out in full the unit is *gigawei*.
 
-It exists for one reason: readability. An example will make that obvious far quicker than an argument would — and setting one up needs just a single piece of background.
+It exists for one reason: readability.
+
+An example will make that obvious far quicker than an argument would — and setting one up needs just a single piece of background.
 
 A fee on Ethereum isn't a flat charge. It's a **price per unit of computational work**, and that unit is called **[gas](../glossary.md#gas "The unit computational work is measured in")** — which gets a page of its own later. All that matters here is that a fee comes out as a price, and prices need a unit to be quoted in.
 
@@ -150,7 +152,7 @@ Gas prices land naturally in the single-to-low-hundreds range when written in gw
 
     **In code it is always lowercase.** Solidity accepts `wei`, `gwei` and
     `ether` as suffixes on a numeric literal, and those keywords are
-    case-sensitive [(Solidity documentation, n.d.)](#ref-solidity-units):
+    case-sensitive [(Solidity documentation, v0.8.26)](#ref-solidity-units):
 
     ```solidity
     assert(1 wei == 1);
@@ -203,7 +205,7 @@ Going from ether to wei means moving the decimal point **18 places right**. From
 
 - <a id="ref-dai-1998"></a>**Dai, W.** (1998). *b-money.* <http://www.weidai.com/bmoney.txt>
 - <a id="ref-goldberg-1991"></a>**Goldberg, D.** (1991). *What every computer scientist should know about floating-point arithmetic.* *ACM Computing Surveys*, 23(1), 5–48. <https://doi.org/10.1145/103162.103163>
-- <a id="ref-solidity-units"></a>**Solidity documentation** (n.d.). *Units and globally available variables.* Documents `wei`, `gwei` and `ether` as case-sensitive suffixes on numeric literals. <https://docs.soliditylang.org/en/latest/units-and-global-variables.html>
+- <a id="ref-solidity-units"></a>**Solidity documentation**, v0.8.26. *Units and globally available variables.* Documents `wei`, `gwei` and `ether` as case-sensitive suffixes on numeric literals. Version-pinned deliberately: the `latest` URL moves, and `szabo` and `finney` were removed from earlier versions. <https://docs.soliditylang.org/en/v0.8.26/units-and-global-variables.html>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Defines wei as the base unit of account. <https://ethereum.github.io/yellowpaper/paper.pdf>
 
 </div>
