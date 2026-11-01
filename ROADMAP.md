@@ -45,39 +45,104 @@ published yet, and linking the [fork policy](docs/about/forks.md) for why.
 
 ## Target structure
 
-Reading order once everything exists. **Bold** = published or Phase 1;
-everything else is Phase 2+. Note how each problem page sits directly above the
-mechanism that answers it.
+Reading order once everything exists. `←` marks a fork-proof *problem* page
+sitting directly above the fork-dependent mechanism that answers it.
 
 ```
 Home
-Foundations            What is Ethereum? · Ether/wei/gwei · Hex and bytes
-Cryptography           Keccak-256 · Private keys · Public keys · Addresses
-                       Signatures
-Encoding               RLP
-                       Merkle Patricia Trie                      [tier 2]
-Accounts and state     Accounts · The nonce
-                       State                                     [tier 2]
-Transactions           Why metering is necessary                  <- problem
-                       Transactions                              [tier 2]
-                       Gas and the fee market                    [tier 3]
-Blocks                 Blocks · The block header                 [tier 3]
-Consensus              Why order has to be agreed                 <- problem
-                       Proof of Stake · validators · finality    [tier 3]
-The EVM                The EVM · opcodes · storage · the ABI
-                       Gas costs per operation                   [tier 2]
-Limits                 The oracle problem                         <- problem
-                       Why throughput is limited                  <- problem
-                       Rollups and blobs                         [tier 3]
-Reference              Gas costs table · Fork history            [tier 2/3]
+
+Foundations         What is Ethereum? · Ether, wei and gwei · Hex and bytes
+Cryptography        Keccak-256 · Private keys · Public keys · Addresses
+                    Signatures
+Keys and wallets    Wallets and seed phrases · What losing your keys means
+Encoding            RLP · Merkle Patricia Trie [2]
+Accounts and state  Accounts · The nonce · State [2]
+Transactions        Why metering is necessary ← · Transactions [2]
+                    Gas [2] · Fees [3]
+Blocks              Blocks [2] · The block header [3] · The chain, reorgs [3]
+The EVM             The EVM [2] · Opcodes [3] · Stack, memory and storage
+                    Bytecode and deployment [2] · The ABI · Events and logs
+Consensus           Why order must be agreed ← · Proof of Stake [3]
+                    Validators · Finality · Withdrawals [3]
+Scaling             Why throughput is limited ← · Rollups [3] · Blobs [3]
+Standards           ERC-20 · ERC-721 · ENS [3] · Account abstraction [3]
+
+Economics           (landing page)
+  Why it costs      Security budget ← · Who pays ← · Fixed cap or flexible ←
+  Pricing           Congestion pricing [2] · The fee burn [3] · MEV [3]
+                    Capacity as supply [3]
+  Money             Stablecoins: what holds a peg · Runs and reserve quality
+                    Private money in historical perspective
+  Institutions      Transaction cost economics · State growth as externality
+                    Public goods funding [2]
+
+Applications        What needs this machine? · Insurance · Exchanges and AMMs
+                    Lending · NFTs · DAOs
+Governance          Who changes the protocol · The EIP process [3]
+Security & privacy  How things go wrong · Reentrancy · Oracle manipulation
+                    The economics of audits · Everything is public
+
+Reference           Gas costs [2] · Fork history [3]
 Glossary
-About                  Ethereum changes · Who's writing this
+About               Ethereum changes · Who's writing this
+Tools               Keccak hasher · key → address · converters · decoders
 ```
 
-Two things to notice. The **Reference** section is where every fork-dependent
-*number* is centralised, so repricings touch one file. And **Limits** groups the
-inherent constraints — a genuine topic, not a tier bucket: readers do look for
-"what can't this do", and all three pages there are about the same thing.
+## What adding the missing topics changes
+
+Five structural consequences, all of them real changes rather than extra rows.
+
+**1. It's four strands now, not one spine.** Protocol mechanics, economics,
+applications, practicalities. At roughly sixty pages, linear reading stops being
+plausible for most visitors — so the **reading paths on the homepage are
+promoted from a nicety to the primary navigation aid**, and need maintaining as
+a first-class feature.
+
+**2. Economics needs internal structure and a landing page.** Fourteen-odd
+pages across four distinct questions — why it costs anything, how block space is
+priced, private money, and institutions. Past roughly a dozen pages a flat
+section stops being navigable, and arriving directly into the middle of an
+argument needs a front door.
+
+**3. Applications sits *after* Economics, not before.** Tempting to put it early
+because it's the most approachable material, but judging whether an application
+needs this machine requires the economic frame first — otherwise the honest
+answer ("mostly nothing") reads as cynicism rather than conclusion.
+
+**4. "Limits" dissolves.** It was holding the oracle problem and throughput
+together, but once Applications exists the oracle problem belongs there — it's
+the constraint that decides what can be built — and throughput belongs at the
+head of Scaling. Grouping them was a symptom of having nowhere better.
+
+**5. Keys and wallets moves early.** It was filed under practicalities, late.
+Wrong: "what happens if I lose my keys" is among the first questions anyone
+asks, and it needs only the Cryptography section. Immediately after it is the
+right home.
+
+## A fourth kind of staleness: ecosystem
+
+Pages now go stale in four distinct ways, and conflating them is how a reference
+site rots:
+
+| Kind | Example | Marker |
+| --- | --- | --- |
+| **Fork** | gas costs, opcodes | `tier:` plus a visible upgrade stamp |
+| **Data** | "the burn exceeds issuance" | period and source, never a bare value |
+| **Ecosystem** | which stablecoins exist, which protocols are used | describe mechanism classes, never products |
+| **Never** | keccak, RLP, addresses, the security budget | nothing needed |
+
+The **ecosystem** category is new, and it governs the whole Applications section
+plus the money pages in Economics. The rule that follows is the same one already
+written for the oracle page, generalised:
+
+> **Name the mechanism class, not the product.** "Over-collateralised lending"
+> outlives any particular lender. "Fully-reserved versus algorithmic
+> stablecoins" outlives any particular issuer. Products are the one thing on
+> this site guaranteed to be wrong within a year.
+
+Where a specific case genuinely teaches something — Terra/UST as reflexive
+collapse — write it as **history**, in a `??? info "History: …"` box, with dates.
+Past tense ages gracefully; present tense doesn't.
 
 ---
 
