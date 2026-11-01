@@ -93,6 +93,13 @@ nav:
   - Accounts:
       - Accounts: accounts/accounts.md
       - The nonce: accounts/nonce.md
+  # Tier 1 only for now. The fork-dependent economics — Ethereum's own
+  # issuance, the fee burn, the fee market, MEV — waits for the protocol
+  # pages it depends on. See the Economics section of ROADMAP.md.
+  - Economics:
+      - Why security has to be paid for: economics/security-budget.md
+      - 'Who pays: issuance or fees': economics/who-pays.md
+      - Fixed cap or flexible supply: economics/supply-cap.md
   - Glossary: glossary.md
   - About:
       - Ethereum changes: about/forks.md
