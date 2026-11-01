@@ -126,7 +126,7 @@ So the rule, and it's a consequence rather than a preference:
 
 **One gwei is 10<sup>9</sup> wei** — a billion wei. The prefix is *giga*, so written out in full the unit is *gigawei*.
 
-It exists for one reason: readability.
+It exists for one reason: readability. An example will make that obvious far quicker than an argument would — and setting one up needs just a single piece of background.
 
 A fee on Ethereum isn't a flat charge. It's a **price per unit of computational work**, and that unit is called **[gas](../glossary.md#gas "The unit computational work is measured in")** — which gets a page of its own later. All that matters here is that a fee comes out as a price, and prices need a unit to be quoted in.
 
