@@ -141,37 +141,102 @@ is one of hundreds; an economist's account of Ethereum's monetary policy and
 fee mechanism is rare. **Treat this as the site's distinguishing section, not a
 side interest.**
 
-It splits on tier exactly like everything else:
+#### The conceptual spine
 
-| Page | Tier | Why |
-| --- | --- | --- |
-| Why a blockchain must pay for security | 1 | Whoever orders transactions has to be compensated, or nobody does it. Permanent, and the foundation for everything below. |
-| Fixed cap vs. variable supply: Bitcoin and Ethereum | 1 | The *trade-off* is permanent — a hard cap maximises scarcity, a flexible supply lets you keep paying for security. Both choices have costs. |
-| Who pays for what, and in what | 1 | Fees payable only in ether; the consequence that a token-rich, ether-poor account is stuck. |
-| Ethereum's issuance and the fee burn | 3 | EIP-1559 created the burn (2021); The Merge replaced issuance wholesale (2022). Numbers to the Reference section. |
-| Fee markets as mechanism design | 2–3 | The problem is permanent; EIP-1559's specific solution is not. |
-| MEV and the economics of ordering | 3 | Fast-moving, and partly an ecosystem rather than protocol question. |
+Not a list of topics — one argument, each step resting on the one before, the
+same discipline as the rest of the site.
 
-**Where it sits in the reading order:** after transactions and fees, since it
-needs the idea that computation is paid for. The Tier 1 pages could come
-earlier — the security-budget argument needs nothing but the state machine.
+1. **Why anything must be paid at all.** Ordering transactions has to be
+   expensive to attack, which means it has to be rewarded. Somebody must be
+   paid, continuously, or the chain is cheap to capture. This is the root of
+   everything else and it needs no Ethereum specifics — only the state machine.
+2. **Who pays, and how.** There are exactly two sources: **new issuance**,
+   which dilutes existing holders, and **fees**, which charge users. Every
+   chain picks a mix. This is a tax-incidence question, and framing it that way
+   is the single most clarifying move available.
+3. **The fixed-cap trade-off.** Bitcoin capped supply, so issuance tends to
+   zero and the security budget must eventually come from fees alone — an
+   open question, not a solved one. Ethereum left supply uncapped, so it can
+   always pay for security, at the cost of any scarcity guarantee. **Neither
+   choice is obviously right, and saying so is the honest position.** This is
+   the inflation question, and it belongs here.
+4. **Pricing block space.** Capacity is scarce and lumpy. A first-price
+   auction made users guess each other's bids; EIP-1559 replaced it with a
+   posted price that adjusts algorithmically. Mechanism design, with a real
+   literature.
+5. **Why the base fee is burned.** Paying it to validators would reward them
+   for manufacturing congestion. Burning it instead redistributes to all
+   holders proportionally. An incentive-compatibility argument with a
+   distributional side effect — worth separating those two things.
+6. **The value of ordering: MEV.** Whoever controls sequence extracts rent.
+   That rent drives the builder and relay markets, and with them
+   centralisation pressure.
+7. **Capacity as supply.** Rollups and blobs raise effective supply, which is
+   why fees fall. The demand side has had far more attention than the supply
+   side.
+
+Steps **1–3 need nothing but the state machine** and are Tier 1 — publishable
+now, alongside Foundations. Steps **4–7 depend on fees, consensus and
+scaling**, and are Tier 2–3.
+
+That's the same **problem then mechanism** split used everywhere else: 1–3 are
+questions *any* chain faces, 4–7 are Ethereum's particular answers. The tier
+correlation is a consequence, not the organising principle.
+
+#### Managing it on the site
+
+**A top-level `Economics` section, which owns the arguments and never
+re-explains mechanism.** The division:
+
+- **Protocol pages answer "how does this work?"** They may state a mechanism
+  and give its rationale in a sentence.
+- **Economics pages answer "why this design, what's the trade-off, and what do
+  we actually know about the effects?"** Anything needing an *argument* rather
+  than a sentence belongs here.
+
+Without that rule the economics gets scattered across a dozen protocol pages,
+the argument becomes impossible to follow, and the differentiator evaporates.
+With it, both stay readable and neither duplicates the other.
+
+**Late in the reading order**, except the Tier 1 pages, which can sit early
+because they need no machinery.
+
+#### A third kind of staleness
+
+Protocol pages go stale by **fork**. Economics pages also go stale by **data**.
+
+"The burn exceeds issuance" is not a fork-dependent claim — it depends on how
+busy the network is, and it can reverse without any rule changing. The existing
+fork stamp doesn't catch this.
+
+So empirical claims need their own convention, now in the page conventions
+above: **state the period, state the source, never state a bare current value.**
+
+#### The real risk here isn't organisation, it's credibility
+
+This is the most narrative-contaminated part of the whole subject. "Sound
+money", "ultrasound money", deflation-as-virtue — advocacy repeated so often it
+reads as analysis. Four safeguards:
+
+- **Separate positive from normative.** What the mechanism does is one claim;
+  whether that's desirable is another. Never let the second ride along inside
+  the first.
+- **Say what is unknown.** Whether fee-only revenue can secure a chain in the
+  long run is genuinely open. Writing "open question" where it's open is worth
+  more than any confident answer.
+- **Cite the literature, not blog posts**, for anything contested.
+- **Refuse the vocabulary.** The loaded terms carry conclusions inside them.
+  Describe the mechanism and let the reader judge.
 
 **Literature to build on** (verify each before citing):
 
 - Budish, E. (2018). *The Economic Limits of Bitcoin and the Blockchain.*
-  NBER working paper 24717. The canonical formal treatment of what
-  proof-of-work security actually costs and why.
+  NBER working paper 24717. Formalises the relationship between what a chain
+  pays for security per unit time and the value it can safely secure.
 - Roughgarden, T. (2020). *Transaction Fee Mechanism Design for the Ethereum
-  Blockchain: An Economic Analysis of EIP-1559.* arXiv:2012.00854. Mechanism
-  design applied directly to Ethereum's fee market.
-
-**The discipline this section needs most:** it is by far the most
-narrative-contaminated part of the subject. "Sound money", "ultrasound money",
-deflation-as-virtue — these are advocacy, repeated so often they read as
-analysis. Describe the mechanism, state what is and isn't known about its
-effects, and keep claims about value separate from claims about design. The
-site's credibility depends on not reading as promotion, and this is the section
-where that's easiest to lose.
+  Blockchain: An Economic Analysis of EIP-1559.* arXiv:2012.00854.
+- Daian, P., et al. (2019). *Flash Boys 2.0.* arXiv:1904.05234. Already cited
+  on What is Ethereum?; load-bearing for step 6.
 
 ### The problem/solution splitting rule
 
@@ -294,6 +359,12 @@ than maintaining two versions that drift apart.
    that's how everyone refers to them. They sort under E.
 6. **Verify every citation** against the original before publishing. A wrong
    reference costs more credibility than no reference.
+
+   **Empirical claims carry a period and a source, never a bare value.** This
+   is a different kind of staleness from forks: "the burn exceeds issuance"
+   depends on how busy the network is and can reverse with no rule changing, so
+   a fork stamp won't catch it. Write *"over 2024, X exceeded Y (source)"*, not
+   *"X exceeds Y"*. Mostly matters in the Economics section.
 
    Two further rules on citations, both learned the hard way:
 
