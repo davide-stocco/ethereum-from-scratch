@@ -38,27 +38,61 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
 ---
 
-## Where to start
+## Contents
 
 <div class="grid cards" markdown>
 
-- **[Foundations](foundations/what-is-ethereum.md)**
+- **Foundations**
 
-    What Ethereum actually is — a state machine — plus the units and the number formats you'll meet on every page after this.
+    What Ethereum actually is, and the units and number formats you'll meet on every page after it.
 
-- **[Cryptography](crypto/keccak256.md)**
+    [What is Ethereum?](foundations/what-is-ethereum.md) · [Ether, wei and gwei](foundations/ether.md) · [Hex and bytes](foundations/hex-and-bytes.md)
 
-    Hashing, private keys, public keys, and how an address is derived from them. One worked example, carried all the way through.
+- **Cryptography**
 
-- **[Encoding](encoding/rlp.md)**
+    Hashing, keys, and how an address is derived from them. One worked example carried all the way through.
 
-    RLP: how Ethereum turns structured data into bytes, and why it needed its own format rather than using JSON.
+    [Keccak-256](crypto/keccak256.md) · [Private keys](crypto/private-keys.md) · [Public keys](crypto/public-keys.md) · [Addresses](crypto/addresses.md) · [Signatures](crypto/signatures.md)
 
-- **[Accounts](accounts/accounts.md)**
+- **Keys and wallets**
 
-    The four fields every account has, and why an account-based design needs a nonce when Bitcoin's coin-based design doesn't.
+    What a wallet actually holds, and why there's no password reset.
+
+    [Wallets and seed phrases](wallets/seed-phrases.md) · [What losing your keys means](wallets/losing-your-keys.md)
+
+- **Encoding**
+
+    How Ethereum turns structured data into bytes, and how it fingerprints the whole state in 32 of them.
+
+    [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
+
+- **Accounts and state**
+
+    The four fields every account has, and why an account-based design needs a nonce when Bitcoin's doesn't.
+
+    [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md)
+
+- **Transactions**
+
+    The only way anything ever changes — what's inside one, and what it costs.
+
+    [Why metering is necessary](transactions/why-metering.md) · [Transactions](transactions/transactions.md) · [Gas](transactions/gas.md) · [Fees](transactions/fees.md)
+
+- **Blocks**
+
+    How transactions get bundled, chained, and occasionally un-chained.
+
+    [Blocks](blocks/blocks.md) · [The block header](blocks/block-header.md) · [The chain and reorgs](blocks/the-chain.md)
+
+- **Economics**
+
+    Why running this costs anything, who ends up paying, and what capping a supply buys and costs.
+
+    [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md)
 
 </div>
+
+Also: a [glossary](glossary.md) of every term used on the site, and a [reference](reference/gas-costs.md) section holding the numbers that change at upgrades.
 
 ---
 
