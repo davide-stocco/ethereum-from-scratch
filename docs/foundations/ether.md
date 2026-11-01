@@ -15,7 +15,9 @@ description: Ether, wei and Gwei — what the units are, why Ethereum counts in 
 
 So "I sent you 2 Ethereum" is wrong in the same way "I paid you 50 Visa" is wrong. You send *ether*; Ethereum is the thing that moves it.
 
-One consequence worth having early: ether isn't only money for buying things. You need it to pay for computation, which makes it the thing that makes the network usable at all. An account with no ether can't do anything, however much else it holds.
+One consequence worth having early: ether isn't only money for buying things. **You need ether to do anything at all**, because every transaction costs a fee and fees are payable only in ether.
+
+This has a consequence people meet in practice. Suppose an account holds a large amount of some token — a stablecoin, say — and no ether. It can still *receive* things, since receiving requires no transaction from you. But it cannot **send** anything, including the tokens it holds, because sending means submitting a transaction and there's no ether to pay the fee with. The tokens are visible, owned, and stuck until somebody sends a little ether to the account.
 
 ??? note "What is an ether worth?"
 

@@ -133,6 +133,46 @@ Everything here has been true since 2015 and cannot realistically change. Write 
 - **Why transaction order has to be agreed** — the double-spend problem and why
   a shared state needs a single ordering. Also per the splitting rule.
 
+### Economics — the section that differentiates this site
+
+Davide is an economics researcher, which makes this the one area where the
+author is the expert rather than the student. A learner-written Ethereum primer
+is one of hundreds; an economist's account of Ethereum's monetary policy and
+fee mechanism is rare. **Treat this as the site's distinguishing section, not a
+side interest.**
+
+It splits on tier exactly like everything else:
+
+| Page | Tier | Why |
+| --- | --- | --- |
+| Why a blockchain must pay for security | 1 | Whoever orders transactions has to be compensated, or nobody does it. Permanent, and the foundation for everything below. |
+| Fixed cap vs. variable supply: Bitcoin and Ethereum | 1 | The *trade-off* is permanent — a hard cap maximises scarcity, a flexible supply lets you keep paying for security. Both choices have costs. |
+| Who pays for what, and in what | 1 | Fees payable only in ether; the consequence that a token-rich, ether-poor account is stuck. |
+| Ethereum's issuance and the fee burn | 3 | EIP-1559 created the burn (2021); The Merge replaced issuance wholesale (2022). Numbers to the Reference section. |
+| Fee markets as mechanism design | 2–3 | The problem is permanent; EIP-1559's specific solution is not. |
+| MEV and the economics of ordering | 3 | Fast-moving, and partly an ecosystem rather than protocol question. |
+
+**Where it sits in the reading order:** after transactions and fees, since it
+needs the idea that computation is paid for. The Tier 1 pages could come
+earlier — the security-budget argument needs nothing but the state machine.
+
+**Literature to build on** (verify each before citing):
+
+- Budish, E. (2018). *The Economic Limits of Bitcoin and the Blockchain.*
+  NBER working paper 24717. The canonical formal treatment of what
+  proof-of-work security actually costs and why.
+- Roughgarden, T. (2020). *Transaction Fee Mechanism Design for the Ethereum
+  Blockchain: An Economic Analysis of EIP-1559.* arXiv:2012.00854. Mechanism
+  design applied directly to Ethereum's fee market.
+
+**The discipline this section needs most:** it is by far the most
+narrative-contaminated part of the subject. "Sound money", "ultrasound money",
+deflation-as-virtue — these are advocacy, repeated so often they read as
+analysis. Describe the mechanism, state what is and isn't known about its
+effects, and keep claims about value separate from claims about design. The
+site's credibility depends on not reading as promotion, and this is the section
+where that's easiest to lose.
+
 ### The problem/solution splitting rule
 
 A useful pattern turned up while scoping Proof of Stake and oracles, and it
