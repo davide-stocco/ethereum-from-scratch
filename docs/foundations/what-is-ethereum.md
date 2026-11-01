@@ -13,10 +13,10 @@ That sentence is doing a lot of work, so let's take it apart properly. The most 
 
 A state machine is just two things:
 
-1. Some **state** — the current situation. Facts about the world.
-2. Some **rules** for changing that state.
+1. **State** — everything that is stored as of now.
+2. **Rules** — which changes are valid, and what the state becomes after one.
 
-A chess board is a state machine. The state is where the pieces are. The rules are the legal moves. Given a board and a move, everyone in the world can work out the new board and they'll all get the same answer. There's no ambiguity, and there's no need to trust the person telling you the move was made.
+A chess board is a state machine. The state is where the pieces are. The rules are the legal moves. Given a board and a move, everyone in the world can work out the new board and they'll all get the same answer. There's no ambiguity, and there's no need to trust the person who told you the move was made — you can work out the result and check it yourself.
 
 This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the [Yellow Paper](../glossary.md#yellow-paper "Ethereum's formal specification, by Gavin Wood"), [Wood (2014)](#ref-wood-2014) — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
 
@@ -65,6 +65,10 @@ graph LR
     B -->|transaction| C[State 3]
     C -->|transaction| D[State 4]
 ```
+
+Thousands of computers each hold a copy of that state. When a transaction arrives, each one applies the rules independently — and because the rules are [deterministic](../glossary.md#determinism "The same inputs always produce the same result, for everyone"), meaning the same state and the same transaction always produce the same new state, they all arrive at an identical answer. Any machine reporting something different would be caught immediately, the same way you'd catch someone lying about a chess position.
+
+That property is the whole point, and it's worth stating bluntly: **nobody has to trust anyone, and nobody is in charge.** Not that everyone trusts each other — trust is simply not required, because anyone can recompute the result and check.
 
 That's Ethereum. Everything else on this site is detail about what's inside the state, what's inside a transaction, and how thousands of computers agree on which transactions happened and in what order.
 
@@ -201,7 +205,7 @@ On Ethereum you can instead put the money somewhere **neither of you controls**,
 
 A contract can hold the money and release it without trusting anyone. **It cannot know whether the camera arrived.**
 
-Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the [determinism](../glossary.md#determinism "The same inputs always produce the same result, for everyone") that makes the whole system work would collapse.
+Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the determinism that makes the whole system work would collapse.
 
 So something outside has to report the result. That reporter is called an **[oracle](../glossary.md#oracle "A service that reports off-chain facts to a contract")**, and the moment you need one, you're trusting it. You've moved the trust rather than removed it. [Zhang et al. (2016)](#ref-zhang-2016) set the problem out formally.
 
@@ -232,7 +236,8 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
 
 ## Recap
 
-- Ethereum is a state machine: a shared state, plus transactions that change it.
+- Ethereum is a state machine: everything stored as of now, plus rules for what may change it.
+- Those rules are deterministic, so anyone can recompute the result and check it. **Nobody has to trust anyone, and nobody is in charge.**
 - Its state is every **account** and its balance — not coins.
 - Accounts can hold **code**, so the network can agree on the result of a computation. That code is stateful and general-purpose, unlike Bitcoin's, and every step of it is metered.
 - Its value isn't speed. It's that tampering is prohibitively expensive and no single party decides the outcome.
