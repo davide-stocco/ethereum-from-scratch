@@ -11,10 +11,15 @@ site_url: https://davide-stocco.github.io/ethereum-from-scratch/
 theme:
   name: material
   features:
-    # Sections are COLLAPSIBLE. Deliberately not using navigation.sections,
-    # which pins every section open — unusable once the site has ~15 of them.
-    - navigation.prune         # only render the active subtree, not all 79 pages
-    - navigation.indexes       # lets a section have its own landing page
+    # Three navigation features are deliberately NOT enabled:
+    #
+    #   navigation.sections  pins every section open — unusable at ~15 sections
+    #   navigation.prune     drops inactive subtrees from the DOM, which turns
+    #                        each section header into a LINK to its first page
+    #                        and leaves nothing for a transition to animate
+    #   navigation.indexes   only useful once sections have landing pages
+    #
+    # Without them, section headers are <label> toggles that expand in place.
     - navigation.top           # "back to top" button
     - navigation.footer        # prev/next links at the bottom of each page
     - search.suggest
