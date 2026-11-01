@@ -183,6 +183,98 @@ That's the same **problem then mechanism** split used everywhere else: 1–3 are
 questions *any* chain faces, 4–7 are Ethereum's particular answers. The tier
 correlation is a consequence, not the organising principle.
 
+#### The wider topic set
+
+The seven-step spine is the backbone. Beyond it, these are the candidates,
+grouped by the question they answer. Tier in brackets.
+
+**Monetary policy and supply**
+
+- Staking yield as a native interest rate [3]. A currency that pays a yield for
+  being locked up is an unusual object; what does that do to holding behaviour?
+- Reflexivity between price and security [1]. The security budget is paid in
+  ether but attacks are priced in dollars, so the same issuance rate buys more
+  or less security as the price moves. Structural, so Tier 1.
+- Liquid staking and concentration [3]. Principal–agent, and a market-structure
+  question about why a few providers dominate.
+
+**Public economics — the strongest untapped seam**
+
+- **Congestion pricing** [2]. EIP-1559 is, almost exactly, textbook congestion
+  pricing with an algorithmically adjusting Pigouvian charge. The connection to
+  Vickrey is direct and essentially nobody makes it.
+- **State growth as an externality** [1 for the problem]. Storage is paid for
+  once and imposes a cost on every node forever — an uninternalised externality
+  and a commons problem. State-rent and statelessness proposals are Pigouvian
+  responses. The problem is permanent; the proposals are not.
+- Public goods funding [2]. Quadratic funding came out of this ecosystem and has
+  a real paper behind it (Buterin, Hitzig & Weyl).
+
+**Market microstructure**
+
+- MEV and ordering rents [3] — already in the spine.
+- Proposer–builder separation as vertical disintegration [3]. An industrial
+  organisation question: why did block production unbundle, and what does that
+  imply about concentration?
+- Automated market makers as a pricing mechanism [3]. "Impermanent loss" is
+  adverse selection against better-informed traders, which is a far more useful
+  framing than the folk term.
+
+**Private money — where stablecoins go**
+
+- **Stablecoins: what makes a peg hold** [1–2]. Fully-reserved, over-collateralised
+  and algorithmic designs, and why the failure modes differ. The mechanisms are
+  stable concepts even though issuers churn.
+- **Runs and reserve quality** [1 for the theory]. Diamond–Dybvig applies almost
+  unchanged: a redeemable claim against illiquid reserves is a run waiting for a
+  trigger. Terra/UST is a case study in reflexive collapse, not a special
+  crypto phenomenon.
+- Private money issuance in historical perspective [1]. Free banking, wildcat
+  notes, clearing-house certificates. Gorton & Zhang's work makes this comparison
+  explicitly. **This is the page that would be hardest for anyone else to write
+  and easiest for an economist** — and it needs no protocol machinery at all.
+
+**Transaction cost economics — the most original angle available**
+
+- **What smart contracts actually economise on** [1]. Coase and Williamson,
+  applied directly. Contracts reduce the costs of enforcement and custody while
+  *raising* the costs of rigidity and of depending on an oracle. That trade-off
+  explains both why some applications work and why most would be better as a
+  database — which the site already asserts on *What is Ethereum?* without
+  having earned it. This page would earn it.
+
+**Layer 2**
+
+- Rollups as firms buying data availability wholesale [3].
+- Sequencer revenue and centralisation [3].
+
+#### Where that leaves the technical side
+
+Stablecoins and smart contracts are both wanted by the Economics section, but
+the protocol prerequisites are modest:
+
+- **Stablecoins** need only ERC-20 (Tier 1, already queued for Phase 1). The
+  *technical* page would be thin — a token with an issuer — so most of the
+  substance belongs in Economics.
+- **Smart contracts** need the EVM for mechanics [2–3], but the economics page
+  above needs only the concept, which *What is Ethereum?* already supplies.
+
+So the Economics section is less blocked on the technical side than it looks.
+Three of the strongest candidates — private money in historical perspective,
+transaction cost economics, and the state-growth externality — need essentially
+no protocol pages that don't already exist.
+
+**Literature for these** (verify each):
+
+- Coase, R. (1937). *The Nature of the Firm.* Economica, 4(16).
+- Diamond, D. & Dybvig, P. (1983). *Bank Runs, Deposit Insurance, and Liquidity.*
+  Journal of Political Economy, 91(3).
+- Gorton, G. & Zhang, J. (2021). *Taming Wildcat Stablecoins.*
+- Buterin, V., Hitzig, Z. & Weyl, E. G. (2019). *A Flexible Design for Funding
+  Public Goods.* Management Science.
+- Vickrey, W. (1969). *Congestion Theory and Transport Investment.* American
+  Economic Review, 59(2).
+
 #### Managing it on the site
 
 **A top-level `Economics` section, which owns the arguments and never
@@ -289,6 +381,95 @@ To publish a draft: move it into the right `docs/` folder and add it to `nav` in
 - **Consensus** — Proof of Stake, validators, slots and epochs, attestations, finality, withdrawals
 - **Scaling** — why rollups, optimistic, ZK, blobs
 - **Account abstraction** — ERC-4337, EIP-7702
+
+---
+
+# What the site is missing
+
+An audit, because it's easy to mistake "queued" for "covered". Three dimensions
+are **genuinely absent** rather than merely unwritten.
+
+## Absent: applications — what has actually been built
+
+The site explains the machine and will explain its economics, but says nothing
+about what anyone has done with it. That's a real hole, and *What is Ethereum?*
+currently asserts that "plenty of things built on Ethereum would be better as
+an ordinary database" without ever earning the claim.
+
+**The organising question, which makes this a section rather than a catalogue:**
+
+> What does this application need that *only* a trustless ledger provides?
+
+For most of them the honest answer is "nothing" — and saying so, case by case,
+is far more useful than another survey of the ecosystem.
+
+| Application | Does it need this machine? |
+| --- | --- |
+| **Stablecoins** | The clearest real use. Dollar access without a bank, censorship-resistant transfer. Mostly Economics, not protocol. |
+| **Exchanges / AMMs** | Genuinely novel pricing mechanism; works because every input is on-chain. No oracle needed. |
+| **Over-collateralised lending** | Works, and notably *replaces credit assessment with collateral* — an information-economics story. |
+| **Insurance** | The interesting case. See below. |
+| **NFTs** | The market largely collapsed; the underlying idea survives in niches. Worth honesty about both. |
+| **DAOs / governance tokens** | Collective choice with very low turnout and concentrated holdings. Results are mixed at best. |
+| **Supply-chain tracking** | The canonical example of something that should be a database. |
+| **Prediction markets** | Constrained far more by regulation and liquidity than by technology. |
+
+### Insurance deserves its own page
+
+Davide raised it, and it's the richest case study available because it fails and
+succeeds for *economic* reasons rather than technical ones:
+
+- **The oracle problem binds hardest here.** Payouts depend on real-world events,
+  so a trusted data feed is required and the trust you removed comes straight
+  back. Parametric products work — flight delay, weather-station rainfall —
+  because the trigger is objectively published. Indemnity insurance doesn't,
+  because assessing an actual loss needs judgement.
+- **Full collateralisation destroys capital efficiency.** This is the strongest
+  point and it's pure economics. Traditional insurers are efficient *because*
+  they pool weakly-correlated risks, hold fractional reserves and reinsure.
+  An on-chain pool must post the full potential payout. That is a large,
+  structural cost disadvantage, and no amount of smart contract design removes
+  it.
+- **Adverse selection and moral hazard are untouched.** Putting the pool
+  on-chain does nothing about underwriting.
+- **But one real trust cost does go away:** the insurer's discretion to deny a
+  valid claim. In markets where that discretion is the actual problem, the
+  trade may be worth it.
+- Insuring **on-chain** risks (contract failure) is the special case where no
+  oracle is needed, since the trigger is visible to the chain.
+
+Which makes insurance the best available illustration of the general rule:
+smart contracts economise on enforcement and custody, and pay for it in
+rigidity, oracle dependence and capital efficiency.
+
+## Absent: how Ethereum decides to change
+
+Nothing on the site explains *who* changes the protocol or how. EIPs, client
+teams, All Core Devs, the absence of on-chain governance for the base layer.
+This is partly a collective-choice question, so it borders Economics. Tier 1 for
+the structure, Tier 3 for current process.
+
+## Absent: privacy, and things going wrong
+
+Two smaller holes:
+
+- **Everything is public.** Balances, transaction history, contract state. The
+  implications barely feature, and they matter to anyone deciding to use it.
+  Tier 1.
+- **Failure modes.** Reentrancy, oracle manipulation, the economics of audits
+  and bug bounties. A site that only explains how things work reads as
+  promotional by omission. Tier 1 for the categories.
+
+Also missing and more practical: **wallets and key management** — seed phrases,
+what "losing your keys" means, why there's no recovery. A reader-facing gap, and
+mostly Tier 1.
+
+## Merely queued, not missing
+
+For contrast, these are already planned above: blocks, transactions, state, gas
+and fees, the Merkle Patricia Trie, the EVM and smart contract mechanics,
+consensus, rollups and blobs, ERC-20 and ERC-721, signatures, the ABI, events
+and logs, fork history, and the interactive tools.
 
 ---
 
