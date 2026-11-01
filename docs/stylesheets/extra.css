@@ -74,8 +74,8 @@
     overflow: hidden;
     opacity: 0;
     transition:
-      max-height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
-      opacity 0.22s ease-out;
+      max-height 0.45s cubic-bezier(0.25, 0.1, 0.25, 1),
+      opacity 0.32s ease-out;
   }
 
   /* The ceiling has to exceed the tallest section, but not by much: the

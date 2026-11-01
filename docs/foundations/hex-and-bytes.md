@@ -5,7 +5,7 @@ description: Bytes, hexadecimal and the 0x prefix — how to read the long strin
 
 # Hex and bytes
 
-**Fork-proof.** This isn't an Ethereum rule at all. It's how computers represent data, and it predates all of this by decades.
+**Fork-proof.** This isn't an Ethereum rule at all — it's how computers represent data.
 
 Everything on Ethereum is eventually a string of characters like this:
 
@@ -17,11 +17,36 @@ This page is about how to read that. It's short, and it exists so that later pag
 
 ## A byte is eight bits
 
-A **bit** is a single one or zero. A **byte** is eight of them together.
+A **bit** is a single one or zero. A **byte** is eight of them in a row:
 
-Eight bits can be arranged in 2<sup>8</sup> = **256** different ways, so one byte holds one of 256 possible values — conventionally read as a number from 0 to 255.
+```
+0 1 1 0 1 0 0 1
+```
 
-The byte is the unit everything is measured in. Not because it's mathematically special, but because it's what hardware settled on, and the whole stack has counted in bytes ever since.
+How many different bytes are possible? Each position is independently a 0 or a 1, so every position you add doubles the number of patterns. Small cases first, because the pattern is easier to see than to state:
+
+| Bits | Patterns | All of them |
+| --- | --- | --- |
+| 1 | 2 | `0` `1` |
+| 2 | 4 | `00` `01` `10` `11` |
+| 3 | 8 | `000` `001` `010` `011` `100` `101` `110` `111` |
+| 8 | **256** | `00000000` … `11111111` |
+
+Each extra bit doubles it: 2, 4, 8, 16, 32, 64, 128, **256**. That's 2<sup>8</sup>.
+
+By convention each pattern is read as a number, counting up from zero:
+
+```
+00000000  =    0
+00000001  =    1
+00000010  =    2
+00000011  =    3
+   ...
+11111110  =  254
+11111111  =  255
+```
+
+So "one byte" and "a number from 0 to 255" are two descriptions of the same thing. The byte is the unit everything gets measured in — not because eight is mathematically special, but because it's what hardware settled on, and the whole stack has counted in bytes since.
 
 ## Hexadecimal
 
@@ -36,18 +61,72 @@ The byte is the unit everything is measured in. Not because it's mathematically 
 
 So `f` is 15, and `10` in hex is sixteen.
 
+### Reading a hex number
+
+It works exactly like decimal, except each position is worth **16 times** the one to its right instead of 10 times.
+
+In decimal, `1234` means 1×1000 + 2×100 + 3×10 + 4. The place values are 1, 10, 100, 1000 — powers of ten.
+
+In hex the place values are powers of sixteen: 1, 16, 256, 4096. So `0x2f`:
+
+```
+0x2f
+  │└─ f  = 15,  in the ones place      →  15 × 1   =  15
+  └── 2  =  2,  in the sixteens place  →   2 × 16  =  32
+                                                      ──
+                                                      47
+```
+
+And a four-character example, `0x1234`:
+
+```
+4 × 1     =     4
+3 × 16    =    48
+2 × 256   =   512
+1 × 4096  =  4096
+             ─────
+              4660
+```
+
+That's all there is to it. Nothing about hex is conceptually different from decimal — only the number of digits available.
+
 ### Why base 16, and not 10
 
 Because of one tidy coincidence: **one byte is exactly two hex characters.**
 
 A byte holds 256 values. Two hex characters give 16 × 16 = 256 possibilities. They correspond perfectly, with nothing left over:
 
+| Bits | Hex | Decimal |
+| --- | --- | --- |
+| `00000000` | `00` | 0 |
+| `00001111` | `0f` | 15 |
+| `00010000` | `10` | 16 |
+| `10101010` | `aa` | 170 |
+| `11111111` | `ff` | 255 |
+
+Notice that two hex characters also split the byte neatly in half: the left character is the first four bits, the right character the last four. `aa` is `1010` then `1010`.
+
+**Decimal has no such alignment**, and the consequence is worth seeing rather than being told.
+
+Suppose you want to write down three bytes whose values are 5, 255 and 7.
+
+In **hex**, each one takes exactly two characters, so you get `05 ff 07`, which you'd write as:
+
 ```
-byte value 0   ->  00
-byte value 255 ->  ff
+05ff07
 ```
 
-Decimal has no such alignment. A byte in decimal takes one, two, or three digits depending on its value, so you can't look at a decimal string and see where one byte ends and the next begins. In hex you can, always: **chop it into pairs.**
+Now recover the original three bytes. Easy — chop it into pairs: `05`, `ff`, `07`.
+
+In **decimal**, those same three values take one, three and one digits:
+
+```
+52557
+```
+
+Now recover them. You can't. Is that 5, 25, 57? Or 52, 5, 57? Or 5, 255, 7? Nothing in the string tells you where one byte ends and the next begins, because decimal digits per byte varies with the value.
+
+That's the whole reason hex is used: **the boundaries are always visible.**
 
 ```
 d8 dA 6B F2 69 64 aF 9D 7e Ed 9e 03 E5 34 15 D3 7a A9 60 45
@@ -80,11 +159,19 @@ The 32-byte figure turns up constantly because it's the output size of [Keccak-2
 
 `0x1234` can mean two different things, and conflating them causes real bugs.
 
-**As a number**, it's 1×4096 + 2×256 + 3×16 + 4 = **4660**.
+**As a number**, it's 4660 — the calculation from earlier.
 
-**As bytes**, it's two bytes — `0x12` and `0x34` — and the sensible questions are about its length rather than its magnitude.
+**As bytes**, it's two bytes: `0x12` and `0x34`.
 
-Which one is meant depends entirely on context. A balance is a number. An address is bytes. A hash is bytes. Addresses are never arithmetic, even though they look like enormous numbers, and nothing good comes of adding two of them together.
+Both readings are valid. Which is meant depends on context — and the context is really *what you intend to do with it.*
+
+**A number is a quantity.** You add to it, subtract from it, ask whether it's bigger than another one. A balance is a quantity: 2.5 ether plus 1 ether is a meaningful thing to compute.
+
+**A byte string is an identifier.** You compare it for equality and you check its length. That's all. An address isn't a quantity — the only questions worth asking are *"is this 20 bytes?"* and *"is this the same address as that one?"*
+
+Which is why "is this address larger than that address?" is not a meaningful question, even though both look like enormous numbers. It's the same category error as asking whether one phone number is bigger than another: the digits are there to identify, not to count.
+
+So: balances are numbers. Addresses, hashes and storage keys are byte strings. Nothing good comes of doing arithmetic on the second group.
 
 ??? abstract "Leading zeros, and why they sometimes matter"
 
@@ -107,21 +194,36 @@ Which one is meant depends entirely on context. A balance is a number. An addres
 
 ??? abstract "Big-endian, and why the direction is a choice"
 
-    Given several bytes making up one number, you have to agree which end is
-    the most significant. There are two conventions:
+    Here's the problem. Take the two bytes `0x12` and `0x34`, in that order,
+    and read them as one number. **There are two defensible answers**, because
+    you first have to agree which end carries the large part.
 
-    - **Big-endian** puts the most significant byte first, the way we write
-      decimal numbers: in `0x1234`, the `12` is the large part.
-    - **Little-endian** puts the least significant byte first, which some
-      processors prefer internally.
+    **Big-endian** treats the *first* byte as the most significant:
+
+    ```
+    0x12 × 256  +  0x34        =  18 × 256 + 52  =  4660
+    ```
+
+    **Little-endian** treats the *last* byte as the most significant, so the
+    same two bytes are read in the other order:
+
+    ```
+    0x34 × 256  +  0x12        =  52 × 256 + 18  =  13330
+    ```
+
+    Same bytes on disk. Two different numbers. Which is why it has to be
+    agreed rather than assumed.
 
     **Ethereum is big-endian** — integers are serialised most-significant-byte
-    first throughout the specification [(Wood, 2014)](#ref-wood-2014). So hex
-    strings read in the familiar direction, and `0x1234` is 4660 rather than
-    13330.
+    first throughout the specification [(Wood, 2014)](#ref-wood-2014).
+
+    The convenient consequence is that hex strings read in the direction you
+    already expect. In decimal `1234`, the leftmost digit carries the largest
+    place value; big-endian does the same thing with bytes, so `0x1234` is
+    4660, exactly as the place-value calculation earlier gave.
 
     You can go a long way without thinking about this. It becomes unavoidable
-    the moment you write code that converts between numbers and bytes, which is
+    the moment you write code converting between numbers and bytes, which is
     where most beginner mistakes in this area live.
 
 ## Why not binary?
