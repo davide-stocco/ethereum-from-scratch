@@ -62,6 +62,32 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
 ---
 
+## Reading paths
+
+The menu is one sensible order, and reading straight down it works. But depending on why you're here, some of it can wait.
+
+**New to Ethereum — read in order.** Start at [What is Ethereum?](foundations/what-is-ethereum.md) and work down. Nothing assumes anything you haven't already read.
+
+**Here for the economics.** The monetary and incentive questions need surprisingly little machinery — just what Ethereum is and what the units are:
+
+> [What is Ethereum?](foundations/what-is-ethereum.md) → [Ether, wei and gwei](foundations/ether.md) → [Why security has to be paid for](economics/security-budget.md) → [Who pays](economics/who-pays.md) → [Fixed cap or flexible supply](economics/supply-cap.md)
+
+Cryptography, encoding and accounts can be skipped and picked up later.
+
+**Here for the technical detail.** Work down Foundations, Cryptography, Encoding and Accounts in order. These are the parts that haven't changed since 2015, so they're worth learning properly once.
+
+**Looking for one specific thing.** Use the search box, or the [glossary](glossary.md) for a quick definition with a link to the page that explains it.
+
+!!! note "Why there's no choice to make up front"
+
+    Some sites ask you to pick a track before you begin. This one doesn't,
+    because the economics genuinely depends on the technical material — you
+    can't weigh what security *costs* without knowing what it *buys* — so the
+    paths overlap rather than diverge. There's one set of pages, and these are
+    just suggested routes through them.
+
+---
+
 ## What's missing, and why
 
 Gas costs, the fee market, transaction types, the EVM, Proof of Stake and rollups aren't here yet. They're all important, and they're all coming.
