@@ -36,6 +36,58 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Sidebar: section headers vs. chapter links
+   ---------------------------------------------------------------------------
+   Section headers were the same weight as the pages inside them, so the
+   hierarchy had to be inferred from indentation alone. Headers now read as
+   headers, and page links sit visibly below them.
+   --------------------------------------------------------------------------- */
+
+.md-nav--primary .md-nav__item--nested > .md-nav__link {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.md-nav--primary .md-nav__item--nested .md-nav__item .md-nav__link {
+  font-weight: 400;
+}
+
+/* The expand/collapse chevron should turn rather than jump. */
+.md-nav__link .md-nav__icon {
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar: animate expanding a section
+   ---------------------------------------------------------------------------
+   Material toggles nested navigation with `display`, which cannot be
+   transitioned — so a section appears instantly. Keeping it in the layout and
+   animating height and opacity instead gives the movement somewhere to go.
+   Scoped to desktop: the mobile drawer slides between panes already, and has
+   its own animation.
+   --------------------------------------------------------------------------- */
+
+@media screen and (min-width: 76.25em) {
+  .md-nav--primary .md-nav__item--nested > .md-nav {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    transition:
+      max-height 0.28s cubic-bezier(0.2, 0, 0.2, 1),
+      opacity 0.2s ease,
+      transform 0.28s cubic-bezier(0.2, 0, 0.2, 1);
+  }
+
+  .md-nav--primary .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+    max-height: 40rem;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Sources sections
    ---------------------------------------------------------------------------
    Each page ends with its references. Set them slightly smaller and looser
