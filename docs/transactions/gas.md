@@ -1,3 +1,7 @@
+---
+tier: 2
+---
+
 # Gas
 
 !!! warning "Stub — not written yet"

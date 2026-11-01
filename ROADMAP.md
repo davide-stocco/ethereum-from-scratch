@@ -146,6 +146,31 @@ Past tense ages gracefully; present tense doesn't.
 
 ---
 
+# Versions
+
+~79 pages at full scope, which is a multi-year project. So the goal is a site
+that's **useful at every stage**, not only at the end.
+
+| | Contents | Pages | Why it stands alone |
+| --- | --- | --- | --- |
+| **v1 — launch** | Foundations, Cryptography, Keys and wallets, Encoding, Accounts and state, Economics "why it costs", Glossary, About | ~20 | *"The permanent core, and why it costs anything."* Almost all Tier 1 — nothing can go stale. Contains the differentiator. |
+| **v2** | Transactions, Blocks, Reference, first Tools | ~32 | The working machine. Where most readers' questions actually live. |
+| **v3** | The EVM, Consensus, Scaling, Standards | ~50 | Technically complete. |
+| **v4** | Applications, Governance, Security and privacy, rest of Economics | ~79 | The judgement layer — needs everything before it. |
+
+**Launch at v1**, and don't wait for v2. Twenty permanent pages is a complete,
+defensible site; waiting for v3 means two years of nothing public.
+
+**v1 and v2 are scaffolded in `nav` now.** v3 and v4 stay out of the site until
+v1 is published — a sidebar listing seventy unwritten pages is worse than no
+sidebar.
+
+**At launch, trim `nav` to written pages only.** The stubs are there for the
+author's benefit; publishing them gets near-empty pages indexed as thin content
+and drags down the good ones.
+
+---
+
 # Phase 1 — the fork-proof core *(published)*
 
 Everything here has been true since 2015 and cannot realistically change. Write these once; they never need revisiting.

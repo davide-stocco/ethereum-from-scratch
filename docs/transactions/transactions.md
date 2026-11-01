@@ -1,3 +1,7 @@
+---
+tier: 2
+---
+
 # Transactions
 
 !!! warning "Stub — not written yet"
@@ -26,4 +30,4 @@
 - Don't explain the signature maths here — point at the signatures page.
 - The `data` field is the gateway to the whole EVM section. Flag it as important and move on.
 
-**Next:** [The nonce](nonce.md)
+**Next:** [Gas](gas.md)

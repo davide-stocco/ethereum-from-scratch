@@ -11,7 +11,10 @@ site_url: https://davide-stocco.github.io/ethereum-from-scratch/
 theme:
   name: material
   features:
-    - navigation.sections      # show section headings in the sidebar
+    # Sections are COLLAPSIBLE. Deliberately not using navigation.sections,
+    # which pins every section open — unusable once the site has ~15 of them.
+    - navigation.prune         # only render the active subtree, not all 79 pages
+    - navigation.indexes       # lets a section have its own landing page
     - navigation.top           # "back to top" button
     - navigation.footer        # prev/next links at the bottom of each page
     - search.suggest
@@ -79,6 +82,8 @@ markdown_extensions:
 # ---------------------------------------------------------------------------
 nav:
   - Home: index.md
+
+  # ---- v1: the launch set. All Tier 1 — nothing here can go stale. -------
   - Foundations:
       - What is Ethereum?: foundations/what-is-ethereum.md
       - Ether, wei and gwei: foundations/ether.md
@@ -88,18 +93,39 @@ nav:
       - Private keys: crypto/private-keys.md
       - Public keys: crypto/public-keys.md
       - Addresses: crypto/addresses.md
+      - Signatures: crypto/signatures.md
+  - Keys and wallets:
+      - Wallets and seed phrases: wallets/seed-phrases.md
+      - What losing your keys means: wallets/losing-your-keys.md
   - Encoding:
       - RLP encoding: encoding/rlp.md
-  - Accounts:
+      - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
+  - Accounts and state:
       - Accounts: accounts/accounts.md
       - The nonce: accounts/nonce.md
-  # Tier 1 only for now. The fork-dependent economics — Ethereum's own
-  # issuance, the fee burn, the fee market, MEV — waits for the protocol
-  # pages it depends on. See the Economics section of ROADMAP.md.
+      - State: accounts/state.md
+
+  # ---- v2: the working machine. Tier 2-3, so these carry date stamps. ---
+  - Transactions:
+      - Why metering is necessary: transactions/why-metering.md
+      - Transactions: transactions/transactions.md
+      - Gas: transactions/gas.md
+      - Fees: transactions/fees.md
+  - Blocks:
+      - Blocks: blocks/blocks.md
+      - The block header: blocks/block-header.md
+      - The chain and reorgs: blocks/the-chain.md
+
+  # ---- Economics: Tier 1 group only. Pricing, money and institutions -----
+  # ---- wait for the protocol pages they depend on. See ROADMAP.md. ------
   - Economics:
       - Why security has to be paid for: economics/security-budget.md
       - 'Who pays: issuance or fees': economics/who-pays.md
       - Fixed cap or flexible supply: economics/supply-cap.md
+
+  - Reference:
+      - Gas costs: reference/gas-costs.md
+      - Fork history: reference/fork-history.md
   - Glossary: glossary.md
   - About:
       - Ethereum changes: about/forks.md

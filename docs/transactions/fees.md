@@ -1,3 +1,7 @@
+---
+tier: 3
+---
+
 # Fees
 
 !!! warning "Stub — not written yet"

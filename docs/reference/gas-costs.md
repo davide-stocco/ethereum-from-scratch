@@ -1,3 +1,7 @@
+---
+tier: 2
+---
+
 # Gas costs
 
 !!! warning "Stub — not written yet"

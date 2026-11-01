@@ -1,3 +1,7 @@
+---
+tier: 2
+---
+
 # State
 
 !!! warning "Stub — not written yet"
@@ -15,7 +19,7 @@
 ## Notes to self
 
 - The state root is the hinge that connects accounts to blocks. It's worth being very clear here, because it's how a tiny block header commits to gigabytes of data.
-- You need the [Merkle Patricia Trie](../technical/merkle-patricia-trie.md) for the *how*. On this page, only promise that a fingerprint exists and that any change to any account changes it.
+- You need the [Merkle Patricia Trie](../encoding/merkle-patricia-trie.md) for the *how*. On this page, only promise that a fingerprint exists and that any change to any account changes it.
 - Worth stating: Ethereum's state is several hundred gigabytes and grows constantly. This is a real, ongoing design problem ("state growth") — and good motivation for the scaling section.
 
 **Next:** [Transactions](../transactions/transactions.md)
