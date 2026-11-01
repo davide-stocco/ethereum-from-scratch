@@ -1,9 +1,9 @@
 ---
 tier: 1
-description: Ether, wei and Gwei — what the units are, why Ethereum counts in whole numbers of wei, and why decimals would break consensus.
+description: Ether, wei and gwei — what the units are, why Ethereum counts in whole numbers of wei, and why decimals would break consensus.
 ---
 
-# Ether, wei and Gwei
+# Ether, wei and gwei
 
 **Fork-proof.** 10<sup>18</sup> wei per ether, fixed since genesis.
 
@@ -53,7 +53,7 @@ There are **10<sup>18</sup> wei** in one ether — a billion billion.
 1 ether = 1,000,000,000,000,000,000 wei
 ```
 
-It's named after **Wei Dai**, a cryptographer who in 1998 described *b-money* [(Dai, 1998)](#ref-dai-1998), one of the ideas that fed into cryptocurrencies. Several other units were defined early on with similar namesakes, and almost nobody uses them. In practice you'll meet three: **wei, Gwei, ether.**
+It's named after **Wei Dai**, a cryptographer who in 1998 described *b-money* [(Dai, 1998)](#ref-dai-1998), one of the ideas that fed into cryptocurrencies. Several other units were defined early on with similar namesakes, and almost nobody uses them. In practice you'll meet three: **wei, gwei, ether.**
 
 ### Yes — wei is Ethereum's satoshi
 
@@ -122,33 +122,27 @@ So the rule, and it's a consequence rather than a preference:
     is moving a decimal point rather than doing a calculation, and "18 decimals"
     became the convention most tokens follow in turn.
 
-## Why fees are quoted in Gwei
+## Why fees are quoted in gwei
 
-**One Gwei is 10<sup>9</sup> wei** — a billion wei. The prefix is *giga*, so written out in full the unit is *gigawei*.
+**One gwei is 10<sup>9</sup> wei** — a billion wei. The prefix is *giga*, so written out in full the unit is *gigawei*.
 
-It exists purely for readability. Transaction fees are quoted in Gwei, and the reason becomes obvious when you write one fee three ways:
+It exists purely for readability. Transaction fees are quoted in gwei, and the reason becomes obvious when you write one fee three ways:
 
 | Unit | A gas price |
 | --- | --- |
 | wei | `20000000000` |
 | ether | `0.00000002` |
-| **Gwei** | **`20`** |
+| **gwei** | **`20`** |
 
-Fees land naturally in the single-to-low-hundreds range when expressed in Gwei, so that's the unit wallets and fee trackers use. There's nothing special about it — it's just the scale at which fees become human-readable.
+Fees land naturally in the single-to-low-hundreds range when expressed in gwei, so that's the unit wallets and fee trackers use. There's nothing special about it — it's just the scale at which fees become human-readable.
 
 ??? note "Gwei, gwei or gigawei?"
 
-    All three appear in the wild, and no standard settles it. What can be said
-    definitely:
+    All three appear in the wild, and no standard settles it. Two things can be
+    said definitely.
 
     **Spelled out in full, it's one word: *gigawei*.** Metric prefixes never
     take a space — gigawatt, not giga watt — so "giga wei" isn't right.
-
-    **In prose, this site writes *Gwei*.** Usage across the ecosystem is
-    genuinely split. Block explorers and market sites tend to capitalise it;
-    the strict analogy with SI units named after people — volt, watt, newton,
-    all lowercase when spelled out — argues the other way. There's no authority
-    to appeal to, so the only real rule is to pick one and hold it.
 
     **In code it is always lowercase.** Solidity accepts `wei`, `gwei` and
     `ether` as suffixes on a numeric literal, and those keywords are
@@ -160,24 +154,31 @@ Fees land naturally in the single-to-low-hundreds range when expressed in Gwei, 
     assert(1 ether == 1e18);
     ```
 
-    So code on this site uses lowercase regardless of the prose convention —
-    not an inconsistency, a requirement of the compiler.
+    **That's the reason this site writes lowercase everywhere.** Prose and code
+    then agree, and there's no sense in spelling the same unit two ways inside
+    one project. Capitalised *Gwei* is perfectly defensible — block explorers
+    and market sites commonly use it — but choosing it means every code example
+    on the site contradicts the surrounding text, for no gain.
 
-    (Note also that `szabo` and `finney`, two of the original unit names, were
-    valid suffixes once and were removed from the language. A reminder that
-    even naming conventions get pruned.)
+    Lowercase also happens to match how SI writes spelled-out units named after
+    people: volt, watt, newton. That's a weaker argument though, since wei is
+    not an SI unit and the analogy is just an analogy. The compiler is a rule.
 
-*(Fees are priced per unit of work, and that unit of work is called **[gas](../glossary.md#gas "The unit computational work is measured in")**. It gets a page of its own; for now, all you need is that fees are quoted in Gwei because the numbers come out legible.)*
+    `szabo` and `finney`, two of the original unit names, were once valid
+    suffixes and have since been removed from the language — a reminder that
+    even naming conventions get pruned.
+
+*(Fees are priced per unit of work, and that unit of work is called **[gas](../glossary.md#gas "The unit computational work is measured in")**. It gets a page of its own; for now, all you need is that fees are quoted in gwei because the numbers come out readable.)*
 
 ## The conversion table
 
 | Unit | Wei | In ether |
 | --- | --- | --- |
 | 1 wei | `1` | 0.000000000000000001 |
-| 1 Gwei | `1000000000` | 0.000000001 |
+| 1 gwei | `1000000000` | 0.000000001 |
 | 1 ether | `1000000000000000000` | 1 |
 
-Going from ether to wei means moving the decimal point **18 places right**. From Gwei to wei, **9 places right**. That's the whole arithmetic.
+Going from ether to wei means moving the decimal point **18 places right**. From gwei to wei, **9 places right**. That's the whole arithmetic.
 
 ---
 
@@ -187,7 +188,7 @@ Going from ether to wei means moving the decimal point **18 places right**. From
 - **Wei** is the smallest unit: 10<sup>18</sup> per ether, and genuinely indivisible. It's Ethereum's equivalent of Bitcoin's satoshi, just far finer.
 - **The protocol holds only whole numbers of wei.** The decimal point you see is added by software.
 - That's required, not stylistic: **decimal fractions round differently on different machines**, nodes would disagree, and determinism would break.
-- Fees are quoted in **Gwei** (10<sup>9</sup> wei), the scale at which they read legibly.
+- Fees are quoted in **gwei** (10<sup>9</sup> wei), the scale at which they read most easily.
 
 **Next:** [Hex and bytes](hex-and-bytes.md) — how those numbers are actually written down.
 

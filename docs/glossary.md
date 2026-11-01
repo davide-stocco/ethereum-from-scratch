@@ -80,8 +80,8 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **Gas**{ #gas }
 : The unit measuring computational work. Not money — gas is the *amount* of work, and the fee is what that work costs. Exists so that computation is paid for and so no contract can run forever.
 
-**Gwei**{ #gwei }
-: 10<sup>9</sup> wei. The unit fees are normally quoted in. → [Ether, wei and Gwei](foundations/ether.md)
+**gwei**{ #gwei }
+: 10<sup>9</sup> wei. The unit fees are normally quoted in. → [Ether, wei and gwei](foundations/ether.md)
 
 ## H
 
@@ -164,7 +164,7 @@ If you arrived from a search engine and a word on some page made no sense, this 
 ## W
 
 **wei**{ #wei }
-: The smallest unit of ether. 10<sup>18</sup> wei = 1 ether. All amounts are integers in wei; Ethereum never uses decimals. → [Ether, wei and Gwei](foundations/ether.md)
+: The smallest unit of ether. 10<sup>18</sup> wei = 1 ether. All amounts are integers in wei; Ethereum never uses decimals. → [Ether, wei and gwei](foundations/ether.md)
 
 ## Y
 
