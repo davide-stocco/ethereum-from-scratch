@@ -66,7 +66,7 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **EOA**{ #eoa } (Externally Owned Account)
 : An account controlled by a private key rather than by code — what people mean by a wallet. The only kind that can start a transaction. → [Accounts](accounts/accounts.md)
 
-**Ether**{ #ether }
+**ether**{ #ether }
 : Ethereum's native currency. Counted internally in [wei](foundations/ether.md), never in decimals.
 
 **EVM**{ #evm } (Ethereum Virtual Machine)
@@ -80,7 +80,7 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **Gas**{ #gas }
 : The unit measuring computational work. Not money — gas is the *amount* of work, and the fee is what that work costs. Exists so that computation is paid for and so no contract can run forever.
 
-**Gwei**{ #gwei }
+**gwei**{ #gwei }
 : 10<sup>9</sup> wei. The unit fees are normally quoted in. → [Ether, wei and gwei](foundations/ether.md)
 
 ## H
@@ -163,7 +163,7 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 ## W
 
-**Wei**{ #wei }
+**wei**{ #wei }
 : The smallest unit of ether. 10<sup>18</sup> wei = 1 ether. All amounts are integers in wei; Ethereum never uses decimals. → [Ether, wei and gwei](foundations/ether.md)
 
 ## Y
