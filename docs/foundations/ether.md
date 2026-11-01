@@ -47,7 +47,7 @@ This has a consequence people meet in practice. Suppose an account holds a large
 
 ## Wei is the smallest unit
 
-There are **10<sup>18</sup> wei** in one ether — a billion billion.
+There are **10<sup>18</sup> wei** in one ether — a billion billion. Wei is the unit the specification itself counts in: the Yellow Paper defines balances and fees in wei throughout, and treats ether as a denomination on top [(Wood, 2014)](#ref-wood-2014).
 
 ```
 1 ether = 1,000,000,000,000,000,000 wei
@@ -126,15 +126,19 @@ So the rule, and it's a consequence rather than a preference:
 
 **One gwei is 10<sup>9</sup> wei** — a billion wei. The prefix is *giga*, so written out in full the unit is *gigawei*.
 
-It exists purely for readability. Transaction fees are quoted in gwei, and the reason becomes obvious when you write one fee three ways:
+It exists for one reason: readability.
 
-| Unit | A gas price |
+A fee on Ethereum isn't a flat charge. It's a **price per unit of computational work**, and that unit is called **[gas](../glossary.md#gas "The unit computational work is measured in")** — which gets a page of its own later. All that matters here is that a fee comes out as a price, and prices need a unit to be quoted in.
+
+Write one such price three ways and the choice makes itself:
+
+| Unit | The same gas price |
 | --- | --- |
 | wei | `20000000000` |
 | ether | `0.00000002` |
 | **gwei** | **`20`** |
 
-Fees land naturally in the single-to-low-hundreds range when expressed in gwei, so that's the unit wallets and fee trackers use. There's nothing special about it — it's just the scale at which fees become human-readable.
+Gas prices land naturally in the single-to-low-hundreds range when written in gwei, so that's what wallets and fee trackers use. Nothing deeper than that: it's simply the scale at which the numbers are readable.
 
 ??? note "Gwei, gwei or gigawei?"
 
@@ -154,6 +158,10 @@ Fees land naturally in the single-to-low-hundreds range when expressed in gwei, 
     assert(1 ether == 1e18);
     ```
 
+    That list has itself shrunk, incidentally, which is some evidence for how
+    unsettled the naming is: `szabo` and `finney` were once valid suffixes too,
+    and have since been removed from the language.
+
     **That's the reason this site writes lowercase everywhere.** Prose and code
     then agree, and there's no sense in spelling the same unit two ways inside
     one project. Capitalised *Gwei* is perfectly defensible — block explorers
@@ -164,11 +172,6 @@ Fees land naturally in the single-to-low-hundreds range when expressed in gwei, 
     people: volt, watt, newton. That's a weaker argument though, since wei is
     not an SI unit and the analogy is just an analogy. The compiler is a rule.
 
-    `szabo` and `finney`, two of the original unit names, were once valid
-    suffixes and have since been removed from the language — a reminder that
-    even naming conventions get pruned.
-
-*(Fees are priced per unit of work, and that unit of work is called **[gas](../glossary.md#gas "The unit computational work is measured in")**. It gets a page of its own; for now, all you need is that fees are quoted in gwei because the numbers come out readable.)*
 
 ## The conversion table
 
