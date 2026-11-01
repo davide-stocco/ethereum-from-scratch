@@ -565,7 +565,26 @@ and logs, fork history, and the interactive tools.
 
 # Phase 3 — interactive tools
 
-Save these for last; they need HTML and JavaScript, which is worth learning once the writing is done. They're also what makes a site like this memorable.
+**Started early, deliberately.** The plan was to leave these until the writing
+was done, but the hex page made the case for moving sooner: a converter there
+teaches place values better than any amount of prose. So tools now get built
+where a page genuinely needs one, rather than all at the end.
+
+Conventions established by the first one:
+
+- **One file, `docs/javascripts/converters.js`**, loaded site-wide via
+  `extra_javascript`. Each tool looks for its own element ids and does nothing
+  if they're absent, so there's no per-page wiring.
+- **Plain JavaScript, no dependencies.** Nothing to keep updated, nothing to
+  break, and the whole file stays readable.
+- **BigInt throughout, never Number.** A JavaScript Number holds 53 bits
+  exactly; an address is 160 and a hash is 256. Using Number would silently
+  corrupt real Ethereum values, which is the one bug a tool like this must not
+  have.
+- **Guard against double-binding.** Material swaps pages without reloading and
+  re-runs the file, so each tool marks its root element once.
+- **Markup in the page, logic in the file.** The page holds a
+  `<div class="tool">` of labelled inputs; the JavaScript holds the behaviour.
 
 - Unit converter (wei ⇄ gwei ⇄ ether)
 - Hex ⇄ decimal ⇄ bytes converter
@@ -598,6 +617,10 @@ than maintaining two versions that drift apart.
         changed. Often the clearest justification for the current design, and
         the fork policy's "teach changes as history" in practice.
       - `??? note "…"` — asides, terminology, caveats.
+      - `???+ example "Try it: …"` — an **interactive tool**. Purple, and the
+        only box type that opens by default (`???+`), because a hidden
+        instrument is a useless one. Always followed by a few prompts worth
+        trying, so the tool teaches something rather than just existing.
 
    **No mixing.** An always-open `!!!` box sitting beside collapsed ones reads
    as a mistake, and a reader can't tell what the convention is. All closed by

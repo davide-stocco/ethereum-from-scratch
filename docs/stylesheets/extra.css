@@ -36,6 +36,84 @@
 }
 
 /* ---------------------------------------------------------------------------
+   "Try it" boxes — interactive exercises
+   ---------------------------------------------------------------------------
+   Uses Material's `example` admonition type, which already has its own
+   purple, distinct from note (blue), info (cyan), abstract (light blue) and
+   warning (orange). Only the controls inside need styling.
+   --------------------------------------------------------------------------- */
+
+.md-typeset .tool {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 0.8rem;
+  align-items: center;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.md-typeset .tool label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.md-typeset .tool input {
+  width: 100%;
+  padding: 0.4em 0.6em;
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.15rem;
+}
+
+.md-typeset .tool input:focus {
+  outline: none;
+  border-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .tool input.tool__input--bad {
+  border-color: #d32f2f;
+}
+
+.md-typeset .tool__out {
+  grid-column: 1 / -1;
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.md-typeset .tool__hint {
+  font-size: 0.72rem;
+  opacity: 0.7;
+  overflow-wrap: anywhere;
+}
+
+.md-typeset .tool__error {
+  font-size: 0.78rem;
+  color: #d32f2f;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .tool input.tool__input--bad,
+[data-md-color-scheme="slate"] .md-typeset .tool__error {
+  color: #ff8a80;
+  border-color: #ff8a80;
+}
+
+/* Stack the labels above the fields on narrow screens. */
+@media screen and (max-width: 44.9em) {
+  .md-typeset .tool {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
    Sidebar: section headers vs. chapter links
    ---------------------------------------------------------------------------
    Section headers were the same weight as the pages inside them, so the

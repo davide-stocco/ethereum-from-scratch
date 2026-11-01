@@ -90,6 +90,34 @@ And a four-character example, `0x1234`:
 
 That's all there is to it. Nothing about hex is conceptually different from decimal — only the number of digits available.
 
+???+ example "Try it: convert between decimal, hex and binary"
+
+    Type into any field and the other two follow. It starts on `0x1234`, the
+    example above.
+
+    <div class="tool" markdown="0">
+      <label for="conv-dec">Decimal</label>
+      <input id="conv-dec" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" placeholder="4660">
+      <label for="conv-hex">Hex</label>
+      <input id="conv-hex" type="text" autocomplete="off" spellcheck="false" placeholder="0x1234">
+      <label for="conv-bin">Binary</label>
+      <input id="conv-bin" type="text" autocomplete="off" spellcheck="false" placeholder="1001000110100">
+      <p class="tool__out" id="conv-out"></p>
+    </div>
+
+    Things worth trying:
+
+    - **`255`**, then **`256`**. One byte becomes two, because 255 is the
+      largest value a single byte holds.
+    - **`ff`**, then **`100`** in the hex field — the same boundary from the
+      other side.
+    - A real address, like
+      `0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045`. It reports 20 bytes, and
+      the decimal equivalent is an absurd number nobody would ever want to
+      read. Which is the point of the next section.
+    - **`10101010`** in binary. Note it comes out as `aa` — each hex character
+      is exactly four bits.
+
 ### Why base 16, and not 10
 
 Because of one tidy coincidence: **one byte is exactly two hex characters.**

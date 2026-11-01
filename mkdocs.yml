@@ -48,6 +48,9 @@ theme:
 extra_css:
   - stylesheets/extra.css
 
+extra_javascript:
+  - javascripts/converters.js
+
 markdown_extensions:
   - admonition                 # the coloured "note" / "warning" boxes
   - pymdownx.details           # collapsible boxes
