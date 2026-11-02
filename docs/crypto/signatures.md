@@ -11,15 +11,37 @@ The [private keys](private-keys.md) page described what a signature is *for*: pr
 
 ## A transaction never says who sent it
 
-Look through everything a transaction carries: a nonce, a recipient, an amount, some data, a fee limit, and three numbers called `v`, `r` and `s`.
+Transactions get a page of their own later. Only one thing about them matters here.
+
+A transaction is a short list of fields — how much, to whom, what data, how much fee — followed by three numbers called `v`, `r` and `s`, which together are the signature.
 
 **There is no "from" field.** Nowhere does a transaction state its sender.
 
-Instead, the sender's address is **recovered** from the signature. Given the signed message and the three signature values, anyone can compute the public key that must have produced it — and from that, [the address](addresses.md). The specification has a function for exactly this, and every node runs it on every transaction it receives [(Wood, 2014)](#ref-wood-2014).
+Instead, the sender's address is **recovered** from the signature. Given the signed message and those three numbers, anyone can compute the public key that must have produced them — and from that, [the address](addresses.md).
+
+This isn't optional or occasional. When a node receives a transaction it has to establish who sent it before it can do anything at all: whose balance to check, whose [nonce](../accounts/nonce.md "A per-account counter of transactions already sent") to compare against, whose account to take the fee from. Recovery is how it finds out, so every node runs it on every transaction it ever sees. The Yellow Paper defines the function for exactly this purpose [(Wood, 2014)](#ref-wood-2014).
 
 So the signature doesn't *accompany* a claim of identity. The signature **is** the claim.
 
 Which is rather elegant once it lands. A forged "from" field would be worthless, so Ethereum doesn't have one. The only way to appear as the sender of a transaction is to produce a signature that recovers to your address, and the only way to do that is to hold the key.
+
+## The algorithm has a name
+
+Before the demonstration, the thing doing the work deserves naming.
+
+Signing and recovery are done with **ECDSA** — the Elliptic Curve Digital Signature Algorithm [(SECG, 2009)](#ref-sec1). It isn't an Ethereum invention or a cryptocurrency one; it's a long-standing standard used for TLS certificates, software signing and much else. Ethereum's contribution is the curve it runs on and the recovery trick below.
+
+What it does, in and out:
+
+```
+    signing:      message hash  +  private key   ──►   two numbers, r and s
+    verifying:    message hash  +  r, s  +  public key   ──►   yes or no
+    recovering:   message hash  +  r, s  +  v   ──►   the public key itself
+```
+
+The first two are ordinary ECDSA. The **third** is what Ethereum leans on: rather than being handed a public key to check against, it reconstructs the public key from the signature. That's why no sender field is needed.
+
+This page doesn't derive any of it. The three properties from the [private keys](private-keys.md) page are all you need: anyone can check it, it reveals nothing about the key, and it's bound to one message.
 
 ??? example "Try it: sign, then recover the signer"
 
@@ -111,11 +133,25 @@ Neither covers the other. A nonce is meaningless across chains, since the other 
 
 A quirk with real consequences.
 
-For any valid signature `(r, s)`, the value `(r, n − s)` is *also* a valid signature over the same message — where *n* is the curve order. The maths is symmetric, so flipping `s` to the other side of the range and flipping `v` to compensate yields a second, equally valid signature.
+For any valid signature `(r, s)`, the value `(r, n − s)` is **also** a valid signature over the same message — where *n* is the order of secp256k1, the same constant from the [private keys](private-keys.md) page that bounds a valid key. The underlying maths is symmetric, so flipping `s` to the other side of the range and flipping `v` to compensate gives a second, equally valid signature.
 
-That sounds harmless. It isn't, because a transaction's **hash covers its signature**. Two valid signatures mean two different transaction hashes for what is otherwise the same transaction. Software tracking a payment by its hash could watch for one, while the other is what actually gets included — and conclude, wrongly, that nothing happened.
+Two things make that matter.
 
-**EIP-2** [(Buterin, 2015)](#ref-eip2) closed this by requiring `s` to be in the **lower half** of its range. Of the two equivalent signatures exactly one qualifies, so the ambiguity is gone. The tool above does this normalisation; press *Sign again* and `s` always begins with a digit below `8`.
+**First, anyone can do the flip.** It takes no private key — only arithmetic on a signature you've already seen. So any node relaying your transaction can alter it this way, and the result still verifies as yours.
+
+**Second, a transaction is identified by its hash, and that hash covers the signature.** Change `s`, and you change the transaction's bytes, and therefore its hash — while the transaction still does exactly the same thing on behalf of exactly the same sender.
+
+So before EIP-2, this could happen:
+
+1. You broadcast a payment. Your wallet notes its hash — call it **H1** — because that's how you track a transaction.
+2. Some node along the way flips `s`, producing a byte-for-byte different transaction with hash **H2**. Still your payment. Still validly signed by you. Different hash.
+3. **H2** is the version that gets included in a block.
+4. Your wallet waits for H1. It never appears. As far as the wallet can tell, the payment never happened.
+5. So it reports a failure — and if anything automatically retries, you pay twice.
+
+The payment went through the whole time. The accounting was looking for the wrong name for it.
+
+**EIP-2** [(Buterin, 2015)](#ref-eip2) closed this by requiring `s` to lie in the **lower half** of its range. Of the two equivalent signatures, exactly one qualifies, so there is only ever one valid encoding and only one possible hash. The tool above applies that normalisation — press *Sign again* a few times and `s` always starts with a hex digit below `8`.
 
 ## Signing things that aren't transactions
 
@@ -128,14 +164,31 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
     Because a signature authorises whatever was signed, and your wallet can
     only show you the bytes.
 
-    **ERC-191** [(Van de Sande et al., 2016)](#ref-eip191) adds a prefix to
-    personal messages so that a signed phrase can never be mistaken for a
-    signed transaction. That's a real protection, and it's narrow: it stops one
-    specific confusion. It does nothing about a message that is plainly a
-    message and still grants away something you didn't mean to.
+    **ERC-191** [(Van de Sande et al., 2016)](#ref-eip191) protects against one
+    specific confusion: a phrase you sign being replayed as a *transaction*
+    you never authorised. It does so by prefixing the message before hashing.
+    For ordinary personal messages the prefix is:
 
-    The tool above hashes the message directly, without the prefix, to keep
-    the demonstration about signing rather than framing.
+    ```
+    \x19  "Ethereum Signed Message:\n"  <length of the message>
+    ```
+
+    So signing `hello` actually hashes
+    `\x19Ethereum Signed Message:\n5hello`, not `hello`.
+
+    The leading byte is the load-bearing part. `0x19` cannot begin a valid
+    transaction encoding, so the bytes you signed are **structurally incapable**
+    of being a transaction. The signature therefore cannot be lifted out and
+    presented as authorisation to move funds. The length is included so one
+    message can't be reinterpreted as a different, shorter one.
+
+    That's genuine, and it's narrow: it stops signed messages masquerading as
+    transactions. It does nothing about a message that is plainly a message and
+    still signs away something you didn't intend — which is why reading the
+    prompt still matters.
+
+    The tool above hashes the message directly, with no prefix, to keep the
+    demonstration about signing rather than about framing.
 
 ---
 
