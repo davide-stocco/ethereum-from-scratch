@@ -124,7 +124,37 @@ That's defined by **secp256k1**, the elliptic curve Ethereum uses [(SECG, 2010)]
 
 ## What it's for
 
-A private key does exactly one useful thing: it produces **signatures** that can be checked against the matching [address](addresses.md) without revealing the key itself. Transaction signing on Ethereum has used secp256k1 keys this way since the beginning, and the Yellow Paper specifies it as such [(Wood, 2014)](#ref-wood-2014).
+A private key does exactly one useful thing: it produces **signatures**.
+
+A signature is a way of **proving you know a secret without telling anyone the secret.**
+
+That sounds impossible, and with an ordinary password it is. If you prove you know a password by typing it in, whoever is on the other end now knows it too — you've handed over the very thing you were proving you had. Every proof costs you the secret.
+
+A signature escapes that. Give your private key a message — say, "send 1 ether to Anna" — and it computes a value with two properties:
+
+- **Anyone can check** that the value could only have been produced by someone holding the key for a particular [address](addresses.md).
+- **The value reveals nothing** about the key. You can publish a thousand signatures and the key stays secret.
+
+And a third property, which matters just as much: **the signature is bound to that one message.** Change a single byte — the amount, the recipient — and it stops checking out. So a signature isn't a reusable token the way a password is. It authorises exactly one thing, once.
+
+??? note "It's not much like a handwritten signature"
+
+    The word is unhelpful, because the everyday version works the opposite way.
+
+    Your handwritten signature is **the same every time**, which is precisely
+    its weakness: anyone who has seen it can attempt a copy, and a copy works
+    on any document.
+
+    A digital signature is **different for every message**. Signing two
+    transactions gives two unrelated values, and neither is any use on a third.
+    So there's nothing to copy. Seeing a million of someone's signatures tells
+    you nothing you could use.
+
+    Closer analogies are all imperfect, but the useful intuition is a lock that
+    produces a different, publicly-checkable receipt for each thing you lock —
+    rather than a stamp that leaves the same mark.
+
+Transaction signing on Ethereum has worked this way with secp256k1 keys since the beginning [(Wood, 2014)](#ref-wood-2014). How the computation actually works is the subject of [signatures](signatures.md); for now, only the properties matter.
 
 That's the mechanism behind every claim of ownership on Ethereum. Which leads to a definition worth stating bluntly, because it surprises people:
 

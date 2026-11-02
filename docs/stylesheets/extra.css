@@ -88,8 +88,13 @@
   overflow-wrap: anywhere;
 }
 
+/* Block, not inline: tools emit several of these in a row, and inline spans
+   ran together into "...10^37Fraction of all possible keys...". */
 .md-typeset .tool__hint {
+  display: block;
+  margin-top: 0.3rem;
   font-size: 0.72rem;
+  line-height: 1.6;
   opacity: 0.7;
   overflow-wrap: anywhere;
 }

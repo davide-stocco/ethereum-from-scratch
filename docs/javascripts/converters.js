@@ -38,7 +38,7 @@
       out.innerHTML =
         "<strong>" + pairs.length + " " + label + "</strong>: " +
         pairs.map(function (p) { return "<code>" + p + "</code>"; }).join(" ") +
-        "<br><span class=\"tool__hint\">" + value.toString(10) +
+        "<span class=\"tool__hint\">" + value.toString(10) +
         " &nbsp;=&nbsp; 0x" + h +
         " &nbsp;=&nbsp; " + value.toString(2) + "</span>";
     }
