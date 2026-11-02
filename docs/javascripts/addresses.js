@@ -130,13 +130,43 @@
         return;
       }
       inp.classList.remove("tool__input--bad");
-      var correct = checksum(raw.toLowerCase());
+      var lower = raw.toLowerCase();
+      var correct = checksum(lower);
       var isLower = raw === raw.toLowerCase();
       var isUpper = raw === raw.toUpperCase();
 
       var marked = correct.split("").map(function (ch, i) {
         return ch === raw[i] ? ch : "<em class=\"tool__diff\">" + ch + "</em>";
       }).join("");
+
+      // Show the hash alongside, so the rule can be checked by eye.
+      var hash = window.EFS.keccak256Bytes(
+        Array.prototype.map.call(lower, function (c) { return c.charCodeAt(0); })
+      );
+      var hash40 = hash.slice(0, 40);
+      var hashMarked = hash40.split("").map(function (ch) {
+        return parseInt(ch, 16) >= 8
+          ? "<strong class=\"tool__hi\">" + ch + "</strong>"
+          : "<span class=\"tool__faint\">" + ch + "</span>";
+      }).join("");
+      var addrMarked = lower.split("").map(function (ch, i) {
+        var isLetter = ch >= "a" && ch <= "f";
+        var up = isLetter && parseInt(hash40[i], 16) >= 8;
+        return up ? "<strong class=\"tool__hi\">" + ch.toUpperCase() + "</strong>"
+                  : (isLetter ? ch : "<span class=\"tool__faint\">" + ch + "</span>");
+      }).join("");
+
+      var working =
+        "<span class=\"tool__label\">Working, character by character</span>" +
+        "<code class=\"tool__hash tool__align\">" +
+        "<span class=\"tool__rowlbl\">hash  </span>" + hashMarked + "\n" +
+        "<span class=\"tool__rowlbl\">addr  </span>" + addrMarked +
+        "</code>" +
+        "<span class=\"tool__hint\">Top row is the first 40 characters of " +
+        "Keccak-256 of the lowercase address. A hash character of <strong>8 or " +
+        "more</strong> is highlighted; where that sits above a letter " +
+        "<code>a</code>–<code>f</code>, the letter is capitalised. Digits are " +
+        "greyed out because they're never affected.</span>";
 
       var verdict;
       if (isLower || isUpper) {
@@ -155,7 +185,7 @@
 
       out.innerHTML =
         "<span class=\"tool__label\">Checksummed form</span>" +
-        "<code class=\"tool__hash\">0x" + marked + "</code>" + verdict;
+        "<code class=\"tool__hash\">0x" + marked + "</code>" + verdict + working;
     }
     inp.addEventListener("input", run);
     run();

@@ -18,8 +18,19 @@ Twenty bytes, written as 40 hex characters, with a `0x` to say that's what they 
 ## The derivation
 
 ```
-private key  ──×G──►  public key  ──keccak256──►  hash  ──keep last 20──►  address
-  32 bytes             64 bytes                 32 bytes                   20 bytes
+    private key          32 bytes
+         │
+         │   × G
+         ▼
+    public key           64 bytes
+         │
+         │   keccak256
+         ▼
+       hash              32 bytes
+         │
+         │   keep the last 20
+         ▼
+     address             20 bytes
 ```
 
 [Private key](private-keys.md) to [public key](public-keys.md) by curve multiplication, public key to hash by [Keccak-256](keccak256.md), then discard all but the last 20 bytes. That's the whole derivation, and it's specified in exactly those terms — the rightmost 160 bits of the hash [(Wood, 2014)](#ref-wood-2014).
@@ -47,6 +58,62 @@ private key  ──×G──►  public key  ──keccak256──►  hash  ─
 
     **Step 3 — press Random key** a few times. This is precisely what a wallet
     does when it creates an account: pick a number, derive, hash, truncate.
+
+## One private key gives exactly one address
+
+Worth stating plainly, because the answer isn't obvious and wallets make it look otherwise.
+
+**Every step in that chain is deterministic.** Multiplying by G has one answer. Keccak-256 has one answer. Taking the last 20 bytes has one answer. So a given private key produces one public key, which produces one address, and it will produce the same one on any machine, forever. There's no choice to make and no parameter to vary.
+
+So how does your wallet show you a dozen addresses?
+
+??? abstract "Because the wallet has a seed, not a key"
+
+    This is the distinction from the [private keys](private-keys.md) page, and
+    it's where it starts to matter.
+
+    ```
+                     seed
+                      │
+          ┌───────────┼───────────┐
+          ▼           ▼           ▼
+      key #0       key #1      key #2        ← many keys, from one seed
+          │           │           │
+          ▼           ▼           ▼
+      address 0   address 1   address 2      ← one address each
+    ```
+
+    The **seed** sits upstream and can generate an unlimited supply of private
+    keys by a repeatable procedure. Each of those keys then yields exactly one
+    address, by the chain on this page.
+
+    So "many addresses from one thing" is true of a **seed** and false of a
+    **private key**. Which is why writing down twelve words can restore a whole
+    wallet, while a single private key only ever restores a single account.
+
+    Mechanics under
+    [wallets and seed phrases](../wallets/seed-phrases.md).
+
+??? info "One key can *control* several addresses, though"
+
+    A separate point, and easy to conflate with the above.
+
+    A key is derived into one address. But that address can go on to **create
+    contracts**, and each contract gets an address of its own — computed from
+    the creator's address and [nonce](../accounts/nonce.md "A per-account counter of transactions already sent"),
+    as the contract-addresses section below explains. Deploy ten contracts and
+    there are ten more addresses under your control.
+
+    Contracts can also simply be *configured* to obey a particular address,
+    which is how multi-signature and smart-contract wallets work.
+
+    So the precise statements are:
+
+    - **derived from** your key: exactly one address, always
+    - **controlled by** your key: as many as you care to create
+
+    The chain on this page is about the first. Nothing about control is visible
+    in an address.
 
 ## Why keep only 20 bytes?
 

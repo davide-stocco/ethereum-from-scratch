@@ -125,6 +125,31 @@
   opacity: 0.35;
 }
 
+/* Two rows that must line up character by character: no wrapping, scroll
+   instead, or the alignment that carries the meaning is lost. */
+.md-typeset .tool__align {
+  white-space: pre;
+  overflow-x: auto;
+  overflow-wrap: normal;
+}
+
+.md-typeset .tool__rowlbl {
+  opacity: 0.5;
+  user-select: none;
+}
+
+.md-typeset .tool__hi {
+  font-weight: 700;
+  color: #00695c;
+  background: rgba(0, 105, 92, 0.12);
+  border-radius: 0.1rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .tool__hi {
+  color: #80cbc4;
+  background: rgba(128, 203, 196, 0.16);
+}
+
 /* Characters that differ between two hashes. */
 .md-typeset .tool__diff {
   font-style: normal;
