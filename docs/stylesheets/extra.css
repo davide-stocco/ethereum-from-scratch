@@ -140,6 +140,22 @@
   opacity: 0.75;
 }
 
+.md-typeset .tool button {
+  justify-self: start;
+  padding: 0.45em 1em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--md-primary-bg-color);
+  background: var(--md-primary-fg-color);
+  border: none;
+  border-radius: 0.15rem;
+  cursor: pointer;
+}
+
+.md-typeset .tool button:hover {
+  background: var(--md-accent-fg-color);
+}
+
 /* Stack the labels above the fields on narrow screens. */
 @media screen and (max-width: 44.9em) {
   .md-typeset .tool {

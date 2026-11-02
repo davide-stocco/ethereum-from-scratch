@@ -1,28 +1,165 @@
 ---
 tier: 1
+description: A private key is just a very large random number. Why that's enough, how large "large" is, and what owning ether actually consists of.
 ---
 
 # Private keys
 
-!!! warning "Stub — not written yet"
+**Fork-proof.** 256-bit keys on the secp256k1 curve, unchanged since genesis.
 
-    This page is an outline. Delete this box when you fill it in.
+A private key is **a number**. That's the whole of it.
 
-**Fork-proof.** secp256k1 and 256-bit keys date from genesis.
+Not a file, not a password, not a certificate issued by anyone. A randomly chosen integer, 256 bits long — which from [hex and bytes](../foundations/hex-and-bytes.md) you'll recognise as 32 bytes, or 64 hex characters.
 
-## Questions this page should answer
+???+ example "Try it: make one"
 
-- What *is* a private key? (Just a number — a random 256-bit integer.)
-- How big is 2<sup>256</sup>, really? Give a concrete comparison so "unguessable" means something.
-- What's the valid range, and why isn't it quite all 256-bit numbers? (Must be less than the secp256k1 curve order `n`.)
-- How do you get a public key from it? (Multiply the curve's generator point by the private key — elliptic curve multiplication.)
-- Why is that one-way? Easy forwards, infeasible backwards — the discrete logarithm problem.
-- What does "owning" ether actually mean, given the state is public? (Knowing the one number that can produce valid signatures for that address.)
+    <div class="tool" markdown="0">
+      <button id="key-gen" type="button">Generate a key</button>
+      <p class="tool__out" id="key-out"></p>
+    </div>
 
-## Notes to self
+    Press it a few times. Nothing was registered, nobody was asked, no server
+    was contacted — your browser picked a random number. **That is the entire
+    process**, and it's the first genuinely strange thing about Ethereum: an
+    account is not issued to you, it's a number you happened to choose.
 
-- Don't try to teach elliptic curves properly. Teach the *property*: one-way, deterministic. Link out for the maths.
-- Worth stating plainly: a private key isn't stored anywhere on the chain. The network never sees it.
-- Mention seed phrases exist but are a *convenience layer* on top (BIP-39) — not part of Ethereum itself. Resist going down that road here.
+!!! danger "Don't use a key from this page"
 
-**Next:** [Public keys](public-keys.md)
+    The generator above uses your browser's cryptographic random number
+    source, which is the right source. But a key is only as safe as everything
+    that has ever seen it — and this one has been displayed on a web page, in
+    a browser, possibly with extensions installed and the page in your history.
+
+    It's here to show you what a key *is*. For anything holding real value,
+    use proper wallet software.
+
+## How is one number enough?
+
+A natural objection: if a key is just a number, surely someone can guess it?
+
+They can't, and the reason is the size of the number. Private keys run up to about 2<sup>256</sup>:
+
+```
+2^256  =  115,792,089,237,316,195,423,570,985,008,
+          687,907,853,269,984,665,640,564,039,457,
+          584,007,913,129,639,936
+```
+
+Roughly **10<sup>77</sup>**. Written out, it's 78 digits. That number resists intuition completely, so rather than reach for an analogy, here's a calculation you can run yourself.
+
+???+ example "Try it: how long to guess a key?"
+
+    Suppose every person alive were hunting for your key, each testing keys as
+    fast as a modern machine can manage, for the entire history of the universe.
+
+    <div class="tool" markdown="0">
+      <label for="bf-rate">Keys per second</label>
+      <input id="bf-rate" type="text" autocomplete="off" spellcheck="false" value="8e18">
+      <label for="bf-years">For how many years</label>
+      <input id="bf-years" type="text" autocomplete="off" spellcheck="false" value="13800000000">
+      <p class="tool__out" id="bf-out"></p>
+    </div>
+
+    The defaults are 8 billion people × a billion keys per second each
+    (8 × 10<sup>18</sup>), running for 13.8 billion years — the age of the
+    universe.
+
+    The result is around **1 in 10<sup>40</sup>**. Not "difficult". Not
+    "takes a long time". After exhausting the universe's entire history with
+    every human being and every machine, they would have searched a fraction
+    of the keyspace too small to write comfortably.
+
+    Try making the numbers absurd — a trillion keys per second, a trillion
+    years. It barely moves.
+
+This is why a key needs no protection beyond secrecy. There's no account to lock, no rate limit to enforce, nobody to appeal to. **The number itself is the security**, and guessing is not a strategy.
+
+## The valid range
+
+Almost any 256-bit number works, but not quite all of them. A private key must be at least 1 and **less than a specific constant** called the order of the curve, written *n*:
+
+```
+n = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
+```
+
+That's defined by **secp256k1**, the elliptic curve Ethereum uses [(SECG, 2010)](#ref-secg-2010) — the same one Bitcoin uses. Keys have to fall below it because of how the [public key](public-keys.md) is derived; the arithmetic happens in a group with exactly *n* elements, so numbers at or above *n* simply wrap around to ones below it.
+
+??? abstract "How much of the range is excluded? Almost none."
+
+    The gap between *n* and 2<sup>256</sup> is:
+
+    ```
+    2^256 - n  =  432,420,386,565,659,656,852,420,866,394,968,145,599
+    ```
+
+    Which looks enormous until you compare it to the space it sits in. The
+    proportion of 256-bit numbers that are *too large* to be valid keys is
+    about:
+
+    ```
+    3.7 × 10^-39      —  roughly 1 in 2.7 × 10^38
+    ```
+
+    So if you pick a random 256-bit number, the chance it's out of range is
+    far smaller than the chance of guessing someone's key. Real
+    implementations do check, and loop if the draw fails, but the branch
+    essentially never runs.
+
+    This is also why "a private key is a random 256-bit number" is a perfectly
+    good working definition, even though it's not exactly true.
+
+## What it's for
+
+A private key does exactly one useful thing: it produces **signatures** that can be checked against the matching [address](addresses.md) without revealing the key itself. Transaction signing on Ethereum has used secp256k1 keys this way since the beginning, and the Yellow Paper specifies it as such [(Wood, 2014)](#ref-wood-2014).
+
+That's the mechanism behind every claim of ownership on Ethereum. Which leads to a definition worth stating bluntly, because it surprises people:
+
+> **"Owning" ether means knowing a number.**
+
+Nothing in the state records that an account belongs to you. The chain holds only a balance against an [address](addresses.md), entirely public, visible to everybody. What distinguishes you from everyone else looking at it is that you can produce valid signatures for it and they can't.
+
+So there's nothing to steal except the number — and nothing to lose except the number, which is the subject of [what losing your keys means](../wallets/losing-your-keys.md).
+
+## What comes next
+
+Two things follow from the key, in order:
+
+1. The key is multiplied into a **[public key](public-keys.md)** — easy to compute forwards, infeasible to reverse.
+2. The public key is hashed into an **[address](addresses.md)**.
+
+Each step is one-way, which is why an address reveals nothing about the key behind it.
+
+??? info "Seed phrases are not this"
+
+    If you've used a wallet, you've probably met twelve or twenty-four words
+    rather than a 64-character number, and may reasonably assume *that's* the
+    private key.
+
+    It isn't. Those words are a **seed**, and a procedure turns one seed into
+    many private keys. It's a convenience layer sitting above everything on
+    this page — Ethereum has never heard of it, and sees only keys and
+    signatures. Covered under
+    [wallets and seed phrases](../wallets/seed-phrases.md).
+
+---
+
+## Recap
+
+- A private key is **a random 256-bit number**. Nothing more.
+- Nobody issues it. You pick it, and the network never needs to know you did.
+- There are about **10<sup>77</sup>** possibilities, which is why guessing is not a strategy — every human searching for the age of the universe covers around 1 in 10<sup>40</sup> of the space.
+- It must be below the curve order *n*, which excludes about **1 in 10<sup>38</sup>** of all 256-bit numbers — so in practice, any random number will do.
+- Its one job is producing **signatures**, and therefore **"owning" ether means knowing a number.**
+
+**Next:** [Public keys](public-keys.md) — the one-way step that turns the key into something you can safely publish.
+
+---
+
+## References
+
+<div class="sources" markdown>
+
+- <a id="ref-secg-2010"></a>**Standards for Efficient Cryptography Group** (2010). *SEC 2: Recommended Elliptic Curve Domain Parameters*, version 2.0. Defines secp256k1, including the group order *n* quoted above. <https://www.secg.org/sec2-v2.pdf>
+- <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Appendix F specifies the use of secp256k1 for transaction signing. <https://ethereum.github.io/yellowpaper/paper.pdf>
+
+</div>
