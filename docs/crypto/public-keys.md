@@ -54,7 +54,9 @@ Because the same equation over the *real* numbers really is a smooth curve, and 
 <figcaption>y² = x³ + 7 over the real numbers — a genuine curve, and what every diagram of this shows.</figcaption>
 </figure>
 
-That picture is honest about the **structure** and misleading about the **shape**. Take the identical equation over a small finite field — let's use 97 instead of a 78-digit prime, so it fits on a page — and you get this instead:
+That picture is honest about the **structure** and misleading about the **shape**.
+
+Now keep the equation exactly as it is, and change only one thing: do the arithmetic with wrapping, modulo a small prime. The modulus is doing the work here — it's not a detail, it's the whole difference between the two pictures. Using 97, so the result fits on a page:
 
 <figure markdown="span">
 <svg viewBox="0 0 300 300" role="img" aria-label="The same equation over the field of 97 elements: 78 scattered points with no curved shape" style="width:100%;max-width:22rem;height:auto">
@@ -66,24 +68,52 @@ That picture is honest about the **structure** and misleading about the **shape*
   <text x="290" y="291" font-size="10" fill="currentColor" opacity="0.6" text-anchor="end">x →  96</text>
   <text x="14" y="22" font-size="10" fill="currentColor" opacity="0.6">96</text>
 </svg>
-<figcaption>y² = x³ + 7 modulo 97. The same equation, 78 points, and nothing remotely curved.</figcaption>
+<figcaption>The same equation, with the arithmetic wrapped at 97 instead of carried out over the reals. 78 points, and nothing remotely curved.</figcaption>
 </figure>
 
-Same equation, no curve. Just scattered dots, symmetric about the middle because *y* and *p* − *y* are both solutions.
+Same equation, no curve. The wrapping is what destroys the shape: a coordinate that would have carried on climbing instead falls back to the bottom of the range, so neighbouring values of *x* land nowhere near each other. What's left is scattered dots, symmetric about the middle because *y* and *p* − *y* are both solutions.
 
 secp256k1 is this second picture, with 97 replaced by a prime of 78 digits and roughly 10⁷⁷ points rather than 78. Nobody draws *that*.
 
 So when you see a smooth curve with points labelled on it, read it as a **diagram of the rules**, not a map of the territory. The rules carry over exactly; the shape does not.
 
-!!! note "Why the real-number picture is still worth having"
+??? note "Why the real-number picture is still worth having"
 
-    The geometry is where point addition comes from. To add two points on the
-    real curve you draw a straight line through them, find the third place it
-    crosses, and reflect it across the horizontal axis — the chord-and-tangent
-    construction. That's genuinely visual and genuinely how the rule was
-    derived.
+    The geometry is where point addition comes from, and it's genuinely
+    visual. To add two points **P** and **Q** on the real curve:
 
-    Over a finite field the *same algebraic formulas* apply, and they still
+    1. Draw a straight line through them.
+    2. That line crosses the curve at exactly one more place. Call it **R**.
+    3. Reflect **R** across the horizontal axis. That reflection is **P + Q**.
+
+    <figure markdown="span">
+    <svg viewBox="0 0 460 300" role="img" aria-label="Adding two points on the real curve: a line through P and Q crosses the curve at a third point R, which is reflected across the horizontal axis to give P plus Q" style="width:100%;max-width:28rem;height:auto">
+      <g stroke="currentColor" stroke-width="1" opacity="0.25">
+        <line x1="40" y1="148.0" x2="445" y2="148.0"/>
+        <line x1="194.9" y1="12" x2="194.9" y2="272"/>
+      </g>
+      <path d="M 444.2,261.3 L 443.0,260.5 L 441.8,259.8 L 440.7,259.1 L 439.5,258.3 L 438.3,257.6 L 437.1,256.9 L 435.9,256.1 L 434.7,255.4 L 433.5,254.7 L 432.3,254.0 L 431.1,253.3 L 429.9,252.5 L 428.7,251.8 L 427.6,251.1 L 426.4,250.4 L 425.2,249.7 L 424.0,249.0 L 422.8,248.3 L 421.6,247.6 L 420.4,246.9 L 419.2,246.2 L 418.0,245.5 L 416.8,244.8 L 415.6,244.2 L 414.5,243.5 L 413.3,242.8 L 412.1,242.1 L 410.9,241.4 L 409.7,240.8 L 408.5,240.1 L 407.3,239.4 L 406.1,238.8 L 404.9,238.1 L 403.7,237.4 L 402.5,236.8 L 401.3,236.1 L 400.2,235.5 L 399.0,234.8 L 397.8,234.2 L 396.6,233.5 L 395.4,232.9 L 394.2,232.3 L 393.0,231.6 L 391.8,231.0 L 390.6,230.4 L 389.4,229.7 L 388.2,229.1 L 387.1,228.5 L 385.9,227.9 L 384.7,227.3 L 383.5,226.6 L 382.3,226.0 L 381.1,225.4 L 379.9,224.8 L 378.7,224.2 L 377.5,223.6 L 376.3,223.0 L 375.1,222.4 L 374.0,221.9 L 372.8,221.3 L 371.6,220.7 L 370.4,220.1 L 369.2,219.5 L 368.0,219.0 L 366.8,218.4 L 365.6,217.8 L 364.4,217.3 L 363.2,216.7 L 362.0,216.2 L 360.8,215.6 L 359.7,215.1 L 358.5,214.5 L 357.3,214.0 L 356.1,213.4 L 354.9,212.9 L 353.7,212.4 L 352.5,211.8 L 351.3,211.3 L 350.1,210.8 L 348.9,210.3 L 347.7,209.8 L 346.6,209.3 L 345.4,208.8 L 344.2,208.3 L 343.0,207.8 L 341.8,207.3 L 340.6,206.8 L 339.4,206.3 L 338.2,205.8 L 337.0,205.3 L 335.8,204.9 L 334.6,204.4 L 333.5,203.9 L 332.3,203.5 L 331.1,203.0 L 329.9,202.6 L 328.7,202.1 L 327.5,201.7 L 326.3,201.2 L 325.1,200.8 L 323.9,200.4 L 322.7,199.9 L 321.5,199.5 L 320.3,199.1 L 319.2,198.7 L 318.0,198.3 L 316.8,197.9 L 315.6,197.5 L 314.4,197.1 L 313.2,196.7 L 312.0,196.3 L 310.8,195.9 L 309.6,195.5 L 308.4,195.2 L 307.2,194.8 L 306.1,194.4 L 304.9,194.1 L 303.7,193.7 L 302.5,193.4 L 301.3,193.0 L 300.1,192.7 L 298.9,192.4 L 297.7,192.0 L 296.5,191.7 L 295.3,191.4 L 294.1,191.1 L 293.0,190.8 L 291.8,190.5 L 290.6,190.2 L 289.4,189.9 L 288.2,189.6 L 287.0,189.3 L 285.8,189.0 L 284.6,188.8 L 283.4,188.5 L 282.2,188.3 L 281.0,188.0 L 279.8,187.8 L 278.7,187.5 L 277.5,187.3 L 276.3,187.0 L 275.1,186.8 L 273.9,186.6 L 272.7,186.4 L 271.5,186.2 L 270.3,186.0 L 269.1,185.8 L 267.9,185.6 L 266.7,185.4 L 265.6,185.2 L 264.4,185.0 L 263.2,184.8 L 262.0,184.7 L 260.8,184.5 L 259.6,184.4 L 258.4,184.2 L 257.2,184.1 L 256.0,183.9 L 254.8,183.8 L 253.6,183.6 L 252.5,183.5 L 251.3,183.4 L 250.1,183.3 L 248.9,183.2 L 247.7,183.0 L 246.5,182.9 L 245.3,182.8 L 244.1,182.7 L 242.9,182.7 L 241.7,182.6 L 240.5,182.5 L 239.3,182.4 L 238.2,182.3 L 237.0,182.3 L 235.8,182.2 L 234.6,182.1 L 233.4,182.1 L 232.2,182.0 L 231.0,181.9 L 229.8,181.9 L 228.6,181.9 L 227.4,181.8 L 226.2,181.8 L 225.1,181.7 L 223.9,181.7 L 222.7,181.7 L 221.5,181.6 L 220.3,181.6 L 219.1,181.6 L 217.9,181.6 L 216.7,181.5 L 215.5,181.5 L 214.3,181.5 L 213.1,181.5 L 212.0,181.5 L 210.8,181.5 L 209.6,181.5 L 208.4,181.4 L 207.2,181.4 L 206.0,181.4 L 204.8,181.4 L 203.6,181.4 L 202.4,181.4 L 201.2,181.4 L 200.0,181.4 L 198.8,181.4 L 197.7,181.4 L 196.5,181.4 L 195.3,181.4 L 194.1,181.4 L 192.9,181.4 L 191.7,181.4 L 190.5,181.4 L 189.3,181.4 L 188.1,181.4 L 186.9,181.4 L 185.7,181.4 L 184.6,181.4 L 183.4,181.4 L 182.2,181.4 L 181.0,181.4 L 179.8,181.4 L 178.6,181.4 L 177.4,181.4 L 176.2,181.3 L 175.0,181.3 L 173.8,181.3 L 172.6,181.3 L 171.5,181.3 L 170.3,181.3 L 169.1,181.2 L 167.9,181.2 L 166.7,181.2 L 165.5,181.1 L 164.3,181.1 L 163.1,181.1 L 161.9,181.0 L 160.7,181.0 L 159.5,180.9 L 158.3,180.9 L 157.2,180.8 L 156.0,180.7 L 154.8,180.7 L 153.6,180.6 L 152.4,180.5 L 151.2,180.5 L 150.0,180.4 L 148.8,180.3 L 147.6,180.2 L 146.4,180.1 L 145.2,180.0 L 144.1,179.9 L 142.9,179.8 L 141.7,179.7 L 140.5,179.6 L 139.3,179.4 L 138.1,179.3 L 136.9,179.1 L 135.7,179.0 L 134.5,178.8 L 133.3,178.7 L 132.1,178.5 L 131.0,178.3 L 129.8,178.1 L 128.6,177.9 L 127.4,177.7 L 126.2,177.5 L 125.0,177.3 L 123.8,177.1 L 122.6,176.8 L 121.4,176.6 L 120.2,176.3 L 119.0,176.1 L 117.8,175.8 L 116.7,175.5 L 115.5,175.2 L 114.3,174.9 L 113.1,174.5 L 111.9,174.2 L 110.7,173.8 L 109.5,173.4 L 108.3,173.1 L 107.1,172.6 L 105.9,172.2 L 104.7,171.8 L 103.6,171.3 L 102.4,170.8 L 101.2,170.3 L 100.0,169.7 L 98.8,169.2 L 97.6,168.5 L 96.4,167.9 L 95.2,167.2 L 94.0,166.5 L 92.8,165.7 L 91.6,164.9 L 90.5,164.0 L 89.3,163.1 L 88.1,162.0 L 86.9,160.9 L 85.7,159.6 L 84.5,158.1 L 83.3,156.3 L 82.1,153.9 L 80.9,148.0 L 80.9,148.0 L 82.1,142.1 L 83.3,139.7 L 84.5,137.9 L 85.7,136.4 L 86.9,135.1 L 88.1,134.0 L 89.3,132.9 L 90.5,132.0 L 91.6,131.1 L 92.8,130.3 L 94.0,129.5 L 95.2,128.8 L 96.4,128.1 L 97.6,127.5 L 98.8,126.8 L 100.0,126.3 L 101.2,125.7 L 102.4,125.2 L 103.6,124.7 L 104.7,124.2 L 105.9,123.8 L 107.1,123.4 L 108.3,122.9 L 109.5,122.6 L 110.7,122.2 L 111.9,121.8 L 113.1,121.5 L 114.3,121.1 L 115.5,120.8 L 116.7,120.5 L 117.8,120.2 L 119.0,119.9 L 120.2,119.7 L 121.4,119.4 L 122.6,119.2 L 123.8,118.9 L 125.0,118.7 L 126.2,118.5 L 127.4,118.3 L 128.6,118.1 L 129.8,117.9 L 131.0,117.7 L 132.1,117.5 L 133.3,117.3 L 134.5,117.2 L 135.7,117.0 L 136.9,116.9 L 138.1,116.7 L 139.3,116.6 L 140.5,116.4 L 141.7,116.3 L 142.9,116.2 L 144.1,116.1 L 145.2,116.0 L 146.4,115.9 L 147.6,115.8 L 148.8,115.7 L 150.0,115.6 L 151.2,115.5 L 152.4,115.5 L 153.6,115.4 L 154.8,115.3 L 156.0,115.3 L 157.2,115.2 L 158.3,115.1 L 159.5,115.1 L 160.7,115.0 L 161.9,115.0 L 163.1,114.9 L 164.3,114.9 L 165.5,114.9 L 166.7,114.8 L 167.9,114.8 L 169.1,114.8 L 170.3,114.7 L 171.5,114.7 L 172.6,114.7 L 173.8,114.7 L 175.0,114.7 L 176.2,114.7 L 177.4,114.6 L 178.6,114.6 L 179.8,114.6 L 181.0,114.6 L 182.2,114.6 L 183.4,114.6 L 184.6,114.6 L 185.7,114.6 L 186.9,114.6 L 188.1,114.6 L 189.3,114.6 L 190.5,114.6 L 191.7,114.6 L 192.9,114.6 L 194.1,114.6 L 195.3,114.6 L 196.5,114.6 L 197.7,114.6 L 198.8,114.6 L 200.0,114.6 L 201.2,114.6 L 202.4,114.6 L 203.6,114.6 L 204.8,114.6 L 206.0,114.6 L 207.2,114.6 L 208.4,114.6 L 209.6,114.5 L 210.8,114.5 L 212.0,114.5 L 213.1,114.5 L 214.3,114.5 L 215.5,114.5 L 216.7,114.5 L 217.9,114.4 L 219.1,114.4 L 220.3,114.4 L 221.5,114.4 L 222.7,114.3 L 223.9,114.3 L 225.1,114.3 L 226.2,114.2 L 227.4,114.2 L 228.6,114.1 L 229.8,114.1 L 231.0,114.1 L 232.2,114.0 L 233.4,113.9 L 234.6,113.9 L 235.8,113.8 L 237.0,113.7 L 238.2,113.7 L 239.3,113.6 L 240.5,113.5 L 241.7,113.4 L 242.9,113.3 L 244.1,113.3 L 245.3,113.2 L 246.5,113.1 L 247.7,113.0 L 248.9,112.8 L 250.1,112.7 L 251.3,112.6 L 252.5,112.5 L 253.6,112.4 L 254.8,112.2 L 256.0,112.1 L 257.2,111.9 L 258.4,111.8 L 259.6,111.6 L 260.8,111.5 L 262.0,111.3 L 263.2,111.2 L 264.4,111.0 L 265.6,110.8 L 266.7,110.6 L 267.9,110.4 L 269.1,110.2 L 270.3,110.0 L 271.5,109.8 L 272.7,109.6 L 273.9,109.4 L 275.1,109.2 L 276.3,109.0 L 277.5,108.7 L 278.7,108.5 L 279.8,108.2 L 281.0,108.0 L 282.2,107.7 L 283.4,107.5 L 284.6,107.2 L 285.8,107.0 L 287.0,106.7 L 288.2,106.4 L 289.4,106.1 L 290.6,105.8 L 291.8,105.5 L 293.0,105.2 L 294.1,104.9 L 295.3,104.6 L 296.5,104.3 L 297.7,104.0 L 298.9,103.6 L 300.1,103.3 L 301.3,103.0 L 302.5,102.6 L 303.7,102.3 L 304.9,101.9 L 306.1,101.6 L 307.2,101.2 L 308.4,100.8 L 309.6,100.5 L 310.8,100.1 L 312.0,99.7 L 313.2,99.3 L 314.4,98.9 L 315.6,98.5 L 316.8,98.1 L 318.0,97.7 L 319.2,97.3 L 320.3,96.9 L 321.5,96.5 L 322.7,96.1 L 323.9,95.6 L 325.1,95.2 L 326.3,94.8 L 327.5,94.3 L 328.7,93.9 L 329.9,93.4 L 331.1,93.0 L 332.3,92.5 L 333.5,92.1 L 334.6,91.6 L 335.8,91.1 L 337.0,90.7 L 338.2,90.2 L 339.4,89.7 L 340.6,89.2 L 341.8,88.7 L 343.0,88.2 L 344.2,87.7 L 345.4,87.2 L 346.6,86.7 L 347.7,86.2 L 348.9,85.7 L 350.1,85.2 L 351.3,84.7 L 352.5,84.2 L 353.7,83.6 L 354.9,83.1 L 356.1,82.6 L 357.3,82.0 L 358.5,81.5 L 359.7,80.9 L 360.8,80.4 L 362.0,79.8 L 363.2,79.3 L 364.4,78.7 L 365.6,78.2 L 366.8,77.6 L 368.0,77.0 L 369.2,76.5 L 370.4,75.9 L 371.6,75.3 L 372.8,74.7 L 374.0,74.1 L 375.1,73.6 L 376.3,73.0 L 377.5,72.4 L 378.7,71.8 L 379.9,71.2 L 381.1,70.6 L 382.3,70.0 L 383.5,69.4 L 384.7,68.7 L 385.9,68.1 L 387.1,67.5 L 388.2,66.9 L 389.4,66.3 L 390.6,65.6 L 391.8,65.0 L 393.0,64.4 L 394.2,63.7 L 395.4,63.1 L 396.6,62.5 L 397.8,61.8 L 399.0,61.2 L 400.2,60.5 L 401.3,59.9 L 402.5,59.2 L 403.7,58.6 L 404.9,57.9 L 406.1,57.2 L 407.3,56.6 L 408.5,55.9 L 409.7,55.2 L 410.9,54.6 L 412.1,53.9 L 413.3,53.2 L 414.5,52.5 L 415.6,51.8 L 416.8,51.2 L 418.0,50.5 L 419.2,49.8 L 420.4,49.1 L 421.6,48.4 L 422.8,47.7 L 424.0,47.0 L 425.2,46.3 L 426.4,45.6 L 427.6,44.9 L 428.7,44.2 L 429.9,43.5 L 431.1,42.7 L 432.3,42.0 L 433.5,41.3 L 434.7,40.6 L 435.9,39.9 L 437.1,39.1 L 438.3,38.4 L 439.5,37.7 L 440.7,36.9 L 441.8,36.2 L 443.0,35.5 L 444.2,34.7" fill="none" stroke="currentColor" stroke-width="2" opacity="0.85"/>
+      <line x1="51.9" y1="125.5" x2="409.3" y2="89.5"
+            stroke="currentColor" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.75"/>
+      <line x1="148.7" y1="115.7" x2="148.7" y2="180.3"
+            stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 3" opacity="0.6"/>
+      <circle cx="135.3" cy="117.1" r="4" fill="currentColor"/><text x="141.3" y="109.1" font-size="12" font-weight="bold" fill="currentColor">P</text>
+      <circle cx="314.0" cy="99.1" r="4" fill="currentColor"/><text x="322.0" y="93.1" font-size="12" font-weight="bold" fill="currentColor">Q</text>
+      <circle cx="148.7" cy="115.7" r="4" fill="currentColor"/><text x="132.7" y="107.7" font-size="12" font-weight="bold" fill="currentColor">R</text>
+      <circle cx="148.7" cy="180.3" r="4" fill="currentColor"/><text x="114.7" y="196.3" font-size="12" font-weight="bold" fill="currentColor">P+Q</text>
+    </svg>
+    <figcaption>Adding P and Q: the chord meets the curve again at R, and P + Q is R reflected downwards.</figcaption>
+    </figure>
+
+    That's the **chord** construction. When you add a point to *itself* there's
+    no second point to draw a line through, so you use the **tangent** at that
+    point instead — and the rest is the same. Hence "chord and tangent".
+
+    The reflection in step 3 looks arbitrary and isn't: it's what makes the
+    operation behave like addition, so that adding points is associative and
+    every point has an inverse. Without it the structure doesn't work.
+
+    Over a finite field the **same algebraic formulas** apply, and they still
     produce a valid third point. There's simply no line to draw any more. The
     arithmetic survives the move; the picture doesn't.
 
@@ -104,7 +134,18 @@ Your public key is then:
 public key = private key × G
 ```
 
-That's it. Take G, add it to itself as many times as your private key says, and the point you land on is your public key. Since a private key is around 10⁷⁷, "as many times as your private key says" isn't something anyone does literally — see the box further down.
+That's it. Take G, add it to itself as many times as your private key says, and **the point you land on is your public key.** Since a private key is around 10⁷⁷, "as many times as your private key says" isn't something anyone does literally — see the box further down.
+
+Worth being clear about what you end up with, because it catches people out:
+
+> **The public key is a point.** Not a string, not a hash — a pair of coordinates, *x* and *y*, each a 32-byte number. Any hex string you see called "a public key" is just one of several ways of writing that pair down.
+
+So the whole derivation is two steps and no more:
+
+```
+a number you chose          ──×G──►      a point on the curve
+   (private key)                            (public key)
+```
 
 ??? example "Try it: private key to public key"
 
@@ -115,7 +156,11 @@ That's it. Take G, add it to itself as many times as your private key says, and 
       <p class="tool__out" id="pub-out"></p>
     </div>
 
-    Work through it in this order — each step shows something different.
+    The two coordinates at the top **are** the public key. The byte strings
+    below them are the same point written in the different formats explained
+    later on this page — not extra things, just other spellings.
+
+    Work through it in this order; each step shows something different.
 
     **Step 1 — check the tool is honest.** The field starts at `1`, so it's
     computing 1 × G, which should be G itself. Compare the x and y it gives

@@ -111,17 +111,23 @@
       var x = hex(pt[0], 64), y = hex(pt[1], 64);
       var prefix = (pt[1] & ONE) === ZERO ? "02" : "03";
       out.innerHTML =
-        "<span class=\"tool__label\">x coordinate — 32 bytes</span>" +
+        "<span class=\"tool__hint\">Your public key is a <strong>point on the " +
+        "curve</strong> — a pair of coordinates. These two numbers are it:</span>" +
+        "<span class=\"tool__label\">↳ x &nbsp;(32 bytes)</span>" +
         "<code class=\"tool__hash\">" + x + "</code>" +
-        "<span class=\"tool__label\">y coordinate — 32 bytes</span>" +
+        "<span class=\"tool__label\">↳ y &nbsp;(32 bytes)</span>" +
         "<code class=\"tool__hash\">" + y + "</code>" +
-        "<span class=\"tool__label\">x and y joined — 64 bytes, the form Ethereum uses</span>" +
+        "<span class=\"tool__hint\">Everything below is the <em>same point</em>, " +
+        "just written down differently — see <em>The several written forms</em> " +
+        "further down the page.</span>" +
+        "<span class=\"tool__label\">Raw: x then y &nbsp;(64 bytes)</span>" +
         "<code class=\"tool__hash\">" + x + y + "</code>" +
-        "<span class=\"tool__label\">Compressed — 33 bytes, y left out</span>" +
+        "<span class=\"tool__label\">Compressed: y replaced by one byte &nbsp;(33 bytes)</span>" +
         "<code class=\"tool__hash\">" + prefix + x + "</code>" +
-        "<span class=\"tool__hint\">y is " +
+        "<span class=\"tool__hint\">Here y is <strong>" +
         ((pt[1] & ONE) === ZERO ? "even" : "odd") +
-        ", which is all the prefix records — enough to recover it from x.</span>";
+        "</strong>, so the compressed form starts <code>" + prefix + "</code>. " +
+        "That single byte is enough to recompute y from x.</span>";
     }
 
     inp.addEventListener("input", run);
