@@ -274,11 +274,35 @@ The `0x04` prefix in the second form is a marker meaning "uncompressed point fol
 
 The name decodes piece by piece: **sec** for the standards group that published it, **p** because the field is a prime one, **256** for the size in bits, **k** for Koblitz, and **1** because it's the first curve of that kind in the list [(SECG, 2010)](#ref-secg-2010).
 
-**Koblitz** is a person — Neal Koblitz, one of the mathematicians who proposed using elliptic curves for cryptography in the mid-1980s. A Koblitz curve is one whose constants are chosen to have deliberate structure rather than being picked arbitrarily, because structure makes the arithmetic faster. You can see it in secp256k1's own numbers: the equation is `y² = x³ + 7`, with no *x* term at all and a tiny constant, and the field prime sits just below a power of two. Both choices speed up the computation, and both are plainly visible rather than the output of some opaque procedure.
+Bitcoin chose it, and Ethereum followed — which brought along a decade of implementations, review and hardware support.
 
-That last part turns out to matter, and it's the subject of the box below.
+??? info "History: who Koblitz was, and what a Koblitz curve is"
 
-Bitcoin chose it, and Ethereum followed — which brought a decade of implementations, review and hardware support along with it.
+    **Koblitz** is a person. Neal Koblitz was one of two mathematicians who,
+    working independently in the mid-1980s, proposed using elliptic curves for
+    cryptography — the other was Victor Miller. Until then elliptic curves
+    were a subject in pure number theory with no particular connection to
+    keeping secrets.
+
+    A **Koblitz curve** is one whose constants are chosen to have deliberate
+    structure rather than being picked arbitrarily, because structure makes
+    the arithmetic faster.
+
+    You can see it in secp256k1's own numbers. The equation is `y² = x³ + 7`,
+    with no *x* term at all and a tiny constant, and the field prime sits just
+    below a power of two:
+
+    ```
+    p = 2²⁵⁶ − 2³² − 977
+    ```
+
+    Both choices speed up the computation. But they have a second property
+    that turned out to matter more: **they're plainly visible.** Anyone can see
+    why each constant is what it is, because there's nothing to see — a 7, and
+    a prime chosen to sit near a round binary number.
+
+    That becomes the interesting part when you compare it with the
+    alternative, which is the next box.
 
 ??? info "There was another candidate, and the choice is interesting"
 
