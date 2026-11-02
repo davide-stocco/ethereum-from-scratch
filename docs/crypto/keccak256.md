@@ -9,7 +9,7 @@ description: Keccak-256 is Ethereum's hash function — any input in, 32 bytes o
 
 A **hash function** takes any input at all — a word, a book, a transaction, a gigabyte of video — and returns a fixed-size fingerprint. Keccak-256's output is always exactly **32 bytes**, which is [64 hex characters](../foundations/hex-and-bytes.md).
 
-???+ example "Try it: hash anything"
+??? example "Try it: hash anything"
 
     <div class="tool" markdown="0">
       <label for="kec-in">Input</label>
@@ -38,7 +38,7 @@ Everything Ethereum does with hashing rests on these, and nothing else.
 
 The third property is the one people underestimate, so it's worth seeing. Two inputs differing by one letter:
 
-???+ example "Try it: the avalanche effect"
+??? example "Try it: the avalanche effect"
 
     <div class="tool" markdown="0">
       <label for="av-a">Input A</label>
@@ -117,7 +117,7 @@ So Ethereum uses **Keccak-256**, and the NIST standard is **SHA3-256**, and they
 
 One byte, and the outputs share nothing:
 
-???+ example "Try it: Keccak-256 against SHA3-256"
+??? example "Try it: Keccak-256 against SHA3-256"
 
     <div class="tool" markdown="0">
       <label for="sha-in">Input</label>

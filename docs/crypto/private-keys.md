@@ -11,7 +11,7 @@ A private key is **a number**. That's the whole of it.
 
 Not a file, not a password, not a certificate issued by anyone. A randomly chosen integer, 256 bits long — which from [hex and bytes](../foundations/hex-and-bytes.md) you'll recognise as 32 bytes, or 64 hex characters.
 
-???+ example "Try it: make one"
+??? example "Try it: make one"
 
     <div class="tool" markdown="0">
       <button id="key-gen" type="button">Generate a key</button>
@@ -61,7 +61,7 @@ They can't, and the reason is the size of the number. Private keys run up to abo
 
 Roughly **10<sup>77</sup>**. Written out, it's 78 digits. That number resists intuition completely, so rather than reach for an analogy, here's a calculation you can run yourself.
 
-???+ example "Try it: how long to guess a key?"
+??? example "Try it: how long to guess a key?"
 
     Suppose every person alive were hunting for your key, each testing keys as
     fast as a modern machine can manage, for the entire history of the universe.

@@ -117,7 +117,7 @@ And a four-character example, `0x1234`:
 
 That's all there is to it. Nothing about hex is conceptually different from decimal — only the number of digits available.
 
-???+ example "Try it: convert between decimal, hex and binary"
+??? example "Try it: convert between decimal, hex and binary"
 
     Type into any field and the other two follow. It starts on `0x1234`, the
     example above.

@@ -617,10 +617,14 @@ than maintaining two versions that drift apart.
         changed. Often the clearest justification for the current design, and
         the fork policy's "teach changes as history" in practice.
       - `??? note "…"` — asides, terminology, caveats.
-      - `???+ example "Try it: …"` — an **interactive tool**. Purple, and the
-        only box type that opens by default (`???+`), because a hidden
-        instrument is a useless one. Always followed by a few prompts worth
-        trying, so the tool teaches something rather than just existing.
+      - `??? example "Try it: …"` — an **interactive tool**. Purple, so it
+        reads as distinct from the others. Always followed by a few prompts
+        worth trying, so the tool teaches something rather than just existing.
+
+   **Every box starts closed, with no exceptions** — including tools. An
+   earlier version opened tools by default on the grounds that a hidden
+   instrument is useless, but that made them the one inconsistent element on
+   every page. The `Try it:` prefix is invitation enough.
 
    **No mixing.** An always-open `!!!` box sitting beside collapsed ones reads
    as a mistake, and a reader can't tell what the convention is. All closed by
