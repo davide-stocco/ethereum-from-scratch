@@ -48,6 +48,35 @@ By convention each pattern is read as a number, counting up from zero:
 
 So "one byte" and "a number from 0 to 255" are two descriptions of the same thing. The byte is the unit everything gets measured in — not because eight is mathematically special, but because it's what hardware settled on, and the whole stack has counted in bytes since.
 
+### How a pattern becomes a number
+
+The same way a decimal number does, except each position is worth **twice** the one to its right instead of ten times. So the place values are 1, 2, 4, 8, 16, 32, 64, 128 — the powers of two.
+
+Take the byte from the top of this section, `01101001`. Multiply each bit by its place value and add up:
+
+```
+0 × 128  =    0
+1 ×  64  =   64
+1 ×  32  =   32
+0 ×  16  =    0
+1 ×   8  =    8
+0 ×   4  =    0
+0 ×   2  =    0
+1 ×   1  =    1
+            ────
+             105
+```
+
+A bit is either 0 or 1, so each position either contributes its place value or contributes nothing. Reading a byte is just adding up the place values wherever there's a 1: 64 + 32 + 8 + 1 = **105**.
+
+Which also shows where the 0-to-255 range comes from. The largest possible byte is `11111111`, every position contributing:
+
+```
+128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = 255
+```
+
+And the smallest is `00000000`, contributing nothing at all. Zero to 255, with every value in between reachable exactly once.
+
 ## Hexadecimal
 
 **Hex** is counting in base 16 instead of base 10. It needs sixteen digits, and since we only have ten, the first six letters fill in. The encoding is standardised, as Base16 [(Josefsson, 2006)](#ref-josefsson-2006), though you'll never see it called that outside a specification:
@@ -63,11 +92,9 @@ So `f` is 15, and `10` in hex is sixteen.
 
 ### Reading a hex number
 
-It works exactly like decimal, except each position is worth **16 times** the one to its right instead of 10 times.
+Exactly the same trick as the bits above, with a different multiplier. Each position is worth **16 times** the one to its right — where in binary it was twice, and in decimal ten times.
 
-In decimal, `1234` means 1×1000 + 2×100 + 3×10 + 4. The place values are 1, 10, 100, 1000 — powers of ten.
-
-In hex the place values are powers of sixteen: 1, 16, 256, 4096. So `0x2f`:
+So the place values are the powers of sixteen: 1, 16, 256, 4096. Take `0x2f`:
 
 ```
 0x2f
