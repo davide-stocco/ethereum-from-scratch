@@ -121,6 +121,10 @@
   border-radius: 0.15rem;
 }
 
+.md-typeset .tool__faint {
+  opacity: 0.35;
+}
+
 /* Characters that differ between two hashes. */
 .md-typeset .tool__diff {
   font-style: normal;

@@ -213,6 +213,11 @@
     run();
   }
 
+  // Shared so the addresses page can chain key -> public key -> hash.
+  window.EFS = window.EFS || {};
+  window.EFS.keccak256Bytes = OK ? function (bytes) { return toHex(keccak(bytes, 0x01)); } : null;
+  window.EFS.keccak256Text  = OK ? keccak256 : null;
+
   function run() { hasher(); avalanche(); versus(); }
 
   if (document.readyState === "loading") {
