@@ -251,3 +251,37 @@
   letter-spacing: 0.04em;
   opacity: 0.75;
 }
+
+
+/* ---------------------------------------------------------------------------
+   Collapsible boxes: smooth open and close
+   ---------------------------------------------------------------------------
+   The height itself is driven by javascripts/boxes.js, because a <details>
+   drops its content out of layout when closed and so has no height for CSS to
+   transition between. All this does is define the transition and hide the
+   overflow while it runs.
+
+   The .is-animating class is only present during the animation, so overflow
+   is never clipped at rest — which matters for tooltips inside a box.
+   --------------------------------------------------------------------------- */
+
+.md-typeset details.is-animating {
+  overflow: hidden;
+  transition: height 0.26s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Fade the contents in slightly behind the height, so the box doesn't look
+   like it's merely being stretched. */
+.md-typeset details[open] > :not(summary) {
+  animation: efs-box-in 0.3s ease-out;
+}
+
+@keyframes efs-box-in {
+  from { opacity: 0; transform: translateY(-0.2rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset details.is-animating { transition: none; }
+  .md-typeset details[open] > :not(summary) { animation: none; }
+}

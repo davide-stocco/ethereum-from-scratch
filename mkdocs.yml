@@ -52,6 +52,8 @@ extra_javascript:
   - javascripts/converters.js
   - javascripts/keccak.js
   - javascripts/keys.js
+  - javascripts/secp256k1.js
+  - javascripts/boxes.js
 
 markdown_extensions:
   - admonition                 # the coloured "note" / "warning" boxes
