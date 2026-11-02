@@ -30,7 +30,7 @@ Everything Ethereum does with hashing rests on these, and nothing else.
 
 **2. Fixed size.** Any input, 32 bytes out. A single character and the complete works of Shakespeare both come out the same length.
 
-**3. Avalanche.** Change the input by the smallest possible amount and roughly **half** the output bits flip. Not "the output changes a bit" — the output is unrecognisable.
+**3. Avalanche.** Change the input by the smallest possible amount and **nearly every character of the output changes**. Not "the output changes a bit" — the output is unrecognisable.
 
 **4. One-way.** Given an output, there is no practical way to find an input that produces it. Easy forwards, infeasible backwards.
 
@@ -48,15 +48,30 @@ The third property is the one people underestimate, so it's worth seeing. Two in
       <p class="tool__out" id="av-out"></p>
     </div>
 
-    `hello` and `hellp` differ in a single letter — in fact in a single *bit*
-    of one byte. Yet **132 of the 256 output bits differ**, which is about
-    half, exactly as the property predicts.
+    `hello` and `hellp` differ in a single letter. Yet **61 of the 64 hex
+    characters differ** — the output isn't similar, it's unrelated.
 
-    Worth trying: make the two inputs **identical**. Every bit matches, every
-    time. That's determinism and avalanche together — wildly sensitive to any
-    change, and perfectly stable when there's none.
+    Worth trying: make the two inputs **identical**. Every character matches,
+    every time. That's determinism and avalanche together — wildly sensitive to
+    any change, and perfectly stable when there's none.
 
-Half the bits is not an accident, it's the design target. If similar inputs produced similar hashes, you could hill-climb your way to a desired output: tweak, see if you got closer, tweak again. Avalanche destroys that strategy, because "closer" carries no information.
+### Nearly every character, but only half the bits
+
+The tool reports two numbers, and the gap between them is worth a moment: **61 of 64 characters** changed, but only **132 of 256 bits**.
+
+That isn't a contradiction. Recall from [hex and bytes](../foundations/hex-and-bytes.md) that each hex character is exactly four bits. A character *looks* different if **any one** of its four bits flipped — so characters are a much blunter instrument than bits.
+
+If the function is doing its job, each output bit flips with probability one half. The chance that all four bits of a character survive untouched is then:
+
+```
+(1/2)^4  =  1/16
+```
+
+So a character changes 15 times out of 16, and across 64 characters you'd expect about 64 × 15/16 = **60** of them to change. We observed 61.
+
+**Half the bits is the design target; nearly every character is what that looks like in hex.** The bit figure is the precise statement of the property, and the character figure is what you actually see.
+
+And half is not an accident. If similar inputs produced similar hashes, you could hill-climb your way to a desired output: tweak the input, check whether you got closer, tweak again. Avalanche destroys that strategy, because "closer" carries no information at all.
 
 ## Why it can't be reversed
 
@@ -109,9 +124,9 @@ One byte, and the outputs share nothing:
     </div>
 
     Both functions use the identical permutation, the identical structure, the
-    identical number of rounds. They differ by one byte of padding — and about
-    half the output bits differ as a result. Avalanche doesn't care *where* the
-    difference came from.
+    identical number of rounds. They differ by one byte of padding — and almost
+    every character of the output differs as a result. Avalanche doesn't care
+    *where* the difference came from.
 
     The empty string is the pair worth remembering, since both turn up
     constantly in different contexts:
@@ -154,7 +169,7 @@ Two misconceptions worth killing off.
 
 - Keccak-256 takes **any input** and returns exactly **32 bytes**.
 - It is **deterministic** — the same input gives the same output everywhere, forever.
-- **Avalanche**: a one-bit change flips about half the output bits, so similar inputs tell you nothing about each other.
+- **Avalanche**: a one-letter change rewrites nearly every character of the output — half the bits, which in hex means about 60 of the 64 characters. Similar inputs tell you nothing about each other.
 - It is **one-way** because the output is too small to hold the input. The information is gone, not hidden.
 - Collisions must exist; the claim is that **nobody can find one**, and 2<sup>256</sup> is why.
 - **Keccak-256 is not SHA3-256.** One padding byte apart, and completely different outputs.
