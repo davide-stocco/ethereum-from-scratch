@@ -80,6 +80,9 @@
   window.EFS = window.EFS || {};
   window.EFS.pubFromPriv = OK ? pubFromPriv : null;
   window.EFS.secpHex = hex;
+  // Shared with the signatures page, which needs the group operations.
+  window.EFS.secp = OK ? { P: P, N: N, G: [GX, GY], add: add, mul: mul, mod: mod,
+                           powmod: powmod, inv: inv } : null;
 
   function tool() {
     var inp = document.getElementById("pub-priv");
