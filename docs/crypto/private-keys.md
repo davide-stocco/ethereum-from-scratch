@@ -23,15 +23,29 @@ Not a file, not a password, not a certificate issued by anyone. A randomly chose
     process**, and it's the first genuinely strange thing about Ethereum: an
     account is not issued to you, it's a number you happened to choose.
 
-!!! danger "Don't use a key from this page"
+!!! danger "Never send anything to a key from this page"
 
-    The generator above uses your browser's cryptographic random number
-    source, which is the right source. But a key is only as safe as everything
-    that has ever seen it — and this one has been displayed on a web page, in
-    a browser, possibly with extensions installed and the page in your history.
+    To be precise about the risk, because it's easy to overstate and easy to
+    understate.
 
-    It's here to show you what a key *is*. For anything holding real value,
-    use proper wallet software.
+    **Nothing is at risk right now.** The key you just generated controls an
+    account that has never been used and holds nothing. There is nothing to
+    steal.
+
+    **The danger is only if you ever put value behind it.** And it's absolute,
+    because of something worth stating plainly: **the private key is the
+    complete secret.** There is nothing above it, beneath it, or alongside it
+    — no password, no second factor, no account to lock. Anyone holding that
+    number can sign for that address, and the network cannot tell them from
+    you.
+
+    This key has been generated in a browser and displayed on a screen, in a
+    tab that is probably in your history, on a page any installed extension
+    could read. That's fine for looking at. It is permanently unfit for
+    holding anything, and no amount of later care fixes it.
+
+    For real value, use wallet software that generates a key and never shows
+    it to anyone, including you.
 
 ## How is one number enough?
 
@@ -118,6 +132,8 @@ That's the mechanism behind every claim of ownership on Ethereum. Which leads to
 
 Nothing in the state records that an account belongs to you. The chain holds only a balance against an [address](addresses.md), entirely public, visible to everybody. What distinguishes you from everyone else looking at it is that you can produce valid signatures for it and they can't.
 
+And the key is the **whole** secret, not one factor among several. Nothing else is checked: no password, no second device, no identity. A signature is valid or it isn't, and producing a valid one requires only the number.
+
 So there's nothing to steal except the number — and nothing to lose except the number, which is the subject of [what losing your keys means](../wallets/losing-your-keys.md).
 
 ## What comes next
@@ -135,10 +151,23 @@ Each step is one-way, which is why an address reveals nothing about the key behi
     rather than a 64-character number, and may reasonably assume *that's* the
     private key.
 
-    It isn't. Those words are a **seed**, and a procedure turns one seed into
-    many private keys. It's a convenience layer sitting above everything on
-    this page — Ethereum has never heard of it, and sees only keys and
-    signatures. Covered under
+    It isn't. Those words are a **seed**, and a repeatable procedure turns one
+    seed into many private keys.
+
+    The direction matters, because it's easy to get backwards. The seed sits
+    **upstream** of your keys, not above them as some higher authority:
+
+    ```
+    seed  ──►  private key  ──►  address
+    ```
+
+    So a seed is a convenient way to *produce and re-produce* keys — which is
+    why writing down twelve words can restore a whole wallet. But it is **not
+    a second secret guarding them.** Once a private key exists, it stands
+    alone: whoever has it can sign, and the seed is irrelevant to that.
+
+    Ethereum itself has never heard of seed phrases. They're a wallet
+    convention, and the protocol sees only keys and signatures. Covered under
     [wallets and seed phrases](../wallets/seed-phrases.md).
 
 ---
