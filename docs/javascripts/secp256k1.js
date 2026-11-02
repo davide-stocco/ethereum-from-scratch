@@ -115,9 +115,9 @@
         "<code class=\"tool__hash\">" + x + "</code>" +
         "<span class=\"tool__label\">y coordinate — 32 bytes</span>" +
         "<code class=\"tool__hash\">" + y + "</code>" +
-        "<span class=\"tool__label\">The 64-byte form Ethereum hashes to make an address</span>" +
+        "<span class=\"tool__label\">x and y joined — 64 bytes, the form Ethereum uses</span>" +
         "<code class=\"tool__hash\">" + x + y + "</code>" +
-        "<span class=\"tool__label\">Compressed — 33 bytes, y thrown away</span>" +
+        "<span class=\"tool__label\">Compressed — 33 bytes, y left out</span>" +
         "<code class=\"tool__hash\">" + prefix + x + "</code>" +
         "<span class=\"tool__hint\">y is " +
         ((pt[1] & ONE) === ZERO ? "even" : "odd") +
