@@ -118,6 +118,40 @@ That's all there is to it. Nothing about hex is conceptually different from deci
     - **`10101010`** in binary. Note it comes out as `aa` — each hex character
       is exactly four bits.
 
+??? note "The converter above nearly had a bug, and it's the one from the last page"
+
+    [The previous page](ether.md) argued that Ethereum counts in whole numbers
+    because decimal fractions round differently on different machines, and
+    rounding would break consensus. That argument has teeth, and it bit this
+    tool.
+
+    The obvious way to write a converter is with JavaScript's ordinary number
+    type. But that type is a 64-bit float, and it holds integers **exactly**
+    only up to 2<sup>53</sup> − 1, which is about 9 quadrillion. An address is
+    160 bits — roughly 10<sup>33</sup> times larger than that limit.
+
+    Past the limit, a float can't represent every integer any more, so it
+    silently snaps to the nearest value it *can* represent. Feed the address
+    from earlier through one and you get this back:
+
+    ```
+    correct:  d8da6bf26964af9d7eed9e03e53415d37aa96045
+    float:    d8da6bf26964b000000000000000000000000000
+    ```
+
+    Twenty-five of the forty characters replaced by zeros. **No error, no
+    warning** — just a wrong answer delivered with total confidence, which is
+    the worst kind.
+
+    The converter uses JavaScript's arbitrary-precision integer type instead,
+    which has no such limit. Hence the invitation above to paste in a real
+    address: it's a demonstration that the tool handles something a naive one
+    would quietly mangle.
+
+    Which is the whole reason Ethereum never stores a fraction. Not
+    fastidiousness — this failure, happening on thousands of machines at once,
+    with balances instead of addresses.
+
 ### Why base 16, and not 10
 
 Because of one tidy coincidence: **one byte is exactly two hex characters.**
