@@ -145,40 +145,6 @@ That's all there is to it. Nothing about hex is conceptually different from deci
     - **`10101010`** in binary. Note it comes out as `aa` — each hex character
       is exactly four bits.
 
-??? note "The converter above nearly had a bug, and it's the one from the last page"
-
-    [The previous page](ether.md) argued that Ethereum counts in whole numbers
-    because decimal fractions round differently on different machines, and
-    rounding would break consensus. That argument has teeth, and it bit this
-    tool.
-
-    The obvious way to write a converter is with JavaScript's ordinary number
-    type. But that type is a 64-bit float, and it holds integers **exactly**
-    only up to 2<sup>53</sup> − 1, which is about 9 quadrillion. An address is
-    160 bits — roughly 10<sup>33</sup> times larger than that limit.
-
-    Past the limit, a float can't represent every integer any more, so it
-    silently snaps to the nearest value it *can* represent. Feed the address
-    from earlier through one and you get this back:
-
-    ```
-    correct:  d8da6bf26964af9d7eed9e03e53415d37aa96045
-    float:    d8da6bf26964b000000000000000000000000000
-    ```
-
-    Twenty-five of the forty characters replaced by zeros. **No error, no
-    warning** — just a wrong answer delivered with total confidence, which is
-    the worst kind.
-
-    The converter uses JavaScript's arbitrary-precision integer type instead,
-    which has no such limit. Hence the invitation above to paste in a real
-    address: it's a demonstration that the tool handles something a naive one
-    would quietly mangle.
-
-    Which is the whole reason Ethereum never stores a fraction. Not
-    fastidiousness — this failure, happening on thousands of machines at once,
-    with balances instead of addresses.
-
 ### Why base 16, and not 10
 
 Because of one tidy coincidence: **one byte is exactly two hex characters.**
@@ -195,27 +161,52 @@ A byte holds 256 values. Two hex characters give 16 × 16 = 256 possibilities. T
 
 Notice that two hex characters also split the byte neatly in half: the left character is the first four bits, the right character the last four. `aa` is `1010` then `1010`.
 
-**Decimal has no such alignment**, and the consequence is worth seeing rather than being told.
+**Decimal has no such alignment**, and the consequence matters.
 
-Suppose you want to write down three bytes whose values are 5, 255 and 7.
+To see why, put yourself on the receiving end. A program sends you some characters and tells you they're three bytes. Your job is to work out what those three bytes were — **and you don't know their values in advance.** That's the whole task.
 
-In **hex**, each one takes exactly two characters, so you get `05 ff 07`, which you'd write as:
+**In hex**, every byte is two characters, whatever its value:
+
+| The byte | In hex |
+| --- | --- |
+| 5 | `05` |
+| 255 | `ff` |
+| 7 | `07` |
+
+So it arrives as six characters:
 
 ```
 05ff07
 ```
 
-Now recover the original three bytes. Easy — chop it into pairs: `05`, `ff`, `07`.
+Six characters, two per byte, three bytes. Cut after every second character and you're done: `05` `ff` `07`. And that procedure would have worked for *any* three bytes, which is the important part.
 
-In **decimal**, those same three values take one, three and one digits:
+**In decimal**, how many digits a byte takes depends on its value:
+
+| The byte | In decimal | Digits |
+| --- | --- | --- |
+| 5 | `5` | one |
+| 255 | `255` | three |
+| 7 | `7` | one |
+
+So it arrives as five characters:
 
 ```
 52557
 ```
 
-Now recover them. You can't. Is that 5, 25, 57? Or 52, 5, 57? Or 5, 255, 7? Nothing in the string tells you where one byte ends and the next begins, because decimal digits per byte varies with the value.
+Now where do you cut? You have five characters to divide into three bytes, and several ways to do it are perfectly legal:
 
-That's the whole reason hex is used: **the boundaries are always visible.**
+| Reading | Bytes | Valid? |
+| --- | --- | --- |
+| `5` `25` `57` | 5, 25, 57 | yes — all ≤ 255 |
+| `52` `5` `57` | 52, 5, 57 | yes |
+| `5` `255` `7` | 5, 255, 7 | yes — the right one |
+| `52` `55` `7` | 52, 55, 7 | yes |
+
+Four readings, all legitimate, and **nothing in the string tells you which was meant.** To know that each byte took one, three and one digits, you'd have to already know the values — which is precisely what you were trying to find out.
+
+That's the alignment hex has and decimal hasn't. In hex the boundaries are implied by position, because every byte is the same width. In decimal they aren't implied at all, so they'd have to be sent separately — and at that point you've invented a worse version of hex.
 
 ```
 d8 dA 6B F2 69 64 aF 9D 7e Ed 9e 03 E5 34 15 D3 7a A9 60 45
