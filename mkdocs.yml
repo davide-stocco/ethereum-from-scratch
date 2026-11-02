@@ -50,6 +50,7 @@ extra_css:
 
 extra_javascript:
   - javascripts/converters.js
+  - javascripts/keccak.js
 
 markdown_extensions:
   - admonition                 # the coloured "note" / "warning" boxes
@@ -75,18 +76,13 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
 
 # ---------------------------------------------------------------------------
-# PHASE 1: fork-proof content only.
+# Reading order. Tiers (which decide publishing order and what a fork can
+# invalidate) live in each page's frontmatter and in ROADMAP.md — never here.
 #
-# Every page below has been true since Ethereum launched in 2015 and cannot
-# realistically change — altering any of it would break every wallet, library
-# and deployed contract at once.
+# v3 and v4 sections stay out of this file until v1 is published: a sidebar
+# listing seventy unwritten pages is worse than no sidebar.
 #
-# Fork-dependent material (gas costs, the fee market, transaction types,
-# Proof of Stake, rollups) lives in /drafts and is NOT published yet.
-# See FORKS.md for the classification, and docs/about/forks.md for the
-# reader-facing explanation.
-#
-# Order matters: nothing is explained before its prerequisites.
+# Nothing is explained before its prerequisites.
 # ---------------------------------------------------------------------------
 nav:
   - Home: index.md

@@ -105,6 +105,41 @@
   border-color: #ff8a80;
 }
 
+.md-typeset .tool__hash {
+  display: block;
+  margin: 0.15rem 0 0.35rem;
+  padding: 0.35em 0.5em;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  background: var(--md-code-bg-color);
+  border-radius: 0.15rem;
+}
+
+/* Characters that differ between two hashes. */
+.md-typeset .tool__diff {
+  font-style: normal;
+  font-weight: 700;
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.1);
+  border-radius: 0.1rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .tool__diff {
+  color: #ff8a80;
+  background: rgba(255, 138, 128, 0.14);
+}
+
+.md-typeset .tool__label {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
 /* Stack the labels above the fields on narrow screens. */
 @media screen and (max-width: 44.9em) {
   .md-typeset .tool {
