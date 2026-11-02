@@ -98,6 +98,9 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 ## N
 
+**NIST**{ #nist } (National Institute of Standards and Technology)
+: The United States government agency that publishes technical standards, cryptography among them, as documents called FIPS. It ran the competition that chose Keccak as SHA-3 — and then altered the padding before publication, which is why Ethereum's Keccak-256 and the SHA3-256 standard are different functions. → [Keccak-256](crypto/keccak256.md)
+
 **Nonce**{ #nonce }
 : A per-account counter of transactions already sent. Prevents the same signed transaction being replayed, and forces strict ordering. → [The nonce](accounts/nonce.md "A per-account counter of transactions already sent")
 

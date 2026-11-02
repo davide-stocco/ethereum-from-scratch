@@ -109,7 +109,9 @@ Which means infinitely many inputs share any given hash. That sounds alarming un
 
 This causes real confusion and real bugs, so it's worth being precise.
 
-Keccak, designed by Bertoni, Daemen, Peeters and Van Assche [(Bertoni et al., 2011)](#ref-bertoni-2011), won NIST's competition to become SHA-3. Between winning and being published as a standard, **NIST changed the padding** — the bytes appended to the input before hashing [(NIST, 2015)](#ref-fips202). Ethereum had already adopted the original Keccak and kept it.
+Keccak, designed by Bertoni, Daemen, Peeters and Van Assche [(Bertoni et al., 2011)](#ref-bertoni-2011), won an open competition to become SHA-3. The competition was run by **[NIST](../glossary.md#nist "The US government agency that publishes technical standards, cryptography included")** — the United States standards agency, which publishes the cryptographic standards most of the world ends up using.
+
+Between Keccak winning and the standard being published, **NIST changed the padding**: the bytes appended to the input before hashing [(NIST, 2015)](#ref-fips202). Ethereum had already adopted the original Keccak and kept it.
 
 So Ethereum uses **Keccak-256**, and the NIST standard is **SHA3-256**, and they are *not the same function*. The difference is a single byte: `0x01` where the standard uses `0x06`.
 
