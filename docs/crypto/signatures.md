@@ -181,6 +181,48 @@ Put against a whole transaction the difference is stark. A plain ether transfer 
 
 That's the trade. One extra byte of `v` instead of sixty-four bytes of public key, paid for with a slightly more involved calculation. On a system where every byte is stored permanently and everywhere, it's not a close call.
 
+### So Ethereum never verifies a transaction signature at all
+
+Worth being precise about, because the natural assumption is that recovery happens *first* and verification *then* confirms it. It doesn't. **Recovery stands in place of verification**, and the verification step simply doesn't exist.
+
+Compare the two mental models:
+
+```
+    the familiar one      "here is the claimed sender —
+                           check the signature matches them"
+
+    Ethereum's            "here is a signature —
+                           it determines who the sender is"
+```
+
+In the first, there are two pieces of information that might disagree, so there's a check, and the check can fail. In the second **there is only one piece of information.** The sender isn't claimed and then confirmed; the sender is *defined* as whoever the signature recovers to.
+
+So the question "is this signature valid for this sender?" is never asked — and therefore can never fail. That's why, as the tool below shows, a tampered message doesn't produce an invalid-signature error. There's no such error to produce. It produces a different sender.
+
+??? note "A few things can still fail outright"
+
+    Recovery replaces the signature check, but it doesn't make a transaction
+    unconditionally acceptable. Some structural conditions remain, and a
+    transaction breaking any of them is rejected before recovery is even
+    attempted:
+
+    - `r` and `s` must each be at least 1 and below the curve order
+    - `s` must be in the lower half of its range, per
+      [EIP-2](#ref-eip2) — see [malleability](#malleability-and-why-s-has-to-be-small)
+    - `r` must actually be the x coordinate of a point on the curve, or
+      there is no **R** to rebuild and recovery has nothing to work with
+
+    These are checks on whether the numbers are *well-formed*, not on whether
+    they're *yours*. Nothing here compares anything to a sender.
+
+### Where a comparison does happen
+
+One exception worth knowing, because it's the case you'll meet as a user.
+
+When a website asks you to sign a phrase to log in, it **does** compare. It knows which address it expects — the one you claimed to own — so it recovers the address from your signature and checks the two match. That's a genuine verification, built out of recovery.
+
+The difference is that the site has an expectation to test against. A node processing a transaction has none, and needs none.
+
 ??? abstract "Is recovery slower than verification?"
 
     Not meaningfully. Verification works out to two point multiplications;
@@ -454,6 +496,7 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
 - What's signed is the **hash of the transaction**, which protects every field at once.
 - `r` and `s` are the signature; `v` is one bit saying which of two possible public keys to recover.
 - **Verification would have worked too** — but it needs the public key, and Ethereum has no certificates to supply one. Recovery buys the same guarantee for one byte of `v` instead of 64 bytes of public key in every transaction.
+- So Ethereum **never verifies a transaction signature**. Recovery replaces that step: the sender isn't claimed and then checked, it's *defined* as whoever the signature recovers to. A comparison only happens where something has an expectation to test — signing in to a website, for instance.
 - **The same message signed twice gives different signatures**, both recovering the same address.
 - A tampered message recovers **a different address**, not an error — nothing in a signature says whose it should have been.
 - Replay needs two defences: the **nonce** within a chain, the **chain id** across chains.
