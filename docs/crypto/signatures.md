@@ -106,6 +106,40 @@ So **`v` is one bit saying which**: the *y* was even, or the *y* was odd. That's
 
 The first two are ordinary ECDSA, used across the internet. The **third** is what Ethereum leans on, and it's why a transaction needs no sender field.
 
+### Recovering an address, step by step
+
+Spelled out as a procedure, so the tool below isn't a black box:
+
+```
+recover(message, r, s, v):
+
+    1.  z  =  keccak256(message)        the hash that was actually signed
+
+    2.  R  =  the curve point whose x coordinate is r
+              — two points qualify, one with even y and one with odd,
+                so use v to pick the right one
+
+    3.  Q  =  r⁻¹ · ( s·R  −  z·G )     solve the signing relation for Q
+
+    4.  address = last 20 bytes of keccak256(Q)
+```
+
+Step 3 is the rearrangement from above. Step 4 is the [addresses](addresses.md) page, unchanged.
+
+Notice what goes **in**: a message, and three numbers. Every one of them public. No key, no secret, nothing that has to be kept safe — which is exactly why any stranger can run this, and why every node does.
+
+### Nothing in this is secret
+
+Worth pausing on, because signing is routinely confused with encrypting.
+
+**The message is public.** A transaction is broadcast to every node on the network in plain text — the amount, the recipient, the data, all of it readable by anyone. Nothing is encrypted at any stage. A block explorer showing you somebody's transfers isn't breaking anything; it's reading what was published.
+
+What a signature provides isn't secrecy, it's **authorship**. It answers *who authorised this*, not *what does it say*. Those are different questions, and Ethereum only needs the first one answered.
+
+The only secret anywhere is the private key, and it never leaves your machine. What travels is `r` and `s`, which [reveal nothing about it](private-keys.md).
+
+So when the tool below hands the verifier the message openly, that isn't a simplification for the demonstration — it's how the system works. **If the message were secret nobody could check it was valid**, and a network that can't check transactions has nothing to agree on.
+
 This page doesn't derive any of it. The three properties from the [private keys](private-keys.md) page are what matter: anyone can check it, it reveals nothing about the key, and it's bound to one message.
 
 ??? example "Try it: sign, then recover the signer"
@@ -121,9 +155,10 @@ This page doesn't derive any of it. The three properties from the [private keys]
       <p class="tool__out" id="sig-out"></p>
     </div>
 
-    **Step 1 — note what the verifier was given.** Only the message and the
-    signature. Not the address, not the public key. The recovered address is
-    computed, and it matches.
+    **Step 1 — note what the verifier was *not* given.** Not the address, not
+    the public key, not any claim about who signed. Just the message — public,
+    as always — and three numbers. The address underneath is computed from
+    those alone, and it matches.
 
     **Step 2 — press Sign again**, several times. The signature changes
     completely every time, and **the recovered address never does.** That's
@@ -134,11 +169,38 @@ This page doesn't derive any of it. The three properties from the [private keys]
     different message from the one that was signed. Change "Anna" to "Anne",
     or 1 ether to 2.
 
-    Recovery doesn't fail. It returns **a different address** — some unrelated
-    stranger. That's worth sitting with: there's no error state, because
-    nothing in the signature says whose it was supposed to be. A tampered
-    message simply recovers to somebody who never existed, and the transaction
-    is rejected for having a sender who hasn't authorised anything.
+    **Recovery doesn't fail. It returns a different address.** That's the
+    surprising part, and it's worth following through why.
+
+    1. The signature was computed over `keccak256("…to Anna")`.
+    2. The verifier now computes `keccak256("…to Anne")` — a completely
+       different *z*, because of [avalanche](keccak256.md).
+    3. Step 3 of the procedure above uses *z*. Feed in a different *z* and the
+       equation returns a different **Q**.
+    4. That **Q** is a perfectly valid point on the curve, so it's a perfectly
+       valid public key, which gives a perfectly valid-looking address. Just
+       not the signer's.
+
+    **So there is no error state, and there couldn't be.** Recovery isn't
+    checking anything — it has no idea what answer was expected, and nothing
+    to compare against. It is a calculation, and it always returns an answer.
+    Tamper with the message and the answer is simply a different address.
+
+    Which raises the obvious question: if nothing fails, what stops the
+    tampering working?
+
+    **The address it recovers to is a random point in a space of 2¹⁶⁰.**
+    Essentially certainly, nobody holds the key for it, it has never been
+    used, and it holds no ether. So when a node treats that address as the
+    sender — as [it must](#a-transaction-never-says-who-sent-it) — it finds an
+    account with a nonce of zero and a balance of nothing, and rejects the
+    transaction for the dullest possible reasons: wrong nonce, can't pay the
+    fee.
+
+    The tampering fails, but not because a signature check said "invalid".
+    It fails because the altered transaction is now claimed by a stranger who
+    has no funds and no history. Which is a stronger guarantee than a check,
+    because there's nothing to get wrong.
 
 ## What actually gets signed
 
