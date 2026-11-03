@@ -620,6 +620,15 @@ than maintaining two versions that drift apart.
       - `??? example "Try it: …"` — an **interactive tool**. Purple, so it
         reads as distinct from the others. Always followed by a few prompts
         worth trying, so the tool teaches something rather than just existing.
+      - `??? failure "…"` — conditions under which something is rejected.
+      - `??? question "…"` — a distinction readers routinely get wrong.
+      - `??? warning "…"` — a trap that costs you something.
+
+   **Pick the type by meaning, and check what's nearby.** Three boxes of the
+   same type in succession read as one undifferentiated block, which hides
+   that they cover separate concepts. Material gives each type its own colour,
+   so varying them by *meaning* also varies them visually — but if two
+   adjacent boxes genuinely want the same type, move one instead.
 
    **Every box starts closed, with no exceptions** — including tools. An
    earlier version opened tools by default on the grounds that a hidden

@@ -64,7 +64,7 @@ Signing a message hash **z** with a private key **d** goes like this:
 
 Every term there has already appeared on this site:
 
-| | |
+| Symbol | What it is |
 | --- | --- |
 | *z* | the message hash, from [Keccak-256](keccak256.md) |
 | *d* | the private key — the only secret in the equation |
@@ -215,6 +215,22 @@ In the first, there are two pieces of information that might disagree, so there'
 
 So the question "is this signature valid for this sender?" is never asked — and therefore can never fail. That's why, as the tool below shows, a tampered message doesn't produce an invalid-signature error. There's no such error to produce. It produces a different sender.
 
+??? failure "A few things can still fail outright"
+
+    Recovery replaces the signature check, but it doesn't make a transaction
+    unconditionally acceptable. Some structural conditions remain, and a
+    transaction breaking any of them is rejected before recovery is even
+    attempted:
+
+    - `r` and `s` must each be at least 1 and below the curve order
+    - `s` must be in the lower half of its range, per
+      [EIP-2](#ref-eip2) — see [malleability](#malleability-and-why-s-has-to-be-small)
+    - `r` must actually be the x coordinate of a point on the curve, or
+      there is no **R** to rebuild and recovery has nothing to work with
+
+    These are checks on whether the numbers are *well-formed*, not on whether
+    they're *yours*. Nothing here compares anything to a sender.
+
 #### Which is not the same as saying nothing gets checked
 
 An important line to draw, because "verification" covers two different jobs and this page only ever discusses one of them.
@@ -253,7 +269,7 @@ Which recasts the whole section. Recovery isn't an alternative to checking a tra
     depends on knowing them — they're here only to show **which** checks need
     a sender and which don't.
 
-??? note "Valid, versus included-and-failed"
+??? question "Valid, versus included-and-failed"
 
     Worth separating while the distinction is in view, because the two get
     conflated constantly.
@@ -270,22 +286,6 @@ Which recasts the whole section. Recovery isn't an alternative to checking a tra
     that has to be the case is the subject of
     [why metering is necessary](../transactions/why-metering.md).
 
-
-??? note "A few things can still fail outright"
-
-    Recovery replaces the signature check, but it doesn't make a transaction
-    unconditionally acceptable. Some structural conditions remain, and a
-    transaction breaking any of them is rejected before recovery is even
-    attempted:
-
-    - `r` and `s` must each be at least 1 and below the curve order
-    - `s` must be in the lower half of its range, per
-      [EIP-2](#ref-eip2) — see [malleability](#malleability-and-why-s-has-to-be-small)
-    - `r` must actually be the x coordinate of a point on the curve, or
-      there is no **R** to rebuild and recovery has nothing to work with
-
-    These are checks on whether the numbers are *well-formed*, not on whether
-    they're *yours*. Nothing here compares anything to a sender.
 
 ### Where the comparison does happen
 
