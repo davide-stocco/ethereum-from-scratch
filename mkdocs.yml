@@ -55,6 +55,7 @@ extra_javascript:
   - javascripts/secp256k1.js
   - javascripts/addresses.js
   - javascripts/signatures.js
+  - javascripts/wallets.js
   - javascripts/boxes.js
 
 markdown_extensions:
