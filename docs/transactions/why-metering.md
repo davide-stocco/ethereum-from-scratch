@@ -37,4 +37,4 @@ This is the **problem** page. [Gas](gas.md) is the mechanism that answers it, an
 - The halting-problem point is what makes this more than hand-waving. It explains why metering is *necessary* rather than merely convenient — and almost nothing written about gas says this clearly.
 - This page is also the hinge into Economics: it establishes that computation must be paid for, which [who pays](../economics/who-pays.md) then takes up.
 
-**Next:** [Transactions](transactions.md)
+**Next:** [Gas](gas.md)

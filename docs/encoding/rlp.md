@@ -32,4 +32,4 @@ tier: 1
 - Don't cover the Merkle Patricia Trie here, even though it's built on RLP. Separate page, and it's not fork-proof (Verkle trees are planned).
 - Excellent candidate for an interactive encoder/decoder widget later.
 
-**Next:** [Accounts](../accounts/accounts.md)
+**Next:** [The Merkle Patricia Trie](merkle-patricia-trie.md)

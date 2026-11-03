@@ -33,4 +33,4 @@ description: How Ethereum fingerprints its entire state in 32 bytes, so a block 
 - Be clear about *why* anyone should care: it's what lets a 500-byte block header commit to hundreds of gigabytes of state, and what makes light clients possible.
 - Verkle trees are the reason this is Tier 2. Mention the plan, don't chase it.
 
-**Next:** [Accounts](../accounts/accounts.md)
+**Next:** [Transactions](../transactions/transactions.md)

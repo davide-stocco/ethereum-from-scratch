@@ -27,4 +27,4 @@ tier: 1
 - Keep fees out of this page. You'll want to say "underpriced", which is enough — the fee market isn't published yet and isn't fork-proof. Say "a fee too low for anyone to include it" and move on.
 - Ordering note: this page needs only the one-sentence notion of a transaction already given in [What is Ethereum?](../foundations/what-is-ethereum.md) — an instruction that changes the state. Resist explaining transaction anatomy here.
 
-**Next:** this is the end of the published material. See [how this site handles forks](../about/forks.md) for what's coming.
+**Next:** [State](state.md)

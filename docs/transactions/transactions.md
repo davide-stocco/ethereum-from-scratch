@@ -30,4 +30,4 @@ tier: 2
 - Don't explain the signature maths here — point at the signatures page.
 - The `data` field is the gateway to the whole EVM section. Flag it as important and move on.
 
-**Next:** [Gas](gas.md)
+**Next:** [Why metering is necessary](why-metering.md)

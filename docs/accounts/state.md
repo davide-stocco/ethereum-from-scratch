@@ -22,4 +22,4 @@ tier: 2
 - You need the [Merkle Patricia Trie](../encoding/merkle-patricia-trie.md) for the *how*. On this page, only promise that a fingerprint exists and that any change to any account changes it.
 - Worth stating: Ethereum's state is several hundred gigabytes and grows constantly. This is a real, ongoing design problem ("state growth") — and good motivation for the scaling section.
 
-**Next:** [Transactions](../transactions/transactions.md)
+**Next:** [RLP encoding](../encoding/rlp.md)

@@ -60,23 +60,23 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
     [Wallets and seed phrases](wallets/seed-phrases.md) · [What losing your keys means](wallets/losing-your-keys.md)
 
-- **Encoding**
-
-    How Ethereum turns structured data into bytes, and how it fingerprints the whole state in 32 of them.
-
-    [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
-
 - **Accounts and state**
 
     The four fields every account has, and why an account-based design needs a nonce when Bitcoin's doesn't.
 
     [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md)
 
+- **Encoding**
+
+    How Ethereum turns structured data into bytes, and how it fingerprints the whole state in 32 of them.
+
+    [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
+
 - **Transactions**
 
     The only way anything ever changes — what's inside one, and what it costs.
 
-    [Why metering is necessary](transactions/why-metering.md) · [Transactions](transactions/transactions.md) · [Gas](transactions/gas.md) · [Fees](transactions/fees.md)
+    [Transactions](transactions/transactions.md) · [Why metering is necessary](transactions/why-metering.md) · [Gas](transactions/gas.md) · [Fees](transactions/fees.md)
 
 - **Blocks**
 
@@ -108,7 +108,7 @@ The menu is one sensible order, and reading straight down it works. But dependin
 
 Cryptography, encoding and accounts can be skipped and picked up later.
 
-**Here for the technical detail.** Work down Foundations, Cryptography, Encoding and Accounts in order. These are the parts that haven't changed since 2015, so they're worth learning properly once.
+**Here for the technical detail.** Work down Foundations, Cryptography, Accounts and Encoding in order. These are the parts that haven't changed since 2015, so they're worth learning properly once.
 
 **Looking for one specific thing.** Use the search box, or the [glossary](glossary.md) for a quick definition with a link to the page that explains it.
 

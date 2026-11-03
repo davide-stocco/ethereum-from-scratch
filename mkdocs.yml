@@ -106,18 +106,25 @@ nav:
   - Keys and wallets:
       - Wallets and seed phrases: wallets/seed-phrases.md
       - What losing your keys means: wallets/losing-your-keys.md
-  - Encoding:
-      - RLP encoding: encoding/rlp.md
-      - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
   - Accounts and state:
       - Accounts: accounts/accounts.md
       - The nonce: accounts/nonce.md
       - State: accounts/state.md
+  # Encoding sits AFTER state on purpose. The Merkle Patricia Trie explains
+  # what the state root actually is, and the state page defers to it — so the
+  # reader has to know what state is first. RLP needs nothing but hex, so it
+  # travels with the trie rather than earlier.
+  - Encoding:
+      - RLP encoding: encoding/rlp.md
+      - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
 
   # ---- v2: the working machine. Tier 2-3, so these carry date stamps. ---
+  # "Why metering is necessary" is the fork-proof problem page that Gas
+  # answers, so it sits directly above Gas — not at the head of the section,
+  # where it preceded the reader knowing what a transaction is.
   - Transactions:
-      - Why metering is necessary: transactions/why-metering.md
       - Transactions: transactions/transactions.md
+      - Why metering is necessary: transactions/why-metering.md
       - Gas: transactions/gas.md
       - Fees: transactions/fees.md
   - Blocks:

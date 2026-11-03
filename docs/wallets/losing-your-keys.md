@@ -26,4 +26,4 @@ description: Why there is no password reset, no customer service, and no way bac
 - The strongest framing is the symmetry: **no privileged party** means no confiscation *and* no recovery. You cannot have one without the other. That earns the page its place — it's the clearest illustration on the site of what "no one is in charge" actually costs.
 - Avoid statistics about lost coins. The numbers are estimates and they age.
 
-**Next:** [RLP encoding](../encoding/rlp.md)
+**Next:** [Accounts](../accounts/accounts.md)

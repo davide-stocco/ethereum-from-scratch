@@ -27,4 +27,4 @@ tier: 3
 - Worth noting the second-order effect: the burn means ether supply can shrink when the network is busy. Mention it, but don't turn the page into tokenomics.
 - A worked example in gwei, with real numbers, beats the formula.
 
-**Next:** blocks — write `docs/blocks/blocks.md` and add it to `nav` in `mkdocs.yml`.
+**Next:** [Blocks](../blocks/blocks.md)
