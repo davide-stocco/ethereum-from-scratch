@@ -193,7 +193,13 @@ That's the trade. One extra byte of `v` instead of sixty-four bytes of public ke
 
 ### So Ethereum never verifies a transaction signature at all
 
-Worth being precise about, because the natural assumption is that recovery happens *first* and verification *then* confirms it. It doesn't. **Recovery stands in place of verification**, and the verification step simply doesn't exist.
+Worth being precise about, because the natural assumption is that recovery happens *first* and verification *then* confirms it. It doesn't — and the cleanest way to say why is this:
+
+> **Verification is recovery followed by a comparison.**
+>
+> Recover the public key from the signature, then check it's the one you were expecting. Ethereum does the recovery and has **nothing to compare against**, so it stops there.
+
+That matters because it settles the obvious worry. Skipping the comparison isn't a weakened check — the two operations establish exactly the same fact, and verification succeeds precisely when recovery returns the expected key. There is no version of this where a forgery slips through recovery but would have been caught by verification. The comparison is omitted because there's no expectation to test, not because a check was dropped.
 
 Compare the two mental models:
 
@@ -217,20 +223,35 @@ An important line to draw, because "verification" covers two different jobs and 
 
 **Transaction validation** asks whether the transaction is acceptable at all — and that happens in full, every time, unchanged.
 
-And look at what those checks need:
+And here is the part that matters. Some of those checks can be made by looking at the transaction on its own. Others are **about the sender** — and so cannot even be attempted until recovery has worked out who the sender is:
 
-| Check a node makes | Needs to know the sender? |
+| What the node asks | Can it ask yet? |
 | --- | --- |
-| Is the encoding well-formed? | no |
-| Are `r` and `s` in range, with `s` in the lower half? | no |
-| **← recovery happens here** | |
-| Does the nonce match **this account's** next expected nonce? | **yes** |
-| Does **this account's** balance cover the value plus the fee? | **yes** |
-| Is the gas limit sane, and the chain id right? | no |
+| Is this well-formed — the right fields, the right shape? | yes |
+| Are the signature's numbers within their permitted range? | yes |
+| **← recovery happens here, and produces an address** | |
+| Has this account already used this transaction number? | only now |
+| Does this account hold enough ether to pay? | only now |
+| Is the offered fee acceptable to the network? | yes |
+| Is this transaction even meant for this network? | yes |
 
-Most of the substantive checks are **about the sender** — their nonce, their balance. So none of them can run until recovery has worked out who that is.
+Which recasts the whole section. Recovery isn't an alternative to checking a transaction — **it's the step that makes the important checks possible at all.** It answers *who*, and the account-specific questions are then asked of that answer.
 
-Which recasts the whole section: recovery isn't an alternative to checking a transaction. **It's the step that makes checking possible.** It answers *who*, and everything else is then checked against that answer.
+??? note "The proper names for those checks"
+
+    Each of those questions has a technical name, and each gets a page of its
+    own later. Listed here so the terms aren't a surprise when you meet them:
+
+    | The question | What it's called |
+    | --- | --- |
+    | Has this account already used this transaction number? | the [nonce](../glossary.md#nonce "A per-account counter of transactions already sent") |
+    | Does this account hold enough ether to pay? | the [balance](../glossary.md#balance "How much ether an account holds, counted in wei") |
+    | Is the offered fee acceptable? | [gas](../glossary.md#gas "The unit computational work is measured in") limits and fee parameters |
+    | Is this meant for this network? | the [chain id](../glossary.md#chain-id "A number identifying which network a transaction is for") |
+
+    The glossary has a one-line definition of each. Nothing on this page
+    depends on knowing them — they're here only to show **which** checks need
+    a sender and which don't.
 
 ??? note "Valid, versus included-and-failed"
 
@@ -266,13 +287,15 @@ Which recasts the whole section: recovery isn't an alternative to checking a tra
     These are checks on whether the numbers are *well-formed*, not on whether
     they're *yours*. Nothing here compares anything to a sender.
 
-### Where a comparison does happen
+### Where the comparison does happen
 
-One exception worth knowing, because it's the case you'll meet as a user.
+Which brings the other half of that formulation into view, and it's the case you'll meet as a user.
 
-When a website asks you to sign a phrase to log in, it **does** compare. It knows which address it expects — the one you claimed to own — so it recovers the address from your signature and checks the two match. That's a genuine verification, built out of recovery.
+When a website asks you to sign a phrase to log in, it **does** compare. It knows which address it expects — the one you claimed to own — so it recovers the address from your signature and checks the two match.
 
-The difference is that the site has an expectation to test against. A node processing a transaction has none, and needs none.
+That is **verification**, assembled exactly as described above: recovery, then a comparison. Not a different mechanism, and not an exception to anything. The site simply has an expectation to test, so it performs the second step that a node processing a transaction has no use for.
+
+So the same operation underlies both. What differs is only whether anyone had an answer in mind beforehand.
 
 ### Why recovery is possible at all
 
@@ -537,7 +560,7 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
 - What's signed is the **hash of the transaction**, which protects every field at once.
 - `r` and `s` are the signature; `v` is one bit saying which of two possible public keys to recover.
 - **Verification would have worked too** — but it needs the public key, and Ethereum has no certificates to supply one. Recovery buys the same guarantee for one byte of `v` instead of 64 bytes of public key in every transaction.
-- So Ethereum **never verifies a transaction signature**. Recovery replaces that step: the sender isn't claimed and then checked, it's *defined* as whoever the signature recovers to. A comparison only happens where something has an expectation to test — signing in to a website, for instance.
+- **Verification is recovery plus a comparison.** Ethereum does the recovery and has nothing to compare against, so a transaction signature is never "verified" in that sense — the sender isn't claimed and then checked, it's *defined* as whoever the signature recovers to. Where something does have an expectation to test, such as a website login, the comparison happens and that is verification.
 - That is **not** the same as nothing being checked. Nonce, balance, gas limit and chain id are all still validated — and most of them need the sender, so recovery is what makes those checks possible rather than a substitute for them.
 - **The same message signed twice gives different signatures**, both recovering the same address.
 - A tampered message recovers **a different address**, not an error — nothing in a signature says whose it should have been.

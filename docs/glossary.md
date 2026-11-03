@@ -47,6 +47,9 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **Canonical**{ #canonical }
 : Agreed on and permanently recorded by the network, as opposed to merely having existed. Intermediate states inside a block are real but not canonical.
 
+**Chain id**{ #chain-id }
+: A number identifying which network a transaction is for — 1 for Ethereum's main network, different values for testnets and other chains. Included in what gets signed, so a signature is valid on one chain only. → [Signatures](crypto/signatures.md)
+
 **Consensus layer**{ #consensus-layer }
 : The half of Ethereum that decides the *order* of transactions, using Proof of Stake. → [What is Ethereum?](foundations/what-is-ethereum.md)
 
