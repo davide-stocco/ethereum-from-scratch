@@ -10,7 +10,7 @@ tier: 3
 
 Ethereum upgrades by **hard fork**: a coordinated rule change that every node adopts at an agreed block or slot. This page is the timeline — the one place a reader can see how the protocol got to where it is.
 
-!!! danger "Verify before writing this page"
+!!! warning "Verify before writing this page"
 
     Fork names, dates and contents are exactly the kind of detail that gets
     misremembered. Write this page from primary sources only:

@@ -261,7 +261,7 @@ Bitcoin chose it, and Ethereum followed — which brought along a decade of impl
     That becomes the interesting part when you compare it with the
     alternative, which is the next box.
 
-??? info "There was another candidate, and the choice is interesting"
+??? question "There was another candidate, and the choice is interesting"
 
     The obvious alternative was **secp256r1**, where `r` stands for random.
     It's the curve NIST recommends and most of the wider internet uses.
@@ -310,7 +310,7 @@ This doesn't put anything at risk today. The public key is meant to be public, a
 
 So why mention it at all? Because it's a second lock, and it only matters if the first one ever fails.
 
-??? abstract "When the distinction would actually matter"
+??? note "When the distinction would actually matter"
 
     Everything on this page rests on the discrete logarithm problem being
     hard. Suppose one day it isn't — because someone finds a flaw in the

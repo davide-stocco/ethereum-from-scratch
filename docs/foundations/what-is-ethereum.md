@@ -20,7 +20,7 @@ A chess board is a state machine. The state is where the pieces are. The rules a
 
 This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the [Yellow Paper](../glossary.md#yellow-paper "Ethereum's formal specification, by Gavin Wood"), [Wood (2014)](#ref-wood-2014) — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.
 
-??? abstract "The formal version"
+??? abstract "The formal version: the state transition function"
 
     [Wood (2014)](#ref-wood-2014) writes the state transition as a function. If
     **σ** is the world state and **T** a transaction:
@@ -138,7 +138,7 @@ The difference is what the code is allowed to *do*.
 
 That's the real divide. Not code versus no code, but **a one-off check versus a program that remembers.**
 
-??? abstract "The formal version"
+??? abstract "The formal version: stateless versus stateful"
 
     In the usual terminology: Bitcoin's Script is **stateless** and
     deliberately **not [Turing-complete](../glossary.md#turing-complete "Able to express any computation, loops included")** —
@@ -163,7 +163,7 @@ Two things follow from this, and both matter.
 
 **In Bitcoin, the state is a collection of separate chunks of money** [(Nakamoto, 2008)](#ref-nakamoto-2008). Each chunk was produced by some earlier payment, and each can be spent exactly once, in full. There is no stored balance anywhere: your wallet works out "you have 0.4 bitcoin" by adding up the chunks it's able to spend. Spending one destroys it and creates new chunks — one for the recipient, one returning your change.
 
-??? info "The name for those chunks: UTXOs"
+??? note "The name for those chunks: UTXOs"
 
     They're called **UTXOs** — unspent transaction outputs. You'll meet the
     term constantly in comparisons between the two systems, and it's worth
@@ -183,7 +183,7 @@ Every step of that execution is **metered and capped**. The caller pays for each
 
 That's the actual novelty. Bitcoin lets you agree on *who owns what*. Ethereum lets you agree on *what a program computed*.
 
-??? note "So where does the 'world computer' phrase come from?"
+??? question "So where does the 'world computer' phrase come from?"
 
     This is the kernel of truth in it. Ethereum really does execute programs, and the whole network agrees on the results.
 

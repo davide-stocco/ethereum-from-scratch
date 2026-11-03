@@ -609,55 +609,44 @@ than maintaining two versions that drift apart.
 2. **Accessible main prose.** No unexplained jargon. This is the default
    reading path, and it must stand alone.
 3. **Every extra box is collapsible — `???`, never `!!!`.** This is the
-   layering mechanism: one page serves both audiences instead of two pages that
-   drift apart. Common kinds:
-      - `??? abstract "The formal version"` — specification notation, exact
-        field widths, edge cases.
-      - `??? info "History: …"` — how something used to work and why it
-        changed. Often the clearest justification for the current design, and
-        the fork policy's "teach changes as history" in practice.
-      - `??? note "…"` — asides, terminology, caveats.
-      - `??? example "Try it: …"` — an **interactive tool**. Purple, so it
-        reads as distinct from the others. Always followed by a few prompts
-        worth trying, so the tool teaches something rather than just existing.
-      - `??? failure "…"` — conditions under which something is rejected.
-      - `??? question "…"` — a distinction readers routinely get wrong.
-      - `??? warning "…"` — a trap that costs you something.
+   layering mechanism: one page serves both audiences instead of two pages
+   that drift apart.
 
-   **Pick the type by meaning, and check what's nearby.** Three boxes of the
-   same type in succession read as one undifferentiated block, which hides
-   that they cover separate concepts. Material gives each type its own colour,
-   so varying them by *meaning* also varies them visually — but if two
-   adjacent boxes genuinely want the same type, move one instead.
+   **Choose the type by what the box contains**, not for visual variety.
+   Material gives each type its own colour, so getting the meaning right
+   gets the colour right as a side effect:
 
-   **Every box starts closed, with no exceptions** — including tools. An
-   earlier version opened tools by default on the grounds that a hidden
-   instrument is useless, but that made them the one inconsistent element on
-   every page. The `Try it:` prefix is invitation enough.
+   | Type | Colour | Holds |
+   | --- | --- | --- |
+   | `abstract` | light blue | specification-level precision — notation, exact widths, derivations, quantitative margins |
+   | `info` | cyan | **history and change over time** — how it used to work, what is changing |
+   | `note` | blue | a plain aside: terminology, a clarification, a caveat |
+   | `question` | light green | a question a reader arrives with, or a distinction they routinely get wrong |
+   | `warning` | orange | a trap that costs you something |
+   | `failure` | red | the conditions under which something is rejected |
+   | `example` | purple | an **interactive tool**, always titled `Try it: …` |
 
-   **No mixing.** An always-open `!!!` box sitting beside collapsed ones reads
-   as a mistake, and a reader can't tell what the convention is. All closed by
-   default; the main prose must stand alone without any of them.
+   **No mixing, and all closed by default.** The main prose must stand alone
+   without any of them — a reader who opens nothing should lose nothing, and
+   nothing load-bearing may live only inside a box.
 
-   **Only three kinds of box stay open**, and none of them is skippable
-   reading *about the subject*:
+   **Check what's adjacent.** Two consecutive boxes of the same type read as
+   one undifferentiated block, which hides that they make separate points. If
+   two neighbours genuinely want the same type, move one rather than
+   mislabelling it.
 
-      - **`!!! warning "Stub — not written yet"`** — the page's own status.
-      - **`!!! info "Current as of …"`** and the verify-before-writing
-        notices — staleness stamps, per `FORKS.md`. A reader has to see these
-        to judge whether a page is current.
-      - **`!!! danger`** where ignoring it costs money. Exactly one at
-        present: the generated-key warning on `crypto/private-keys.md`.
+   **One deliberate exception:** tools are always `example`, even consecutively.
+   A reader should recognise a tool instantly, and that consistency is worth
+   more than the adjacency rule.
 
-   Everything else closes, including technical cautions. "Ethereum hashes the
-   64-byte form" is important but it is still reading, and a box that opens
-   itself because the author thinks it matters is how the convention erodes.
+   **Titles must be distinct within a page.** Two boxes both called "The formal
+   version" are indistinguishable in a table of contents — name what each one
+   is formal *about*.
 
-   **A collapsed title has to be self-describing**, since it's all the reader
-   sees. "Two simplifications in the table above" works; "Note" doesn't.
+   **Only three kinds stay open**, none of them skippable reading about the
+   subject: the `Stub — not written yet` notice, the `Current as of …`
+   staleness stamps, and one `danger` box where ignoring it costs money.
 
-   Avoid double quotes inside a title — they terminate it early. Use single
-   quotes: `??? note "Where does the 'world computer' phrase come from?"`
 4. **In-text citations, author–date style**, linking to the reference:
    `[Wood (2014)](#ref-wood-2014)` when the author is the subject of the
    sentence, `[(Nakamoto, 2008)](#ref-nakamoto-2008)` when it's parenthetical.

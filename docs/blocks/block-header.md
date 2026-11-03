@@ -9,7 +9,7 @@ description: Field by field through a block header — and what each one commits
 
     This page is an outline. Delete this box when you fill it in.
 
-!!! danger "Fork-dependent — verify before writing"
+!!! warning "Fork-dependent — verify before writing"
 
     The header field list has grown at several forks: `baseFeePerGas` in
     London, `withdrawalsRoot` in Shanghai, blob fields and the parent beacon

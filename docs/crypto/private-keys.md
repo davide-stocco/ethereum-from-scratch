@@ -175,7 +175,7 @@ Two things follow from the key, in order:
 
 Each step is one-way, which is why an address reveals nothing about the key behind it.
 
-??? info "Seed phrases are not this"
+??? question "Seed phrases are not this"
 
     If you've used a wallet, you've probably met twelve or twenty-four words
     rather than a 64-character number, and may reasonably assume *that's* the

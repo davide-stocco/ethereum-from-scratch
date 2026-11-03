@@ -253,7 +253,7 @@ Which is why "is this address larger than that address?" is not a meaningful que
 
 So: balances are numbers. Addresses, hashes and storage keys are byte strings. Nothing good comes of doing arithmetic on the second group.
 
-??? abstract "Leading zeros, and why they sometimes matter"
+??? warning "Leading zeros, and why they sometimes matter"
 
     The distinction above has a sharp edge: **as a number, leading zeros are
     meaningless; as bytes, they are not.**

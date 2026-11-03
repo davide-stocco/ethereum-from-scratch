@@ -67,7 +67,7 @@ Worth stating plainly, because the answer isn't obvious and wallets make it look
 
 So how does your wallet show you a dozen addresses?
 
-??? abstract "Because the wallet has a seed, not a key"
+??? note "Because the wallet has a seed, not a key"
 
     This is the distinction from the [private keys](private-keys.md) page, and
     it's where it starts to matter.
@@ -94,7 +94,7 @@ So how does your wallet show you a dozen addresses?
     Mechanics under
     [wallets and seed phrases](../wallets/seed-phrases.md).
 
-??? info "One key can *control* several addresses, though"
+??? question "One key can *control* several addresses, though"
 
     A separate point, and easy to conflate with the above.
 
