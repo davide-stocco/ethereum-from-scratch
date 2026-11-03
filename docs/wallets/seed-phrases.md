@@ -140,7 +140,7 @@ A seed could perfectly well be written as hex. The reason it isn't:
 
 ### Where the numbers come from
 
-The list holds exactly **2048 words**, and 2048 is 2<sup>11</sup> — so each word carries precisely **11 bits**.
+The list holds exactly **2048 words**, and 2048 is 2<sup>11</sup>. That number was chosen for precisely that reason: picking one word out of 2<sup>11</sup> carries exactly **11 bits**, with nothing left over.
 
 That makes the arithmetic tidy:
 
@@ -307,7 +307,7 @@ Not that wallets are unimportant. They're the only reason any of this is usable,
 - A wallet holds **keys, not money.** Your ether is in the state; the wallet can only sign.
 - A **seed** can produce unlimited private keys; a private key still gives exactly one address.
 - Because the procedure is **repeatable**, the phrase is a complete backup.
-- The word list is **2048 = 2<sup>11</sup>**, so 12 words carries 128 bits of randomness and 24 carries 256, plus a checksum in each case.
+- The word list is **2048 = 2<sup>11</sup>**, chosen so each word carries exactly 11 bits. That's why 12 words comes to 128 bits of randomness and 24 comes to 256, plus a checksum in each case.
 - The **derivation path** decides which keys. Two wallets disagreeing about your addresses are walking different paths, not losing your money.
 - The optional **passphrase** makes a different wallet from the same words, with no way to detect a wrong one.
 - **None of it is part of Ethereum.** It's convention on top, and the protocol would not notice if it changed.
