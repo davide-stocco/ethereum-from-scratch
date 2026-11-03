@@ -139,7 +139,11 @@ nav:
       - 'Who pays: issuance or fees': economics/who-pays.md
       - Fixed cap or flexible supply: economics/supply-cap.md
 
-  - Reference:
+  # Named for its contents, not its function. "Reference" could mean a
+  # bibliography; this is the two pages that absorb change on behalf of the
+  # rest of the site — the costs table and the upgrade timeline. Directory
+  # stays reference/ so no URL moves.
+  - Costs and upgrades:
       - Gas costs: reference/gas-costs.md
       - Fork history: reference/fork-history.md
   - Glossary: glossary.md

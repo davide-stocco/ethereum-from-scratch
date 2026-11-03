@@ -90,9 +90,15 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
     [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md)
 
+- **Costs and upgrades**
+
+    The two pages that absorb change, so the rest of the site doesn't have to. Every number lives here, and nowhere else.
+
+    [Gas costs](reference/gas-costs.md) · [Fork history](reference/fork-history.md)
+
 </div>
 
-Also: a [glossary](glossary.md) of every term used on the site, and a [reference](reference/gas-costs.md) section holding the numbers that change at upgrades.
+Also: a [glossary](glossary.md) defining every term used anywhere on the site.
 
 ---
 

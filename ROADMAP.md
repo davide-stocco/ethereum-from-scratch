@@ -82,7 +82,7 @@ Governance          Who changes the protocol · The EIP process [3]
 Security & privacy  How things go wrong · Reentrancy · Oracle manipulation
                     The economics of audits · Everything is public
 
-Reference           Gas costs [2] · Fork history [3]
+Costs and upgrades  Gas costs [2] · Fork history [3]
 Glossary
 About               Ethereum changes · Who's writing this
 Tools               Keccak hasher · key → address · converters · decoders
