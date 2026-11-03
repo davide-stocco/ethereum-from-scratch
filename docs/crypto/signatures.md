@@ -152,7 +152,7 @@ Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh eve
 
 The third operation, and the reason a transaction needs no sender field at all.
 
-### Why not just verify?
+### Why not simply verify the signature?
 
 A fair objection, and worth answering before going further: **verification would work perfectly well.** It's what the rest of the internet does. So why does Ethereum bother with recovery?
 
@@ -181,6 +181,16 @@ Put against a whole transaction the difference is stark. A plain ether transfer 
 
 That's the trade. One extra byte of `v` instead of sixty-four bytes of public key, paid for with a slightly more involved calculation. On a system where every byte is stored permanently and everywhere, it's not a close call.
 
+??? abstract "Is recovery slower than verification?"
+
+    Not meaningfully. Verification works out to two point multiplications;
+    recovery needs a modular square root to rebuild **R** from `r`, plus
+    comparable multiplication. The same order of work either way.
+
+    Which is why the decision came down to bytes rather than speed. Had
+    recovery been dramatically more expensive, 64 bytes might have been the
+    cheaper thing to pay.
+
 ### So Ethereum never verifies a transaction signature at all
 
 Worth being precise about, because the natural assumption is that recovery happens *first* and verification *then* confirms it. It doesn't. **Recovery stands in place of verification**, and the verification step simply doesn't exist.
@@ -198,6 +208,47 @@ Compare the two mental models:
 In the first, there are two pieces of information that might disagree, so there's a check, and the check can fail. In the second **there is only one piece of information.** The sender isn't claimed and then confirmed; the sender is *defined* as whoever the signature recovers to.
 
 So the question "is this signature valid for this sender?" is never asked — and therefore can never fail. That's why, as the tool below shows, a tampered message doesn't produce an invalid-signature error. There's no such error to produce. It produces a different sender.
+
+#### Which is not the same as saying nothing gets checked
+
+An important line to draw, because "verification" covers two different jobs and this page only ever discusses one of them.
+
+**Signature verification** asks a single narrow question: did the holder of this key sign this exact data? That's the cryptographic operation, and it's the only thing recovery replaces.
+
+**Transaction validation** asks whether the transaction is acceptable at all — and that happens in full, every time, unchanged.
+
+And look at what those checks need:
+
+| Check a node makes | Needs to know the sender? |
+| --- | --- |
+| Is the encoding well-formed? | no |
+| Are `r` and `s` in range, with `s` in the lower half? | no |
+| **← recovery happens here** | |
+| Does the nonce match **this account's** next expected nonce? | **yes** |
+| Does **this account's** balance cover the value plus the fee? | **yes** |
+| Is the gas limit sane, and the chain id right? | no |
+
+Most of the substantive checks are **about the sender** — their nonce, their balance. So none of them can run until recovery has worked out who that is.
+
+Which recasts the whole section: recovery isn't an alternative to checking a transaction. **It's the step that makes checking possible.** It answers *who*, and everything else is then checked against that answer.
+
+??? note "Valid, versus included-and-failed"
+
+    Worth separating while the distinction is in view, because the two get
+    conflated constantly.
+
+    - **Invalid** — fails one of the checks above. Never enters a block,
+      costs nothing, as though it never existed.
+    - **Valid but failed** — passes every check, is included in a block, and
+      then fails *during execution*: it runs out of gas, or the contract
+      rejects what it was asked to do. It happened. It's permanent. **You
+      paid for it.**
+
+    A failed transaction is not a rejected one. The work was genuinely
+    performed by every node on the network, so the fee is genuinely owed. Why
+    that has to be the case is the subject of
+    [why metering is necessary](../transactions/why-metering.md).
+
 
 ??? note "A few things can still fail outright"
 
@@ -222,16 +273,6 @@ One exception worth knowing, because it's the case you'll meet as a user.
 When a website asks you to sign a phrase to log in, it **does** compare. It knows which address it expects — the one you claimed to own — so it recovers the address from your signature and checks the two match. That's a genuine verification, built out of recovery.
 
 The difference is that the site has an expectation to test against. A node processing a transaction has none, and needs none.
-
-??? abstract "Is recovery slower than verification?"
-
-    Not meaningfully. Verification works out to two point multiplications;
-    recovery needs a modular square root to rebuild **R** from `r`, plus
-    comparable multiplication. The same order of work either way.
-
-    Which is why the decision came down to bytes rather than speed. Had
-    recovery been dramatically more expensive, 64 bytes might have been the
-    cheaper thing to pay.
 
 ### Why recovery is possible at all
 
@@ -497,6 +538,7 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
 - `r` and `s` are the signature; `v` is one bit saying which of two possible public keys to recover.
 - **Verification would have worked too** — but it needs the public key, and Ethereum has no certificates to supply one. Recovery buys the same guarantee for one byte of `v` instead of 64 bytes of public key in every transaction.
 - So Ethereum **never verifies a transaction signature**. Recovery replaces that step: the sender isn't claimed and then checked, it's *defined* as whoever the signature recovers to. A comparison only happens where something has an expectation to test — signing in to a website, for instance.
+- That is **not** the same as nothing being checked. Nonce, balance, gas limit and chain id are all still validated — and most of them need the sender, so recovery is what makes those checks possible rather than a substitute for them.
 - **The same message signed twice gives different signatures**, both recovering the same address.
 - A tampered message recovers **a different address**, not an error — nothing in a signature says whose it should have been.
 - Replay needs two defences: the **nonce** within a chain, the **chain id** across chains.
