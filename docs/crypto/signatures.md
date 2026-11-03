@@ -152,6 +152,45 @@ Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh eve
 
 The third operation, and the reason a transaction needs no sender field at all.
 
+### Why not just verify?
+
+A fair objection, and worth answering before going further: **verification would work perfectly well.** It's what the rest of the internet does. So why does Ethereum bother with recovery?
+
+Because verification needs the public key, and recovery doesn't.
+
+Look again at what each operation takes in:
+
+```
+    verifying:    message hash  +  r, s  +  public key   ──►   yes or no
+    recovering:   message hash  +  r, s  +  v            ──►   the public key
+```
+
+To verify, you must already **have** the public key. On the open internet that's usually free — a TLS certificate hands it to you, having been issued in advance by somebody you trust. Ethereum has no certificates and no issuers, so there's nowhere for a verifier to get your public key from. It would have to **travel with every transaction.**
+
+And that costs:
+
+| | Bytes carried |
+| --- | --- |
+| `r` and `s` | 64 |
+| **plus a public key**, to verify | **+ 64** |
+| **plus `v`**, to recover | **+ 1** |
+
+So verification would cost **128 bytes** of signature data per transaction, where recovery costs **65**. Sixty-three bytes saved, every transaction, forever, in storage held by thousands of nodes.
+
+Put against a whole transaction the difference is stark. A plain ether transfer is on the order of 110 bytes; carrying the public key would push it past 170 — **more than half again as large**, for information the network can work out by itself.
+
+That's the trade. One extra byte of `v` instead of sixty-four bytes of public key, paid for with a slightly more involved calculation. On a system where every byte is stored permanently and everywhere, it's not a close call.
+
+??? abstract "Is recovery slower than verification?"
+
+    Not meaningfully. Verification works out to two point multiplications;
+    recovery needs a modular square root to rebuild **R** from `r`, plus
+    comparable multiplication. The same order of work either way.
+
+    Which is why the decision came down to bytes rather than speed. Had
+    recovery been dramatically more expensive, 64 bytes might have been the
+    cheaper thing to pay.
+
 ### Why recovery is possible at all
 
 Here is the part worth understanding, because it looks like magic and isn't.
@@ -414,6 +453,7 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
 - **A transaction has no sender field.** The address is recovered from the signature, so the signature *is* the claim of identity.
 - What's signed is the **hash of the transaction**, which protects every field at once.
 - `r` and `s` are the signature; `v` is one bit saying which of two possible public keys to recover.
+- **Verification would have worked too** — but it needs the public key, and Ethereum has no certificates to supply one. Recovery buys the same guarantee for one byte of `v` instead of 64 bytes of public key in every transaction.
 - **The same message signed twice gives different signatures**, both recovering the same address.
 - A tampered message recovers **a different address**, not an error — nothing in a signature says whose it should have been.
 - Replay needs two defences: the **nonce** within a chain, the **chain id** across chains.
