@@ -125,6 +125,15 @@
   opacity: 0.35;
 }
 
+/* A secondary line inside a tool__hash block — a derived value shown under
+   the primary one. Quieter than the result it belongs to, but fully legible:
+   truncating it would defeat the point of displaying it. */
+.md-typeset .tool__sub {
+  display: block;
+  margin-top: 0.25em;
+  opacity: 0.6;
+}
+
 /* Two rows that must line up character by character: no wrapping, scroll
    instead, or the alignment that carries the meaning is lost. */
 .md-typeset .tool__align {

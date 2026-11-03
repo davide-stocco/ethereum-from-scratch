@@ -117,6 +117,12 @@ Because that procedure is deterministic, the same phrase always produces the sam
     addresses, and it would go on indefinitely. This is what your wallet is
     doing when it shows you a list.
 
+    Each address is shown with **the private key it was derived from**, in
+    full. Those are real keys, and the only reason it is safe to print them
+    here is that the phrase above is public. Compare any two: nothing in one
+    hints at the other, and nothing in either hints at the phrase they both
+    came from.
+
     **Step 2 — change one word.** Every address changes completely. There's a
     hash at the heart of this, so the [avalanche
     property](../crypto/keccak256.md) applies here too.

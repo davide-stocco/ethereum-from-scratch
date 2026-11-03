@@ -184,8 +184,8 @@
             var rows = keys.map(function (k, i) {
               return "<span class=\"tool__label\">m/44'/60'/0'/0/" + i + "</span>" +
                      "<code class=\"tool__hash\">" + addressOf(k) +
-                     "<span class=\"tool__faint\">  ·  key " +
-                     from32(k)[0].toString(16).padStart(2, "0") + "…</span></code>";
+                     "<span class=\"tool__sub\">private key &nbsp;" +
+                     hex(from32(k)) + "</span></code>";
             }).join("");
             out.innerHTML =
               "<span class=\"tool__label\">The 64-byte seed your phrase becomes</span>" +
