@@ -24,11 +24,26 @@ This page is how those two facts fit together.
 
 Worth unpacking that, because the usual word is actively misleading.
 
-Your ether isn't in your wallet. It isn't anywhere except [the state](../accounts/state.md) — a number recorded against your address on thousands of machines. Deleting your wallet app doesn't move it. Installing a different one doesn't move it either.
+Your ether isn't in your wallet. It's a number recorded against your [address](../crypto/addresses.md) by every computer on the network — and your wallet is not one of them. Delete the app and the number is untouched. Install a different app and it still doesn't move.
 
 What a wallet holds is **keys**, and what it does is sign things with them. A better name would be a keyring.
 
-Which explains something that otherwise seems strange: you can "import" the same seed phrase into three different wallets at once and see the same balances in all three. Nothing was copied. All three are looking at the same public state, and all three can produce the same signatures.
+Which explains something that otherwise seems odd: you can load the same seed phrase into three different wallets at once and see the same balances in all three. Nothing was copied between them. All three can derive the same keys, so all three can produce the same [signatures](../crypto/signatures.md) — and all three are reading the same public records.
+
+## What the phrase actually is
+
+Before the tree: a seed phrase is **a number, written as words.** Twelve of them usually, sometimes twenty-four.
+
+That's worth stressing, because the words look like something a person chose, and they aren't. Making a phrase goes like this:
+
+1. Generate **random bits** — 128 of them for a twelve-word phrase.
+2. Append a short **checksum** calculated from those bits.
+3. Chop the result into groups of **11 bits**.
+4. Read each group as a number from 0 to 2047, and use it to pick a word from a fixed list of exactly **2048 words**.
+
+So `abandon` doesn't mean anything. It's word number 0 in the list, and it's there because eleven of your random bits happened to come out as zeros.
+
+Nothing is remembered, chosen or looked up. The phrase **is** the number, in a form a human can copy onto paper without making mistakes.
 
 ## One phrase, many keys
 
@@ -49,9 +64,41 @@ Here's the structure, and the direction is what matters:
       address 0       address 1       address 2
 ```
 
-The phrase becomes a single large number — the **seed** — and that seed can generate an endless supply of private keys by a repeatable procedure. Each key then yields one address, exactly as the cryptography section described.
+The words are stretched into a single large number — the **seed** — and that seed can produce an endless supply of private keys. Each key then yields one address, exactly as the cryptography section described.
 
-So "many addresses from one thing" is true of a **seed** and false of a **private key**. And because the procedure is repeatable, the same phrase always produces the same keys, in the same order, on any wallet that follows the same rules. That's what makes a written-down phrase a backup.
+So "many addresses from one thing" is true of a **seed** and false of a **private key**.
+
+??? abstract "The procedure that turns one seed into many keys"
+
+    Worth seeing, because "a repeatable procedure" is doing a lot of work in
+    that sentence.
+
+    Every point in the tree holds **two** things: a private key, and a
+    separate 32-byte value called a **chain code**. The seed gives you the
+    first of each.
+
+    To produce child number *i* from any point in the tree:
+
+    ```
+    1.  combine  the chain code, the parent's key material, and i
+    2.  hash it  with HMAC-SHA512, giving 64 bytes
+    3.  the first 32 bytes, added to the parent key, = the child's key
+    4.  the last  32 bytes                          = the child's chain code
+    ```
+
+    Three properties follow, and they're the useful part:
+
+    - **Deterministic.** The same seed and the same *i* always give the same
+      key, on any machine, forever. That's what makes a written phrase a
+      complete backup.
+    - **One-way.** A child key reveals nothing about its parent, so exposing
+      one account doesn't expose the others.
+    - **Unlimited.** *i* can be any of about four billion values at every
+      level, and the levels nest. You will not run out.
+
+    This is BIP-32 [(Wuille, 2012)](#ref-bip32), and the tool below runs it.
+
+Because that procedure is deterministic, the same phrase always produces the same keys, in the same order, on any wallet that walks the same route through the tree. **That** is what makes a written-down phrase a backup rather than merely a hint.
 
 ??? example "Try it: a phrase, and the addresses it produces"
 
@@ -103,7 +150,7 @@ That makes the arithmetic tidy:
 | 18 | 198 | 192 | 6 |
 | 24 | 264 | **256** | 8 |
 
-Which answers a question people often ask: why 12 and 24, rather than any number of words? Because 12 words is exactly 128 bits of randomness and 24 words is exactly 256, with the remainder a checksum. Those are the two security levels anyone wanted, so those are the two counts you meet.
+Which is where the twelve and the twenty-four come from. They aren't arbitrary, and they aren't the only lengths the standard allows — they're the two that land on round numbers of random bits. Twelve words is exactly 128 bits of randomness; twenty-four is exactly 256. Those were the two security levels anyone wanted, so those are the two counts you meet in practice.
 
 ??? warning "12 words is not half as strong as 24"
 
@@ -114,17 +161,24 @@ Which answers a question people often ask: why 12 and 24, rather than any number
 
 ## The path, and why two wallets can disagree
 
-The seed can produce unlimited keys, so something has to say **which** ones. That's the **derivation path**, and for Ethereum it conventionally looks like this:
+The seed can produce unlimited keys, so something has to say **which** ones. That's the **derivation path** — the route taken down the tree. Wallets handling Ethereum keys have settled on this one:
 
 ```
 m / 44' / 60' / 0' / 0 / 0
-│    │     │     │   │   └── address index — 0, 1, 2, … the list your wallet shows
-│    │     │     │   └────── 0 for ordinary receiving addresses
-│    │     │     └────────── account number, if the wallet offers separate accounts
-│    │     └──────────────── 60 means Ethereum
-│    └────────────────────── 44 means "this is a standard structured path"
-└───────────────────────────  the seed itself
 ```
+
+Read left to right, each segment picks a branch:
+
+| Segment | What it selects |
+| --- | --- |
+| `m` | the seed itself — the root of the tree |
+| `44'` | a standard structured layout, rather than an ad-hoc one |
+| `60'` | **Ethereum.** 60 is the number registered for it in the wallet standard |
+| `0'` | which account, if the wallet offers more than one |
+| `0` | ordinary receiving addresses |
+| `0` | the address index — 0, 1, 2, … the list your wallet shows you |
+
+Note what that `60` is and isn't. It's an entry in a registry **wallet software keeps**, so that two wallets don't derive different keys for the same chain. Ethereum doesn't publish it, doesn't read it, and doesn't know it exists. The path is a convention among wallets about where to look — not something the protocol specifies.
 
 Walk a different path and you get entirely different keys from the same seed. Which is exactly why **the same phrase can show different addresses in two different wallets** — not a bug, and not a lost wallet. The phrase was fine; the wallet was looking somewhere else in the tree.
 
@@ -169,9 +223,9 @@ Walk a different path and you get entirely different keys from the same seed. Wh
 
 That sentence is the whole boundary, and it's worth being exact about, because the claim gets both over- and under-stated.
 
-**Keys are protocol.** A private key controlling an address *is* Ethereum. It's in the specification, and the whole of [signatures](../crypto/signatures.md) describes how the network uses it.
+**Keys are protocol.** Three things on the previous pages are written into the specification and enforced by every node: that an [address](../crypto/addresses.md) is derived from a public key in one particular way, that a public key comes from a private key on one particular curve, and that a [signature](../crypto/signatures.md) from that key is the only thing which can authorise a change to that address. Those rules are Ethereum.
 
-**Where the key came from is not.** Nothing above this line — not seed phrases, not the key tree, not derivation paths — exists anywhere in Ethereum.
+**Where your key came from is not.** Nothing on *this* page — not seed phrases, not the key tree, not derivation paths — appears anywhere in Ethereum. The protocol cares that you hold a key. It has no interest in how you came by it.
 
 ### What a node actually sees
 
@@ -189,6 +243,15 @@ Roll a die 256 times. Write the results down as bits. Treat that number as a pri
 
 If the protocol cared where keys came from, that wouldn't work. It does work. So it doesn't care.
 
+??? warning "Don't actually do that"
+
+    The dice test is sound as an argument and a poor idea in practice. Real
+    dice are slightly biased, counting 256 results by hand goes wrong, and
+    you'd have no checksum to catch the error — so you could lose everything
+    to a miscount you never notice.
+
+    It demonstrates what the protocol will accept. It is not a method.
+
 ### Then what is a seed phrase for?
 
 It solves a **human** problem, not a protocol one.
@@ -197,14 +260,23 @@ A 64-character hex key is miserable to write on paper and verify, and you would 
 
 Both are conveniences. Neither makes anything possible that wasn't possible before — you could always have written down raw keys, one per account, and Ethereum would have been equally content.
 
-### What follows from this
+### Three things this explains
 
-Several things that otherwise look like faults:
+Each of them looks like a defect until you see where the line falls.
 
-- **Two wallets can show different addresses for one phrase.** They're following conventions, and conventions can differ. If paths were protocol, they couldn't.
-- **A hardware wallet and a browser extension can share one phrase**, because both implement the same public standards — not because Ethereum coordinates them.
-- **Anyone could invent a different scheme tomorrow**, and Ethereum would accept its keys without modification.
-- **None of this appears in the Yellow Paper.** That isn't an oversight.
+**Two wallets can show different addresses for the same phrase.**
+
+Each wallet picks a path down the tree, and nothing *forces* two wallets to pick the same one. If Ethereum defined paths, they would all have to agree, because disagreeing would mean breaking the rules. Ethereum doesn't define them, so a wallet is free to look somewhere else — and some older ones did. Your keys weren't lost. The second wallet was reading a different branch of the same tree, and the addresses it showed you were real, just unused.
+
+**A hardware wallet and a browser extension can share one phrase.**
+
+Not because Ethereum coordinates them — it has no idea either exists. Because both vendors independently chose to implement the same three published standards. That's co-operation between competitors, which can be relied on in practice and could in principle stop at any time.
+
+**Anyone could invent a different scheme tomorrow.**
+
+A new way of turning a backup into keys would need no permission, no proposal, and no change to Ethereum — because Ethereum only ever sees the finished keys. It would need other wallets to adopt it to be *useful*, but nothing about the protocol would resist it.
+
+That last point is the test for whether something is protocol or convention: **could you replace it unilaterally?** Seed phrases, yes. The curve that turns a private key into an address, no.
 
 ### What it does *not* mean
 
