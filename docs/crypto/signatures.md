@@ -25,11 +25,29 @@ So the signature doesn't *accompany* a claim of identity. The signature **is** t
 
 Which is rather elegant once it lands. A forged "from" field would be worthless, so Ethereum doesn't have one. The only way to appear as the sender of a transaction is to produce a signature that recovers to your address, and the only way to do that is to hold the key.
 
-## The algorithm has a name
+## What actually gets signed
 
-Before the demonstration, the thing doing the work deserves naming — and so do its three outputs, which appear everywhere once you start looking at transactions.
+Not the transaction — the **hash** of the transaction, via [Keccak-256](keccak256.md).
+
+That has a useful consequence. Since the hash covers every field, changing any single byte of the transaction changes the hash, and a signature over the old hash recovers to a different address. So the signature protects **all** of it at once: the amount, the recipient, the fee, the nonce. There's no need to sign each field separately, and no way to alter one in transit.
+
+## How a signature is made
+
+The thing doing the work deserves naming — and so do its three outputs, which appear everywhere once you start looking at transactions.
 
 Signing and recovery are done with **ECDSA**, the Elliptic Curve Digital Signature Algorithm [(SECG, 2009)](#ref-sec1). It isn't an Ethereum invention or a cryptocurrency one; it's a long-standing standard behind TLS certificates and software signing. Ethereum's contribution is the curve it runs on, and the use it makes of recovery.
+
+### The three operations, side by side
+
+```
+    signing:      message hash  +  private key          ──►   r, s
+    verifying:    message hash  +  r, s  +  public key   ──►   yes or no
+    recovering:   message hash  +  r, s  +  v            ──►   the public key
+```
+
+The first two are ordinary ECDSA, used across the internet. The **third** is the one Ethereum leans on, and it gets a section of its own below.
+
+The rest of this section covers **signing**. Recovery follows after it.
 
 ### Where `r` and `s` come from
 
@@ -130,6 +148,10 @@ Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh eve
     the same *k*, two different messages never do, and no random number
     source is involved anywhere.
 
+## How the signer is recovered
+
+The third operation, and the reason a transaction needs no sender field at all.
+
 ### Why recovery is possible at all
 
 Here is the part worth understanding, because it looks like magic and isn't.
@@ -201,7 +223,8 @@ So **`v` is one bit saying which**: the *y* was even, or the *y* was odd. That's
     any other chain using the same curve, so a payment could be taken from one
     network and replayed on another, where the same key controlled the same
     address. **EIP-155** [(Buterin, 2016)](#ref-eip155) fixed it by folding the
-    **chain id** into `v`, so a signature became valid on exactly one network.
+    **chain id** — a number identifying which network a signature is for — into
+    `v`, so a signature became valid on exactly one chain.
 
     Modern typed transactions dropped that trick. They carry the chain id as
     its own field and store the parity plainly as 0 or 1 — which is what the
@@ -209,16 +232,6 @@ So **`v` is one bit saying which**: the *y* was even, or the *y* was odd. That's
 
     So if you meet `v = 27`, `v = 37` and `v = 1` in different places, none is
     wrong; they're three generations of the same bit.
-
-### The three operations, side by side
-
-```
-    signing:      message hash  +  private key          ──►   r, s
-    verifying:    message hash  +  r, s  +  public key   ──►   yes or no
-    recovering:   message hash  +  r, s  +  v            ──►   the public key
-```
-
-The first two are ordinary ECDSA, used across the internet. The **third** is what Ethereum leans on, and it's why a transaction needs no sender field.
 
 ### Recovering an address, step by step
 
@@ -316,22 +329,22 @@ This page doesn't derive any of it. The three properties from the [private keys]
     has no funds and no history. Which is a stronger guarantee than a check,
     because there's nothing to get wrong.
 
-## What actually gets signed
-
-Not the transaction — the **hash** of the transaction, via [Keccak-256](keccak256.md).
-
-That has a useful consequence. Since the hash covers every field, changing any single byte of the transaction changes the hash, and a signature over the old hash recovers to a different address. So the signature protects **all** of it at once: the amount, the recipient, the fee, the nonce. There's no need to sign each field separately, and no way to alter one in transit.
-
 ## Replay protection needs two different things
 
-Worth putting side by side, because they're easily confused and solve different problems.
+A signed transaction is a standing instruction. Unless something stops it, anyone who has seen it can submit it again — and it will still be valid, because it's still correctly signed by you. Two different versions of that problem exist, and each needs its own defence.
+
+**Replayed on the same chain.** Someone rebroadcasts your payment hoping it executes twice. The [nonce](../accounts/nonce.md "A per-account counter of transactions already sent") stops this: it's part of what you signed, and once a nonce has been used the network will never accept it again.
+
+**Replayed on a different chain.** This one is less obvious. Ethereum isn't the only network using secp256k1 and this address format — there are testnets, forks such as Ethereum Classic, and unrelated chains built the same way. **Your key controls the same address on all of them.** So a transaction you signed for one network could be lifted and submitted on another, where it would verify perfectly and move real funds.
+
+The defence is the **chain id**: a number identifying the network, included in what gets signed. Sign with Ethereum's chain id and the signature simply isn't valid anywhere else.
 
 | Attack | Defence |
 | --- | --- |
-| Rebroadcasting your transaction **on this chain** | the [nonce](../accounts/nonce.md "A per-account counter of transactions already sent") — once used, that number is spent forever |
-| Replaying it **on another chain** | the chain id — the signature is only valid for one network |
+| Rebroadcasting your transaction **on this chain** | the **nonce** — once used, that number is spent forever |
+| Replaying it **on another chain** | the **chain id** — the signature is valid on one network only |
 
-Neither covers the other. A nonce is meaningless across chains, since the other chain has its own count. A chain id does nothing about the same transaction being submitted twice on the network it belongs to.
+Neither covers the other. A nonce means nothing across chains, since the other chain keeps its own count. A chain id does nothing about the same transaction being submitted twice on the network it belongs to.
 
 ## Malleability, and why `s` has to be small
 
