@@ -62,13 +62,73 @@ And notice that *d* appears exactly once, multiplied by *r* and buried under a *
 
 Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh every time, `r` and `s` are completely different on every signature — which is what you see when you press *Sign again* below.
 
-??? warning "k must never repeat"
+??? warning "*k* must never repeat — and here is exactly why"
 
-    If the same *k* is ever used to sign two different messages with the same
-    key, the private key can be recovered from the two signatures by
-    schoolroom algebra. It's one of the classic ways real systems have lost
-    keys, and the reason serious implementations derive *k* deterministically
-    from the key and message rather than trusting a random number source.
+    If one key signs two different messages using the same *k*, **the private
+    key falls out of the two signatures.** Not eventually, not with effort:
+    immediately, with two subtractions and two divisions.
+
+    Here's the whole attack.
+
+    Since `r` depends only on *k*, two signatures sharing a *k* also share the
+    same `r`. So you have two equations:
+
+    ```
+    s₁  =  k⁻¹ ( z₁ + r·d )
+    s₂  =  k⁻¹ ( z₂ + r·d )
+    ```
+
+    Subtract them. The `r·d` terms are identical in both, so they **cancel** —
+    and *d* vanishes along with them:
+
+    ```
+    s₁ − s₂  =  k⁻¹ ( z₁ − z₂ )
+    ```
+
+    Now *k* is the only unknown left, and it's trivially isolated:
+
+    ```
+    k  =  ( z₁ − z₂ ) · ( s₁ − s₂ )⁻¹
+    ```
+
+    Everything on that right-hand side is public — the two hashes are the
+    messages, and the two `s` values came with the signatures.
+
+    Then put *k* back into either original equation and solve for *d*:
+
+    ```
+    s₁ · k  =  z₁ + r·d
+
+    d  =  ( s₁·k − z₁ ) · r⁻¹
+    ```
+
+    And that is the private key.
+
+    **A worked example**, with real secp256k1 values. One key signs "pay Anna
+    1 ether" and "pay Bob 2 ether", reusing *k*:
+
+    ```
+    r   (identical in both)  fd1b7de8c449eecd…
+    s₁                       e1df25a5e5f1ccc9…
+    s₂                       e78cef03efaf0bd8…
+
+    recovered d  1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    actual    d  1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef
+    ```
+
+    Note that `r` being the same in two signatures is **visible to anyone**.
+    It's the public signal that this attack is available.
+
+    **This is not hypothetical.** Sony's PlayStation 3 code-signing key was
+    recovered in 2010 in exactly this way — the same *k* on every signature.
+    In 2013 a flaw in Android's random number generator made Bitcoin wallets
+    repeat nonces, and keys were emptied.
+
+    Which is why serious implementations don't leave *k* to chance at all.
+    **RFC 6979** [(Pornin, 2013)](#ref-rfc6979) derives it deterministically
+    from the private key and the message hash: the same message always gives
+    the same *k*, two different messages never do, and no random number
+    source is involved anywhere.
 
 ### Why recovery is possible at all
 
@@ -356,6 +416,7 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
 
 - <a id="ref-eip2"></a>**Buterin, V.** (2015). *EIP-2: Homestead hard-fork changes.* Ethereum Improvement Proposals. Among other changes, requires the signature value *s* to lie in the lower half of its range, removing signature malleability. <https://eips.ethereum.org/EIPS/eip-2>
 - <a id="ref-eip155"></a>**Buterin, V.** (2016). *EIP-155: Simple replay attack protection.* Ethereum Improvement Proposals. Folds the chain id into the signature so a transaction is valid on one network only. <https://eips.ethereum.org/EIPS/eip-155>
+- <a id="ref-rfc6979"></a>**Pornin, T.** (2013). *Deterministic Usage of the Digital Signature Algorithm (DSA) and Elliptic Curve Digital Signature Algorithm (ECDSA).* RFC 6979, Internet Engineering Task Force. Derives the per-signature nonce from the key and message, removing the reuse failure described above. <https://www.rfc-editor.org/rfc/rfc6979>
 - <a id="ref-sec1"></a>**Standards for Efficient Cryptography Group** (2009). *SEC 1: Elliptic Curve Cryptography*, version 2.0. Specifies ECDSA signing, verification and public key recovery. <https://www.secg.org/sec1-v2.pdf>
 - <a id="ref-eip191"></a>**Van de Sande, A., Nita-Rotaru, C., & Logvinov, L.** (2016). *ERC-191: Signed data standard.* Ethereum Improvement Proposals. Prefixes signed messages so they cannot be confused with signed transactions. <https://eips.ethereum.org/EIPS/eip-191>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Appendix F defines the recovery function used to obtain a sender address from a signature. <https://ethereum.github.io/yellowpaper/paper.pdf>
