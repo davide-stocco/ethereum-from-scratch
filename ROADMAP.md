@@ -664,9 +664,12 @@ than maintaining two versions that drift apart.
    staleness stamps, `danger` boxes, and `definition` boxes.
 
    `danger` is reserved for **where ignoring it costs money**, and always
-   open — a caution behind a click is a caution nobody reads. Two so far:
-   never funding a key from the generator on *Private keys*, and not
-   generating a key by hand with dice on *Seed phrases*. That reservation is
+   open — a caution behind a click is a caution nobody reads. Three so far:
+   never funding a key from the generator on *Private keys*, not generating a
+   key by hand with dice on *Seed phrases*, and recovery services being
+   categorically fraudulent on *Losing your keys*. Each one earns it by
+   following from the page's own argument rather than being appended as
+   general prudence. That reservation is
    what keeps it meaningful; anything merely surprising or easy to get wrong
    is a `warning`, and may be collapsed.
 
