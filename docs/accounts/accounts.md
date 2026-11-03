@@ -49,31 +49,29 @@ So the two kinds differ in *where control lives*. Outside the system, or inside 
 
 ## What an account actually looks like
 
-Easiest to start with one in front of you. Here is an ordinary wallet account:
+Easiest to start with one in front of you. Take the address `0x7E5F…95Bdf`, and ask a node what it holds:
 
 ```
-address      0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf   ← the key
-─────────────────────────────────────────────────────────
 nonce        3
 balance      1500000000000000000
 storageRoot  56e81f17…b421
 codeHash     c5d24601…a470
 ```
 
-Four values, and that is the entire account. The balance is in [wei](../foundations/ether.md), so it reads as 1.5 ether. The nonce says three transactions have been sent from here. The last two are hashes, and the specific ones shown mean *nothing stored* and *no code* — more on them shortly.
+Four values, and that is the entire account. The address isn't in there — it's what you looked the account *up* by, like a word in an index rather than part of the entry. The balance is in [wei](../foundations/ether.md), so it reads as 1.5 ether. The nonce says three transactions have been sent from here. The last two are hashes, and the specific ones shown mean *nothing stored* and *no code* — more on them shortly.
 
 Now a contract account, same four fields:
 
 ```
 nonce        0
 balance      0
-storageRoot  a fingerprint of its stored values     ← not the empty constant
-codeHash     a fingerprint of its code              ← not the empty constant
+storageRoot  ⟨fingerprint of its stored values⟩
+codeHash     ⟨fingerprint of its code⟩
 ```
 
-Same shape, different contents. **There is no fifth field marking it as a contract.** The difference is entirely in those last two values, and we'll come back to exactly how you read it.
+Neither of those last two is the empty constant, and that is the only thing distinguishing this account from the one above. Same shape, different contents. **There is no fifth field marking it as a contract.** The difference is entirely in those last two values, and we'll come back to exactly how you read it.
 
-A note on those numbers. The address is real — it's the one [private key `1` produces](../crypto/addresses.md), the most-guessed key in existence — but its nonce and balance above are made up for illustration. The two hashes in the first block are genuine fixed constants you'll meet again in a moment. The second block uses words rather than invented hex, because a plausible-looking fake hash is worse than no hash at all.
+A note on those numbers. The address is real — it's the one [private key `1` produces](../crypto/addresses.md), the most-guessed key in existence — but the nonce and balance shown for it are made up for illustration. The two hashes in the wallet account are genuine fixed constants, and you'll meet them again in a moment. The contract's two are written in words rather than invented hex, because a plausible-looking fake hash is worse than no hash at all.
 
 ## The four fields
 
@@ -127,8 +125,11 @@ What's still deferred is how you hash a *collection*. Hashing one lump of bytes 
 An account with no storage and no code still has both fields. They hold the fingerprints **of emptiness**, which are two fixed constants:
 
 ```
-codeHash     c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470
-storageRoot  56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
+codeHash — the hash of no code at all
+    c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470
+
+storageRoot — the root of an empty trie
+    56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
 ```
 
 The first is Keccak-256 of nothing at all — the empty-input hash the Keccak page used to check its own implementation against the published value. The second is the root of an empty trie. **Every ordinary wallet account on Ethereum carries that identical pair**, which is what makes the next section possible.
