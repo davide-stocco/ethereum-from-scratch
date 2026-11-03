@@ -156,20 +156,68 @@ Walk a different path and you get entirely different keys from the same seed. Wh
     necessarily unlock anything. It also means a forgotten passphrase is
     indistinguishable from a lost phrase. Try it in the tool above.
 
-## None of this is Ethereum
+## Ethereum knows about keys. It has no idea how you got them.
 
-Worth saying plainly, because it explains most of the confusion in this area.
+That sentence is the whole boundary, and it's worth being exact about, because the claim gets both over- and under-stated.
 
-**Ethereum has never heard of seed phrases.** It has no concept of a wallet, a seed, a derivation path or an account list. It sees [addresses](../crypto/addresses.md), [signatures](../crypto/signatures.md) and nothing else.
+**Keys are protocol.** A private key controlling an address *is* Ethereum. It's in the specification, and the whole of [signatures](../crypto/signatures.md) describes how the network uses it.
 
-Every mechanism on this page is a convention that wallet software agreed on, invented for Bitcoin and adopted wholesale. Which is why:
+**Where the key came from is not.** Nothing above this line — not seed phrases, not the key tree, not derivation paths — exists anywhere in Ethereum.
 
-- different wallets can disagree about your addresses — they're following conventions, not rules
-- a hardware wallet and a browser extension can share one phrase
-- none of this appears anywhere in the Yellow Paper
-- and it could all be replaced tomorrow without touching Ethereum at all
+### What a node actually sees
 
-That last point is already happening, incidentally. [Account abstraction](../crypto/addresses.md) moves the whole question of "what authorises a transaction" into contract code, where a single key need not be the answer. But the protocol underneath stays exactly as the cryptography section described it.
+When you send a transaction, a node receives the fields plus `v`, `r` and `s`. It [recovers an address](../crypto/signatures.md), checks that account's nonce and balance, and executes.
+
+Nothing in that sequence mentions a seed, a phrase, a path or a wallet. The node **cannot tell** whether your key came from twelve words, a hardware device, or a number you made up — and it has no way to ask.
+
+### The dice test
+
+Here's the version that settles it.
+
+Roll a die 256 times. Write the results down as bits. Treat that number as a private key, derive the public key, derive the address, and send ether to it.
+
+**Ethereum accepts that key exactly as readily as one from any wallet.** There's no registration step, no scheme to declare, nothing to opt into. There is no field anywhere that says *"this key was generated properly"*, because there would be nothing to put in it.
+
+If the protocol cared where keys came from, that wouldn't work. It does work. So it doesn't care.
+
+### Then what is a seed phrase for?
+
+It solves a **human** problem, not a protocol one.
+
+A 64-character hex key is miserable to write on paper and verify, and you would need a fresh one for every account you wanted. So BIP-39 turns one number into words you can transcribe by hand, and BIP-32 turns one secret into a whole tree of keys so you never need to back up more than once.
+
+Both are conveniences. Neither makes anything possible that wasn't possible before — you could always have written down raw keys, one per account, and Ethereum would have been equally content.
+
+### What follows from this
+
+Several things that otherwise look like faults:
+
+- **Two wallets can show different addresses for one phrase.** They're following conventions, and conventions can differ. If paths were protocol, they couldn't.
+- **A hardware wallet and a browser extension can share one phrase**, because both implement the same public standards — not because Ethereum coordinates them.
+- **Anyone could invent a different scheme tomorrow**, and Ethereum would accept its keys without modification.
+- **None of this appears in the Yellow Paper.** That isn't an oversight.
+
+### What it does *not* mean
+
+Not that wallets are unimportant. They're the only reason any of this is usable, and a flaw in one costs you everything. The point is narrower: the protocol doesn't **define** them — so they vary, compete, and improve without anyone needing to change Ethereum.
+
+??? info "History: the boundary is starting to move"
+
+    The clean story above is becoming less clean, and it's worth knowing which
+    direction it's going.
+
+    **Account abstraction** is, in part, about pulling wallet logic *into*
+    contract code — so that "what authorises a transaction" can be a rule
+    rather than a single key: several signers required, spending limits, a
+    recovery procedure, fees paid by somebody else.
+
+    That is the protocol beginning to care about something it had left
+    entirely to software. The layer this page describes doesn't go away — a
+    contract still ultimately checks signatures made by keys — but "one key,
+    one account" stops being the only arrangement available.
+
+    Everything in the [cryptography](../crypto/private-keys.md) section stays
+    exactly as described. What changes is how much gets built on top of it.
 
 ---
 

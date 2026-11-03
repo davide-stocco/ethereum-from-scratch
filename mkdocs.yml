@@ -104,7 +104,10 @@ nav:
       - Public keys: crypto/public-keys.md
       - Addresses: crypto/addresses.md
       - Signatures: crypto/signatures.md
-  - Keys and wallets:
+  # Named just "Wallets": the previous section already did keys, and this
+  # one is about the layer ABOVE the protocol — conventions wallet software
+  # agreed on, which Ethereum has never heard of.
+  - Wallets:
       - Wallets and seed phrases: wallets/seed-phrases.md
       - What losing your keys means: wallets/losing-your-keys.md
   - Accounts and state:

@@ -54,9 +54,9 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
     [Keccak-256](crypto/keccak256.md) · [Private keys](crypto/private-keys.md) · [Public keys](crypto/public-keys.md) · [Addresses](crypto/addresses.md) · [Signatures](crypto/signatures.md)
 
-- **Keys and wallets**
+- **Wallets**
 
-    What a wallet actually holds, and why there's no password reset.
+    What a wallet actually holds, why there's no password reset, and which parts of this Ethereum has never heard of.
 
     [Wallets and seed phrases](wallets/seed-phrases.md) · [What losing your keys means](wallets/losing-your-keys.md)
 

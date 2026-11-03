@@ -54,7 +54,7 @@ Home
 Foundations         What is Ethereum? · Ether, wei and gwei · Hex and bytes
 Cryptography        Keccak-256 · Private keys · Public keys · Addresses
                     Signatures
-Keys and wallets    Wallets and seed phrases · What losing your keys means
+Wallets             Wallets and seed phrases · What losing your keys means
 Encoding            RLP · Merkle Patricia Trie [2]
 Accounts and state  Accounts · The nonce · State [2]
 Transactions        Why metering is necessary ← · Transactions [2]
@@ -114,7 +114,7 @@ together, but once Applications exists the oracle problem belongs there — it's
 the constraint that decides what can be built — and throughput belongs at the
 head of Scaling. Grouping them was a symptom of having nowhere better.
 
-**5. Keys and wallets moves early.** It was filed under practicalities, late.
+**5. Wallets moves early.** It was filed under practicalities, late.
 Wrong: "what happens if I lose my keys" is among the first questions anyone
 asks, and it needs only the Cryptography section. Immediately after it is the
 right home.
@@ -153,7 +153,7 @@ that's **useful at every stage**, not only at the end.
 
 | | Contents | Pages | Why it stands alone |
 | --- | --- | --- | --- |
-| **v1 — launch** | Foundations, Cryptography, Keys and wallets, Encoding, Accounts and state, Economics "why it costs", Glossary, About | ~20 | *"The permanent core, and why it costs anything."* Almost all Tier 1 — nothing can go stale. Contains the differentiator. |
+| **v1 — launch** | Foundations, Cryptography, Wallets, Encoding, Accounts and state, Economics "why it costs", Glossary, About | ~20 | *"The permanent core, and why it costs anything."* Almost all Tier 1 — nothing can go stale. Contains the differentiator. |
 | **v2** | Transactions, Blocks, Fork-dependent details, first Tools | ~32 | The working machine. Where most readers' questions actually live. |
 | **v3** | The EVM, Consensus, Scaling, Standards | ~50 | Technically complete. |
 | **v4** | Applications, Governance, Security and privacy, rest of Economics | ~79 | The judgement layer — needs everything before it. |
