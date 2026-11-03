@@ -125,6 +125,19 @@ Because that procedure is deterministic, the same phrase always produces the sam
     again, and you now have a *different wallet* from the same twelve words.
     More on that below.
 
+    **Step 4 — type something that isn't a phrase at all.** `banana banana
+    banana`, or your own name. It derives addresses from that too, perfectly
+    happily.
+
+    That is not a shortcoming of the tool; it is what the derivation does.
+    Turning a phrase into a seed is one fixed calculation over the characters
+    you typed, and it has no opinion about whether those characters were words.
+    The wordlist and the checksum are checks a **wallet** runs *before* this
+    point — which is why your wallet rejects a mistyped phrase and this tool
+    accepts it. Worth noticing, because it's the same division as the `60` in
+    the path: real rules, enforced entirely by software, nowhere in the
+    protocol.
+
     The phrase shown is the standard test vector from the specification. It is
     famous, publicly known, and holds nothing — a good thing to experiment
     with, and the worst conceivable thing to use.
@@ -135,7 +148,7 @@ A seed could perfectly well be written as hex. The reason it isn't:
 
 - **You can copy words by hand without error.** Sixty-four hex characters transcribed onto paper is a mistake waiting to happen; `abandon` is not.
 - **You can read them aloud**, and spell them if needed.
-- **Most typos become detectable**, because the words come from a fixed list of 2048. Write `abandonn` and it simply isn't a word in the list.
+- **Most typos become detectable**, because the words come from a fixed list of 2048. Write `abandonn` and it simply isn't in the list, so a wallet can refuse it before deriving anything.
 - **And part of the phrase is a checksum**, so a phrase with one word swapped for another valid word usually still fails.
 
 ### Where the numbers come from
@@ -243,7 +256,7 @@ Roll a die 256 times. Write the results down as bits. Treat that number as a pri
 
 If the protocol cared where keys came from, that wouldn't work. It does work. So it doesn't care.
 
-??? warning "Don't actually do that"
+!!! danger "Don't actually do that"
 
     The dice test is sound as an argument and a poor idea in practice. Real
     dice are slightly biased, counting 256 results by hand goes wrong, and

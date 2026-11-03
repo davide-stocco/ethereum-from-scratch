@@ -661,8 +661,14 @@ than maintaining two versions that drift apart.
 
    **So four kinds stay open**, none of them skippable reading *about the
    subject*: the `Stub — not written yet` notice, the `Current as of …`
-   staleness stamps, one `danger` box where ignoring it costs money, and
-   `definition` boxes.
+   staleness stamps, `danger` boxes, and `definition` boxes.
+
+   `danger` is reserved for **where ignoring it costs money**, and always
+   open — a caution behind a click is a caution nobody reads. Two so far:
+   never funding a key from the generator on *Private keys*, and not
+   generating a key by hand with dice on *Seed phrases*. That reservation is
+   what keeps it meaningful; anything merely surprising or easy to get wrong
+   is a `warning`, and may be collapsed.
 
 4. **In-text citations, author–date style**, linking to the reference:
    `[Wood (2014)](#ref-wood-2014)` when the author is the subject of the
