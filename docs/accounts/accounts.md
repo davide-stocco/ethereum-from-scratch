@@ -52,8 +52,8 @@ So the two kinds differ in *where control lives*. Outside the system, or inside 
 Easiest to start with one in front of you. Here is an ordinary wallet account:
 
 ```
-address      0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf   ← what you look it up by
-──────────────────────────────────────────────────────────
+address      0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf   ← the key
+─────────────────────────────────────────────────────────
 nonce        3
 balance      1500000000000000000
 storageRoot  56e81f17…b421
