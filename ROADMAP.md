@@ -630,10 +630,19 @@ than maintaining two versions that drift apart.
    as a mistake, and a reader can't tell what the convention is. All closed by
    default; the main prose must stand alone without any of them.
 
-   **The only `!!!` boxes are status notices about the page itself** — the
-   "Stub — not written yet" warnings and the glossary's scope note. Those are
-   not content a reader may skip, so they stay open, and the difference in
-   purpose justifies the difference in form.
+   **Only three kinds of box stay open**, and none of them is skippable
+   reading *about the subject*:
+
+      - **`!!! warning "Stub — not written yet"`** — the page's own status.
+      - **`!!! info "Current as of …"`** and the verify-before-writing
+        notices — staleness stamps, per `FORKS.md`. A reader has to see these
+        to judge whether a page is current.
+      - **`!!! danger`** where ignoring it costs money. Exactly one at
+        present: the generated-key warning on `crypto/private-keys.md`.
+
+   Everything else closes, including technical cautions. "Ethereum hashes the
+   64-byte form" is important but it is still reading, and a box that opens
+   itself because the author thinks it matters is how the convention erodes.
 
    **A collapsed title has to be self-describing**, since it's all the reader
    sees. "Two simplifications in the table above" works; "Note" doesn't.

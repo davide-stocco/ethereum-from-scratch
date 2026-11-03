@@ -112,7 +112,7 @@ Cryptography, encoding and accounts can be skipped and picked up later.
 
 **Looking for one specific thing.** Use the search box, or the [glossary](glossary.md) for a quick definition with a link to the page that explains it.
 
-!!! note "Why there's no choice to make up front"
+??? note "Why there's no choice to make up front"
 
     Some sites ask you to pick a track before you begin. This one doesn't,
     because the economics genuinely depends on the technical material — you

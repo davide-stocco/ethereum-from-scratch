@@ -9,7 +9,7 @@ Definitions here are deliberately **one or two sentences** — just enough to un
 
 If you arrived from a search engine and a word on some page made no sense, this is where to look.
 
-!!! note "Scope"
+??? note "Scope"
 
     This covers every term used on the published pages. It grows as the site
     does — so if something is missing, it's because no page uses it yet. Terms

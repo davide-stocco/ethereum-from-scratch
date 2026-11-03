@@ -27,21 +27,86 @@ Which is rather elegant once it lands. A forged "from" field would be worthless,
 
 ## The algorithm has a name
 
-Before the demonstration, the thing doing the work deserves naming.
+Before the demonstration, the thing doing the work deserves naming — and so do its three outputs, which appear everywhere once you start looking at transactions.
 
-Signing and recovery are done with **ECDSA** — the Elliptic Curve Digital Signature Algorithm [(SECG, 2009)](#ref-sec1). It isn't an Ethereum invention or a cryptocurrency one; it's a long-standing standard used for TLS certificates, software signing and much else. Ethereum's contribution is the curve it runs on and the recovery trick below.
+Signing and recovery are done with **ECDSA**, the Elliptic Curve Digital Signature Algorithm [(SECG, 2009)](#ref-sec1). It isn't an Ethereum invention or a cryptocurrency one; it's a long-standing standard behind TLS certificates and software signing. Ethereum's contribution is the curve it runs on, and the use it makes of recovery.
 
-What it does, in and out:
+### Where `r` and `s` come from
+
+Signing a message hash **z** with a private key **d** goes like this:
+
+1. Pick a **random secret number**, called *k*, used once and then thrown away.
+2. Compute the curve point *k* × G, the same multiplication from the [public keys](public-keys.md) page.
+3. **`r` is the x coordinate of that point.**
+4. **`s` combines** the message hash, `r`, the private key and *k*, in a single modular equation.
+
+So the two halves have distinct jobs. `r` is a commitment to the random point — it depends on *k* and nothing else. `s` is the half the **private key enters**, mixed with the message so that the pair is bound to this message and no other.
+
+Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh every time, `r` and `s` are completely different on every signature — which is what you see when you press *Sign again* below.
+
+??? warning "k must never repeat"
+
+    If the same *k* is ever used to sign two different messages with the same
+    key, the private key can be recovered from the two signatures by
+    schoolroom algebra. It's one of the classic ways real systems have lost
+    keys, and the reason serious implementations derive *k* deterministically
+    from the key and message rather than trusting a random number source.
+
+### Why recovery is possible at all
+
+Here is the part worth understanding, because it looks like magic and isn't.
+
+**Verification and recovery are the same equation, solved for different unknowns.**
+
+ECDSA's check is a relationship between four things: the message hash, `r`, `s`, and the public key **Q**. Ordinarily you are handed all four, substitute them in, and see whether the relationship holds — that's verification.
+
+But an equation with one unknown can be rearranged. Leave **Q** out, and the relationship can be solved *for* **Q** instead:
 
 ```
-    signing:      message hash  +  private key   ──►   two numbers, r and s
+    Q  =  r⁻¹ ( s·R  −  z·G )
+```
+
+where **R** is the point whose x coordinate is `r`. Everything on the right is public: `r` and `s` come with the signature, *z* is the message hash, G is the fixed generator. So the public key falls out directly.
+
+Recovery isn't a feature bolted onto ECDSA. It's the same algebra read in the other direction.
+
+### Which is where `v` comes in
+
+One snag. Recovery needs the point **R**, and the signature only gives you `r` — its *x* coordinate. As the [public keys](public-keys.md) page showed, an *x* coordinate has **two** possible *y* values, one even and one odd.
+
+Two candidate points give two candidate public keys, and so two candidate addresses. Only one of them signed.
+
+So **`v` is one bit saying which**: the *y* was even, or the *y* was odd. That's its whole job. Without it you'd recover two addresses with no way to choose between them.
+
+??? info "History: `v` used to carry more than one bit"
+
+    In early Ethereum, `v` was 27 or 28 — the parity bit plus an offset
+    inherited from Bitcoin.
+
+    Then came a problem. A transaction signed for Ethereum was equally valid on
+    any other chain using the same curve, so a payment could be taken from one
+    network and replayed on another, where the same key controlled the same
+    address. **EIP-155** [(Buterin, 2016)](#ref-eip155) fixed it by folding the
+    **chain id** into `v`, so a signature became valid on exactly one network.
+
+    Modern typed transactions dropped that trick. They carry the chain id as
+    its own field and store the parity plainly as 0 or 1 — which is what the
+    tool below shows. Cleaner, and the same protection.
+
+    So if you meet `v = 27`, `v = 37` and `v = 1` in different places, none is
+    wrong; they're three generations of the same bit.
+
+### The three operations, side by side
+
+```
+    signing:      message hash  +  private key          ──►   r, s
     verifying:    message hash  +  r, s  +  public key   ──►   yes or no
-    recovering:   message hash  +  r, s  +  v   ──►   the public key itself
+    recovering:   message hash  +  r, s  +  v            ──►   the public key
 ```
 
-The first two are ordinary ECDSA. The **third** is what Ethereum leans on: rather than being handed a public key to check against, it reconstructs the public key from the signature. That's why no sender field is needed.
+The first two are ordinary ECDSA, used across the internet. The **third** is what Ethereum leans on, and it's why a transaction needs no sender field.
 
-This page doesn't derive any of it. The three properties from the [private keys](private-keys.md) page are all you need: anyone can check it, it reveals nothing about the key, and it's bound to one message.
+This page doesn't derive any of it. The three properties from the [private keys](private-keys.md) page are what matter: anyone can check it, it reveals nothing about the key, and it's bound to one message.
 
 ??? example "Try it: sign, then recover the signer"
 
@@ -61,10 +126,9 @@ This page doesn't derive any of it. The three properties from the [private keys]
     computed, and it matches.
 
     **Step 2 — press Sign again**, several times. The signature changes
-    completely every time, and **the recovered address never does.** This is
-    the point made on the private keys page: a signature isn't a fixed token
-    you could copy, it's freshly computed, and there's a random ingredient in
-    each one.
+    completely every time, and **the recovered address never does.** That's
+    *k* being fresh on each signature, and it's the claim from the private
+    keys page made concrete: a signature is computed, not held.
 
     **Step 3 — alter the lower field only**, so the verifier checks a
     different message from the one that was signed. Change "Anna" to "Anne",
@@ -81,42 +145,6 @@ This page doesn't derive any of it. The three properties from the [private keys]
 Not the transaction — the **hash** of the transaction, via [Keccak-256](keccak256.md).
 
 That has a useful consequence. Since the hash covers every field, changing any single byte of the transaction changes the hash, and a signature over the old hash recovers to a different address. So the signature protects **all** of it at once: the amount, the recipient, the fee, the nonce. There's no need to sign each field separately, and no way to alter one in transit.
-
-## The three values
-
-| | What it is |
-| --- | --- |
-| `r` | derived from a random point chosen during signing |
-| `s` | the part that actually involves the private key |
-| `v` | which of two possible public keys to recover |
-
-`r` and `s` are the signature proper, as ECDSA defines it [(SECG, 2009)](#ref-sec1). `v` is the interesting one, and it exists for a very practical reason.
-
-### Why `v` is needed
-
-Recovery starts from `r`, which gives you the *x* coordinate of a point on the curve. But as the [public keys](public-keys.md) page showed, an *x* coordinate has **two** possible *y* values — one even, one odd.
-
-Two candidate points mean two candidate public keys, and therefore two candidate addresses. Only one of them signed. So `v` carries a single bit saying which: *the y was even* or *the y was odd*.
-
-Without it you'd recover two addresses and have no way to choose. One extra bit saves you from that.
-
-??? info "History: v used to carry more than one bit"
-
-    In early Ethereum, `v` was 27 or 28 — the parity bit plus an offset
-    inherited from Bitcoin.
-
-    Then came a problem. A transaction signed for Ethereum was equally valid on
-    any other chain using the same curve, so a payment could be taken from one
-    network and replayed on another, where the same key controlled the same
-    address. **EIP-155** [(Buterin, 2016)](#ref-eip155) fixed it by folding the
-    **chain id** into `v`, so a signature became valid on exactly one network.
-
-    Modern typed transactions dropped that trick. They carry the chain id as
-    its own field and store the parity plainly as 0 or 1 — which is what the
-    tool above shows. Cleaner, and the same protection.
-
-    So if you meet `v = 27`, `v = 37` and `v = 1` in different places, none is
-    wrong; they're three generations of the same bit.
 
 ## Replay protection needs two different things
 
@@ -159,7 +187,7 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
 
 "Sign in with your wallet" works this way: a site gives you a phrase, you sign it, and the site recovers your address. No transaction, no gas, no block — just a signature and a recovery, exactly as in the tool above.
 
-!!! warning "Which is why a signing prompt deserves reading"
+??? warning "Which is why a signing prompt deserves reading"
 
     Because a signature authorises whatever was signed, and your wallet can
     only show you the bytes.

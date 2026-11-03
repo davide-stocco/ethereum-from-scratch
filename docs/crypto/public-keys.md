@@ -211,7 +211,7 @@ The `0x04` prefix in the second form is a marker meaning "uncompressed point fol
 
 **Compressed** form drops `y` entirely, which works because the curve equation nearly determines it. Given `x`, the equation `y² = x³ + 7` has exactly two solutions, and they always have opposite parity — one even, one odd. So a single byte recording which one it was (`02` for even, `03` for odd) is enough to recompute `y`. Half the size, no information lost.
 
-!!! warning "Ethereum hashes the 64-byte form, with no prefix"
+??? warning "Ethereum hashes the 64-byte form, with no prefix"
 
     When deriving an [address](addresses.md), Ethereum hashes the **raw 64
     bytes** — `x` followed by `y`, and *no* `0x04` prefix.
