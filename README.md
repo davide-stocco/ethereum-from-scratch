@@ -52,7 +52,7 @@ docs/
   transactions/       # transactions, metering, gas, fees
   blocks/             # blocks, the header, the chain
   economics/          # the security budget, who pays, supply
-  reference/          # gas costs, fork history  (menu: "Costs and upgrades")
+  reference/          # gas costs, fork history  (menu: "Fork-dependent details")
   about/              # the fork policy, who's writing this
   glossary.md
 

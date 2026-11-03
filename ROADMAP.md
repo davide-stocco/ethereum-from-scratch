@@ -82,7 +82,7 @@ Governance          Who changes the protocol · The EIP process [3]
 Security & privacy  How things go wrong · Reentrancy · Oracle manipulation
                     The economics of audits · Everything is public
 
-Costs and upgrades  Gas costs [2] · Fork history [3]
+Fork-dependent      Gas costs [2] · Fork history [3]
 Glossary
 About               Ethereum changes · Who's writing this
 Tools               Keccak hasher · key → address · converters · decoders
@@ -154,7 +154,7 @@ that's **useful at every stage**, not only at the end.
 | | Contents | Pages | Why it stands alone |
 | --- | --- | --- | --- |
 | **v1 — launch** | Foundations, Cryptography, Keys and wallets, Encoding, Accounts and state, Economics "why it costs", Glossary, About | ~20 | *"The permanent core, and why it costs anything."* Almost all Tier 1 — nothing can go stale. Contains the differentiator. |
-| **v2** | Transactions, Blocks, Costs and upgrades, first Tools | ~32 | The working machine. Where most readers' questions actually live. |
+| **v2** | Transactions, Blocks, Fork-dependent details, first Tools | ~32 | The working machine. Where most readers' questions actually live. |
 | **v3** | The EVM, Consensus, Scaling, Standards | ~50 | Technically complete. |
 | **v4** | Applications, Governance, Security and privacy, rest of Economics | ~79 | The judgement layer — needs everything before it. |
 

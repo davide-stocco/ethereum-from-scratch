@@ -90,9 +90,9 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
     [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md)
 
-- **Costs and upgrades**
+- **Fork-dependent details**
 
-    The two pages that absorb change, so the rest of the site doesn't have to. Every number lives here, and nowhere else.
+    Everywhere else on this site is meant to stay true. These are the two pages that don't — the costs a fork can reprice, and the record of what each upgrade did. Every number lives here, and nowhere else.
 
     [Gas costs](reference/gas-costs.md) · [Fork history](reference/fork-history.md)
 
