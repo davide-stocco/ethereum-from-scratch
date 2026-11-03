@@ -450,7 +450,7 @@ page on the site that rots.
 
 # Phase 2 — fork-dependent *(in `/drafts`, not published)*
 
-These stubs already exist in `drafts/`. They stay unpublished until Phase 1 is written, because they need the foundations above *and* because they need the careful handling described in [FORKS.md](FORKS.md): numbers centralised, pages date-stamped, changes taught as history.
+These stubs are now scaffolded in `docs/` and visible in the menu, but unwritten. They need the foundations above *and* the careful handling described in [FORKS.md](FORKS.md): numbers centralised, pages date-stamped, changes taught as history. They come out of `nav` at launch, with everything else unwritten.
 
 | Draft | Why it waits |
 | --- | --- |

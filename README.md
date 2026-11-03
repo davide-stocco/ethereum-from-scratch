@@ -8,7 +8,7 @@ Most Ethereum introductions either give you a metaphor that collapses under insp
 
 **Nothing is explained before its prerequisites.** The ordering is the actual work — see [ROADMAP.md](ROADMAP.md).
 
-**Phase 1 covers only what has never changed.** Ethereum upgrades through hard forks, and plenty of tutorials that were correct when written are now quietly wrong. So the published site starts with the part of Ethereum that has been stable since 2015 and realistically cannot change: hashing, keys, addresses, RLP, units, and the account model. Fork-dependent material waits in `drafts/` until it can be handled properly. See [FORKS.md](FORKS.md).
+**It starts with what has never changed.** Ethereum upgrades through hard forks, and plenty of tutorials that were correct when written are now quietly wrong. So the first pages written are the ones that cannot go stale: hashing, keys, addresses, signatures, units, and the account model. Fork-dependent pages are scaffolded but carry date stamps, and every number that a fork can change lives in one place rather than scattered through the prose. See [FORKS.md](FORKS.md).
 
 ## Built with
 
@@ -38,18 +38,31 @@ Builds the site and pushes it to the `gh-pages` branch, which GitHub Pages serve
 ## Layout
 
 ```
-mkdocs.yml          # config — the nav section defines page order
-ROADMAP.md          # what's written, what's next, in what order
-FORKS.md            # which pages are fork-proof, and the maintenance policy
-docs/               # the published site
+mkdocs.yml            # config — the nav section defines reading order
+ROADMAP.md            # what's written, what's next, and every convention
+FORKS.md              # which pages a fork can invalidate, and the policy
+
+docs/
   index.md
-  foundations/      # what Ethereum is, units, hex and bytes
-  crypto/           # keccak, private keys, public keys, addresses
-  encoding/         # RLP
-  accounts/         # accounts, the nonce
-  about/            # how this site handles forks
-drafts/             # fork-dependent stubs, not published yet
+  foundations/        # what Ethereum is, units, hex and bytes
+  crypto/             # keccak, keys, addresses, signatures
+  wallets/            # seed phrases, losing your keys
+  accounts/           # accounts, the nonce, state
+  encoding/           # RLP, the Merkle Patricia Trie
+  transactions/       # transactions, metering, gas, fees
+  blocks/             # blocks, the header, the chain
+  economics/          # the security budget, who pays, supply
+  reference/          # gas costs, fork history  (menu: "Costs and upgrades")
+  about/              # the fork policy, who's writing this
+  glossary.md
+
+  javascripts/        # the interactive tools — no dependencies, plain JS
+  stylesheets/        # one file of overrides on the Material theme
 ```
+
+Every page carries a `tier:` in its frontmatter — `1` for fork-proof, `2` and
+`3` for pages an upgrade can invalidate. That makes the post-fork review
+mechanical: `grep -rl "^tier: 3" docs/`.
 
 ## Corrections
 
