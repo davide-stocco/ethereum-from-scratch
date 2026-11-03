@@ -314,3 +314,51 @@
   .md-typeset details.is-animating { transition: none; }
   .md-typeset details[open] > :not(summary) { animation: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   "Definition" boxes
+   ---------------------------------------------------------------------------
+   Material has no definition type, so this adds one: teal, with a bookmark
+   icon, distinct from every colour already in use (blue, light blue, cyan,
+   light green, orange, red, purple).
+
+   These are the ONE content box that stays open. A definition isn't
+   supplementary reading — it's the page's central term stated plainly, and a
+   reader scanning the page should be able to spot it without clicking.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --md-admonition-icon--definition: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2 L18 2 L18 22 L12 17 L6 22 Z"/></svg>');
+}
+
+.md-typeset .admonition.definition,
+.md-typeset details.definition {
+  border-color: #00897b;
+}
+
+.md-typeset .definition > .admonition-title,
+.md-typeset .definition > summary {
+  background-color: rgba(0, 137, 123, 0.1);
+}
+
+.md-typeset .definition > .admonition-title::before,
+.md-typeset .definition > summary::before {
+  background-color: #00897b;
+  -webkit-mask-image: var(--md-admonition-icon--definition);
+  mask-image: var(--md-admonition-icon--definition);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition.definition,
+[data-md-color-scheme="slate"] .md-typeset details.definition {
+  border-color: #4db6ac;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset .definition > summary {
+  background-color: rgba(77, 182, 172, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset .definition > summary::before {
+  background-color: #4db6ac;
+}

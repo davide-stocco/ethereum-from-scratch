@@ -643,9 +643,22 @@ than maintaining two versions that drift apart.
    version" are indistinguishable in a table of contents — name what each one
    is formal *about*.
 
-   **Only three kinds stay open**, none of them skippable reading about the
-   subject: the `Stub — not written yet` notice, the `Current as of …`
-   staleness stamps, and one `danger` box where ignoring it costs money.
+   `!!! definition "Term"` — **the one content box that stays open.** Teal,
+   with a bookmark icon, defined in `extra.css` because Material has no such
+   type. Holds the page's central term stated plainly, so a reader scanning
+   the page can spot it. Hiding a definition behind a click would be
+   perverse — it isn't supplementary reading.
+
+   Use it where the prose doesn't already give a crisp statement. *Private
+   keys* opens "a private key is a number, that's the whole of it", which is
+   the definition — a box there would just repeat it. *Wallets* opens by
+   saying what a wallet **isn't**, so the box earns its place. One per page at
+   most, and only when it adds something.
+
+   **So four kinds stay open**, none of them skippable reading *about the
+   subject*: the `Stub — not written yet` notice, the `Current as of …`
+   staleness stamps, one `danger` box where ignoring it costs money, and
+   `definition` boxes.
 
 4. **In-text citations, author–date style**, linking to the reference:
    `[Wood (2014)](#ref-wood-2014)` when the author is the subject of the

@@ -11,9 +11,18 @@ The [cryptography](../crypto/private-keys.md) section ended with a loose thread.
 
 This page is how those two facts fit together.
 
+!!! definition "Wallet"
+
+    Software that **stores private keys and signs things with them.** Not a
+    container for money, and not an account — your ether is recorded on the
+    network, not inside any app.
+
+    A wallet's whole job is to keep your keys safe and use them when you ask.
+    *Keyring* would have been the better word.
+
 ## A wallet doesn't hold your money
 
-Worth clearing up first, because the word is actively misleading.
+Worth unpacking that, because the usual word is actively misleading.
 
 Your ether isn't in your wallet. It isn't anywhere except [the state](../accounts/state.md) — a number recorded against your address on thousands of machines. Deleting your wallet app doesn't move it. Installing a different one doesn't move it either.
 
