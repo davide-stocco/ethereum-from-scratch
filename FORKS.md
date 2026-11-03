@@ -88,7 +88,7 @@ These *are* fork output. Expect to rewrite them, and date-stamp them clearly.
     much later, check [the reference table](../reference/gas-costs.md).
 ```
 
-**2. Keep every number in one file.** The gas-costs page is the single source of truth. When a fork changes costs, you edit one file — not the twelve pages that mention them. The stub currently lives at `drafts/gas-costs.md`; move it to `docs/reference/` — shown in the menu as *Costs and upgrades* — when you publish Phase 2.
+**2. Keep every number in one file.** `docs/reference/gas-costs.md` — shown in the menu as *Costs and upgrades* — is the single source of truth. When a fork changes costs, you edit that one file, not the twelve pages that mention them.
 
 **3. Explain changes as history, not as corrections.** When a fork changes something, the old behaviour is often the clearest way to explain why the new one exists. EIP-1559 makes far more sense once you know fee bidding was a blind auction. Write it as *"it used to work like X, which had problem Y, so now it works like Z."* That turns your maintenance burden into your best teaching material.
 
