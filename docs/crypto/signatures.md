@@ -36,11 +36,29 @@ Signing and recovery are done with **ECDSA**, the Elliptic Curve Digital Signatu
 Signing a message hash **z** with a private key **d** goes like this:
 
 1. Pick a **random secret number**, called *k*, used once and then thrown away.
-2. Compute the curve point *k* × G, the same multiplication from the [public keys](public-keys.md) page.
-3. **`r` is the x coordinate of that point.**
-4. **`s` combines** the message hash, `r`, the private key and *k*, in a single modular equation.
+2. Compute the curve point *k* × G, the same multiplication from the [public keys](public-keys.md) page. Call it **R**.
+3. **`r` is the x coordinate of R.**
+4. **`s` is computed from** the message hash, `r`, the private key and *k*:
 
-So the two halves have distinct jobs. `r` is a commitment to the random point — it depends on *k* and nothing else. `s` is the half the **private key enters**, mixed with the message so that the pair is bound to this message and no other.
+```
+    s  =  k⁻¹ ( z  +  r · d )      mod n
+```
+
+Every term there has already appeared on this site:
+
+| | |
+| --- | --- |
+| *z* | the message hash, from [Keccak-256](keccak256.md) |
+| *d* | the private key — the only secret in the equation |
+| *r* | the x coordinate from step 3 |
+| *k* | the random number from step 1 |
+| *n* | secp256k1's order, from the [private keys](private-keys.md) page |
+
+*k*⁻¹ means the modular inverse — the number that multiplies by *k* to give 1, working modulo *n*. Not a fraction; there are no fractions anywhere in this.
+
+So the two halves have distinct jobs. `r` is a commitment to the random point: it depends on *k* and nothing else. `s` is the half the **private key enters**, mixed with the message hash so that the pair is bound to this message and no other.
+
+And notice that *d* appears exactly once, multiplied by *r* and buried under a *k*⁻¹ you don't know. That's what makes the equation safe to publish.
 
 Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh every time, `r` and `s` are completely different on every signature — which is what you see when you press *Sign again* below.
 
@@ -68,7 +86,43 @@ But an equation with one unknown can be rearranged. Leave **Q** out, and the rel
 
 where **R** is the point whose x coordinate is `r`. Everything on the right is public: `r` and `s` come with the signature, *z* is the message hash, G is the fixed generator. So the public key falls out directly.
 
-Recovery isn't a feature bolted onto ECDSA. It's the same algebra read in the other direction.
+Recovery isn't a feature bolted onto ECDSA. It's the same algebra read in the other direction — and since the signing equation is written out above, that claim can be checked rather than taken on faith.
+
+??? abstract "The formal version: from the signing equation to Q, in six lines"
+
+    Start from the equation in the previous section, and remember that the
+    public key is **Q = d·G**.
+
+    ```
+    s   =  k⁻¹ ( z + r·d )          the signing equation
+
+    s·k =  z + r·d                  multiply both sides by k
+
+    k   =  s⁻¹ ( z + r·d )          divide by s instead
+
+    R   =  k·G
+        =  s⁻¹ ( z·G + r·d·G )      multiply through by G
+        =  s⁻¹ ( z·G + r·Q )        because d·G is just Q
+
+    s·R =  z·G + r·Q                multiply by s
+
+    r·Q =  s·R − z·G                move z·G across
+
+    Q   =  r⁻¹ ( s·R − z·G )        divide by r
+    ```
+
+    Six steps of ordinary rearrangement, and nothing cleverer than multiplying
+    both sides by the same thing. The only substitution that matters is
+    **d·G = Q** on line four: that's where the private key disappears and the
+    public key takes its place.
+
+    Which is the whole point. The signer's equation and the verifier's are the
+    same statement; the signer knows *d* and *k* and solves for `s`, while
+    everyone else knows `s` and solves for **Q**.
+
+    All of this was checked numerically before publication: both the signing
+    equation and the final rearrangement hold for every random key, nonce and
+    message tried.
 
 ### Which is where `v` comes in
 
