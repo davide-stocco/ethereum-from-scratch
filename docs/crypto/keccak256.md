@@ -7,7 +7,16 @@ description: Keccak-256 is Ethereum's hash function — any input in, 32 bytes o
 
 **Fork-proof.** Ethereum's hash function since genesis, specified as such throughout the Yellow Paper [(Wood, 2014)](#ref-wood-2014). Addresses, the state root, transaction hashes and function selectors all depend on it, so it cannot be changed.
 
-A **hash function** takes any input at all — a word, a book, a transaction, a gigabyte of video — and returns a fixed-size fingerprint. Keccak-256's output is always exactly **32 bytes**, which is [64 hex characters](../foundations/hex-and-bytes.md).
+!!! definition "Keccak-256"
+
+    A **hash function**: it takes any input at all — a word, a book, a
+    transaction, a gigabyte of video — and returns a fixed-size fingerprint.
+    Keccak-256's output is always exactly **32 bytes**, which is
+    [64 hex characters](../foundations/hex-and-bytes.md).
+
+    The same input always gives the same fingerprint. A slightly different
+    input gives an unrecognisably different one. And there is no way to work
+    backwards from a fingerprint to what produced it.
 
 ??? example "Try it: hash anything"
 

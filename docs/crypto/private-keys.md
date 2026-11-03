@@ -9,7 +9,17 @@ description: A private key is just a very large random number. Why that's enough
 
 A private key is **a number**. That's the whole of it.
 
-Not a file, not a password, not a certificate issued by anyone. A randomly chosen integer, 256 bits long — which from [hex and bytes](../foundations/hex-and-bytes.md) you'll recognise as 32 bytes, or 64 hex characters.
+!!! definition "Private key"
+
+    A randomly chosen integer, 256 bits long — which from
+    [hex and bytes](../foundations/hex-and-bytes.md) you'll recognise as 32
+    bytes, or 64 hex characters.
+
+    Whoever knows it can produce [signatures](signatures.md) for the matching
+    [address](addresses.md), and that is the whole of what owning ether
+    consists of.
+
+Not a file, not a password, not a certificate issued by anyone. Nobody assigns it to you and no record exists of it anywhere.
 
 ??? example "Try it: make one"
 

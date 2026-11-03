@@ -9,6 +9,16 @@ description: How a signature proves you hold a private key, and how the sender's
 
 The [private keys](private-keys.md) page described what a signature is *for*: proving you know a secret without revealing it. This page is about how Ethereum actually uses that — and it opens with the fact that surprises nearly everyone.
 
+!!! definition "Signature"
+
+    Three numbers — `v`, `r` and `s` — computed from a message and a
+    [private key](private-keys.md). They prove that the key's holder
+    authorised **that exact message**, while revealing nothing about the key.
+
+    On Ethereum they do one thing more: the signer's
+    [address](addresses.md) can be **recovered** from them. Which is why a
+    transaction never has to state who sent it.
+
 ## A transaction never says who sent it
 
 Transactions get a page of their own later. Only one thing about them matters here.

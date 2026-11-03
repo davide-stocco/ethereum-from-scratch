@@ -649,11 +649,15 @@ than maintaining two versions that drift apart.
    the page can spot it. Hiding a definition behind a click would be
    perverse — it isn't supplementary reading.
 
-   Use it where the prose doesn't already give a crisp statement. *Private
-   keys* opens "a private key is a number, that's the whole of it", which is
-   the definition — a box there would just repeat it. *Wallets* opens by
-   saying what a wallet **isn't**, so the box earns its place. One per page at
-   most, and only when it adds something.
+   **Every content page has exactly one**, near the top, naming the term in
+   the page title. The pattern that avoids redundancy: let the prose keep the
+   memorable framing and give the box the *precise* statement. *Private keys*
+   still opens "a private key is a number, that's the whole of it" — the box
+   then supplies the 256 bits, the 32 bytes, and what the key is actually
+   for. Complementary, not duplicated.
+
+   Where a definition was already sitting in the prose, it moved into the box
+   and the surrounding sentences were rewritten so nothing is said twice.
 
    **So four kinds stay open**, none of them skippable reading *about the
    subject*: the `Stub — not written yet` notice, the `Current as of …`

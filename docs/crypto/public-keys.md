@@ -9,6 +9,15 @@ description: A public key is a point on a curve, computed from a private key by 
 
 A [private key](private-keys.md) is a number you keep. A **public key** is what you get by running that number through a one-way calculation, and it's safe to publish.
 
+!!! definition "Public key"
+
+    A **point on the secp256k1 curve**, computed from a private key by
+    multiplying a fixed, published point by it. Two coordinates, 32 bytes
+    each, so 64 bytes in total.
+
+    Easy to compute from the private key and infeasible to reverse — which
+    is what makes it safe to publish.
+
 The calculation involves an elliptic curve, which sounds forbidding and mostly isn't. You need three things from this page: what a public key *is*, why the step can't be reversed, and which of its several written forms Ethereum actually uses.
 
 ## The curve

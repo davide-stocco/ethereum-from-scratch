@@ -13,7 +13,16 @@ An address is the thing you actually paste into a wallet:
 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 ```
 
-Twenty bytes, written as 40 hex characters, with a `0x` to say that's what they are. This is the last step of the chain and the simplest one: **hash the public key and keep the end of it.**
+!!! definition "Address"
+
+    The **last 20 bytes of the Keccak-256 hash of a public key** — 40 hex
+    characters, conventionally written with `0x` in front.
+
+    It is the identifier everything on Ethereum is recorded against: balances,
+    contract code, storage. Nothing distinguishes an address whose key someone
+    holds from one nobody has ever computed.
+
+Twenty bytes, forty hex characters. This is the last step of the chain and the simplest one: **hash the public key and keep the end of it.**
 
 ## The derivation
 

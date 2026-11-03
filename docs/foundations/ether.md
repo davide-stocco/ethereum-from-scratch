@@ -7,11 +7,18 @@ description: Ether, wei and gwei — what the units are, why Ethereum counts in 
 
 **Fork-proof.** 10<sup>18</sup> wei per ether, fixed since genesis.
 
+!!! definition "Ether · wei"
+
+    **Ether** is Ethereum's native currency, ticker ETH. You need it to pay
+    for anything the network does on your behalf.
+
+    **Wei** is the unit it is counted in — 10<sup>18</sup> wei to one ether.
+    Every amount on Ethereum is a whole number of wei. The protocol has no
+    decimals anywhere.
+
 ## Ethereum is the network. Ether is the currency.
 
-**Ethereum** is the network — the [state machine](what-is-ethereum.md), the computers running it, the rules they follow.
-
-**Ether** is the currency that network uses. Its ticker is ETH.
+**Ethereum** is the network — the [state machine](what-is-ethereum.md), the computers running it, the rules they follow. **Ether** is what moves across it.
 
 So "I sent you 2 Ethereum" is wrong in the same way "I paid you 50 Visa" is wrong. You send *ether*; Ethereum is the thing that moves it.
 

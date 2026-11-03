@@ -15,6 +15,15 @@ Everything on Ethereum is eventually a string of characters like this:
 
 This page is about how to read that. It's short, and it exists so that later pages can say "32 bytes" and have it mean something.
 
+!!! definition "Byte · hexadecimal"
+
+    A **byte** is eight bits — one of 256 possible values, conventionally
+    read as a number from 0 to 255.
+
+    **Hexadecimal**, or hex, is base 16: the digits `0`–`9` plus the letters
+    `a`–`f`. One byte is exactly two hex characters, and that single fact is
+    the only reason anyone writes data this way.
+
 ## A byte is eight bits
 
 A **bit** is a single one or zero. A **byte** is eight of them in a row:
@@ -79,7 +88,7 @@ And the smallest is `00000000`, contributing nothing at all. Zero to 255, with e
 
 ## Hexadecimal
 
-**Hex** is counting in base 16 instead of base 10. It needs sixteen digits, and since we only have ten, the first six letters fill in. The encoding is standardised, as Base16 [(Josefsson, 2006)](#ref-josefsson-2006), though you'll never see it called that outside a specification:
+Base 16 needs sixteen digits, and since we only have ten, the first six letters fill in. The encoding is standardised, as Base16 [(Josefsson, 2006)](#ref-josefsson-2006), though you'll never see it called that outside a specification:
 
 | Hex | Decimal | | Hex | Decimal |
 | --- | --- | --- | --- | --- |

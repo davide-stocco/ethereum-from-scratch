@@ -9,6 +9,15 @@ Ethereum is a **shared computer that nobody owns**.
 
 That sentence is doing a lot of work, so let's take it apart properly. The most useful way to understand Ethereum is not as a currency, or a blockchain, or a network. It's as a **state machine** — and once that clicks, most other things about it stop being surprising.
 
+!!! definition "Ethereum"
+
+    A **state machine** run in step by thousands of computers: a shared
+    record of what every account holds and what every program has stored,
+    plus rules for changing it that are identical everywhere.
+
+    Because those rules are deterministic, anybody can recompute the result
+    and check it. That is why the system needs nobody in charge.
+
 ## A state machine
 
 A state machine is just two things:
