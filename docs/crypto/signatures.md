@@ -281,7 +281,7 @@ Which recasts the whole section. Recovery isn't an alternative to checking a tra
 
     | The question | What it's called |
     | --- | --- |
-    | Has this account already used this transaction number? | the [nonce](../glossary.md#nonce "A per-account counter of transactions already sent") |
+    | Has this account already used this transaction number? | the [account nonce](../accounts/nonce.md "A per-account counter of transactions already sent") |
     | Does this account hold enough ether to pay? | the [balance](../glossary.md#balance "How much ether an account holds, counted in wei") |
     | Is the offered fee acceptable? | [gas](../glossary.md#gas "The unit computational work is measured in") limits and fee parameters |
     | Is this meant for this network? | the [chain id](../glossary.md#chain-id "A number identifying which network a transaction is for") |
@@ -491,8 +491,8 @@ This page doesn't derive any of it. The three properties from the [private keys]
     used, and it holds no ether. So when a node treats that address as the
     sender — as [it must](#a-transaction-never-says-who-sent-it) — it finds an
     account with a nonce of zero and a balance of nothing, and rejects the
-    transaction for the dullest possible reasons: wrong nonce, can't pay the
-    fee.
+    transaction for the dullest possible reasons: the account nonce doesn't
+    match, and there's nothing there to pay the fee with.
 
     The tampering fails, but not because a signature check said "invalid".
     It fails because the altered transaction is now claimed by a stranger who
@@ -503,7 +503,9 @@ This page doesn't derive any of it. The three properties from the [private keys]
 
 A signed transaction is a standing instruction. Unless something stops it, anyone who has seen it can submit it again — and it will still be valid, because it's still correctly signed by you. Two different versions of that problem exist, and each needs its own defence.
 
-**Replayed on the same chain.** Someone rebroadcasts your payment hoping it executes twice. The [nonce](../accounts/nonce.md "A per-account counter of transactions already sent") stops this: it's part of what you signed, and once a nonce has been used the network will never accept it again.
+**Replayed on the same chain.** Someone rebroadcasts your payment hoping it executes twice. The [account nonce](../accounts/nonce.md "A per-account counter of transactions already sent") stops this: it's part of what you signed, and once an account has used a given nonce the network will never accept that number from it again.
+
+Note which nonce that is. *k* must never repeat either, but for an entirely different reason and with an entirely different enforcer: repeating *k* is dangerous because it **leaks your key**, and nothing in the protocol checks for it. Repeating an account nonce is merely futile, because **every node checks it** and rejects the duplicate.
 
 **Replayed on a different chain.** This one is less obvious. Ethereum isn't the only network using secp256k1 and this address format — there are testnets, forks such as Ethereum Classic, and unrelated chains built the same way. **Your key controls the same address on all of them.** So a transaction you signed for one network could be lifted and submitted on another, where it would verify perfectly and move real funds.
 
@@ -511,10 +513,10 @@ The defence is the **chain id**: a number identifying the network, included in w
 
 | Attack | Defence |
 | --- | --- |
-| Rebroadcasting your transaction **on this chain** | the **nonce** — once used, that number is spent forever |
+| Rebroadcasting your transaction **on this chain** | the **account nonce** — once used, that number is spent forever |
 | Replaying it **on another chain** | the **chain id** — the signature is valid on one network only |
 
-Neither covers the other. A nonce means nothing across chains, since the other chain keeps its own count. A chain id does nothing about the same transaction being submitted twice on the network it belongs to.
+Neither covers the other. An account nonce means nothing across chains, since the other chain keeps its own count. A chain id does nothing about the same transaction being submitted twice on the network it belongs to.
 
 ## Malleability, and why `s` has to be small
 
@@ -586,10 +588,10 @@ A private key will sign any bytes you give it, and plenty of uses have nothing t
 - `r` and `s` are the signature; `v` is one bit saying which of two possible public keys to recover.
 - **Verification would have worked too** — but it needs the public key, and Ethereum has no certificates to supply one. Recovery buys the same guarantee for one byte of `v` instead of 64 bytes of public key in every transaction.
 - **Verification is recovery plus a comparison.** Ethereum does the recovery and has nothing to compare against, so a transaction signature is never "verified" in that sense — the sender isn't claimed and then checked, it's *defined* as whoever the signature recovers to. Where something does have an expectation to test, such as a website login, the comparison happens and that is verification.
-- That is **not** the same as nothing being checked. Nonce, balance, gas limit and chain id are all still validated — and most of them need the sender, so recovery is what makes those checks possible rather than a substitute for them.
+- That is **not** the same as nothing being checked. Account nonce, balance, gas limit and chain id are all still validated — and most of them need the sender, so recovery is what makes those checks possible rather than a substitute for them.
 - **The same message signed twice gives different signatures**, both recovering the same address.
 - A tampered message recovers **a different address**, not an error — nothing in a signature says whose it should have been.
-- Replay needs two defences: the **nonce** within a chain, the **chain id** across chains.
+- Replay needs two defences: the **account nonce** within a chain, the **chain id** across chains.
 - `s` is restricted to its lower half, because otherwise one transaction would have two valid hashes.
 
 **Next:** [Wallets and seed phrases](../wallets/seed-phrases.md) — where the keys actually come from.
