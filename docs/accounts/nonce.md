@@ -5,7 +5,7 @@ description: A per-account counter that stops a signed transaction being used tw
 
 # The nonce
 
-**[Won't go out of date](../about/forks.md).** The way the nonce works has never been revised.
+**[Permanent](../about/forks.md).** The way the nonce works has never been revised.
 
 !!! definition "Nonce"
 

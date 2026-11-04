@@ -5,7 +5,7 @@ description: Why there is no password reset, no customer service, and no way bac
 
 # What losing your keys means
 
-**[Won't go out of date](../about/forks.md).** A direct consequence of how [addresses](../crypto/addresses.md) are derived and how [signatures](../crypto/signatures.md) are checked. No upgrade could change it without changing both.
+**[Permanent](../about/forks.md).** A direct consequence of how [addresses](../crypto/addresses.md) are derived and how [signatures](../crypto/signatures.md) are checked. No upgrade could change it without changing both.
 
 !!! definition "Irrecoverable"
 

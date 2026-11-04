@@ -9,7 +9,7 @@ description: Bitcoin capped its supply; Ethereum did not. Both choices have cost
 
     This page is an outline. Delete this box when you fill it in.
 
-**[Won't go out of date](../about/forks.md).** The trade-off is permanent, even though each chain's current issuance is not.
+**[Permanent](../about/forks.md).** The trade-off is permanent, even though each chain's current issuance is not.
 
 Bitcoin capped its supply at 21 million. Ethereum has no cap. This is the single clearest design disagreement between the two, and it follows directly from the previous two pages: if [security must be paid for](security-budget.md) and [the money comes from issuance or fees](who-pays.md), then capping supply means eventually paying for security out of fees alone.
 

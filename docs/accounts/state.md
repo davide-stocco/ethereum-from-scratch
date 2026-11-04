@@ -5,7 +5,7 @@ description: The state is every account and what it holds — kept by each node,
 
 # State
 
-**[Mostly won't go out of date](../about/forks.md).** That the state is a mapping from addresses to accounts, and that each block commits to it with a single root, has held since 2015. The *structure* producing that root is the part under active replacement.
+**[Permanent, except one part](../about/forks.md).** That the state is a mapping from addresses to accounts, and that each block commits to it with a single root, has held since 2015. The *structure* producing that root is the part under active replacement.
 
 !!! info "Current as of Fusaka (December 2025)"
 

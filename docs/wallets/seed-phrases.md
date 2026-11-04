@@ -5,7 +5,7 @@ description: What a wallet actually holds, and how twelve ordinary words can sta
 
 # Wallets and seed phrases
 
-**[Won't go out of date](../about/forks.md).** None of this is part of Ethereum. These are conventions built on top, and they haven't changed since they were written.
+**[Permanent in practice](../about/forks.md).** None of this is part of Ethereum — these are conventions built on top of it. Nothing *binds* anyone to them, so they aren't permanent the way a protocol rule is. They have also gone unchanged since they were written, and every wallet now depends on them.
 
 The [cryptography](../crypto/private-keys.md) section ended with a loose thread. A [private key](../crypto/private-keys.md) is one number and gives [exactly one address](../crypto/addresses.md) — yet every wallet you've used shows a list of addresses, and offers to restore all of them from twelve words.
 

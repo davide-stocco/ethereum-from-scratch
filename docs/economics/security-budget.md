@@ -9,7 +9,7 @@ description: Why a blockchain has to pay someone, continuously, to order its tra
 
     This page is an outline. Delete this box when you fill it in.
 
-**[Won't go out of date](../about/forks.md).** The requirement is structural: it follows from the design, not from any particular fork's rules.
+**[Permanent](../about/forks.md).** The requirement is structural: it follows from the design, not from any particular fork's rules.
 
 This is the **root** of the Economics section. Everything else here depends on it, so it's worth getting exactly right.
 

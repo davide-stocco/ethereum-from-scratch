@@ -5,7 +5,7 @@ description: An address is the last 20 bytes of the Keccak-256 hash of a public 
 
 # Addresses
 
-**[Won't go out of date](../about/forks.md).** Address derivation and EIP-55 checksums have never changed.
+**[Permanent](../about/forks.md).** Address derivation and EIP-55 checksums have never changed.
 
 An address is the thing you actually paste into a wallet:
 

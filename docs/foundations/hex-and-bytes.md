@@ -5,7 +5,7 @@ description: Bytes, hexadecimal and the 0x prefix — how to read the long strin
 
 # Hex and bytes
 
-**[Won't go out of date](../about/forks.md).** This isn't an Ethereum rule at all — it's how computers represent data.
+**[Permanent](../about/forks.md).** This isn't an Ethereum rule at all — it's how computers represent data.
 
 Everything on Ethereum is eventually a string of characters like this:
 

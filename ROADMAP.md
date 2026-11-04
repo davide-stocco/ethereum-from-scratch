@@ -673,12 +673,30 @@ than maintaining two versions that drift apart.
    what keeps it meaningful; anything merely surprising or easy to get wrong
    is a `warning`, and may be collapsed.
 
-4. **In-text citations, author–date style**, linking to the reference:
+4. **An opening durability label**, the first line of every content page,
+   bolded and linking to `about/forks.md`:
+
+   - `**[Permanent](../about/forks.md).**` — nothing here can go stale.
+   - `**[Permanent, except one part](../about/forks.md).**` — then the
+     sentence after it names *which* part. Never "mostly": a hedge tells the
+     reader something is unreliable without telling them what.
+   - `**[Permanent in practice](../about/forks.md).**` — used once, on *seed
+     phrases*, where the material is convention rather than protocol. Nothing
+     binds anyone to BIP-39, so the stronger claim would be false.
+
+   This replaced `**Fork-proof.**`, which was internal vocabulary appearing on
+   the site's second content page and explained nowhere — not on the homepage,
+   not in the glossary. **The standing lesson: terminology invented for
+   maintenance must not reach the reader.** `Tier 2`, `Tier 3` and
+   `fork-proof` all leaked before anyone noticed, so grep for them before
+   publishing.
+
+5. **In-text citations, author–date style**, linking to the reference:
    `[Wood (2014)](#ref-wood-2014)` when the author is the subject of the
    sentence, `[(Nakamoto, 2008)](#ref-nakamoto-2008)` when it's parenthetical.
    This replaced footnotes — it shows the reader where a claim comes from at
    the point they read it, rather than making them chase a number.
-5. **A `## References` section** at the end, wrapped in
+6. **A `## References` section** at the end, wrapped in
    `<div class="sources" markdown>`, **alphabetical by author surname**.
    Each entry carries an explicit anchor so citations can link to it:
    `- <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Title.* Venue. URL`

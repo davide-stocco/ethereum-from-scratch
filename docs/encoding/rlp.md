@@ -8,7 +8,7 @@ tier: 1
 
     This page is an outline. Delete this box when you fill it in.
 
-**[Won't go out of date](../about/forks.md).** Recursive Length Prefix has not been revised since Ethereum launched in 2015.
+**[Permanent](../about/forks.md).** Recursive Length Prefix has not been revised since Ethereum launched in 2015.
 
 ## Questions this page should answer
 
