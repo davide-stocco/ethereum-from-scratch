@@ -240,8 +240,11 @@
    Size carries the rank, not capitals: small caps shout, and these labels are
    read far more often than they are clicked. */
 
-/* Rank 1 — the part: "Who you are" */
-.md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__link {
+/* Rank 1 — anything at the top of the menu. Mostly the five parts, but also
+   the standalone pages up there: Home and Glossary. Keyed on being top-level
+   rather than on being a section, or those two render at page size among the
+   part labels and look like orphans. */
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link {
   font-weight: 700;
   font-size: 0.84rem;
   line-height: 1.45;
