@@ -18,6 +18,8 @@ That makes for a narrower site than it could be. It's also the part worth learni
 
 The main text of every page is written to be read start to finish with no prior knowledge, and it stands on its own.
 
+**Every page opens by saying whether it can go out of date.** Ethereum is upgraded every so often, and some of what's true today won't be in five years. So each page states up front whether what follows is settled for good or has parts that move — and that line links to [the full explanation](about/forks.md) of how this site handles it. If a page says it won't go out of date, you can trust it without checking the date on anything.
+
 Some pages also carry **collapsible boxes**, closed by default, in two kinds:
 
 - **The formal version** — the precise, specification-level statement of what the page just explained in plain language. Exact notation, exact field widths, edge cases.

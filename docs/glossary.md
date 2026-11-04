@@ -80,6 +80,9 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 ## G
 
+**Genesis**{ #genesis }
+: The very first block, and the starting state it defined — Ethereum's launch in July 2015. "Since genesis" is the usual way of saying "for the whole life of the network"; this site generally says the plainer thing instead.
+
 **Gas**{ #gas }
 : The unit measuring computational work. Not money — gas is the *amount* of work, and the fee is what that work costs. Exists so that computation is paid for and so no contract can run forever.
 

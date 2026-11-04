@@ -9,7 +9,7 @@ description: A blockchain can fund itself by issuing new currency or by charging
 
     This page is an outline. Delete this box when you fill it in.
 
-**Fork-proof.** There are only two sources of revenue, and that's arithmetic rather than protocol rules.
+**[Won't go out of date](../about/forks.md).** There are only two sources of revenue, and that's arithmetic rather than protocol rules.
 
 Given that [security has to be paid for](security-budget.md), the next question is who pays. There are exactly two possibilities.
 

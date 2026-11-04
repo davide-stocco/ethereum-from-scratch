@@ -9,7 +9,7 @@ description: What a smart contract actually is — code stored at an account, ru
 
     This page is an outline. Delete this box when you fill it in.
 
-**Fork-proof.** What a contract *is* follows from [accounts](../accounts/accounts.md) and hasn't changed since genesis. What it *costs* to run, and which operations exist, are fork-dependent and belong to later pages.
+**[Won't go out of date](../about/forks.md).** What a contract *is* follows from [accounts](../accounts/accounts.md) and hasn't changed since genesis. What it *costs* to run, and which operations exist, are fork-dependent and belong to later pages.
 
 ## Questions this page should answer
 

@@ -5,7 +5,7 @@ description: An account is an entry in Ethereum's state with four fields. There 
 
 # Accounts
 
-**Fork-proof in its essentials.** The four fields have been the same since genesis. The clean split between the two *kinds* of account is the part that has started to soften.
+**[Mostly won't go out of date](../about/forks.md).** The four fields have been the same since Ethereum launched in 2015. The clean split between the two *kinds* of account is the part that has started to soften.
 
 !!! info "Current as of Fusaka (December 2025)"
 

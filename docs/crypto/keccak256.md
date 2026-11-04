@@ -5,7 +5,7 @@ description: Keccak-256 is Ethereum's hash function — any input in, 32 bytes o
 
 # Keccak-256
 
-**Fork-proof.** Ethereum's hash function since genesis, specified as such throughout the Yellow Paper [(Wood, 2014)](#ref-wood-2014). Addresses, the state root, transaction hashes and function selectors all depend on it, so it cannot be changed.
+**[Won't go out of date](../about/forks.md).** Ethereum's hash function since it launched in 2015, specified as such throughout the Yellow Paper [(Wood, 2014)](#ref-wood-2014). Addresses, the state root, transaction hashes and function selectors all depend on it, so it cannot be changed.
 
 !!! definition "Keccak-256"
 

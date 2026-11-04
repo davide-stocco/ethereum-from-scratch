@@ -5,7 +5,7 @@ description: The state is every account and what it holds — kept by each node,
 
 # State
 
-**Fork-proof in substance.** That the state is a mapping from addresses to accounts, and that each block commits to it with a single root, has held since genesis. The *structure* producing that root is the part under active replacement.
+**[Mostly won't go out of date](../about/forks.md).** That the state is a mapping from addresses to accounts, and that each block commits to it with a single root, has held since 2015. The *structure* producing that root is the part under active replacement.
 
 !!! info "Current as of Fusaka (December 2025)"
 
@@ -100,7 +100,7 @@ Match, and it has independently confirmed its state is identical to the proposer
 
 Mismatch, and it rejects the block. And notice the mismatch is unambiguous rather than merely worrying: because the node verified its own starting point one block ago, the fault cannot be in where it began. It is in the block.
 
-This is an induction running from genesis — *my state was right then, I applied the same instructions everybody else did, so my state is right now* — and it's why a node needs no copy of anybody else's state, ever.
+This is an induction running back to the very first block — *my state was right then, I applied the same instructions everybody else did, so my state is right now* — and it's why a node needs no copy of anybody else's state, ever.
 
 ??? example "What this stops, concretely"
 

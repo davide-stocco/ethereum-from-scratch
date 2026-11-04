@@ -9,7 +9,7 @@ description: Bitcoin capped its supply; Ethereum did not. Both choices have cost
 
     This page is an outline. Delete this box when you fill it in.
 
-**Fork-proof.** The trade-off is permanent, even though each chain's current issuance is not.
+**[Won't go out of date](../about/forks.md).** The trade-off is permanent, even though each chain's current issuance is not.
 
 Bitcoin capped its supply at 21 million. Ethereum has no cap. This is the single clearest design disagreement between the two, and it follows directly from the previous two pages: if [security must be paid for](security-budget.md) and [the money comes from issuance or fees](who-pays.md), then capping supply means eventually paying for security out of fees alone.
 
@@ -46,4 +46,4 @@ Verify before citing.
 - Budish, E. (2018). *The Economic Limits of Bitcoin and the Blockchain.* NBER working paper 24717. Relevant to whether fee-funded security scales.
 - The monetary-policy-rules literature on rules versus discretion is the natural comparison. Pick whichever treatment you know best — this is your field, not mine.
 
-**Next:** the Tier 3 pages — Ethereum's actual issuance and the fee burn — once the protocol pages they depend on exist.
+**Next:** [Gas costs](../reference/gas-costs.md) — where this site keeps every number that a future upgrade could change, including the ones this section's arguments deliberately avoided.

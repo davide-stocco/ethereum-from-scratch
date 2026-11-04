@@ -5,7 +5,7 @@ description: Ether, wei and gwei — what the units are, why Ethereum counts in 
 
 # Ether, wei and gwei
 
-**Fork-proof.** 10<sup>18</sup> wei per ether, fixed since genesis.
+**[Won't go out of date](../about/forks.md).** There have been 10<sup>18</sup> wei to one ether since Ethereum launched in 2015, and changing it now would break every wallet and contract in existence.
 
 !!! definition "Ether · wei"
 

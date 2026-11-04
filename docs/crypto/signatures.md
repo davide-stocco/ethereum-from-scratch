@@ -5,7 +5,7 @@ description: How a signature proves you hold a private key, and how the sender's
 
 # Signatures
 
-**Fork-proof.** ECDSA over secp256k1, unchanged since genesis.
+**[Won't go out of date](../about/forks.md).** ECDSA over secp256k1, unchanged since Ethereum launched in 2015.
 
 The [private keys](private-keys.md) page described what a signature is *for*: proving you know a secret without revealing it. This page is about how Ethereum actually uses that — and it opens with the fact that surprises nearly everyone.
 

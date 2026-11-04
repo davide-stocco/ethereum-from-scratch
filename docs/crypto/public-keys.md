@@ -5,7 +5,7 @@ description: A public key is a point on a curve, computed from a private key by 
 
 # Public keys
 
-**Fork-proof.** secp256k1 has been Ethereum's curve since genesis.
+**[Won't go out of date](../about/forks.md).** secp256k1 has been Ethereum's curve since it launched in 2015.
 
 A [private key](private-keys.md) is a number you keep. A **public key** is what you get by running that number through a one-way calculation, and it's safe to publish.
 

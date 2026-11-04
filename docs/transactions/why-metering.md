@@ -9,7 +9,7 @@ description: Why a network that runs other people's code has to charge for every
 
     This page is an outline. Delete this box when you fill it in.
 
-**Fork-proof.** The requirement follows from running untrusted code on a shared machine. Only the prices change.
+**[Won't go out of date](../about/forks.md).** The requirement follows from running untrusted code on a shared machine. Only the prices change.
 
 This is the **problem** page. [Gas](gas.md) is the mechanism that answers it, and gas *costs* change at forks — the argument here does not.
 

@@ -5,7 +5,7 @@ description: Accounts persist where coins are consumed — which is what makes p
 
 # Why accounts, and what they cost
 
-**Fork-proof.** The choice was made before genesis and has never been revisited. The *responses* to its costs are live engineering, and belong to [fork-dependent details](../reference/gas-costs.md).
+**[Won't go out of date](../about/forks.md).** Accounts were chosen before Ethereum launched in 2015 and the decision has never been reopened, so the costs described below are permanent ones. Work on *reducing* those costs is still going on, which is why the last section describes general approaches rather than naming particular proposals.
 
 !!! definition "The account model"
 

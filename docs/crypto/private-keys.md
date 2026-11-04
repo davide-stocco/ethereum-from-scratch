@@ -5,7 +5,7 @@ description: A private key is just a very large random number. Why that's enough
 
 # Private keys
 
-**Fork-proof.** 256-bit keys on the secp256k1 curve, unchanged since genesis.
+**[Won't go out of date](../about/forks.md).** 256-bit keys on the secp256k1 curve, unchanged since Ethereum launched in 2015.
 
 A private key is **a number**. That's the whole of it.
 
