@@ -55,7 +55,7 @@ The nonce closes it completely. Your transaction says `nonce: 3`, and the moment
 
 ### Why Bitcoin needs no such thing
 
-Because of the difference the [coins-versus-balances diagram](../foundations/what-is-ethereum.md) draws.
+Because of the difference set out on [What is Ethereum?](../foundations/what-is-ethereum.md) — Bitcoin records individual coins, Ethereum records balances.
 
 A Bitcoin transaction names the specific coins it spends. Submit it twice and the second attempt isn't rejected by a rule — it's **meaningless**, because the coins it names no longer exist. The protection is a property of the thing being spent.
 
