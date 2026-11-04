@@ -29,7 +29,7 @@ A transaction is a short list of fields — how much, to whom, what data, how mu
 
 Instead, the sender's address is **recovered** from the signature. Given the signed message and those three numbers, anyone can compute the public key that must have produced them — and from that, [the address](addresses.md).
 
-This isn't optional or occasional. When a node receives a transaction it has to establish who sent it before it can do anything at all: whose balance to check, whose [nonce](../accounts/nonce.md "A per-account counter of transactions already sent") to compare against, whose account to take the fee from. Recovery is how it finds out, so every node runs it on every transaction it ever sees. The Yellow Paper defines the function for exactly this purpose [(Wood, 2014)](#ref-wood-2014).
+This isn't optional or occasional. When a node receives a transaction it has to establish who sent it before it can do anything at all: whose balance to check, whose [account nonce](../accounts/nonce.md "A per-account counter of transactions already sent") to compare against, whose account to take the fee from. Recovery is how it finds out, so every node runs it on every transaction it ever sees. The Yellow Paper defines the function for exactly this purpose [(Wood, 2014)](#ref-wood-2014).
 
 So the signature doesn't *accompany* a claim of identity. The signature **is** the claim.
 
@@ -39,7 +39,7 @@ Which is rather elegant once it lands. A forged "from" field would be worthless,
 
 Not the transaction — the **hash** of the transaction, via [Keccak-256](keccak256.md).
 
-That has a useful consequence. Since the hash covers every field, changing any single byte of the transaction changes the hash, and a signature over the old hash recovers to a different address. So the signature protects **all** of it at once: the amount, the recipient, the fee, the nonce. There's no need to sign each field separately, and no way to alter one in transit.
+That has a useful consequence. Since the hash covers every field, changing any single byte of the transaction changes the hash, and a signature over the old hash recovers to a different address. So the signature protects **all** of it at once: the amount, the recipient, the fee, the account nonce. There's no need to sign each field separately, and no way to alter one in transit.
 
 ## How a signature is made
 
