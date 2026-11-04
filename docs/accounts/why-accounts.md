@@ -196,7 +196,7 @@ Which is a reasonable thing to know about any system you rely on: not whether it
 - Responses divide into **rent, expiry and statelessness.** None has shipped. The problem is permanent; the solutions are plans.
 - It was a **judgement call**, argued at the time with UTXO's advantages acknowledged, and its largest cost unforeseen.
 
-**Next:** [RLP encoding](../encoding/rlp.md) — how Ethereum writes structured data down, including everything this section has described.
+**Next:** [What a smart contract is](../contracts/smart-contracts.md) — the thing persistence made possible, which this page has been arguing towards without ever saying what one is.
 
 ---
 
