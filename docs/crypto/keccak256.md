@@ -114,6 +114,53 @@ Which means infinitely many inputs share any given hash. That sounds alarming un
     same distinction appears everywhere in this subject: not *cannot*, but
     *costs more than any conceivable benefit*.
 
+## How it works: the sponge
+
+The page so far has treated the function as a box you drop bytes into. The inside is worth a look, because Keccak's shape is unusual and it's what the next section's one-byte difference actually modifies.
+
+The design is called a **sponge** [(Bertoni et al., 2011)](#ref-bertoni-2011), for the obvious reason: it absorbs, then it squeezes.
+
+<svg viewBox="0 0 470 268" role="img" aria-label="The sponge. A state of 1600 bits is split into a rate of 136 bytes and a capacity of 64 bytes. Message blocks are exclusive-ored into the rate only; the capacity is never touched by the input directly. Between blocks the permutation mixes all 1600 bits, and the hash is read from the rate at the end." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="46" y="14" width="76" height="26" rx="3"/><rect x="150" y="14" width="76" height="26" rx="3"/><rect x="254" y="14" width="76" height="26" rx="3"/><path d="M84 40 L84 84"/><path d="M188 40 L188 84"/><path d="M292 40 L292 84"/><rect x="40" y="90" width="340" height="58" rx="4"/><rect x="40" y="148" width="340" height="40" rx="4" stroke-dasharray="4 3"/><path d="M380 118 L414 118"/></g><g fill="currentColor" stroke="none"><path d="M79 84 L84 94 L89 84 Z"/><path d="M183 84 L188 94 L193 84 Z"/><path d="M287 84 L292 94 L297 84 Z"/><path d="M414 113 L424 118 L414 123 Z"/><text x="84" y="31" font-size="10" text-anchor="middle">block 1</text><text x="188" y="31" font-size="10" text-anchor="middle">block 2</text><text x="292" y="31" font-size="10" text-anchor="middle">block 3</text><text x="336" y="31" font-size="10" opacity="0.75">&#8230;</text><text x="46" y="60" font-size="9" opacity="0.75">136 bytes each, XORed in</text><text x="52" y="114" font-size="11" font-weight="700">RATE &#183; 136 bytes</text><text x="52" y="134" font-size="10" opacity="0.8">your input goes in here, and the hash comes out here</text><text x="52" y="168" font-size="11" font-weight="700">CAPACITY &#183; 64 bytes</text><text x="52" y="182" font-size="10" opacity="0.8">your input never touches this part</text><text x="398" y="140" font-size="9" text-anchor="middle">32 bytes</text><text x="40" y="214" font-size="10" opacity="0.85">Between blocks, the permutation stirs all 1600 bits together &#8212; so the</text><text x="40" y="228" font-size="10" opacity="0.85">capacity does change, but only in ways nobody can aim.</text><text x="40" y="252" font-size="10" opacity="0.6">1600 bits of state &#183; 1088 rate + 512 capacity &#183; 24 rounds per block</text></g></svg>
+
+**There is a state of 1600 bits**, starting at all zeros. That's the whole memory of the function — no matter how much data you hash, this is all it ever holds.
+
+The state is split in two, and the split is the entire security story:
+
+- the **rate**, 1088 bits or 136 bytes, which your input is allowed to touch
+- the **capacity**, 512 bits, which it is **not**
+
+Hashing then goes:
+
+1. **Pad** the message so its length is a multiple of 136 bytes.
+2. **Absorb.** Take the first 136-byte block and XOR it into the rate. Leave the capacity alone.
+3. **Permute.** Run the whole 1600 bits through a fixed scrambling function, 24 rounds of it. This mixes rate into capacity and back.
+4. Repeat 2 and 3 for every remaining block.
+5. **Squeeze.** Read the first 256 bits of the state. That's your hash.
+
+### Why the capacity is the point
+
+An attacker trying to steer the output controls the input — and therefore controls what gets XORed into the rate, exactly. If that were the whole state, they would have complete knowledge of it at every step, and the function would be a calculation they could run backwards.
+
+The capacity denies them that. **512 bits of the state are never written by the message directly.** They change, constantly, but only as the permutation drags them around, and nobody can aim that. So each block arrives into a state the attacker only partly determines, and the uncertainty compounds with every block absorbed.
+
+That's also why the number is 512 rather than something smaller: it's sized so the capacity is never the weakest link. With a 256-bit output, the binding limit is the birthday bound on the output itself — the 2<sup>128</sup> of the collisions box above — not anything about the internal state.
+
+??? abstract "The permutation, in one paragraph"
+
+    Each of the 24 rounds applies five steps, traditionally named with Greek
+    letters: **θ** mixes each bit with the parity of two nearby columns, **ρ**
+    rotates each of the 25 lanes by a different fixed amount, **π** moves the
+    lanes around, **χ** is the only non-linear step and the one that makes the
+    whole thing irreversible in practice, and **ι** XORs in a round constant so
+    that the rounds aren't identical to each other.
+
+    You don't need the detail to use the function, and this site's
+    implementation doesn't need you to trust it — the rotation amounts and
+    round constants are **computed from the specification's own formulas**
+    rather than copied from a table, then checked against the published test
+    values. A transcription error in a table of 24 constants would be invisible
+    on inspection and fatal in use.
+
 ## Keccak-256 is not SHA-3
 
 This causes real confusion and real bugs, so it's worth being precise.
