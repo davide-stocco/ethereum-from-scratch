@@ -55,19 +55,61 @@ They could exchange their copies and compare. That would work and is completely 
 
 ## The state root
 
-So they do the other thing. Each block header carries a single 32-byte value — the **state root** — which is a fingerprint of the entire state after that block's transactions have been applied [(Wood, 2014)](#ref-wood-2014).
+So they do the other thing. Each block header carries a single 32-byte value — the **state root** — which the proposer says is the fingerprint of the whole state after that block's transactions have been applied [(Wood, 2014)](#ref-wood-2014).
+
+Note *says*. The root is a **claim**, not a fact. Whoever built the block ran the transactions on their own copy, fingerprinted the result, and wrote the number down. Nothing about it is self-evidently true, and the entire mechanism is that it's a claim anybody can test.
 
 <svg viewBox="0 0 470 280" role="img" aria-label="A small block header box contains a 32-byte state root. An arrow leads from it to a large box representing the whole state, holding hundreds of millions of accounts. The 32 bytes commit to all of it, so changing any single value anywhere changes the root." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="10" y="26" width="164" height="96" rx="5"/><rect x="22" y="72" width="140" height="38" rx="4" opacity="0.6"/><rect x="258" y="26" width="202" height="190" rx="5" stroke-dasharray="5 4"/><rect x="272" y="62" width="174" height="26" rx="3"/><rect x="272" y="94" width="174" height="26" rx="3"/><rect x="272" y="126" width="174" height="26" rx="3"/><path d="M174 91 L248 91"/></g><g fill="currentColor" stroke="none"><path d="M248 86 L258 91 L248 96 Z"/><text x="22" y="48" font-size="11" font-weight="700">block header</text><text x="22" y="64" font-size="9" opacity="0.75">a few hundred bytes</text><text x="32" y="90" font-size="11">stateRoot</text><text x="32" y="104" font-size="9" opacity="0.8">32 bytes</text><text x="270" y="48" font-size="11" font-weight="700">the state</text><text x="356" y="48" font-size="9" opacity="0.75">hundreds of gigabytes</text><text x="282" y="79" font-size="10">one account&#8217;s four fields</text><text x="282" y="111" font-size="10">another account</text><text x="282" y="143" font-size="10">another account</text><text x="282" y="172" font-size="10" opacity="0.7">&#8230; hundreds of millions more</text><text x="272" y="200" font-size="9" opacity="0.75">none of this is in the block</text><text x="10" y="244" font-size="10" opacity="0.85">Change one wei in one account and the root changes completely. So two</text><text x="10" y="258" font-size="10" opacity="0.85">nodes agreeing on 32 bytes agree on every balance, every nonce, and</text><text x="10" y="272" font-size="10" opacity="0.85">every byte of every contract&#8217;s storage.</text></g></svg>
 
-That last sentence is the whole trick, and it's worth saying twice. **Two nodes that agree on 32 bytes agree on everything.** Comparing state becomes comparing one short number, because the fingerprint depends on every byte beneath it — alter a single wei in a single account and the root is unrecognisable, exactly as the [Keccak-256](../crypto/keccak256.md) page described.
+### Why a matching root means matching state
 
-So a node's procedure on receiving a block is:
+Two steps, and they differ in kind.
+
+**Different data gives a different root.** That's the [Keccak-256](../crypto/keccak256.md) property: change one wei in one account and the output is unrecognisable. So if your copy of the state and mine differed in any respect at all, our roots would differ.
+
+**Running that backwards gives the useful direction.** Our roots are identical, *therefore* our states are identical — because if they weren't, the roots couldn't be.
+
+That reversal isn't quite airtight, and it's worth being exact about why. Two different states yielding the same root is a **collision**, and the reason to discount it isn't logic, it's that nobody can find one — the 2<sup>128</sup> of the collisions box on the Keccak page. So the guarantee is **computational, not mathematical**, which is the same strength of claim everything else here rests on.
+
+### What a node actually does
+
+The step that makes this work is easy to miss: **the node isn't starting from nowhere.** Before this block arrived, it had already checked its state against the *previous* block's root. So it knows its starting point matches everybody else's.
+
+Which means it holds all three inputs:
+
+- the **same starting state**, already verified
+- the **same transactions**, which came in the block
+- the **same rules**, which are the protocol
+
+Three identical inputs to a deterministic function must produce one identical output. So the node doesn't merely compare roots — **it knows in advance what the root has to be.** Then:
 
 1. Apply the block's transactions to its own copy of the state.
 2. Compute the root of the result.
-3. Compare with the root in the block's header.
+3. Compare with the root the header claims.
 
-Match, and it has independently confirmed that its state is identical to the proposer's — every account, without having seen any of theirs. Mismatch, and it rejects the block. **It never has to trust the state it was handed, because it never was handed any.**
+Match, and it has independently confirmed its state is identical to the proposer's — every account, without having seen any of theirs. **It never has to trust the state it was handed, because it never was handed any.**
+
+Mismatch, and it rejects the block. And notice the mismatch is unambiguous rather than merely worrying: because the node verified its own starting point one block ago, the fault cannot be in where it began. It is in the block.
+
+This is an induction running from genesis — *my state was right then, I applied the same instructions everybody else did, so my state is right now* — and it's why a node needs no copy of anybody else's state, ever.
+
+??? example "What this stops, concretely"
+
+    Suppose a proposer wants to credit itself an extra 1,000 ether.
+
+    Building that state is easy, and fingerprinting it honestly is easy. The
+    problem is the number it must then publish: it disagrees with the root
+    every honest node computes from the same transactions, so every one of
+    them rejects the block.
+
+    And there is no number it could write instead, because **the correct root
+    is fixed by things everybody already has** — the previous state and the
+    transactions in the block. The proposer isn't being asked for information
+    nobody else can obtain. It's being asked to state a value that others will
+    independently derive, which leaves it nowhere to put a lie.
+
+    Which is the asymmetry the whole design turns on. Producing the state is
+    expensive; checking the claim about it costs a 32-byte comparison.
 
 ??? abstract "Why a plain hash of the whole state wouldn't do"
 
@@ -178,7 +220,8 @@ So the state rises monotonically, every node stores all of it, and the requireme
 
 - The state is a **mapping from every address to its four fields** — a snapshot of the present, containing no history.
 - **Blocks don't contain the state.** They contain transactions; each node applies them to its own copy.
-- Each block header carries a **state root**: 32 bytes fingerprinting the whole state. **Two nodes agreeing on it agree on everything.**
+- Each block header carries a **state root**: 32 bytes the proposer *claims* fingerprint the whole state. **Two nodes agreeing on it agree on everything** — a computational guarantee, since the alternative is finding a hash collision.
+- A node already verified its state against the **previous** block's root, so it has the same starting state, the same transactions and the same rules — and therefore knows what the new root must be before it looks.
 - A node applies a block, computes the root, and compares. So it verifies the state **without ever being sent any**.
 - A plain hash wouldn't work: the root must be cheap to update and must support proofs about parts. Both need a tree — the [Merkle Patricia Trie](../encoding/merkle-patricia-trie.md).
 - **Storage nests the same idea**: each contract's slots have their own root, which sits in its account entry.
