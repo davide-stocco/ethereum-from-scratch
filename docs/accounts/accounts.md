@@ -56,6 +56,52 @@ So the two kinds differ in **where the controller lives**, not where the account
     unexplained. This site uses it where precision matters and "wallet" where
     it doesn't.
 
+## Where each thing lives
+
+The previous few pages built up a chain of objects — seed phrase, private key, address — and this page adds a fourth. They are easy to run together, so here is the whole picture at once, with the one thing that matters marked: **the line down the middle.**
+
+```
+  YOUR DEVICE                    EVERY NODE
+  ───────────                    ──────────
+  seed phrase
+      ↓  derives
+  private key
+      ↓  derives, one way
+  address  ········ looks up ········▶  account
+                                          nonce
+                                          balance
+                                          storageRoot
+                                          codeHash
+```
+
+Everything on the left is yours and private. Everything on the right is public and held by thousands of machines. **The address is the only thing that appears on both sides**, and it carries no secret — which is the entire reason it can be handed out.
+
+Three consequences, each of which surprises somebody:
+
+- **The account is not in your wallet.** It never was. Your wallet holds keys; the account is an entry in the state that every node stores. So when your wallet shows you a balance, it has asked a node and is displaying the answer — it owns none of that information.
+- **Deleting your wallet changes no balance.** The account is untouched, because it was never there. What you lose is the key, and with it the ability to authorise anything — which is the whole of the [previous page](../wallets/losing-your-keys.md).
+- **Neither side determines the other's contents.** An address tells you nothing about a balance, and an account holds no trace of the key that controls it. The arrow is a *lookup*, not a calculation.
+
+And the pairing isn't as neat as it looks, in both directions:
+
+| | Happens when |
+| --- | --- |
+| A key with **no account** | the key is fresh and its address has never been used, so nothing is recorded |
+| An account with **no key** | every contract account — plus any address somebody sent ether to in error |
+
+??? note "A wallet usually doesn't store your keys either"
+
+    One more refinement, since it changes what a backup is.
+
+    It's natural to picture a wallet as a folder of private keys. Most modern
+    wallets hold **one seed** and re-derive the keys whenever they're needed,
+    exactly as the [seed phrases](../wallets/seed-phrases.md) page described.
+    The keys are a *product*, not a stored collection.
+
+    Which is why twelve words restore everything, and why "back up your keys"
+    is the wrong instruction — there is usually only one thing to back up, and
+    it sits upstream of all of them.
+
 ## What an account actually looks like
 
 Easiest to start with one in front of you. Take the address `0x7E5F…95Bdf` — the one the [addresses](../crypto/addresses.md) page derived from the private key `1`, picked there because it's the simplest number a key can be and makes every step checkable by hand. Ask a node what that address holds — the lookup itself is explained [further down](#how-an-address-finds-an-account):
@@ -372,6 +418,7 @@ So the protection has to be supplied separately, and it's supplied as a counter.
 
 ## Recap
 
+- **The account is not in your wallet.** Your wallet holds keys; the account is held by every node. The address is the only thing on both sides of that line, and it carries no secret.
 - An account is an **entry in the state**, looked up by address, with exactly four fields: **nonce, balance, storageRoot, codeHash.** The address isn't one of them.
 - The lookup key is **`keccak256(address)`**, not the address — so nobody can choose where their account sits, which stops an attacker dusting a million chosen addresses to force one deep, slow branch.
 - **EOA** means *externally owned* — what controls it sits outside Ethereum, namely a person with a key. A contract's controller is code on the chain.
