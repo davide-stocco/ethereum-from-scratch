@@ -93,58 +93,69 @@ markdown_extensions:
 nav:
   - Home: index.md
 
-  # ---- The five reading parts ------------------------------------------
-  # Each section label is the QUESTION that part answers, because that's what
-  # a reader can hold in their head. The searchable words — Keccak, nonce,
-  # gas — are the page titles directly underneath, which is where someone
-  # arriving from a search engine lands anyway.
+  # ---- The five reading parts, each holding its topic sections ----------
+  # Two levels on purpose. The PART labels are the question that part answers,
+  # which in order read as a sentence summarising the site. The TOPIC labels
+  # inside are what the material is called everywhere else — Cryptography,
+  # Encoding — so a reader scanning for a subject still finds the word they
+  # came looking for.
   #
-  # This collapsed a level rather than adding one. There used to be nine
-  # sections; the parts replace them, so the sidebar got shorter. Directory
-  # names are untouched, so no URL moved.
+  # Parts with a single topic (What it is, Why anyone bothers) list their
+  # pages directly rather than carrying a one-child subsection, which would
+  # be a level of nesting earning nothing.
+  #
+  # Directory names are untouched throughout, so no URL moves.
 
   - What it is:
       - What is Ethereum?: foundations/what-is-ethereum.md
       - Ether, wei and gwei: foundations/ether.md
       - Hex and bytes: foundations/hex-and-bytes.md
 
-  # Cryptography and wallets are one part: the maths that proves who you are,
-  # then the conventions built on top of it that Ethereum has never heard of.
   - Who you are:
-      - Keccak-256: crypto/keccak256.md
-      - Private keys: crypto/private-keys.md
-      - Public keys: crypto/public-keys.md
-      - Addresses: crypto/addresses.md
-      - Signatures: crypto/signatures.md
-      - Wallets and seed phrases: wallets/seed-phrases.md
-      - What losing your keys means: wallets/losing-your-keys.md
+      - Cryptography:
+          - Keccak-256: crypto/keccak256.md
+          - Private keys: crypto/private-keys.md
+          - Public keys: crypto/public-keys.md
+          - Addresses: crypto/addresses.md
+          - Signatures: crypto/signatures.md
+      # Separate from Cryptography because it's the layer ABOVE the protocol —
+      # conventions wallet software agreed on, which Ethereum has never heard of.
+      - Wallets:
+          - Wallets and seed phrases: wallets/seed-phrases.md
+          - What losing your keys means: wallets/losing-your-keys.md
 
-  # Accounts, contracts and encoding are one part: what every node stores,
-  # and how it gets written down. Encoding sits last on purpose — the Merkle
-  # Patricia Trie explains what the state root is, and state defers to it, so
-  # the reader needs state first. Contracts sits where it does because the
-  # accounts page provokes "what IS the second kind of account?" and defers.
   - What it knows:
-      - Accounts: accounts/accounts.md
-      - The nonce: accounts/nonce.md
-      - State: accounts/state.md
-      - Why accounts, and what they cost: accounts/why-accounts.md
-      - What a smart contract is: contracts/smart-contracts.md
-      - RLP encoding: encoding/rlp.md
-      - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
+      - Accounts and state:
+          - Accounts: accounts/accounts.md
+          - The nonce: accounts/nonce.md
+          - State: accounts/state.md
+          # Closes the topic by arguing the trade the first three describe.
+          - Why accounts, and what they cost: accounts/why-accounts.md
+      # Answers the question the accounts page provokes and defers — "two
+      # kinds of account, so what IS the second kind?".
+      - Contracts:
+          - What a smart contract is: contracts/smart-contracts.md
+      # Last on purpose: the Merkle Patricia Trie explains what the state root
+      # is, and state defers to it, so the reader needs state first. RLP needs
+      # nothing but hex, so it travels with the trie rather than earlier.
+      - Encoding:
+          - RLP encoding: encoding/rlp.md
+          - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
 
-  # "Why metering is necessary" sits directly above Gas, not at the head of
-  # the part, where it would precede the reader knowing what a transaction is.
   - How it moves:
-      - Transactions: transactions/transactions.md
-      - Why metering is necessary: transactions/why-metering.md
-      - Gas: transactions/gas.md
-      - Fees: transactions/fees.md
-      - Blocks: blocks/blocks.md
-      - The block header: blocks/block-header.md
-      - The chain and reorgs: blocks/the-chain.md
+      # "Why metering is necessary" sits directly above Gas, not at the head of
+      # the topic, where it would precede knowing what a transaction is.
+      - Transactions:
+          - Transactions: transactions/transactions.md
+          - Why metering is necessary: transactions/why-metering.md
+          - Gas: transactions/gas.md
+          - Fees: transactions/fees.md
+      - Blocks:
+          - Blocks: blocks/blocks.md
+          - The block header: blocks/block-header.md
+          - The chain and reorgs: blocks/the-chain.md
 
-  # Only the durable economics questions. The pages that depend on Ethereum's
+  # Only the durable economics questions. The pages depending on Ethereum's
   # current issuance and burn wait for the protocol pages. See ROADMAP.md.
   - Why anyone bothers:
       - Why security has to be paid for: economics/security-budget.md

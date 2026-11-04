@@ -680,12 +680,26 @@ than maintaining two versions that drift apart.
    beneath, which is where a reader arriving from a search engine lands
    anyway.
 
-   **This removed a level rather than adding one.** There were nine content
-   sections; the five parts replace them, so the sidebar got shorter. Pages
-   that were grouped separately now sit together where they belong to one
-   part: crypto and wallets under *Who you are*, accounts/contracts/encoding
-   under *What it knows*. Directory names were left alone, so no URL moved —
-   the same trick as *Fork-dependent details* pointing at `reference/`.
+   **Both levels are kept.** The parts sit above the original topic sections
+   rather than replacing them: *Who you are* contains *Cryptography* and
+   *Wallets*, *What it knows* contains *Accounts and state*, *Contracts* and
+   *Encoding*. The first attempt flattened the topics away and lost the words
+   a reader scans for — "Cryptography" and "Blocks" stopped appearing in the
+   menu at all. Keeping both means the question orients you and the topic name
+   is still findable.
+
+   Parts holding a single topic (*What it is*, *Why anyone bothers*) list their
+   pages directly, since a one-child subsection is a level of nesting earning
+   nothing. Directory names were left alone throughout, so no URL moved — the
+   same trick as *Fork-dependent details* pointing at `reference/`.
+
+   Three ranks therefore need distinguishing in `extra.css`, and the rule
+   order matters: the part selector is the least specific, so the topic and
+   page rules must come after it or all three render identically. Parts are
+   the only rank set in caps; topics are bold at body size; pages are plain.
+   The expand animation also needs **two** max-height ceilings now — a part
+   holding three expanded topics is far taller than a topic holding four
+   pages, and a ceiling sized for the larger makes the smaller snap open.
 
    Rejected first: a coloured left-edge accent per part. The hues had to be
    low-saturation to avoid colliding with the palette that already means

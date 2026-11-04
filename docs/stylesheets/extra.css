@@ -223,13 +223,38 @@
    headers, and page links sit visibly below them.
    --------------------------------------------------------------------------- */
 
-.md-nav--primary .md-nav__item--nested > .md-nav__link {
+/* Three ranks now, since parts hold topics which hold pages. Each needs to
+   be distinguishable from the one above without shouting: the part is the
+   only thing set in caps, the topic is bold at normal size, pages are plain.
+   Specificity matters here — the deeper selectors must come after, or the
+   part rule wins everywhere and all three look the same. */
+
+/* Rank 1 — the part: "Who you are" */
+.md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__link {
   font-weight: 700;
-  letter-spacing: 0.01em;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
 }
 
-.md-nav--primary .md-nav__item--nested .md-nav__item .md-nav__link {
+/* Rank 2 — the topic: "Cryptography" */
+.md-nav--primary .md-nav__item--nested .md-nav__item--nested > .md-nav__link {
+  font-weight: 700;
+  font-size: inherit;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  opacity: 1;
+}
+
+/* Rank 3 — a page. Also covers pages sitting directly under a part, which is
+   how the two single-topic parts are arranged. */
+.md-nav--primary .md-nav__item--nested .md-nav__item:not(.md-nav__item--nested) > .md-nav__link {
   font-weight: 400;
+  font-size: inherit;
+  text-transform: none;
+  letter-spacing: normal;
+  opacity: 1;
 }
 
 /* The expand/collapse chevron should turn rather than jump. */
@@ -258,11 +283,17 @@
       opacity 0.32s ease-out;
   }
 
-  /* The ceiling has to exceed the tallest section, but not by much: the
+  /* The ceiling has to exceed the tallest open section, but not by much: the
      animation runs until max-height passes the real content height and then
      visibly stops, so an oversized ceiling makes short sections snap open.
-     14rem comfortably clears the largest section here (six items). */
-  .md-nav--primary .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+     Two ceilings now, because a part holding three expanded topics is far
+     taller than a topic holding four pages. */
+  .md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+    max-height: 32rem;
+    opacity: 1;
+  }
+
+  .md-nav--primary .md-nav__item--nested .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
     max-height: 14rem;
     opacity: 1;
   }
