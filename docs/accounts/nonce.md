@@ -9,27 +9,30 @@ description: A per-account counter that stops a signed transaction being used tw
 
 !!! definition "Nonce"
 
-    A **counter** held in every [account](accounts.md), recording how many
-    transactions that account has already sent. It starts at **0**.
+    Literally **"number used once"** — which is all the word promises, and says
+    nothing about how the number is chosen. Ethereum reuses it for several
+    unrelated mechanisms, [listed at the end of this
+    page](#other-things-called-a-nonce).
 
-    Every transaction states the nonce it is using, and the network accepts it
-    only if that number is exactly the one the account is due next. Once
-    included, the account's nonce goes up by one and that number can never be
-    used again.
+    This page is about the **account nonce**: a counter stored in every
+    [account](accounts.md). A transaction declares which value it is claiming,
+    the network accepts it only if that value is the one the account is due
+    next, and the counter then advances — so **no number can ever authorise
+    two things.**
 
-    It is **not** a random number, despite the name. See the box below.
+    It counts; it is not random. *What* it counts and where it starts depend on
+    the kind of account, and both are below.
 
-## A counter, and nothing more
+## The account nonce, concretely
 
-Your account has sent three transactions. Its nonce is 3. The next transaction you sign must say `nonce: 3`, and once it's in a block the account's nonce becomes 4.
+Take an ordinary wallet account. It has sent three transactions. Its nonce is 3. The next transaction you sign must say `nonce: 3`, and once it's in a block the account's nonce becomes 4.
 
 That really is the whole mechanism. The reason it's worth a page is not the counter — it's what the counter prevents, and the very practical trouble it causes when it gets out of step.
 
-??? abstract "Why it's called a nonce, which is a misleading name"
+??? abstract "Why the name misleads, when most nonces really are random"
 
-    *Nonce* is short for **"number used once"**, and that's the only promise
-    the word makes. It says nothing about how the number is chosen, which is
-    where the confusion comes from — most nonces in cryptography are random.
+    The confusion is reasonable: elsewhere in cryptography a nonce almost
+    always *is* a random value, and nothing in the word rules that out.
 
     The `k` used when [signing](../crypto/signatures.md) is the famous example:
     it must be unpredictable, and reusing one leaks your private key. The
@@ -200,7 +203,7 @@ Two of those are worth a second look.
 
 ## Recap
 
-- The nonce is a **per-account counter of transactions sent**, starting at 0, and it's part of what you sign.
+- The **account nonce** is a per-account counter. For a wallet account it counts transactions sent and starts at 0, and it's part of what you sign.
 - It exists to stop **replay**: without it a signed transaction could be submitted again and again, and every copy would verify.
 - Bitcoin needs no equivalent because its transactions name specific coins, which can only be spent once. **Balances offer no such protection**, so a counter supplies it.
 - Nonces must be used **in strict order with no gaps** — nonce 7 is invalid until 6 has been included — because gaps would let two nodes reasonably disagree about what comes next.
