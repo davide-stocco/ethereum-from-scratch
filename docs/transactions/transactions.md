@@ -85,6 +85,10 @@ So state-agnosticism is deliberate: it's what lets a transaction sit in a queue 
 
 **Next:** [Why metering is necessary](why-metering.md)
 
-## References to carry over
+## References
 
-- **Johnson, N.** (2017). *EIP-658: Embedding transaction status code in receipts.* <https://eips.ethereum.org/EIPS/eip-658> — cited by the moved section; add the anchored entry when this page is written.
+<div class="sources" markdown>
+
+- <a id="ref-eip658"></a>**Johnson, N.** (2017). *EIP-658: Embedding transaction status code in receipts.* Ethereum Improvement Proposals. Activated in Byzantium; replaced the per-transaction intermediate state root in receipts with a status code. <https://eips.ethereum.org/EIPS/eip-658>
+
+</div>
