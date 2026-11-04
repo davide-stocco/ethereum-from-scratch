@@ -356,7 +356,10 @@ So why mention it at all? Because it's a second lock, and it only matters if the
     than a speculative hedge against a machine that doesn't exist.
 
     That's a real trade-off Ethereum has chosen, not an oversight. Worth
-    knowing it was chosen.
+    knowing it was chosen — and it's one instance of a larger pattern, since
+    the same persistence that makes an address worth reusing is what makes it
+    worth watching. [Why accounts, and what they
+    cost](../accounts/why-accounts.md) takes that apart.
 
 ---
 

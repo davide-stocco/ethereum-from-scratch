@@ -114,6 +114,9 @@ nav:
       - Accounts: accounts/accounts.md
       - The nonce: accounts/nonce.md
       - State: accounts/state.md
+      # Closes the section by arguing the trade the first three pages describe.
+      # Needs accounts, the nonce and state, and nothing after them.
+      - Why accounts, and what they cost: accounts/why-accounts.md
   # Contracts answers the question the Accounts page provokes and defers —
   # "two kinds of account, so what IS the second kind?". It needs accounts and
   # nothing later, so it sits here rather than next to the EVM, which is where
