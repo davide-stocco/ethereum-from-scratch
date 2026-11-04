@@ -58,7 +58,7 @@ So the two kinds differ in **where the controller lives**, not where the account
 
 ## What an account actually looks like
 
-Easiest to start with one in front of you. Take the address `0x7E5F…95Bdf` — the one the [addresses](../crypto/addresses.md) page derived from the private key `1`, picked there because it's the simplest number a key can be and makes every step checkable by hand. Ask a node what that address holds:
+Easiest to start with one in front of you. Take the address `0x7E5F…95Bdf` — the one the [addresses](../crypto/addresses.md) page derived from the private key `1`, picked there because it's the simplest number a key can be and makes every step checkable by hand. Ask a node what that address holds — the lookup itself is explained [further down](#how-an-address-finds-an-account):
 
 ```
 nonce        3
@@ -164,6 +164,37 @@ It also has to be that way for contracts to be good for anything. An escrow must
 What differs is **how the ether gets out**. An EOA's balance moves when its key signs a transaction. A contract's balance moves only if the contract's own code contains instructions to send it — and if the code has no such path, the ether stays there permanently, as unreachable as if the key had been lost. That has happened at scale more than once, and the reason is worth remembering: nobody can override the code, for precisely the reasons the [previous page](../wallets/losing-your-keys.md) set out.
 
 How contracts work beyond that — what the code is, how it runs, what it costs — is [its own page](../contracts/smart-contracts.md).
+
+## How an address finds an account
+
+This page has twice said "ask a node" without saying what that involves, and the answer is more specific than *it looks it up in a list*.
+
+The state is a key–value mapping. The value is the four fields, written out with [RLP](../encoding/rlp.md) — Ethereum's way of encoding structured data as bytes, which has its own page. The key is the part worth noticing: **it is not the address.** It's the address put through [Keccak-256](../crypto/keccak256.md) first.
+
+```
+address      0x7E5F…95Bdf
+    │
+    │  keccak256
+    ▼
+key          a 32-byte value, which is where to look
+    │
+    ▼
+value        RLP[ nonce, balance, storageRoot, codeHash ]
+```
+
+So nothing about the account is *computed* from the address. The contents are whatever transactions have put there over time, and no amount of arithmetic on an address could tell you a balance. What the address gives you is **where to look** — and the precise structure it's looking in, which makes that lookup provable rather than merely fast, is the [Merkle Patricia Trie](../encoding/merkle-patricia-trie.md).
+
+### Why hash the address first?
+
+It seems like a pointless step — the address is already a hash, and already a fixed 20 bytes. There's a reason, and it's a defence.
+
+**Without it, anybody could choose where in the structure their account lands.** That sounds harmless until you notice that *creating an account costs almost nothing and needs no key*: send one wei to any address and an entry appears, as the empty-accounts box above describes. Nobody has to control an address to put something at it.
+
+So an attacker could pick a million addresses sharing a long leading prefix, dust each one, and force the structure into a single pathologically deep branch — making every lookup along it slow, for every node, permanently. Choosing the keys was free, and the cost landed on everybody else.
+
+Hashing removes the choice. To place two accounts near each other you'd now have to find two addresses whose *hashes* share a long prefix, and that's a brute-force search for every account you want to add. The attack goes from free to expensive, which is the whole of the defence.
+
+A secondary benefit falls out: hash outputs are spread evenly, so keys distribute evenly and no region of the structure ends up much deeper than another even by accident.
 
 ## Which kind is it? Look at one field
 
@@ -342,6 +373,7 @@ So the protection has to be supplied separately, and it's supplied as a counter.
 ## Recap
 
 - An account is an **entry in the state**, looked up by address, with exactly four fields: **nonce, balance, storageRoot, codeHash.** The address isn't one of them.
+- The lookup key is **`keccak256(address)`**, not the address — so nobody can choose where their account sits, which stops an attacker dusting a million chosen addresses to force one deep, slow branch.
 - **EOA** means *externally owned* — what controls it sits outside Ethereum, namely a person with a key. A contract's controller is code on the chain.
 - The account **nonce is a sequential counter**, not a random number. It shares only the "used once" guarantee with the random nonces elsewhere in cryptography.
 - `storageRoot` and `codeHash` are **fingerprints**, letting a fixed-size entry commit to unbounded data. The structure behind them is the [Merkle Patricia Trie](../encoding/merkle-patricia-trie.md).
