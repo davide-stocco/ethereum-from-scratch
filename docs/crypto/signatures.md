@@ -63,7 +63,7 @@ The rest of this section covers **signing**. Recovery follows after it.
 
 Signing a message hash **z** with a private key **d** goes like this:
 
-1. Pick a **random secret number**, called *k*, used once and then thrown away.
+1. Pick a **random secret number**, called *k*, used once and then thrown away. It has a second name you'll meet constantly — the **signing nonce** — on which see the warning below.
 2. Compute the curve point *k* × G, the same multiplication from the [public keys](public-keys.md) page. Call it **R**.
 3. **`r` is the x coordinate of R.**
 4. **`s` is computed from** the message hash, `r`, the private key and *k*:
@@ -79,7 +79,7 @@ Every term there has already appeared on this site:
 | *z* | the message hash, from [Keccak-256](keccak256.md) |
 | *d* | the private key — the only secret in the equation |
 | *r* | the x coordinate from step 3 |
-| *k* | the random number from step 1 |
+| *k* | the random number from step 1, also called the signing nonce |
 | *n* | secp256k1's order, from the [private keys](private-keys.md) page |
 
 *k*⁻¹ means the modular inverse — the number that multiplies by *k* to give 1, working modulo *n*. Not a fraction; there are no fractions anywhere in this.
@@ -89,6 +89,17 @@ So the two halves have distinct jobs. `r` is a commitment to the random point: i
 And notice that *d* appears exactly once, multiplied by *r* and buried under a *k*⁻¹ you don't know. That's what makes the equation safe to publish.
 
 Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh every time, `r` and `s` are completely different on every signature — which is what you see when you press *Sign again* below.
+
+### Two different things get called a nonce
+
+Worth separating before going on, because this page needs both senses and they could hardly be less alike.
+
+| | What it is | Secret? | Chosen how |
+| --- | --- | --- | --- |
+| ***k***, the **signing nonce** | the random value above, thrown away immediately | **yes**, always | unpredictably, never repeating |
+| the **account nonce** | a counter of transactions an account has sent, checked when a transaction is validated | no | by counting |
+
+They share only the literal sense of the word: *number used once*. Everything else is opposed — one must be unguessable or your key is recoverable, the other must be guessable or your wallet couldn't build a transaction. The account one has [its own page](../accounts/nonce.md) and appears later in this one, when we get to what a node checks.
 
 ??? warning "*k* must never repeat — and here is exactly why"
 
@@ -150,7 +161,7 @@ Neither value reveals *d*, and neither reveals *k*. And because *k* is fresh eve
     **This is not hypothetical.** Sony's PlayStation 3 code-signing key was
     recovered in 2010 in exactly this way — the same *k* on every signature.
     In 2013 a flaw in Android's random number generator made Bitcoin wallets
-    repeat nonces, and keys were emptied.
+    repeat *k*, and keys were emptied.
 
     Which is why serious implementations don't leave *k* to chance at all.
     **RFC 6979** [(Pornin, 2013)](#ref-rfc6979) derives it deterministically
@@ -358,7 +369,7 @@ Recovery isn't a feature bolted onto ECDSA. It's the same algebra read in the ot
     everyone else knows `s` and solves for **Q**.
 
     All of this was checked numerically before publication: both the signing
-    equation and the final rearrangement hold for every random key, nonce and
+    equation and the final rearrangement hold for every random key, *k* and
     message tried.
 
 ### Which is where `v` comes in
