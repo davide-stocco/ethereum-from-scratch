@@ -22,6 +22,44 @@ description: What a smart contract actually is — code stored at an account, ru
 - Can a contract be changed after deployment? (Not the code at an address. The appearance of upgrades comes from one contract delegating to another whose address it stores — worth explaining, since "immutable" is widely overstated.)
 - What is an ABI, and why is one needed? (Code sees bytes. The ABI is the convention for which bytes mean which function and arguments. A convention, not a protocol rule.)
 
+## Already written: moved here from the accounts page
+
+This box sat under the "only an EOA can start anything" rule on
+[accounts](../accounts/accounts.md). The rule is a fact about kinds of account
+and stays there; **this** is about what contracts can't do and how people work
+around it, which is this page's subject. Build the surrounding section around
+it rather than rewriting it.
+
+??? question "Then how do things that look automatic work?"
+
+    Somebody is sending transactions. The useful question is why they bother,
+    and the answer is that they're paid to.
+
+    Take a lending contract that must sell somebody's collateral when its value
+    falls too far. The contract can't watch the price — per the rule above, it
+    cannot do anything at all unless called. So it's built the other way round:
+    it exposes a function **anybody may call**, which checks the price and
+    performs the sale only if the condition genuinely holds. Until called, it
+    sits inert.
+
+    But the contract still *needs* that sale to happen, and promptly, or it
+    takes a loss. So it offers a cut of the proceeds to whoever makes the call
+    at the right moment. **That converts "something must watch the price" into
+    a paid job, open to anyone** — which is the only way to get it done, since
+    the contract cannot employ anybody and cannot act alone.
+
+    Hence the racing. The reward goes to the caller whose transaction lands
+    **first**, and only the first: every later call re-checks the condition,
+    finds it no longer true, and does nothing. So the people doing this run
+    software watching for the condition and compete to get their transaction
+    in ahead of the others, because second place pays nothing.
+
+    The pattern has a name — **keepers**, or bots. The automation is economic,
+    not technical. Which makes "it executes automatically" a claim worth
+    examining: the honest version is usually *somebody is paid to make it
+    execute, and so far somebody has.* Let the reward stop covering the fee and
+    the automation quietly stops.
+
 ## Notes to self
 
 - The name is the first obstacle. Say plainly that it is neither smart nor a contract, then move on — people have met the term long before the mechanism, and the wrong mental model is the thing to dislodge.
