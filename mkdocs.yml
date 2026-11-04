@@ -93,62 +93,60 @@ markdown_extensions:
 nav:
   - Home: index.md
 
-  # ---- v1: the launch set. All Tier 1 — nothing here can go stale. -------
-  - Foundations:
+  # ---- The five reading parts ------------------------------------------
+  # Each section label is the QUESTION that part answers, because that's what
+  # a reader can hold in their head. The searchable words — Keccak, nonce,
+  # gas — are the page titles directly underneath, which is where someone
+  # arriving from a search engine lands anyway.
+  #
+  # This collapsed a level rather than adding one. There used to be nine
+  # sections; the parts replace them, so the sidebar got shorter. Directory
+  # names are untouched, so no URL moved.
+
+  - What it is:
       - What is Ethereum?: foundations/what-is-ethereum.md
       - Ether, wei and gwei: foundations/ether.md
       - Hex and bytes: foundations/hex-and-bytes.md
-  - Cryptography:
+
+  # Cryptography and wallets are one part: the maths that proves who you are,
+  # then the conventions built on top of it that Ethereum has never heard of.
+  - Who you are:
       - Keccak-256: crypto/keccak256.md
       - Private keys: crypto/private-keys.md
       - Public keys: crypto/public-keys.md
       - Addresses: crypto/addresses.md
       - Signatures: crypto/signatures.md
-  # Named just "Wallets": the previous section already did keys, and this
-  # one is about the layer ABOVE the protocol — conventions wallet software
-  # agreed on, which Ethereum has never heard of.
-  - Wallets:
       - Wallets and seed phrases: wallets/seed-phrases.md
       - What losing your keys means: wallets/losing-your-keys.md
-  - Accounts and state:
+
+  # Accounts, contracts and encoding are one part: what every node stores,
+  # and how it gets written down. Encoding sits last on purpose — the Merkle
+  # Patricia Trie explains what the state root is, and state defers to it, so
+  # the reader needs state first. Contracts sits where it does because the
+  # accounts page provokes "what IS the second kind of account?" and defers.
+  - What it knows:
       - Accounts: accounts/accounts.md
       - The nonce: accounts/nonce.md
       - State: accounts/state.md
-      # Closes the section by arguing the trade the first three pages describe.
-      # Needs accounts, the nonce and state, and nothing after them.
       - Why accounts, and what they cost: accounts/why-accounts.md
-  # Contracts answers the question the Accounts page provokes and defers —
-  # "two kinds of account, so what IS the second kind?". It needs accounts and
-  # nothing later, so it sits here rather than next to the EVM, which is where
-  # the execution detail will go once gas is published.
-  - Contracts:
       - What a smart contract is: contracts/smart-contracts.md
-
-  # Encoding sits AFTER state on purpose. The Merkle Patricia Trie explains
-  # what the state root actually is, and the state page defers to it — so the
-  # reader has to know what state is first. RLP needs nothing but hex, so it
-  # travels with the trie rather than earlier.
-  - Encoding:
       - RLP encoding: encoding/rlp.md
       - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
 
-  # ---- v2: the working machine. Tier 2-3, so these carry date stamps. ---
-  # "Why metering is necessary" is the fork-proof problem page that Gas
-  # answers, so it sits directly above Gas — not at the head of the section,
-  # where it preceded the reader knowing what a transaction is.
-  - Transactions:
+  # "Why metering is necessary" sits directly above Gas, not at the head of
+  # the part, where it would precede the reader knowing what a transaction is.
+  - How it moves:
       - Transactions: transactions/transactions.md
       - Why metering is necessary: transactions/why-metering.md
       - Gas: transactions/gas.md
       - Fees: transactions/fees.md
-  - Blocks:
       - Blocks: blocks/blocks.md
       - The block header: blocks/block-header.md
       - The chain and reorgs: blocks/the-chain.md
 
-  # ---- Economics: Tier 1 group only. Pricing, money and institutions -----
-  # ---- wait for the protocol pages they depend on. See ROADMAP.md. ------
-  - Economics:
+  # Only the durable economics questions. The pages that depend on Ethereum's
+  # current issuance and burn wait for the protocol pages. See ROADMAP.md.
+  - Why anyone bothers:
       - Why security has to be paid for: economics/security-budget.md
       - 'Who pays: issuance or fees': economics/who-pays.md
       - Fixed cap or flexible supply: economics/supply-cap.md

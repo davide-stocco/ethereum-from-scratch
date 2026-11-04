@@ -673,7 +673,28 @@ than maintaining two versions that drift apart.
    what keeps it meaningful; anything merely surprising or easy to get wrong
    is a `warning`, and may be collapsed.
 
-4. **An opening durability label**, the first line of every content page,
+4. **The sidebar is five questions, not ten topics.** Section labels are
+   *What it is · Who you are · What it knows · How it moves · Why anyone
+   bothers*, which in order read as a sentence summarising the whole site.
+   The searchable words — Keccak, nonce, gas — are the page titles directly
+   beneath, which is where a reader arriving from a search engine lands
+   anyway.
+
+   **This removed a level rather than adding one.** There were nine content
+   sections; the five parts replace them, so the sidebar got shorter. Pages
+   that were grouped separately now sit together where they belong to one
+   part: crypto and wallets under *Who you are*, accounts/contracts/encoding
+   under *What it knows*. Directory names were left alone, so no URL moved —
+   the same trick as *Fork-dependent details* pointing at `reference/`.
+
+   Rejected first: a coloured left-edge accent per part. The hues had to be
+   low-saturation to avoid colliding with the palette that already means
+   something (teal = definition, red = danger, amber = warning), and at that
+   saturation five 2px lines are indistinguishable. **The idea didn't survive
+   being made tasteful enough not to clash** — which is the argument that
+   colour was the wrong instrument, not merely the wrong palette.
+
+5. **An opening durability label**, the first line of every content page,
    bolded and linking to `about/forks.md`:
 
    - `**[Permanent](../about/forks.md).**` — nothing here can go stale.
@@ -691,12 +712,12 @@ than maintaining two versions that drift apart.
    `fork-proof` all leaked before anyone noticed, so grep for them before
    publishing.
 
-5. **In-text citations, author–date style**, linking to the reference:
+6. **In-text citations, author–date style**, linking to the reference:
    `[Wood (2014)](#ref-wood-2014)` when the author is the subject of the
    sentence, `[(Nakamoto, 2008)](#ref-nakamoto-2008)` when it's parenthetical.
    This replaced footnotes — it shows the reader where a claim comes from at
    the point they read it, rather than making them chase a number.
-6. **A `## References` section** at the end, wrapped in
+7. **A `## References` section** at the end, wrapped in
    `<div class="sources" markdown>`, **alphabetical by author surname**.
    Each entry carries an explicit anchor so citations can link to it:
    `- <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Title.* Venue. URL`
