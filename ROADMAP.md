@@ -695,8 +695,11 @@ than maintaining two versions that drift apart.
 
    Three ranks therefore need distinguishing in `extra.css`, and the rule
    order matters: the part selector is the least specific, so the topic and
-   page rules must come after it or all three render identically. Parts are
-   the only rank set in caps; topics are bold at body size; pages are plain.
+   page rules must come after it or all three render identically. **Size
+   carries the rank, not capitals** — parts are set larger with a little space
+   above, topics are bold at body size, pages are plain. Small caps were tried
+   first and shout too much for a label read far more often than it is
+   clicked.
    The expand animation also needs **two** max-height ceilings now — a part
    holding three expanded topics is far taller than a topic holding four
    pages, and a ceiling sized for the larger makes the smaller snap open.

@@ -229,22 +229,22 @@
    Specificity matters here — the deeper selectors must come after, or the
    part rule wins everywhere and all three look the same. */
 
-/* Rank 1 — the part: "Who you are" */
+/* Rank 1 — the part: "Who you are". Size carries the rank, not capitals:
+   small caps shout, and these labels are read far more often than they are
+   clicked. A little breathing room above does the rest of the work. */
 .md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__link {
   font-weight: 700;
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  opacity: 0.85;
+  font-size: 0.84rem;
+  letter-spacing: 0.005em;
+  margin-top: 0.5rem;
 }
 
 /* Rank 2 — the topic: "Cryptography" */
 .md-nav--primary .md-nav__item--nested .md-nav__item--nested > .md-nav__link {
   font-weight: 700;
   font-size: inherit;
-  text-transform: none;
   letter-spacing: 0.01em;
-  opacity: 1;
+  margin-top: 0;
 }
 
 /* Rank 3 — a page. Also covers pages sitting directly under a part, which is
@@ -252,9 +252,8 @@
 .md-nav--primary .md-nav__item--nested .md-nav__item:not(.md-nav__item--nested) > .md-nav__link {
   font-weight: 400;
   font-size: inherit;
-  text-transform: none;
   letter-spacing: normal;
-  opacity: 1;
+  margin-top: 0;
 }
 
 /* The expand/collapse chevron should turn rather than jump. */
