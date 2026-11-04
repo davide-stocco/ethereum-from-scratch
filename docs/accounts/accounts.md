@@ -175,9 +175,9 @@ The confusion is the vocabulary's fault. *Nonce* is merely short for **"number u
     adding one. Same promise, opposite methods — and for `k`, secrecy is
     essential, while for the account nonce it would break everything.
 
-    Two more nonces exist in Ethereum's vicinity, for completeness: the
-    proof-of-work block nonce, now historical, and the per-contract counter
-    described above, which counts deployments rather than transactions.
+    There are more than two senses in play, in fact — the block header has a
+    nonce, and so do many contracts. The [nonce page](nonce.md) lists them all
+    in one table.
 
 ### The two fingerprints
 

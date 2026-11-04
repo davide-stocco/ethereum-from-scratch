@@ -176,6 +176,26 @@ Four things it gets mistaken for:
 
 That last one is the useful test: **the nonce counts what you did, never what happened to you.**
 
+## Other things called a nonce
+
+The word is reused all over Ethereum for things that have nothing to do with each other beyond the "used once" promise. Worth having the list in one place.
+
+| Where | What it is | Chosen how |
+| --- | --- | --- |
+| **Account** | the counter this page is about | counting, 0 upwards |
+| **Transaction** | the field in which a transaction *declares* which account nonce it is claiming | copied from the account |
+| **Block header** | a leftover from proof of work | now **always zero** |
+| **Signing** (`k`) | the secret value in [ECDSA](../crypto/signatures.md) | random, and must be unpredictable |
+| **Inside contracts** | whatever a contract's author decided | up to them |
+
+Two of those are worth a second look.
+
+**The account nonce and the transaction nonce are different fields.** The account holds the count; the transaction states the number it claims. Validity is the test that the two agree. It's easy to read "the nonce" as one thing in one place, but there are two copies and the whole mechanism is the comparison between them.
+
+**The block header's nonce is a fossil.** Under proof of work, miners searched for a value that made the block's hash small enough — that search *was* mining, and the nonce was where the answer went. Proof of stake abolished the search, and EIP-3675 [(Kalinin et al., 2021)](#ref-eip3675) requires the field to be exactly `0x0000000000000000` from the transition block onward. It stays in the header because the header's shape is baked into too much code to change for nothing, so every block since the Merge carries eight bytes of zeros where the puzzle answer used to be.
+
+**And the contract ones aren't protocol at all.** A contract accepting signed instructions from off-chain has the same replay problem this page opens with, and no account nonce to lean on, because the signature isn't a transaction. So contracts keep their own counters — token approvals, account-abstraction operations, anything with an off-chain signature. Each is a convention its author invented, enforced only by that contract's code.
+
 ---
 
 ## Recap
@@ -188,6 +208,7 @@ That last one is the useful test: **the nonce counts what you did, never what ha
 - You can't delete a transaction, only **replace** it: same nonce, higher fee, newly signed. Cancelling means winning a race against your own earlier transaction, which you may lose.
 - For a contract the nonce counts **contracts created**, and it starts at 1. It keeps deployment addresses from colliding.
 - The nonce counts **what you sent** — never what you received.
+- **"Nonce" is reused for several unrelated things**: the account's counter, the transaction field that claims it, the block header's dead proof-of-work field, the secret `k` in signing, and whatever counters contracts keep for themselves.
 
 **Next:** [State](state.md) — the whole collection of accounts, and how a tiny block header commits to all of it.
 
@@ -199,6 +220,7 @@ That last one is the useful test: **the nonce counts what you did, never what ha
 
 - <a id="ref-buterin-2014"></a>**Buterin, V.** (2014). *Ethereum white paper: A next-generation smart contract and decentralized application platform.* Sets out the account model and the replay problem a counter is needed to solve. <https://ethereum.org/en/whitepaper/>
 - <a id="ref-eip155"></a>**Buterin, V.** (2016). *EIP-155: Simple replay attack protection.* Ethereum Improvement Proposals. Adds the chain id, which handles the replay case the nonce cannot — the same transaction carried to a different network. <https://eips.ethereum.org/EIPS/eip-155>
+- <a id="ref-eip3675"></a>**Kalinin, M., Ryan, D., & Buterin, V.** (2021). *EIP-3675: Upgrade consensus to Proof-of-Stake.* Ethereum Improvement Proposals. Requires the block header's nonce to be the zero constant from the transition block onward. <https://eips.ethereum.org/EIPS/eip-3675>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Defines the nonce as a field of the account state and makes the matching nonce a condition of transaction validity. <https://ethereum.github.io/yellowpaper/paper.pdf>
 - <a id="ref-eip161"></a>**Wood, G.** (2016). *EIP-161: State trie clearing (invariant-preserving alternative).* Ethereum Improvement Proposals. Specifies that a newly created contract's nonce begins at 1, closing an address-collision case. <https://eips.ethereum.org/EIPS/eip-161>
 
