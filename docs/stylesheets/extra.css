@@ -379,35 +379,3 @@
 [data-md-color-scheme="slate"] .md-typeset .definition > summary::before {
   background-color: #4db6ac;
 }
-
-/* ---------------------------------------------------------------------------
-   Sidebar: a thin accent marking which part a section belongs to
-   ---------------------------------------------------------------------------
-   Five reading parts, set by nav-parts.js. Sections in the same part share a
-   colour, so the accent shows the grouping without adding a nav level.
-
-   Hues chosen to stay clear of every colour that already MEANS something
-   here: teal is a definition, red is danger, amber is a warning, and the
-   tools use teal and red for highlight and difference. These are low
-   saturation on purpose — a scanning aid, not a signal. The part name in the
-   sidebar carries the information; the colour only helps you find it again.
-   --------------------------------------------------------------------------- */
-
-.md-nav--primary .md-nav__item--nested > .md-nav__link {
-  border-left: 2px solid transparent;
-  padding-left: 0.5rem;
-  transition: border-color 0.2s ease;
-}
-
-.md-nav--primary [data-part="1"] > .md-nav__link { border-left-color: #5c6bc0; }
-.md-nav--primary [data-part="2"] > .md-nav__link { border-left-color: #7e57c2; }
-.md-nav--primary [data-part="3"] > .md-nav__link { border-left-color: #607d8b; }
-.md-nav--primary [data-part="4"] > .md-nav__link { border-left-color: #8d6e63; }
-.md-nav--primary [data-part="5"] > .md-nav__link { border-left-color: #a1748f; }
-
-/* Lighter on dark backgrounds, or a 2px line at low saturation disappears. */
-[data-md-color-scheme="slate"] .md-nav--primary [data-part="1"] > .md-nav__link { border-left-color: #9fa8da; }
-[data-md-color-scheme="slate"] .md-nav--primary [data-part="2"] > .md-nav__link { border-left-color: #b39ddb; }
-[data-md-color-scheme="slate"] .md-nav--primary [data-part="3"] > .md-nav__link { border-left-color: #90a4ae; }
-[data-md-color-scheme="slate"] .md-nav--primary [data-part="4"] > .md-nav__link { border-left-color: #bcaaa4; }
-[data-md-color-scheme="slate"] .md-nav--primary [data-part="5"] > .md-nav__link { border-left-color: #cfa8bd; }
