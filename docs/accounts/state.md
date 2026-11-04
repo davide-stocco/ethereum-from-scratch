@@ -24,6 +24,15 @@ description: The state is every account and what it holds — kept by each node,
     32-byte fingerprint of the whole state, which lets every node check that
     its copy matches everybody else's.
 
+This page needs four things about blocks, all of which [What is Ethereum?](../foundations/what-is-ethereum.md) established and none of which needs the blocks section to understand:
+
+- A **block** is a batch of transactions — a hundred or two — added to the chain as a single unit.
+- Its transactions are **ordered**, and applied one after another in that order.
+- Whoever assembles a block is its **proposer**. Anyone may; who gets to, and when, is the blocks section's business.
+- The state is committed **once per block**, after every transaction in it has run — not once per transaction.
+
+That's the whole of the vocabulary borrowed from later pages. Everything else here is accounts and hashing, both of which you already have.
+
 ## The state is one enormous mapping
 
 Nothing more structurally complicated than a dictionary. The key is an address; the value is the four fields the [accounts](accounts.md) page laid out.
@@ -171,13 +180,13 @@ That intermediate state is perfectly real, and **no root is published for it.** 
 
 It sounds safer to pin the state you signed against. It would be close to unusable.
 
-A transaction naming a required state root would be invalidated by **any** change anywhere in the state — one unrelated transfer, by a stranger, in the same block. Since the state changes every block and thousands of transactions compete for each one, yours would have a useful life of a few seconds and would usually miss. A mempool of transactions waiting their turn could not work at all, because waiting is exactly what would kill them.
+A transaction naming a required state root would be invalidated by **any** change anywhere in the state — one unrelated transfer, by a stranger, in the same block. Since the state changes every block and thousands of transactions compete for each one, yours would have a useful life of a few seconds and would usually miss. A **mempool** — the pool of broadcast transactions waiting their turn — could not work at all, because waiting is exactly what would kill them.
 
 So state-agnosticism is deliberate: it's what lets a transaction sit in a queue and remain valid. The bill arrives elsewhere, though, and it's worth knowing where:
 
 - **You cannot pin the conditions you'll meet.** The state your transaction executes against is whatever exists at inclusion, not what existed when you signed.
 - **Which is why contracts add their own guards.** Deadlines after which a call reverts, minimum amounts a trade must return — those exist because the protocol declines to offer them.
-- **And it's the gap between simulating and executing.** A wallet shows you the outcome against current state; the actual outcome is against state nobody can predict. Most of what gets called front-running lives in that gap.
+- **And it's the gap between simulating and executing.** A wallet shows you the outcome against the state as it stands now; the real outcome is against the state at inclusion, which nobody can predict. Much of what gets called front-running lives in that gap — properly a [transactions](../transactions/transactions.md) topic, but the gap itself is a fact about state.
 
 ## Storage is a state inside the state
 
