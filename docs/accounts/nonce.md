@@ -191,7 +191,11 @@ The word is reused all over Ethereum for things that have nothing to do with eac
 | **Signing** (`k`) | the secret value in [ECDSA](../crypto/signatures.md) | random, and must be unpredictable |
 | **Inside contracts** | whatever a contract's author decided | up to them |
 
-Two of those are worth a second look.
+**They share the name and nothing else.** The value is chosen by counting, or at random, or fixed at zero, or however a contract's author felt; by the protocol, your wallet, the signer, or a stranger. And the cost of repeating one ranges from trivial to catastrophic: reuse an account nonce and your second transaction is simply rejected, while reuse a signing `k` and your private key can be reconstructed from the two signatures.
+
+So there's no general account of nonces to give — "used once" is the whole of the overlap, and a page about that would be a page about a word. Each mechanism is instead covered where its own subject lives: `k` with [signatures](../crypto/signatures.md), the dead field with [the block header](../blocks/block-header.md), the declared value with [transactions](../transactions/transactions.md), and contract counters with [contracts](../contracts/smart-contracts.md). This page takes the account nonce because this section is about accounts.
+
+Two of them still deserve a second look here, because they're the two that get mistaken for this one.
 
 **The account nonce and the transaction nonce are different fields.** The account holds the count; the transaction states the number it claims. Validity is the test that the two agree. It's easy to read "the nonce" as one thing in one place, but there are two copies and the whole mechanism is the comparison between them.
 

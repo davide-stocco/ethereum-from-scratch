@@ -20,6 +20,7 @@ description: What a smart contract actually is — code stored at an account, ru
 - What can it do? (Read and write its own storage, read some chain context, send ether, call other contracts, create contracts. Narrow list, deliberately.)
 - What can it **not** do? (No clock of its own, no network access, no randomness, no file system. Everything it knows must be passed in or already on the chain — which is why [oracles](../glossary.md#oracle) exist.)
 - Can a contract be changed after deployment? (Not the code at an address. The appearance of upgrades comes from one contract delegating to another whose address it stores — worth explaining, since "immutable" is widely overstated.)
+- Why do contracts keep their own nonces? (A contract accepting a signature produced off-chain has the replay problem from [the nonce page](../accounts/nonce.md) and no account nonce to lean on, because a signature isn't a transaction. So it counts for itself — by convention, enforced only by its own code. Token approvals and account-abstraction operations both do this.)
 - What is an ABI, and why is one needed? (Code sees bytes. The ABI is the convention for which bytes mean which function and arguments. A convention, not a protocol rule.)
 
 ## Already written: moved here from the accounts page
