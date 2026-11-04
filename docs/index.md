@@ -44,27 +44,31 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
 Five parts, in order. Each assumes the ones before it and nothing else.
 
-Read as a sentence, they're: **what it is → who you are → what it knows → how it moves → why anyone bothers.**
+Each part answers one question, and in order they make a sentence:
+
+> **what it is → who you are → what it knows → how it moves → why anyone bothers**
+
+That's the whole site in nine words. The longer names below are what you'll see in the menu; the short phrases are the ones worth keeping in your head.
 
 <div class="grid cards" markdown>
 
-- **Part 1 · Foundations**
+- **Part 1 · Foundations** — *what it is*
 
-    *What Ethereum is, and the notation every later page uses.*
+    What Ethereum actually is, and the notation every later page uses.
 
     [What is Ethereum?](foundations/what-is-ethereum.md) · [Ether, wei and gwei](foundations/ether.md) · [Hex and bytes](foundations/hex-and-bytes.md)
 
-- **Part 2 · Keys**
+- **Part 2 · Keys** — *who you are*
 
-    *How you prove who you are, and what holding the only secret costs you.* Mathematics that isn't Ethereum's own, and the conventions built on top of it.
+    How you prove it, and what holding the only secret costs you. Mathematics that isn't Ethereum's own, plus the conventions built on top of it.
 
     **Cryptography** — [Keccak-256](crypto/keccak256.md) · [Private keys](crypto/private-keys.md) · [Public keys](crypto/public-keys.md) · [Addresses](crypto/addresses.md) · [Signatures](crypto/signatures.md)
 
     **Wallets** — [Seed phrases](wallets/seed-phrases.md) · [What losing your keys means](wallets/losing-your-keys.md)
 
-- **Part 3 · What the network remembers**
+- **Part 3 · What the network remembers** — *what it knows*
 
-    *The data every node keeps, how it's written down, and how one 32-byte number commits to all of it.*
+    The data every node keeps, how it's written down, and how one 32-byte number commits to all of it.
 
     **Accounts and state** — [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md) · [Why accounts, and what they cost](accounts/why-accounts.md)
 
@@ -72,17 +76,17 @@ Read as a sentence, they're: **what it is → who you are → what it knows → 
 
     **Encoding** — [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
 
-- **Part 4 · How it changes**
+- **Part 4 · How it changes** — *how it moves*
 
-    *The only way anything ever happens — what's in a transaction, what it costs, and how changes get batched and agreed.*
+    The only way anything ever happens: what's in a transaction, what it costs, and how changes get batched and agreed.
 
     **Transactions** — [Transactions](transactions/transactions.md) · [Why metering is necessary](transactions/why-metering.md) · [Gas](transactions/gas.md) · [Fees](transactions/fees.md)
 
     **Blocks** — [Blocks](blocks/blocks.md) · [The block header](blocks/block-header.md) · [The chain and reorgs](blocks/the-chain.md)
 
-- **Part 5 · Why it keeps working**
+- **Part 5 · Why it keeps working** — *why anyone bothers*
 
-    *The incentives that pay for the whole arrangement — and what happens to them if they stop.*
+    The incentives that pay for the whole arrangement, and what happens if they stop.
 
     **Economics** — [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md)
 
