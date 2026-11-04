@@ -10,8 +10,11 @@ are expected to have no Next link and are listed separately, not flagged.
 """
 import re, pathlib, sys
 
-OUTSIDE = {"index.md", "glossary.md", "about/forks.md", "about/about-me.md",
-           "reference/gas-costs.md", "reference/fork-history.md"}
+# Pages with no "Next" by design: the homepage, and the reference tail after
+# the reading path ends. gas-costs is NOT here any more — it sits inside
+# "How it changes" now, so it is a reading step and needs a Next link.
+OUTSIDE = {"index.md", "glossary.md", "about/forks.md",
+           "reference/fork-history.md", "about/about-me.md"}
 
 def main():
     root = pathlib.Path(__file__).resolve().parent.parent

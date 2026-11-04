@@ -673,9 +673,36 @@ than maintaining two versions that drift apart.
    what keeps it meaningful; anything merely surprising or easy to get wrong
    is a `warning`, and may be collapsed.
 
-4. **The sidebar is five questions, not ten topics.** Section labels are
-   *What it is · Who you are · What it knows · How it moves · Why anyone
-   bothers*, which in order read as a sentence summarising the whole site.
+4. **The sidebar is six questions, not ten topics.** Part labels are
+   *What it is · Who can act · What it holds · How it changes · When it's
+   settled · Why anyone bothers*, which in order read as a sentence
+   summarising the whole site.
+
+   Three decisions inside that, each of which started as a mistake:
+
+   **Keccak-256 sits in part one, not with the keys.** It's a primitive that
+   addresses, the state root, transaction hashes and function selectors all
+   depend on — nothing to do with identity. It was under *Cryptography* only
+   because it precedes private keys in reading order, which is placement by
+   accident.
+
+   **"What it holds", never "Where".** Ethereum has no location; every node
+   holds the same state. A part called *Where* primes a reader to look for a
+   place — a server, a cloud — which is exactly the model the state page
+   opens by demolishing. A part name must not ask the question its pages have
+   to argue against.
+
+   **A page belongs to the part its own content serves, not the part its
+   topic belongs to in general.** *Contracts* sounds like execution, so it
+   went under *How it changes*; but that page is about what a contract **is**
+   — an account with code — and defers the EVM entirely. It belongs with
+   accounts. The EVM page, when written, belongs under *How*.
+
+   The *Fork-dependent details* section was folded away for a related reason:
+   once every page carried a durability label in its first line, a whole menu
+   section signalling staleness duplicated it, while introducing a second
+   organising principle — maintenance risk — competing with the questions.
+   Gas costs moved under *How it changes*, fork history under *About*.
    The searchable words — Keccak, nonce, gas — are the page titles directly
    beneath, which is where a reader arriving from a search engine lands
    anyway.

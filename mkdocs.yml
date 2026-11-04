@@ -93,67 +93,78 @@ markdown_extensions:
 nav:
   - Home: index.md
 
-  # ---- The five reading parts, each holding its topic sections ----------
-  # Two levels on purpose. The PART labels are the question that part answers,
-  # which in order read as a sentence summarising the site. The TOPIC labels
-  # inside are what the material is called everywhere else — Cryptography,
-  # Encoding — so a reader scanning for a subject still finds the word they
-  # came looking for.
+  # ---- Six parts, each named for the question it answers ----------------
+  # In order they read as a sentence: what it is, who can act, what it holds,
+  # how it changes, when it's settled, why anyone bothers. The PART label is
+  # the question; the TOPIC labels inside are what the material is called
+  # everywhere else, so a reader scanning for "Cryptography" still finds it.
   #
-  # Parts with a single topic (What it is, Why anyone bothers) list their
-  # pages directly rather than carrying a one-child subsection, which would
-  # be a level of nesting earning nothing.
-  #
-  # Directory names are untouched throughout, so no URL moves.
+  # A part with only one topic lists its pages directly — a subsection with
+  # one child is nesting that earns nothing. Directory names are untouched
+  # throughout, so no URL moves.
 
+  # Keccak-256 lives here, not with the keys. It is a primitive that
+  # addresses, the state root, transaction hashes and function selectors all
+  # depend on — nothing to do with identity. It sat under Cryptography only
+  # because it happens to precede private keys in reading order.
   - What it is:
       - What is Ethereum?: foundations/what-is-ethereum.md
       - Ether, wei and gwei: foundations/ether.md
       - Hex and bytes: foundations/hex-and-bytes.md
+      - Keccak-256: crypto/keccak256.md
 
-  - Who you are:
+  - Who can act:
       - Cryptography:
-          - Keccak-256: crypto/keccak256.md
           - Private keys: crypto/private-keys.md
           - Public keys: crypto/public-keys.md
           - Addresses: crypto/addresses.md
           - Signatures: crypto/signatures.md
-      # Separate from Cryptography because it's the layer ABOVE the protocol —
-      # conventions wallet software agreed on, which Ethereum has never heard of.
+      # Separate from Cryptography: this is the layer ABOVE the protocol —
+      # conventions wallet software agreed on, which Ethereum never heard of.
       - Wallets:
           - Wallets and seed phrases: wallets/seed-phrases.md
           - What losing your keys means: wallets/losing-your-keys.md
 
-  - What it knows:
+  # "What it holds" rather than "Where": Ethereum has no location, every node
+  # holds the same state, and a part called Where primes exactly the mental
+  # model the state page has to demolish.
+  - What it holds:
       - Accounts and state:
           - Accounts: accounts/accounts.md
           - The nonce: accounts/nonce.md
           - State: accounts/state.md
-          # Closes the topic by arguing the trade the first three describe.
           - Why accounts, and what they cost: accounts/why-accounts.md
-      # Answers the question the accounts page provokes and defers — "two
-      # kinds of account, so what IS the second kind?".
+      # Here, not under "How it changes": this page is what a contract IS —
+      # an account with code. Execution, opcodes and their costs come later
+      # and belong there. It also answers the question the accounts page
+      # provokes and defers, so it should arrive soon after.
       - Contracts:
           - What a smart contract is: contracts/smart-contracts.md
-      # Last on purpose: the Merkle Patricia Trie explains what the state root
-      # is, and state defers to it, so the reader needs state first. RLP needs
-      # nothing but hex, so it travels with the trie rather than earlier.
+      # Neither page is about change: RLP is a notation, the trie a structure.
+      # The trie in particular has nowhere else to go — it IS what the state
+      # root commits to, and the state page defers to it by name. RLP could
+      # sit in part one by dependency, but would arrive with nothing yet to
+      # encode and no reason to care.
       - Encoding:
           - RLP encoding: encoding/rlp.md
           - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
 
-  - How it moves:
-      # "Why metering is necessary" sits directly above Gas, not at the head of
-      # the topic, where it would precede knowing what a transaction is.
-      - Transactions:
-          - Transactions: transactions/transactions.md
-          - Why metering is necessary: transactions/why-metering.md
-          - Gas: transactions/gas.md
-          - Fees: transactions/fees.md
-      - Blocks:
-          - Blocks: blocks/blocks.md
-          - The block header: blocks/block-header.md
-          - The chain and reorgs: blocks/the-chain.md
+  # Gas costs folded in here, where someone hunting for a number would look.
+  # It used to be its own "Fork-dependent details" section, which the
+  # per-page durability labels made redundant — every page now states its own
+  # staleness in its first line, so a whole section signalling the same thing
+  # was a second organising principle competing with the questions.
+  - How it changes:
+      - Transactions: transactions/transactions.md
+      - Why metering is necessary: transactions/why-metering.md
+      - Gas: transactions/gas.md
+      - Fees: transactions/fees.md
+      - Gas costs: reference/gas-costs.md
+
+  - When it's settled:
+      - Blocks: blocks/blocks.md
+      - The block header: blocks/block-header.md
+      - The chain and reorgs: blocks/the-chain.md
 
   # Only the durable economics questions. The pages depending on Ethereum's
   # current issuance and burn wait for the protocol pages. See ROADMAP.md.
@@ -162,14 +173,8 @@ nav:
       - 'Who pays: issuance or fees': economics/who-pays.md
       - Fixed cap or flexible supply: economics/supply-cap.md
 
-  # Deliberately the same phrase FORKS.md uses for this material, so the
-  # policy and the menu share one vocabulary. Membership test: a page belongs
-  # here if and only if a hard fork can invalidate it. Directory stays
-  # reference/ so no URL moves.
-  - Fork-dependent details:
-      - Gas costs: reference/gas-costs.md
-      - Fork history: reference/fork-history.md
   - Glossary: glossary.md
   - About:
       - Ethereum changes: about/forks.md
+      - Fork history: reference/fork-history.md
       - Who's writing this: about/about-me.md

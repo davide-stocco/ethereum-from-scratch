@@ -27,4 +27,4 @@ tier: 3
 - Worth noting the second-order effect: the burn means ether supply can shrink when the network is busy. Mention it, but don't turn the page into tokenomics.
 - A worked example in gwei, with real numbers, beats the formula.
 
-**Next:** [Blocks](../blocks/blocks.md)
+**Next:** [Gas costs](../reference/gas-costs.md) — the actual numbers, kept in one place so every other page can talk about reasons instead.

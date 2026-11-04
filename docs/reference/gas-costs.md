@@ -43,4 +43,4 @@ No concept page should hardcode a gas cost. They explain *why* an operation is e
 | Plain transaction | 21,000 | Base charge: signature recovery, nonce check, state lookup | Genesis |
 | | | | |
 
-**Next:** [Fork history](fork-history.md)
+**Next:** [Blocks](../blocks/blocks.md) — how transactions get batched, and when a change is finally settled.
