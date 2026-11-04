@@ -8,7 +8,7 @@ Ethereum is usually explained badly. Most introductions either hand you a metaph
 
 This site tries something different, with two rules.
 
-**Nothing is explained before its prerequisites.** Start at [What is Ethereum?](foundations/what-is-ethereum.md), work down the menu, and each page assumes you've read the ones above it and nothing more.
+**Nothing is explained before its prerequisites.** Start at [What is Ethereum?](foundations/what-is-ethereum.md), work down, and each page assumes you've read the ones above it and nothing more. The site is in **five parts** for that reason — the order is the argument.
 
 **Everything here is permanent.** Ethereum upgrades through hard forks, and plenty of tutorials that were accurate when written are now quietly wrong. So this site begins with the part of Ethereum that has **not changed since 2015** — and realistically cannot, because altering any of it would break every wallet, library and deployed contract at once.
 
@@ -42,71 +42,63 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
 ## Contents
 
+Five parts, in order. Each assumes the ones before it and nothing else.
+
+Read as a sentence, they're: **what it is → who you are → what it knows → how it moves → why anyone bothers.**
+
 <div class="grid cards" markdown>
 
-- **Foundations**
+- **Part 1 · Foundations**
 
-    What Ethereum actually is, and the units and number formats you'll meet on every page after it.
+    *What Ethereum is, and the notation every later page uses.*
 
     [What is Ethereum?](foundations/what-is-ethereum.md) · [Ether, wei and gwei](foundations/ether.md) · [Hex and bytes](foundations/hex-and-bytes.md)
 
-- **Cryptography**
+- **Part 2 · Keys**
 
-    Hashing, keys, and how an address is derived from them. One worked example carried all the way through.
+    *How you prove who you are, and what holding the only secret costs you.* Mathematics that isn't Ethereum's own, and the conventions built on top of it.
 
-    [Keccak-256](crypto/keccak256.md) · [Private keys](crypto/private-keys.md) · [Public keys](crypto/public-keys.md) · [Addresses](crypto/addresses.md) · [Signatures](crypto/signatures.md)
+    **Cryptography** — [Keccak-256](crypto/keccak256.md) · [Private keys](crypto/private-keys.md) · [Public keys](crypto/public-keys.md) · [Addresses](crypto/addresses.md) · [Signatures](crypto/signatures.md)
 
-- **Wallets**
+    **Wallets** — [Seed phrases](wallets/seed-phrases.md) · [What losing your keys means](wallets/losing-your-keys.md)
 
-    What a wallet actually holds, why there's no password reset, and which parts of this Ethereum has never heard of.
+- **Part 3 · What the network remembers**
 
-    [Wallets and seed phrases](wallets/seed-phrases.md) · [What losing your keys means](wallets/losing-your-keys.md)
+    *The data every node keeps, how it's written down, and how one 32-byte number commits to all of it.*
 
-- **Accounts and state**
+    **Accounts and state** — [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md) · [Why accounts, and what they cost](accounts/why-accounts.md)
 
-    The four fields every account has, and why an account-based design needs a nonce when Bitcoin's doesn't.
+    **Contracts** — [What a smart contract is](contracts/smart-contracts.md)
 
-    [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md)
+    **Encoding** — [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
 
-- **Encoding**
+- **Part 4 · How it changes**
 
-    How Ethereum turns structured data into bytes, and how it fingerprints the whole state in 32 of them.
+    *The only way anything ever happens — what's in a transaction, what it costs, and how changes get batched and agreed.*
 
-    [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
+    **Transactions** — [Transactions](transactions/transactions.md) · [Why metering is necessary](transactions/why-metering.md) · [Gas](transactions/gas.md) · [Fees](transactions/fees.md)
 
-- **Transactions**
+    **Blocks** — [Blocks](blocks/blocks.md) · [The block header](blocks/block-header.md) · [The chain and reorgs](blocks/the-chain.md)
 
-    The only way anything ever changes — what's inside one, and what it costs.
+- **Part 5 · Why it keeps working**
 
-    [Transactions](transactions/transactions.md) · [Why metering is necessary](transactions/why-metering.md) · [Gas](transactions/gas.md) · [Fees](transactions/fees.md)
+    *The incentives that pay for the whole arrangement — and what happens to them if they stop.*
 
-- **Blocks**
+    **Economics** — [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md)
 
-    How transactions get bundled, chained, and occasionally un-chained.
+- **Reference** · not part of the reading path
 
-    [Blocks](blocks/blocks.md) · [The block header](blocks/block-header.md) · [The chain and reorgs](blocks/the-chain.md)
+    Everywhere else on this site is meant to stay true. **Fork-dependent details** are the pages that can't be — the costs an upgrade can reprice, and the record of what each one did. Every number on the site lives there and nowhere else.
 
-- **Economics**
-
-    Why running this costs anything, who ends up paying, and what capping a supply buys and costs.
-
-    [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md)
-
-- **Fork-dependent details**
-
-    Everywhere else on this site is meant to stay true. These are the two pages that don't — the costs a fork can reprice, and the record of what each upgrade did. Every number lives here, and nowhere else.
-
-    [Gas costs](reference/gas-costs.md) · [Fork history](reference/fork-history.md)
+    [Gas costs](reference/gas-costs.md) · [Fork history](reference/fork-history.md) · [Glossary](glossary.md) · [About this site](about/forks.md)
 
 </div>
-
-Also: a [glossary](glossary.md) defining every term used anywhere on the site.
 
 ---
 
 ## Reading paths
 
-The menu is one sensible order, and reading straight down it works. But depending on why you're here, some of it can wait.
+Straight through, part by part, is the order the site is built for. But depending on why you're here, some of it can wait.
 
 **New to Ethereum — read in order.** Start at [What is Ethereum?](foundations/what-is-ethereum.md) and work down. Nothing assumes anything you haven't already read.
 
@@ -114,9 +106,9 @@ The menu is one sensible order, and reading straight down it works. But dependin
 
 > [What is Ethereum?](foundations/what-is-ethereum.md) → [Ether, wei and gwei](foundations/ether.md) → [Why security has to be paid for](economics/security-budget.md) → [Who pays](economics/who-pays.md) → [Fixed cap or flexible supply](economics/supply-cap.md)
 
-Cryptography, encoding and accounts can be skipped and picked up later.
+Parts 2 to 4 can wait, and picking them up later costs nothing.
 
-**Here for the technical detail.** Work down Foundations, Cryptography, Accounts and Encoding in order. These are the parts that haven't changed since 2015, so they're worth learning properly once.
+**Here for the technical detail.** Parts 1 to 3, in order. That's nearly everything on the site that has not changed since 2015 — so it's worth learning properly once rather than twice.
 
 **Looking for one specific thing.** Use the search box, or the [glossary](glossary.md) for a quick definition with a link to the page that explains it.
 
