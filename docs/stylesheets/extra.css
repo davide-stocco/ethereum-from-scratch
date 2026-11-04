@@ -224,36 +224,42 @@
    --------------------------------------------------------------------------- */
 
 /* Three ranks now, since parts hold topics which hold pages. Each needs to
-   be distinguishable from the one above without shouting: the part is the
-   only thing set in caps, the topic is bold at normal size, pages are plain.
-   Specificity matters here — the deeper selectors must come after, or the
-   part rule wins everywhere and all three look the same. */
+   be distinguishable from the one above without shouting.
 
-/* Rank 1 — the part: "Who you are". Size carries the rank, not capitals:
-   small caps shout, and these labels are read far more often than they are
-   clicked. A little breathing room above does the rest of the work. */
+   Two traps here, both of which produced bugs:
+
+   Specificity — the part selector is the least specific of the three, so the
+   topic and page rules must come after it, or the part rule wins everywhere
+   and all three render identically.
+
+   `margin-top` — Material sets `.md-nav__link { margin-top: .625em }`, and
+   that is what puts a gap between every row in the menu. Overriding it to 0
+   on the deeper ranks collapses the whole sidebar into overlapping text. So
+   only the part rule touches it, and only to ask for more.
+
+   Size carries the rank, not capitals: small caps shout, and these labels are
+   read far more often than they are clicked. */
+
+/* Rank 1 — the part: "Who you are" */
 .md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__link {
   font-weight: 700;
   font-size: 0.84rem;
+  line-height: 1.45;
   letter-spacing: 0.005em;
-  margin-top: 0.5rem;
+  margin-top: 1.1em;
 }
 
 /* Rank 2 — the topic: "Cryptography" */
 .md-nav--primary .md-nav__item--nested .md-nav__item--nested > .md-nav__link {
   font-weight: 700;
-  font-size: inherit;
   letter-spacing: 0.01em;
-  margin-top: 0;
 }
 
 /* Rank 3 — a page. Also covers pages sitting directly under a part, which is
    how the two single-topic parts are arranged. */
 .md-nav--primary .md-nav__item--nested .md-nav__item:not(.md-nav__item--nested) > .md-nav__link {
   font-weight: 400;
-  font-size: inherit;
   letter-spacing: normal;
-  margin-top: 0;
 }
 
 /* The expand/collapse chevron should turn rather than jump. */
