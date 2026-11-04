@@ -10,9 +10,14 @@ description: An account is an entry in Ethereum's state with four fields. There 
 !!! info "Current as of Fusaka (December 2025)"
 
     The four fields and the "only an EOA can start a transaction" rule are
-    unchanged since 2015. **EIP-7702**, which shipped with Pectra in May 2025,
-    weakened the distinction between the two kinds — explained in its own box
-    below. Nothing in Fusaka touched accounts.
+    unchanged since 2015. **EIP-7702** weakened the distinction between the
+    two kinds when it shipped in May 2025 — explained in its own box below.
+    Nothing in Fusaka touched accounts.
+
+    *EIP* stands for **Ethereum Improvement Proposal**: the numbered documents
+    in which every change to Ethereum is proposed, argued over and finally
+    specified. They're the primary sources this site cites, and EIP-7702 is
+    simply the 7702nd.
 
     If you're reading much later, check [how this site handles
     forks](../about/forks.md).
@@ -33,11 +38,15 @@ Two words in that box need settling before anything else, because both are doing
 
 **The state** is the complete record of every account — the thing the [state machine](../foundations/what-is-ethereum.md) page described as "the current situation", as opposed to the history that produced it. Every node keeps a copy. This page only needs that much; [its own page](state.md) comes two pages from here.
 
-**EOA** stands for *externally owned account*, and the name repays a moment's thought. "Externally owned" means **the thing that controls it sits outside Ethereum** — a person, somewhere, holding a key the network has never seen. A contract account is the opposite: what controls it is code stored on the chain, in plain view, and the network can read it.
+**EOA** stands for *externally owned account*, and the name is badly chosen, because it suggests the account is somehow outside Ethereum. It isn't. **An EOA is on the chain exactly as much as any other account** — an entry in the state, with the same four fields, stored by every node.
 
-So the two kinds differ in *where control lives*. Outside the system, or inside it.
+What's external is only **the thing that controls it**: a private key, sitting on somebody's device, which the network has never seen and knows nothing about. The account is on-chain; its owner is off-chain.
 
-??? note "Nobody says \"EOA\" out loud"
+A contract account is the other way round. What controls it is code, and that code is stored *on* the chain in plain view, where every node can read it.
+
+So the two kinds differ in **where the controller lives**, not where the account lives. Both accounts live in the state, and neither could do anything otherwise.
+
+??? note "Nobody says “EOA” out loud"
 
     It's specification vocabulary. In conversation people say **wallet** — "send
     it to my wallet" — which is loose but unambiguous in context.
@@ -49,7 +58,7 @@ So the two kinds differ in *where control lives*. Outside the system, or inside 
 
 ## What an account actually looks like
 
-Easiest to start with one in front of you. Take the address `0x7E5F…95Bdf`, and ask a node what it holds:
+Easiest to start with one in front of you. Take the address `0x7E5F…95Bdf` — the one the [addresses](../crypto/addresses.md) page derived from the private key `1`, picked there because it's the simplest number a key can be and makes every step checkable by hand. Ask a node what that address holds:
 
 ```
 nonce        3
@@ -79,10 +88,10 @@ Every account, of either kind, holds these and nothing else [(Wood, 2014)](#ref-
 
 | Field | What it holds |
 | --- | --- |
-| `nonce` | A **counter.** For an EOA: how many transactions this account has sent. For a contract: how many contracts it has created |
-| `balance` | Ether owned, as a whole number of [wei](../foundations/ether.md) |
-| `storageRoot` | A 32-byte fingerprint of everything the account has in storage |
-| `codeHash` | A 32-byte fingerprint of the account's code |
+| `nonce` | A counter — transactions sent, or contracts created |
+| `balance` | Ether owned, in [wei](../foundations/ether.md) |
+| `storageRoot` | Fingerprint of everything in storage |
+| `codeHash` | Fingerprint of the code |
 
 The first two are plain numbers, but the word **nonce** needs defusing immediately, because it invites exactly the wrong guess.
 
@@ -90,7 +99,7 @@ The first two are plain numbers, but the word **nonce** needs defusing immediate
 
 The confusion is the vocabulary's fault. *Nonce* is merely short for **"number used once"**, which promises nothing about *how* the number is chosen.
 
-??? abstract "This site has already used \"nonce\" in the other sense"
+??? abstract "This site has already used “nonce” in the other sense"
 
     So the collision is worth naming, rather than letting you trip over it
     later.
@@ -133,6 +142,28 @@ storageRoot — the root of an empty trie
 ```
 
 The first is Keccak-256 of nothing at all — the empty-input hash the Keccak page used to check its own implementation against the published value. The second is the root of an empty trie. **Every ordinary wallet account on Ethereum carries that identical pair**, which is what makes the next section possible.
+
+### So one account can hold code *and* storage
+
+Yes, and for a contract that's the normal case. The two fields are independent, which gives the combinations you actually meet:
+
+| Account | `codeHash` | `storageRoot` |
+| --- | --- | --- |
+| Ordinary wallet | empty constant | empty constant |
+| Contract holding data | its code | its storage |
+| Freshly deployed contract | its code | empty constant |
+
+The missing fourth row — storage but no code — isn't something you meet, because the only thing that can write to an account's storage is that account's own code.
+
+### And yes, a contract can hold ether
+
+Worth being explicit, since it surprises people. **The `balance` field is on every account**, because there is only one kind of entry in the state. A contract isn't a different sort of object with a different shape; it's an account that happens to have code.
+
+It also has to be that way for contracts to be good for anything. An escrow must actually hold the money it's holding. A trading pool must own the assets it trades. If contracts couldn't own ether they could only ever direct other people's, which is a far weaker thing to be.
+
+What differs is **how the ether gets out**. An EOA's balance moves when its key signs a transaction. A contract's balance moves only if the contract's own code contains instructions to send it — and if the code has no such path, the ether stays there permanently, as unreachable as if the key had been lost. That has happened at scale more than once, and the reason is worth remembering: nobody can override the code, for precisely the reasons the [previous page](../wallets/losing-your-keys.md) set out.
+
+How contracts work beyond that — what the code is, how it runs, what it costs — is [its own page](../contracts/smart-contracts.md).
 
 ## Which kind is it? Look at one field
 
@@ -187,7 +218,7 @@ With the concrete picture in place, one consequence is worth drawing out.
 
 So an address nobody has ever used is not in the state at all. Not stored as a row of zeros — absent. Which is indistinguishable from an account holding nothing, and that's the point: zero balance and no stored entry describe the same situation. Ask a node for the balance of an untouched address and it answers zero, because that's the correct answer, not because it found a record saying so.
 
-??? abstract "Which makes \"empty\" an awkward category"
+??? abstract "Which makes “empty” an awkward category"
 
     A case where a tidy idea needed patching.
 
@@ -267,8 +298,9 @@ Two reasons it has to be this way:
 
     What it does **not** change: an EOA still needs a key to authorise
     anything, and transactions still originate only from EOAs. Both rules this
-    page rests on survive. What's blurring is the clean taxonomy — which is why
-    this page is Tier 2, and why that taxonomy is worth holding loosely.
+    page rests on survive. What's blurring is the tidy two-kinds taxonomy —
+    which is why this page carries a date stamp at the top, and why you should
+    hold that taxonomy loosely.
 
 ??? question "So is an account the same thing as a wallet?"
 
@@ -295,7 +327,11 @@ One last consequence, to set up the next page.
 
 Ethereum records **balances** where Bitcoin records individual coins. The [state machine](../foundations/what-is-ethereum.md) page covered the comparison, and [Buterin (2014)](#ref-buterin-2014) argues the case at length. Here is what the choice costs.
 
-A Bitcoin transaction consumes specific coins. Submit it twice and the second attempt fails on its own terms — the coins it names are already gone, so it isn't merely disallowed, it's meaningless. **The protection is a property of the thing being spent.**
+The difference is roughly **cash versus a bank statement.** Bitcoin is the cash: you hold particular notes, paying someone means handing over specific notes, and you get different ones back as change. The notes *are* the money, and each individual one either exists or has been spent. Ethereum is the statement: there are no notes at all, just a number beside your address that goes up and down.
+
+That distinction decides whether replay is even possible.
+
+A Bitcoin transaction consumes specific coins — it names them. Submit it twice and the second attempt fails on its own terms, because the coins it names are already gone: not merely disallowed, but meaningless, like trying to hand over a note you no longer have. **The protection is a property of the thing being spent.**
 
 An account has no such property. "Send 1 ether from A to B" names nothing that gets used up. It's a valid instruction before it executes and an equally valid instruction afterwards, because A's balance is just a number and the instruction never referred to any particular part of it. A signed transaction would be a **reusable cheque**: anyone who saw it could submit it again, and every copy would verify perfectly.
 

@@ -121,6 +121,14 @@
   border-radius: 0.15rem;
 }
 
+/* Field-name columns: a wrapped `storageRoot` reads as two words and makes
+   the column look broken. Only inline code in the first cell is protected,
+   so tables whose first column is prose still wrap normally. */
+.md-typeset table td:first-child > code,
+.md-typeset table th:first-child > code {
+  white-space: nowrap;
+}
+
 .md-typeset .tool__faint {
   opacity: 0.35;
 }

@@ -114,6 +114,13 @@ nav:
       - Accounts: accounts/accounts.md
       - The nonce: accounts/nonce.md
       - State: accounts/state.md
+  # Contracts answers the question the Accounts page provokes and defers —
+  # "two kinds of account, so what IS the second kind?". It needs accounts and
+  # nothing later, so it sits here rather than next to the EVM, which is where
+  # the execution detail will go once gas is published.
+  - Contracts:
+      - What a smart contract is: contracts/smart-contracts.md
+
   # Encoding sits AFTER state on purpose. The Merkle Patricia Trie explains
   # what the state root actually is, and the state page defers to it — so the
   # reader has to know what state is first. RLP needs nothing but hex, so it
