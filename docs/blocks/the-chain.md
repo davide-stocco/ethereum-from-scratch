@@ -29,4 +29,4 @@ description: How blocks form a chain, why the tip is uncertain, and what a reorg
 - Keep the fork-choice mechanism out. This page is about what a chain *is* and why its tip wobbles; how the network chooses is consensus.
 - A diagram of a short reorg, showing a transaction returning to pending, would carry most of the page.
 
-**Next:** [Why security has to be paid for](../economics/security-budget.md)
+**Next:** [Why security has to be paid for](../economics/security-budget.md) — what it costs to keep the whole arrangement running.

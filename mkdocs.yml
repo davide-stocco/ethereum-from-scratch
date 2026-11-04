@@ -125,6 +125,16 @@ nav:
           - Wallets and seed phrases: wallets/seed-phrases.md
           - What losing your keys means: wallets/losing-your-keys.md
 
+  # Where it runs — placed here because "node" is load-bearing from the
+  # signatures page onward and was defined nowhere. The definition has to
+  # precede the pages that lean on it; the parts of the argument that need
+  # state growth forward-reference it, the same way the state page borrows
+  # four facts about blocks and says so.
+  - Where it runs:
+      - What a node is: nodes/what-a-node-is.md
+      - Clients and the two layers: nodes/clients-and-layers.md
+      - Running one yourself: nodes/running-one.md
+
   # "What it holds" rather than "Where": Ethereum has no location, every node
   # holds the same state, and a part called Where primes exactly the mental
   # model the state page has to demolish.

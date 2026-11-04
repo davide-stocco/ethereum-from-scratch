@@ -8,7 +8,7 @@ Ethereum is usually explained badly. Most introductions either hand you a metaph
 
 This site tries something different, with two rules.
 
-**Nothing is explained before its prerequisites.** Start at [What is Ethereum?](foundations/what-is-ethereum.md), work down, and each page assumes you've read the ones above it and nothing more. The site is in **six parts** for that reason — the order is the argument.
+**Nothing is explained before its prerequisites.** Start at [What is Ethereum?](foundations/what-is-ethereum.md), work down, and each page assumes you've read the ones above it and nothing more. The site is in **seven parts** for that reason — the order is the argument.
 
 **Everything here is permanent.** Ethereum upgrades through hard forks, and plenty of tutorials that were accurate when written are now quietly wrong. So this site begins with the part of Ethereum that has **not changed since 2015** — and realistically cannot, because altering any of it would break every wallet, library and deployed contract at once.
 
@@ -42,11 +42,11 @@ The [glossary](glossary.md) also stands alone: it defines every term used anywhe
 
 ## Contents
 
-Six parts, in order. Each assumes the ones before it and nothing else.
+Seven parts, in order. Each assumes the ones before it and nothing else.
 
 Each part is named for the question it answers, and in order they make a sentence:
 
-> **what it is → who can act → what it holds → how it changes → when it's settled → why anyone bothers**
+> **what it is → who can act → where it runs → what it holds → how it changes → when it's settled → why anyone bothers**
 
 That's the whole site in a line. The topic names under each card are what the material is called elsewhere, in case you're looking for something specific.
 
@@ -66,7 +66,13 @@ That's the whole site in a line. The topic names under each card are what the ma
 
     *Wallets* — [Seed phrases](wallets/seed-phrases.md) · [What losing your keys means](wallets/losing-your-keys.md)
 
-- **Part 3 · What it holds**
+- **Part 3 · Where it runs**
+
+    The machines that hold all this and check every block for themselves — what they are, what software they run, and what it takes to be one.
+
+    [What a node is](nodes/what-a-node-is.md) · [Clients and the two layers](nodes/clients-and-layers.md) · [Running one yourself](nodes/running-one.md)
+
+- **Part 4 · What it holds**
 
     Everything every node stores, and how it's written down — including how one 32-byte number commits to all of it.
 
@@ -76,19 +82,19 @@ That's the whole site in a line. The topic names under each card are what the ma
 
     *Encoding* — [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
 
-- **Part 4 · How it changes**
+- **Part 5 · How it changes**
 
     The only way anything ever happens: what's inside a transaction, why the work has to be metered, and what it costs.
 
     [Transactions](transactions/transactions.md) · [Why metering is necessary](transactions/why-metering.md) · [Gas](transactions/gas.md) · [Fees](transactions/fees.md) · [Gas costs](reference/gas-costs.md)
 
-- **Part 5 · When it's settled**
+- **Part 6 · When it's settled**
 
     How changes get batched, chained, and occasionally un-chained — and what "confirmed" is actually worth.
 
     [Blocks](blocks/blocks.md) · [The block header](blocks/block-header.md) · [The chain and reorgs](blocks/the-chain.md)
 
-- **Part 6 · Why anyone bothers**
+- **Part 7 · Why anyone bothers**
 
     What keeping this running costs, who ends up paying, and what capping a supply buys and costs.
 
@@ -110,9 +116,9 @@ Straight through, part by part, is the order the site is built for. But dependin
 
 > [What is Ethereum?](foundations/what-is-ethereum.md) → [Ether, wei and gwei](foundations/ether.md) → [Why security has to be paid for](economics/security-budget.md) → [Who pays](economics/who-pays.md) → [Fixed cap or flexible supply](economics/supply-cap.md)
 
-Parts 2 to 5 can wait, and picking them up later costs nothing.
+Parts 2 to 6 can wait, and picking them up later costs nothing.
 
-**Here for the technical detail.** Parts 1 to 3, in order. That's nearly everything on the site that has not changed since 2015 — so it's worth learning properly once rather than twice.
+**Here for the technical detail.** Parts 1 to 4, in order. That's nearly everything on the site that has not changed since 2015 — so it's worth learning properly once rather than twice.
 
 **Looking for one specific thing.** Use the search box, or the [glossary](glossary.md) for a quick definition with a link to the page that explains it.
 

@@ -194,7 +194,7 @@ And one thing not to do: don't keep the only copy somewhere a single accident re
 - **Contracts can soften this** — social recovery, account abstraction — by moving authority from one key to code. The keys multiply rather than disappear, and new failure modes arrive with them.
 - No party can take your ether **because** no party can move it. Recovery and confiscation are the same power.
 
-**Next:** [Accounts](../accounts/accounts.md) — what an address actually has recorded against it.
+**Next:** [What a node is](../nodes/what-a-node-is.md) — the machines this site keeps mentioning, finally defined.
 
 ---
 
