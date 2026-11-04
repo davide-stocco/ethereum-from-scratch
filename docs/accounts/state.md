@@ -132,6 +132,53 @@ This is an induction running from genesis — *my state was right then, I applie
     commits to its children. That's the [Merkle Patricia
     Trie](../encoding/merkle-patricia-trie.md), and it gets its own page.
 
+## A transaction doesn't name the state it expects
+
+The natural question, once roots are in view: when you sign a transaction, which state root is it computed against? And should it carry that root, so the network knows what you assumed?
+
+**It carries no state root, and no reference to one.** A transaction holds a nonce, a recipient, a value, some data, gas limits, fee terms, a chain id and a signature — the [transactions](../transactions/transactions.md) page goes through the list. Nothing in it describes the state it expects to meet.
+
+So a transaction is an **instruction, not a statement about the world.** It says what to do. It says nothing about what it assumes.
+
+The single exception is the [nonce](nonce.md), and it's a revealing one. The nonce *is* a claim about state — "my account has sent exactly this many transactions" — but it constrains only your own account's position in its own sequence. About every other account, every balance and every contract's storage, your transaction is silent.
+
+### What yours actually runs against
+
+If it lands in block N, it executes against the state at the end of block N−1, plus the effects of every transaction ordered before it **within** block N.
+
+That intermediate state is perfectly real, and **no root is published for it.** Ethereum commits to the state once per block, after all of it has run — which is the second of the two simplifications flagged back on [What is Ethereum?](../foundations/what-is-ethereum.md).
+
+??? info "History: it used to publish one per transaction"
+
+    This is not how it always worked, and the change is instructive.
+
+    Until the Byzantium upgrade in 2017, every transaction **receipt** carried
+    the state root as of that transaction — a published commitment after each
+    one, not just each block. **EIP-658** [(Johnson, 2017)](#ref-eip658)
+    replaced that field with a plain status code: `1` for success, `0` for
+    failure.
+
+    The reason was cost against benefit. Computing an intermediate root per
+    transaction is real work for every node, and almost nothing used the
+    result, whereas *did this transaction succeed?* was the question everyone
+    actually asked and previously had to infer.
+
+    So Ethereum once offered exactly the per-transaction commitment this
+    section says doesn't exist, looked at the price, and sold it for a single
+    bit of far more useful information.
+
+### Why you shouldn't want to send one
+
+It sounds safer to pin the state you signed against. It would be close to unusable.
+
+A transaction naming a required state root would be invalidated by **any** change anywhere in the state — one unrelated transfer, by a stranger, in the same block. Since the state changes every block and thousands of transactions compete for each one, yours would have a useful life of a few seconds and would usually miss. A mempool of transactions waiting their turn could not work at all, because waiting is exactly what would kill them.
+
+So state-agnosticism is deliberate: it's what lets a transaction sit in a queue and remain valid. The bill arrives elsewhere, though, and it's worth knowing where:
+
+- **You cannot pin the conditions you'll meet.** The state your transaction executes against is whatever exists at inclusion, not what existed when you signed.
+- **Which is why contracts add their own guards.** Deadlines after which a call reverts, minimum amounts a trade must return — those exist because the protocol declines to offer them.
+- **And it's the gap between simulating and executing.** A wallet shows you the outcome against current state; the actual outcome is against state nobody can predict. Most of what gets called front-running lives in that gap.
+
 ## Storage is a state inside the state
 
 An account's `storageRoot` is where this turns recursive, and it's neater than it first sounds.
@@ -224,6 +271,8 @@ So the state rises monotonically, every node stores all of it, and the requireme
 - A node already verified its state against the **previous** block's root, so it has the same starting state, the same transactions and the same rules — and therefore knows what the new root must be before it looks.
 - A node applies a block, computes the root, and compares. So it verifies the state **without ever being sent any**.
 - A plain hash wouldn't work: the root must be cheap to update and must support proofs about parts. Both need a tree — the [Merkle Patricia Trie](../encoding/merkle-patricia-trie.md).
+- **A transaction names no state root.** It's an instruction, not an assumption — which is what lets it wait in a queue. The cost is that you can't pin the conditions it will meet.
+- Ethereum **used** to publish a root per transaction, and traded it in 2017 for a success-or-failure bit.
 - **Storage nests the same idea**: each contract's slots have their own root, which sits in its account entry.
 - Storage keys are hashed like addresses, and the defence matters more there, because a contract picks its slot numbers freely.
 - **History can be discarded; state cannot.** Nodes differ in how much history they keep, not in whether they hold the state.
@@ -238,6 +287,7 @@ So the state rises monotonically, every node stores all of it, and the requireme
 
 <div class="sources" markdown>
 
+- <a id="ref-eip658"></a>**Johnson, N.** (2017). *EIP-658: Embedding transaction status code in receipts.* Ethereum Improvement Proposals. Activated in Byzantium; replaced the per-transaction intermediate state root in receipts with a status code. <https://eips.ethereum.org/EIPS/eip-658>
 - <a id="ref-eip4444"></a>**Kadianakis, G., lightclient, & Stokes, A.** (2021). *EIP-4444: Bound Historical Data in Execution Clients.* Ethereum Improvement Proposals. Proposes that clients stop serving and may prune block bodies and receipts past a cutoff — which is only coherent because state and history are separable. <https://eips.ethereum.org/EIPS/eip-4444>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Defines the world state as a mapping from addresses to account states, and the state root as the header field committing to it. <https://ethereum.github.io/yellowpaper/paper.pdf>
 
