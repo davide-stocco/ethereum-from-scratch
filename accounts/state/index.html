@@ -1,0 +1,2712 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The state is every account and what it holds — kept by each node, never carried in a block, and committed to by one 32-byte number.">
+      
+      
+        <meta name="author" content="Davide">
+      
+      
+        <link rel="canonical" href="https://davide-stocco.github.io/ethereum-from-scratch/accounts/state/">
+      
+      
+        <link rel="prev" href="../nonce/">
+      
+      
+        <link rel="next" href="../why-accounts/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>State - Ethereum from Scratch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="robots" content="noindex, nofollow">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#state" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Ethereum from Scratch" class="md-header__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ethereum from Scratch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              State
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Ethereum from Scratch" class="md-nav__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ethereum from Scratch
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it is
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it is
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/what-is-ethereum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Ethereum?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/ether/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ether, wei and gwei
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/hex-and-bytes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hex and bytes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/keccak256/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keccak-256
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who can act
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Who can act
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cryptography
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/private-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/public-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/addresses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addresses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/signatures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signatures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wallets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/seed-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets and seed phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/losing-your-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What losing your keys means
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where it runs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Where it runs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/what-a-node-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a node is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/clients-and-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients and the two layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/running-one/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running one yourself
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it holds
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it holds
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts and state
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Accounts and state
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nonce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The nonce
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-is-one-enormous-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state is one enormous mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-is-not-in-the-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state is not in the blocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state root
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The state root">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-a-matching-root-means-matching-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a matching root means matching state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-node-actually-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a node actually does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-commitment-is-per-block-not-per-transaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The commitment is per block, not per transaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-is-a-state-inside-the-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage is a state inside the state
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-and-history-are-different-things" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State and history are different things
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-only-grows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state only grows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../why-accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why accounts, and what they cost
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what-it-reveals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it reveals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contracts/smart-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a smart contract is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it's written
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it's written
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/rlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLP encoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/merkle-patricia-trie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Merkle Patricia Trie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it changes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it changes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/why-metering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why metering is necessary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/gas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/fees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/gas-costs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas costs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When it's settled
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    When it's settled
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/blocks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blocks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/block-header/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The block header
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/the-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The chain and reorgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why anyone bothers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Why anyone bothers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/security-budget/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why security has to be paid for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/who-pays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who pays: issuance or fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/supply-cap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fixed cap or flexible supply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who decides, when nobody is in charge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/forks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ethereum changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/fork-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fork history
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about-me/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who's writing this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-is-one-enormous-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state is one enormous mapping
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-is-not-in-the-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state is not in the blocks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state root
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The state root">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-a-matching-root-means-matching-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why a matching root means matching state
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-a-node-actually-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a node actually does
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-commitment-is-per-block-not-per-transaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The commitment is per block, not per transaction
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#storage-is-a-state-inside-the-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Storage is a state inside the state
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-and-history-are-different-things" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        State and history are different things
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-state-only-grows" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The state only grows
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="state">State</h1>
+<p><strong><a href="../../about/forks/">Permanent, except one part</a>.</strong> That the state is a mapping from addresses to accounts, and that each block commits to it with a single root, has held since 2015. The <em>structure</em> producing that root is the part under active replacement.</p>
+<div class="admonition info">
+<p class="admonition-title">Current as of Fusaka (December 2025)</p>
+<p>Nothing here has changed in Ethereum's lifetime. The long-running proposals
+to replace the structure behind the state root — and to let untouched state
+expire — would change the <em>mechanism</em> without changing what the root
+promises. None has shipped. <a href="../../about/forks/">How this site handles forks</a>.</p>
+</div>
+<div class="admonition definition">
+<p class="admonition-title">State</p>
+<p>The complete set of <strong>every account and what it holds</strong> — each
+<a href="../../crypto/addresses/">address</a> paired with its four fields.</p>
+<p>It is <strong>not</strong> stored in the blocks. Every node keeps its own copy and
+updates it as blocks arrive. What a block carries is a <strong>state root</strong>: one
+32-byte fingerprint of the whole state, which lets every node check that
+its copy matches everybody else's.</p>
+</div>
+<p>This page needs four things about blocks, all of which <a href="../../foundations/what-is-ethereum/">What is Ethereum?</a> established and none of which needs the blocks section to understand:</p>
+<ul>
+<li>A <strong>block</strong> is a batch of transactions — a hundred or two — added to the chain as a single unit.</li>
+<li>Its transactions are <strong>ordered</strong>, and applied one after another in that order.</li>
+<li>Whoever assembles a block is its <strong>proposer</strong>. Anyone may; who gets to, and when, is the blocks section's business.</li>
+<li>The state is committed <strong>once per block</strong>, after every transaction in it has run — not once per transaction.</li>
+</ul>
+<p>That's the whole of the vocabulary borrowed from later pages. Everything else here is accounts and hashing, both of which you already have.</p>
+<h2 id="the-state-is-one-enormous-mapping">The state is one enormous mapping</h2>
+<p>Nothing more structurally complicated than a dictionary. The key is an address; the value is the four fields the <a href="../accounts/">accounts</a> page laid out.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>0x7E5F…95Bdf  →  nonce 3   balance 1500000000000000000   (no code)
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>0xd8dA…96045  →  nonce 847 balance 2000000000000000      (no code)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>0xA0b8…eB48   →  nonce 1   balance 0    code, and storage
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      ⋮
+</code></pre></div>
+<p>Hundreds of millions of entries, and that's the lot. Ask "what is Ethereum's state?" and the honest answer is <em>that table, as it stands right now.</em></p>
+<p>Two things follow immediately, and both matter more than they look.</p>
+<p><strong>The state has no history in it.</strong> It says 0x7E5F has sent three transactions. It does not say when, to whom, or what they were. It is a snapshot, not a record.</p>
+<p><strong>The state is the only thing you need to go on.</strong> To check whether a new transaction is valid, a node needs balances and nonces — which are in the state. It does not need to know how those values came about.</p>
+<h2 id="the-state-is-not-in-the-blocks">The state is not in the blocks</h2>
+<p>This is the misconception worth killing early, because almost everyone arrives with it.</p>
+<p>A block does <strong>not</strong> contain the state. It contains <strong>transactions</strong> — instructions — and each node applies them to the copy of the state it already has. The state is the <em>result</em> of running every block ever produced, and it lives on each node's disk, not on the chain.</p>
+<p>Which raises the obvious problem. If every node computes the state privately, how does anyone know they all got the same answer? Thousands of independent machines, each with their own copy, each claiming it's correct.</p>
+<p>They could exchange their copies and compare. That would work and is completely impractical: the state is measured in hundreds of gigabytes, so agreeing on every balance by sending every balance around is not a mechanism, it's a bandwidth bill. <em>(No figure is given here on purpose — it's a moving target, and any number printed on this page would be wrong within months.)</em></p>
+<h2 id="the-state-root">The state root</h2>
+<p>So they do the other thing. Each block header carries a single 32-byte value — the <strong>state root</strong> — which the proposer says is the fingerprint of the whole state after that block's transactions have been applied <a href="#ref-wood-2014">(Wood, 2014)</a>.</p>
+<p>Note <em>says</em>. The root is a <strong>claim</strong>, not a fact. Whoever built the block ran the transactions on their own copy, fingerprinted the result, and wrote the number down. Nothing about it is self-evidently true, and the entire mechanism is that it's a claim anybody can test.</p>
+<p><svg viewBox="0 0 470 280" role="img" aria-label="A small block header box contains a 32-byte state root. An arrow leads from it to a large box representing the whole state, holding hundreds of millions of accounts. The 32 bytes commit to all of it, so changing any single value anywhere changes the root." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="10" y="26" width="164" height="96" rx="5"/><rect x="22" y="72" width="140" height="38" rx="4" opacity="0.6"/><rect x="258" y="26" width="202" height="190" rx="5" stroke-dasharray="5 4"/><rect x="272" y="62" width="174" height="26" rx="3"/><rect x="272" y="94" width="174" height="26" rx="3"/><rect x="272" y="126" width="174" height="26" rx="3"/><path d="M174 91 L248 91"/></g><g fill="currentColor" stroke="none"><path d="M248 86 L258 91 L248 96 Z"/><text x="22" y="48" font-size="11" font-weight="700">block header</text><text x="22" y="64" font-size="9" opacity="0.75">a few hundred bytes</text><text x="32" y="90" font-size="11">stateRoot</text><text x="32" y="104" font-size="9" opacity="0.8">32 bytes</text><text x="270" y="48" font-size="11" font-weight="700">the state</text><text x="356" y="48" font-size="9" opacity="0.75">hundreds of gigabytes</text><text x="282" y="79" font-size="10">one account&#8217;s four fields</text><text x="282" y="111" font-size="10">another account</text><text x="282" y="143" font-size="10">another account</text><text x="282" y="172" font-size="10" opacity="0.7">&#8230; hundreds of millions more</text><text x="272" y="200" font-size="9" opacity="0.75">none of this is in the block</text><text x="10" y="244" font-size="10" opacity="0.85">Change one wei in one account and the root changes completely. So two</text><text x="10" y="258" font-size="10" opacity="0.85">nodes agreeing on 32 bytes agree on every balance, every nonce, and</text><text x="10" y="272" font-size="10" opacity="0.85">every byte of every contract&#8217;s storage.</text></g></svg></p>
+<h3 id="why-a-matching-root-means-matching-state">Why a matching root means matching state</h3>
+<p>Two steps, and they differ in kind.</p>
+<p><strong>Different data gives a different root.</strong> That's the <a href="../../crypto/keccak256/">Keccak-256</a> property: change one wei in one account and the output is unrecognisable. So if your copy of the state and mine differed in any respect at all, our roots would differ.</p>
+<p><strong>Running that backwards gives the useful direction.</strong> Our roots are identical, <em>therefore</em> our states are identical — because if they weren't, the roots couldn't be.</p>
+<p>That reversal isn't quite airtight, and it's worth being exact about why. Two different states yielding the same root is a <strong>collision</strong>, and the reason to discount it isn't logic, it's that nobody can find one — the 2<sup>128</sup> of the collisions box on the Keccak page. So the guarantee is <strong>computational, not mathematical</strong>, which is the same strength of claim everything else here rests on.</p>
+<h3 id="what-a-node-actually-does">What a node actually does</h3>
+<p>The step that makes this work is easy to miss: <strong>the node isn't starting from nowhere.</strong> Before this block arrived, it had already checked its state against the <em>previous</em> block's root. So it knows its starting point matches everybody else's.</p>
+<p>Which means it holds all three inputs:</p>
+<ul>
+<li>the <strong>same starting state</strong>, already verified</li>
+<li>the <strong>same transactions</strong>, which came in the block</li>
+<li>the <strong>same rules</strong>, which are the protocol</li>
+</ul>
+<p>Three identical inputs to a deterministic function must produce one identical output. So the node doesn't merely compare roots — <strong>it knows in advance what the root has to be.</strong> Then:</p>
+<ol>
+<li>Apply the block's transactions to its own copy of the state.</li>
+<li>Compute the root of the result.</li>
+<li>Compare with the root the header claims.</li>
+</ol>
+<p>Match, and it has independently confirmed its state is identical to the proposer's — every account, without having seen any of theirs. <strong>It never has to trust the state it was handed, because it never was handed any.</strong></p>
+<p>Mismatch, and it rejects the block. And notice the mismatch is unambiguous rather than merely worrying: because the node verified its own starting point one block ago, the fault cannot be in where it began. It is in the block.</p>
+<p>This is an induction running back to the very first block — <em>my state was right then, I applied the same instructions everybody else did, so my state is right now</em> — and it's why a node needs no copy of anybody else's state, ever.</p>
+<details class="example">
+<summary>What this stops, concretely</summary>
+<p>Suppose a proposer wants to credit itself an extra 1,000 ether.</p>
+<p>Building that state is easy, and fingerprinting it honestly is easy. The
+problem is the number it must then publish: it disagrees with the root
+every honest node computes from the same transactions, so every one of
+them rejects the block.</p>
+<p>And there is no number it could write instead, because <strong>the correct root
+is fixed by things everybody already has</strong> — the previous state and the
+transactions in the block. The proposer isn't being asked for information
+nobody else can obtain. It's being asked to state a value that others will
+independently derive, which leaves it nowhere to put a lie.</p>
+<p>Which is the asymmetry the whole design turns on. Producing the state is
+expensive; checking the claim about it costs a 32-byte comparison.</p>
+</details>
+<details class="abstract">
+<summary>Why a plain hash of the whole state wouldn't do</summary>
+<p>A fair question: hash the lot and you get 32 bytes, so why does the next
+section need a special structure?</p>
+<p>Because of what the root is asked to do besides matching.</p>
+<p><strong>It must be cheap to update.</strong> A node applies a block, changing perhaps a
+few hundred accounts out of hundreds of millions. Re-hashing the entire
+state for each block would be absurd. The real structure lets a change be
+pushed up one path, touching a handful of values.</p>
+<p><strong>It must support proofs about parts.</strong> Somebody should be able to prove
+<em>"this account holds this balance"</em> against the root, without presenting
+the whole state. A flat hash can't: the only way to verify it is to have
+all the data, which defeats the point for anyone running a <strong>light
+client</strong> — software that follows the chain without storing the state.</p>
+<p>Both needs point to the same answer — a tree of hashes, where each node
+commits to its children. That's the <a href="../../encoding/merkle-patricia-trie/">Merkle Patricia
+Trie</a>, and it gets its own page.</p>
+</details>
+<h3 id="the-commitment-is-per-block-not-per-transaction">The commitment is per block, not per transaction</h3>
+<p>One detail worth pinning down, because it bounds what a root can tell you.</p>
+<p>If a transaction lands in block N, it runs against the state at the end of block N−1 plus the effects of every transaction ordered before it inside block N. <strong>That intermediate state is real, and no root is published for it.</strong> Ethereum commits once per block, after all of it has run.</p>
+<details class="info">
+<summary>History: it used to commit per transaction</summary>
+<p>Not always the case, and the change is instructive.</p>
+<p>Until the Byzantium upgrade in 2017, every transaction
+<strong><a href="../../glossary/#receipt" title="The record a node produces for each transaction, saying what happened when it ran">receipt</a></strong>
+— the record a node produces for each transaction, saying what happened
+when it ran — carried the state root as of that transaction — a published commitment after each
+one, not merely each block. <strong>EIP-658</strong> <a href="#ref-eip658">(Johnson, 2017)</a>
+replaced that field with a plain status code: <code>1</code> for success, <code>0</code> for
+failure.</p>
+<p>The reason was cost against use. Computing an intermediate root per
+transaction is real work for every node, and almost nothing consumed the
+result, whereas <em>did this transaction succeed?</em> was the question everyone
+actually asked and previously had to infer.</p>
+<p>So Ethereum once published exactly this commitment, looked at the price,
+and sold it for a single bit of far more useful information.</p>
+</details>
+<p>A consequence worth carrying forward: a transaction never names the state it expects, and could not usefully do so. That belongs with <a href="../../transactions/transactions/">transactions</a>, where it's unpacked.</p>
+<h2 id="storage-is-a-state-inside-the-state">Storage is a state inside the state</h2>
+<p>An account's <code>storageRoot</code> is where this turns recursive, and it's neater than it first sounds.</p>
+<p>A contract's <strong>storage</strong> is its own private mapping: 32-byte keys, called <strong>slots</strong>, to 32-byte values. Nothing else can read or write it directly — only the contract's own code, which is why the <a href="../accounts/">accounts</a> page could say storage without code never occurs.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>slot 0x00…00  →  0x00…0539    (say, a stored number)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>slot 0x00…01  →  0x00…7E5F…   (say, an address)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>      ⋮
+</code></pre></div>
+<p>That mapping is fingerprinted exactly the way the whole state is — same structure, same guarantees — and the resulting root is what sits in the account's <code>storageRoot</code> field. So:</p>
+<ul>
+<li>the <strong>state root</strong> commits to every account,</li>
+<li>and each account's <strong>storage root</strong> commits to every slot that account holds.</li>
+</ul>
+<p>A tree of accounts, where some leaves carry a tree of their own. Change one slot in one contract and that contract's storage root changes, so that account's entry changes, so the state root changes. <strong>One 32-byte number at the top is a statement about every stored value on Ethereum.</strong></p>
+<details class="note">
+<summary>Storage keys get hashed too, for the same reason addresses do</summary>
+<p>The state is keyed by <code>keccak256(address)</code> rather than the address, as the
+<a href="../accounts/">accounts</a> page explained, so nobody can choose where in the
+structure their account lands.</p>
+<p>Storage does the same: the trie is keyed by <code>keccak256(slot)</code>. And here the
+defence matters <em>more</em>, not less. An address takes work to grind; a slot
+number is simply a number a contract writes to, free to choose outright. If
+raw slots were keys, a contract could write to a million slots sharing a
+long prefix and make its own storage pathologically deep for everybody
+storing it.</p>
+</details>
+<h2 id="state-and-history-are-different-things">State and history are different things</h2>
+<p>Both get called "the blockchain", and separating them explains what a node actually keeps.</p>
+<ul>
+<li><strong>History</strong> is the chain of blocks: every transaction ever sent, in order. It only gets added to.</li>
+<li><strong>State</strong> is where that history has left things. It gets <em>rewritten</em> constantly.</li>
+</ul>
+<p>History is a recording. State is the current position. And the surprising part:</p>
+<blockquote>
+<p>You can throw away the history and keep using the chain. You cannot throw away the state.</p>
+</blockquote>
+<p>To validate the next block, a node needs balances, nonces, code and storage — all present-tense, all in the state. It does not need last year's transactions. They produced the state it's holding, and having done so, they are no longer load-bearing.</p>
+<p>This isn't a thought experiment. <strong>EIP-4444</strong> <a href="#ref-eip4444">(Kadianakis et al., 2021)</a> proposes exactly it: execution clients stop serving and may delete block bodies and receipts past a cutoff, keeping the chain fully functional. That the proposal is even coherent is the clearest evidence the two things are separable.</p>
+<p>Hence the kinds of node you'll meet, which are differences in <strong>how much history</strong> is retained:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Keeps</th>
+<th>Can tell you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Archive</strong></td>
+<td>state at every past block</td>
+<td>what your balance was two years ago</td>
+</tr>
+<tr>
+<td><strong>Full</strong></td>
+<td>current state, plus enough history to re-derive</td>
+<td>everything, but old queries need recomputation</td>
+</tr>
+<tr>
+<td><strong>Pruned</strong></td>
+<td>current state, little history</td>
+<td>the present, authoritatively</td>
+</tr>
+</tbody>
+</table>
+<p>All three validate new blocks identically, because all three hold the current state. The difference is only what questions about the past they can answer.</p>
+<details class="question">
+<summary>So is Ethereum's data permanent or not?</summary>
+<p>Both, in different senses, and the distinction is worth having because the
+word <em>immutable</em> gets used far too loosely.</p>
+<p><strong>What cannot be altered</strong> is the history, by anyone, because every block
+commits to the one before it. Nobody can quietly rewrite a transaction from
+2017.</p>
+<p><strong>What is not guaranteed to be retained</strong> is a copy of it on any particular
+machine. Pruning is a local choice about disk, not a change to the chain.
+The data is immutable; your access to it depends on somebody having kept it.</p>
+<p>So "stored on the blockchain forever" is two claims wearing one coat: <em>it
+can't be changed</em> is a protocol guarantee, while <em>it will always be
+available to you</em> is a bet on other people's storage.</p>
+</details>
+<h2 id="the-state-only-grows">The state only grows</h2>
+<p>One closing fact, with consequences all over the rest of the site.</p>
+<p><strong>Nothing removes an account.</strong> A balance can fall to zero, a contract can become useless, a key can be lost — and the entry stays, because the protocol has no notion of state going out of date. The only deletions in Ethereum's history were the narrow cleanup of genuinely empty accounts the <a href="../accounts/">accounts</a> page described.</p>
+<p>So the state rises monotonically, every node stores all of it, and the cost of running one rises with it. That's the <strong>state growth</strong> problem — not a bug anybody introduced, but the direct price of having chosen accounts, which is <a href="../why-accounts/">the next page's</a> subject.</p>
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li>The state is a <strong>mapping from every address to its four fields</strong> — a snapshot of the present, containing no history.</li>
+<li><strong>Blocks don't contain the state.</strong> They contain transactions; each node applies them to its own copy.</li>
+<li>Each block header carries a <strong>state root</strong>: 32 bytes the proposer <em>claims</em> fingerprint the whole state. <strong>Two nodes agreeing on it agree on everything</strong> — a computational guarantee, since the alternative is finding a hash collision.</li>
+<li>A node already verified its state against the <strong>previous</strong> block's root, so it has the same starting state, the same transactions and the same rules — and therefore knows what the new root must be before it looks.</li>
+<li>A node applies a block, computes the root, and compares. So it verifies the state <strong>without ever being sent any</strong>.</li>
+<li>A plain hash wouldn't work: the root must be cheap to update and must support proofs about parts. Both need a tree — the <a href="../../encoding/merkle-patricia-trie/">Merkle Patricia Trie</a>.</li>
+<li>The root commits to the state <strong>after a whole block</strong>, never mid-block. Ethereum once published a root per transaction and traded it in 2017 for a success-or-failure bit.</li>
+<li><strong>Storage nests the same idea</strong>: each contract's slots have their own root, which sits in its account entry.</li>
+<li>Storage keys are hashed like addresses, and the defence matters more there, because a contract picks its slot numbers freely.</li>
+<li><strong>History can be discarded; state cannot.</strong> Nodes differ in how much history they keep, not in whether they hold the state.</li>
+<li><em>Immutable</em> conflates two claims: the data can't be changed, but your access depends on somebody retaining it.</li>
+<li><strong>The state only ever grows</strong>, because nothing expires. That's the price of accounts.</li>
+</ul>
+<p><strong>Next:</strong> <a href="../why-accounts/">Why accounts, and what they cost</a> — the trade this whole section has been describing.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-eip658"></a><strong>Johnson, N.</strong> (2017). <em>EIP-658: Embedding transaction status code in receipts.</em> Ethereum Improvement Proposals. Activated in Byzantium; replaced the per-transaction intermediate state root in receipts with a status code. <a href="https://eips.ethereum.org/EIPS/eip-658">https://eips.ethereum.org/EIPS/eip-658</a></li>
+<li><a id="ref-eip4444"></a><strong>Kadianakis, G., lightclient, &amp; Stokes, A.</strong> (2021). <em>EIP-4444: Bound Historical Data in Execution Clients.</em> Ethereum Improvement Proposals. Proposes that clients stop serving and may prune block bodies and receipts past a cutoff — which is only coherent because state and history are separable. <a href="https://eips.ethereum.org/EIPS/eip-4444">https://eips.ethereum.org/EIPS/eip-4444</a></li>
+<li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Defines the world state as a mapping from addresses to account states, and the state root as the header field committing to it. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../nonce/" class="md-footer__link md-footer__link--prev" aria-label="Previous: The nonce">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                The nonce
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../why-accounts/" class="md-footer__link md-footer__link--next" aria-label="Next: Why accounts, and what they cost">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Why accounts, and what they cost
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../javascripts/converters.js"></script>
+      
+        <script src="../../javascripts/keccak.js"></script>
+      
+        <script src="../../javascripts/keys.js"></script>
+      
+        <script src="../../javascripts/secp256k1.js"></script>
+      
+        <script src="../../javascripts/addresses.js"></script>
+      
+        <script src="../../javascripts/signatures.js"></script>
+      
+        <script src="../../javascripts/wallets.js"></script>
+      
+        <script src="../../javascripts/boxes.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2882 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="What a wallet actually holds, and how twelve ordinary words can stand behind an unlimited number of private keys.">
+      
+      
+        <meta name="author" content="Davide">
+      
+      
+        <link rel="canonical" href="https://davide-stocco.github.io/ethereum-from-scratch/wallets/seed-phrases/">
+      
+      
+        <link rel="prev" href="../../crypto/signatures/">
+      
+      
+        <link rel="next" href="../losing-your-keys/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Wallets and seed phrases - Ethereum from Scratch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="robots" content="noindex, nofollow">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wallets-and-seed-phrases" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Ethereum from Scratch" class="md-header__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ethereum from Scratch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Wallets and seed phrases
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Ethereum from Scratch" class="md-nav__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ethereum from Scratch
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it is
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it is
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/what-is-ethereum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Ethereum?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/ether/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ether, wei and gwei
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/hex-and-bytes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hex and bytes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/keccak256/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keccak-256
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who can act
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Who can act
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cryptography
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/private-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/public-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/addresses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addresses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/signatures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signatures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wallets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets and seed phrases
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets and seed phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-wallet-doesnt-hold-your-money" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A wallet doesn't hold your money
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-phrase-actually-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the phrase actually is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-phrase-many-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One phrase, many keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-words" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why words
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why words">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-numbers-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the numbers come from
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-path-and-why-two-wallets-can-disagree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The path, and why two wallets can disagree
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ethereum-knows-about-keys-it-has-no-idea-how-you-got-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ethereum knows about keys. It has no idea how you got them.
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ethereum knows about keys. It has no idea how you got them.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-a-node-actually-sees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a node actually sees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dice-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dice test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#then-what-is-a-seed-phrase-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Then what is a seed phrase for?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#three-things-this-explains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three things this explains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-it-does-not-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it does not mean
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../losing-your-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What losing your keys means
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where it runs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Where it runs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/what-a-node-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a node is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/clients-and-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients and the two layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/running-one/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running one yourself
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it holds
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it holds
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts and state
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Accounts and state
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/nonce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The nonce
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/why-accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why accounts, and what they cost
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/what-it-reveals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it reveals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contracts/smart-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a smart contract is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it's written
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it's written
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/rlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLP encoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/merkle-patricia-trie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Merkle Patricia Trie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it changes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it changes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/why-metering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why metering is necessary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/gas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/fees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/gas-costs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas costs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When it's settled
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    When it's settled
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/blocks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blocks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/block-header/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The block header
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/the-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The chain and reorgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why anyone bothers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Why anyone bothers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/security-budget/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why security has to be paid for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/who-pays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who pays: issuance or fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/supply-cap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fixed cap or flexible supply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who decides, when nobody is in charge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/forks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ethereum changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/fork-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fork history
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about-me/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who's writing this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-wallet-doesnt-hold-your-money" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A wallet doesn't hold your money
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-phrase-actually-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the phrase actually is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#one-phrase-many-keys" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One phrase, many keys
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-words" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why words
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why words">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#where-the-numbers-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the numbers come from
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-path-and-why-two-wallets-can-disagree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The path, and why two wallets can disagree
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ethereum-knows-about-keys-it-has-no-idea-how-you-got-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ethereum knows about keys. It has no idea how you got them.
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ethereum knows about keys. It has no idea how you got them.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-a-node-actually-sees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a node actually sees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dice-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The dice test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#then-what-is-a-seed-phrase-for" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Then what is a seed phrase for?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#three-things-this-explains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three things this explains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-it-does-not-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it does not mean
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="wallets-and-seed-phrases">Wallets and seed phrases</h1>
+<p><strong><a href="../../about/forks/">Permanent in practice</a>.</strong> None of this is part of Ethereum — these are conventions built on top of it. Nothing <em>binds</em> anyone to them, so they aren't permanent the way a protocol rule is. They have also gone unchanged since they were written, and every wallet now depends on them.</p>
+<p>The <a href="../../crypto/private-keys/">cryptography</a> section ended with a loose thread. A <a href="../../crypto/private-keys/">private key</a> is one number and gives <a href="../../crypto/addresses/">exactly one address</a> — yet every wallet you've used shows a list of addresses, and offers to restore all of them from twelve words.</p>
+<p>This page is how those two facts fit together.</p>
+<div class="admonition definition">
+<p class="admonition-title">Wallet</p>
+<p>Software that <strong>stores private keys and signs things with them.</strong> Not a
+container for money, and not an account — your ether is recorded on the
+network, not inside any app.</p>
+<p>A wallet's whole job is to keep your keys safe and use them when you ask.
+<em>Keyring</em> would have been the better word.</p>
+</div>
+<h2 id="a-wallet-doesnt-hold-your-money">A wallet doesn't hold your money</h2>
+<p>Worth unpacking that, because the usual word is actively misleading.</p>
+<p>Your ether isn't in your wallet. It's a number recorded against your <a href="../../crypto/addresses/">address</a> by every computer on the network — and your wallet is not one of them. Delete the app and the number is untouched. Install a different app and it still doesn't move.</p>
+<p>What a wallet holds is <strong>keys</strong>, and what it does is sign things with them. A better name would be a keyring.</p>
+<p>Which explains something that otherwise seems odd: you can load the same seed phrase into three different wallets at once and see the same balances in all three. Nothing was copied between them. All three can derive the same keys, so all three can produce the same <a href="../../crypto/signatures/">signatures</a> — and all three are reading the same public records.</p>
+<h2 id="what-the-phrase-actually-is">What the phrase actually is</h2>
+<p>Before the tree: a seed phrase is <strong>a number, written as words.</strong> Twelve of them usually, sometimes twenty-four.</p>
+<p>That's worth stressing, because the words look like something a person chose, and they aren't. Making a phrase goes like this:</p>
+<ol>
+<li>Generate <strong>random bits</strong> — 128 of them for a twelve-word phrase.</li>
+<li>Append a short <strong>checksum</strong> calculated from those bits.</li>
+<li>Chop the result into groups of <strong>11 bits</strong>.</li>
+<li>Read each group as a number from 0 to 2047, and use it to pick a word from a fixed list of exactly <strong>2048 words</strong>.</li>
+</ol>
+<p><svg viewBox="0 0 470 300" role="img" aria-label="128 random bits, here all zeros, with four checksum bits appended to make 132. The 132 bits are chopped into twelve groups of eleven. Each group is read as a number and picks that word from the list, so the first eleven groups are all zeros and give abandon, while the last group contains the four checksum bits, reads as three, and gives about." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="10" y="14" width="330" height="26" rx="3"/><rect x="348" y="14" width="40" height="26" rx="3" opacity="0.55"/><rect x="10" y="112" width="70" height="44" rx="3"/><rect x="86" y="112" width="70" height="44" rx="3"/><rect x="162" y="112" width="70" height="44" rx="3"/><rect x="238" y="112" width="70" height="44" rx="3"/><rect x="314" y="112" width="70" height="44" rx="3"/><rect x="390" y="112" width="70" height="44" rx="3"/><rect x="10" y="168" width="70" height="44" rx="3"/><rect x="86" y="168" width="70" height="44" rx="3"/><rect x="162" y="168" width="70" height="44" rx="3"/><rect x="238" y="168" width="70" height="44" rx="3"/><rect x="314" y="168" width="70" height="44" rx="3"/><rect x="390" y="168" width="70" height="44" rx="3" opacity="0.55"/><path d="M235 56 L235 76"/><path d="M368 46 L368 62 L300 62"/></g><g fill="currentColor" stroke="none"><path d="M230 76 L235 86 L240 76 Z"/><text x="175" y="32" font-size="11" text-anchor="middle">128 random bits &#8212; here, all zeros</text><text x="368" y="32" font-size="11" text-anchor="middle">+4</text><text x="296" y="66" font-size="9" text-anchor="end" opacity="0.8">4 checksum bits, worked out from those 128</text><text x="235" y="104" font-size="11" text-anchor="middle">132 bits, chopped into 12 groups of 11</text><text x="45" y="129" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="45" y="146" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="121" y="129" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="121" y="146" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="197" y="129" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="197" y="146" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="273" y="129" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="273" y="146" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="349" y="129" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="349" y="146" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="425" y="129" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="425" y="146" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="45" y="185" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="45" y="202" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="121" y="185" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="121" y="202" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="197" y="185" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="197" y="202" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="273" y="185" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="273" y="202" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="349" y="185" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000000</text><text x="349" y="202" font-size="10" text-anchor="middle" font-style="italic">abandon</text><text x="425" y="185" font-size="8" text-anchor="middle" font-family="monospace" opacity="0.8">00000000011</text><text x="425" y="202" font-size="10" text-anchor="middle" font-style="italic">about</text><text x="10" y="240" font-size="10" opacity="0.85">Each group is a number from 0 to 2047, and it picks that word from the list.</text><text x="10" y="256" font-size="10" opacity="0.85">Eleven zero bits give word 0, which is <tspan font-style="italic">abandon</tspan>.</text><text x="10" y="280" font-size="10" opacity="0.85">The checksum lands inside the <tspan font-weight="700">last</tspan> group, making it 3 rather than 0 &#8212;</text><text x="10" y="294" font-size="10" opacity="0.85">which is why the phrase ends <tspan font-style="italic">about</tspan>, and not a twelfth <tspan font-style="italic">abandon</tspan>.</text></g></svg></p>
+<p>So <code>abandon</code> doesn't mean anything. It's word number 0 in the list, and it's there because eleven of your random bits happened to come out as zeros.</p>
+<p>Nothing is remembered, chosen or looked up. The phrase <strong>is</strong> the number, in a form a human can copy onto paper without making mistakes.</p>
+<h2 id="one-phrase-many-keys">One phrase, many keys</h2>
+<p>Here's the structure, and the direction is what matters:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>                     seed phrase
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                          │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>                          │  one-way
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>                          ▼
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>                     512-bit seed
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                          │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>          ┌───────────────┼───────────────┐
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>          ▼               ▼               ▼
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>      key #0          key #1          key #2        … unlimited
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>          │               │               │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>          ▼               ▼               ▼
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>      address 0       address 1       address 2
+</code></pre></div>
+<p>The words are stretched into a single large number — the <strong>seed</strong> — and that seed can produce an endless supply of private keys. Each key then yields one address, exactly as the cryptography section described.</p>
+<p>So "many addresses from one thing" is true of a <strong>seed</strong> and false of a <strong>private key</strong>.</p>
+<details class="abstract">
+<summary>The procedure that turns one seed into many keys</summary>
+<p>Worth seeing, because "a repeatable procedure" is doing a lot of work in
+that sentence.</p>
+<p>Every point in the tree holds <strong>two</strong> things: a private key, and a
+separate 32-byte value called a <strong>chain code</strong>. The seed gives you the
+first of each.</p>
+<p>To produce child number <em>i</em> from any point in the tree:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>1.  combine  the chain code, the parent's key material, and i
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>2.  hash it  with HMAC-SHA512, giving 64 bytes
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>3.  the first 32 bytes, added to the parent key, = the child's key
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>4.  the last  32 bytes                          = the child's chain code
+</code></pre></div>
+<p>Three properties follow, and they're the useful part:</p>
+<ul>
+<li><strong>Deterministic.</strong> The same seed and the same <em>i</em> always give the same
+  key, on any machine, forever. That's what makes a written phrase a
+  complete backup.</li>
+<li><strong>One-way.</strong> A child key reveals nothing about its parent, so exposing
+  one account doesn't expose the others.</li>
+<li><strong>Unlimited.</strong> <em>i</em> can be any of about four billion values at every
+  level, and the levels nest. You will not run out.</li>
+</ul>
+<p>This is BIP-32 <a href="#ref-bip32">(Wuille, 2012)</a>, and the tool below runs it.</p>
+</details>
+<p><svg viewBox="0 0 470 232" role="img" aria-label="A tree. One seed leads to an account node at path m slash 44 slash 60 slash 0 slash 0, which branches from a single horizontal line into numbered children, each giving exactly one private key and one address. An ellipsis at the right shows the branching continues indefinitely." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="175" y="8" width="120" height="34" rx="4"/><path d="M235 42 L235 70"/><rect x="140" y="70" width="190" height="34" rx="4"/><path d="M235 104 L235 128"/><path d="M60 128 L436 128"/><rect x="24" y="152" width="72" height="46" rx="4"/><rect x="122" y="152" width="72" height="46" rx="4"/><rect x="220" y="152" width="72" height="46" rx="4"/><rect x="318" y="152" width="72" height="46" rx="4"/><path d="M60 128 L60 152"/><path d="M158 128 L158 152"/><path d="M256 128 L256 152"/><path d="M354 128 L354 152"/><path d="M424 128 L424 150" stroke-dasharray="3 3"/></g><g fill="currentColor" stroke="none"><text x="235" y="29" font-size="12" text-anchor="middle">the seed, 64 bytes</text><text x="235" y="92" font-size="12" text-anchor="middle" font-family="monospace">m/44'/60'/0'/0</text><text x="60" y="169" font-size="11" text-anchor="middle" font-weight="700">/0</text><text x="60" y="185" font-size="9" text-anchor="middle" opacity="0.75">one address</text><text x="158" y="169" font-size="11" text-anchor="middle" font-weight="700">/1</text><text x="158" y="185" font-size="9" text-anchor="middle" opacity="0.75">one address</text><text x="256" y="169" font-size="11" text-anchor="middle" font-weight="700">/2</text><text x="256" y="185" font-size="9" text-anchor="middle" opacity="0.75">one address</text><text x="354" y="169" font-size="11" text-anchor="middle" font-weight="700">/3</text><text x="354" y="185" font-size="9" text-anchor="middle" opacity="0.75">one address</text><text x="424" y="176" font-size="16" text-anchor="middle" opacity="0.7">&#8230;</text><text x="424" y="196" font-size="9" text-anchor="middle" opacity="0.7">and on,</text><text x="424" y="207" font-size="9" text-anchor="middle" opacity="0.7">without limit</text><text x="24" y="226" font-size="10" opacity="0.75">Same seed, same path, same addresses &#8212; in the same order, on any wallet.</text></g></svg></p>
+<p>Because that procedure is deterministic, the same phrase always produces the same keys, in the same order, on any wallet that walks the same route through the tree. <strong>That</strong> is what makes a written-down phrase a backup rather than merely a hint.</p>
+<details class="example">
+<summary>Try it: a phrase, and the addresses it produces</summary>
+<p><div class="tool" markdown="0">
+  <label for="hd-phrase">Seed phrase</label>
+  <input id="hd-phrase" type="text" autocomplete="off" spellcheck="false" value="abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about">
+  <label for="hd-pass">Passphrase (optional)</label>
+  <input id="hd-pass" type="text" autocomplete="off" spellcheck="false" placeholder="usually empty">
+  <p class="tool__out" id="hd-out"></p>
+</div></p>
+<p>This is the real derivation, run in your browser — the same procedure your
+wallet performs.</p>
+<p><strong>Step 1 — look at the five addresses.</strong> One phrase, five unrelated
+addresses, and it would go on indefinitely. This is what your wallet is
+doing when it shows you a list.</p>
+<p>Each address is shown with <strong>the private key it was derived from</strong>, in
+full. Those are real keys, and the only reason it is safe to print them
+here is that the phrase above is public. Compare any two: nothing in one
+hints at the other, and nothing in either hints at the phrase they both
+came from.</p>
+<p><strong>Step 2 — change one word.</strong> Every address changes completely. There's a
+hash at the heart of this, so the <a href="../../crypto/keccak256/">avalanche
+property</a> applies here too.</p>
+<p><strong>Step 3 — type something in the passphrase field.</strong> Every address changes
+again, and you now have a <em>different wallet</em> from the same twelve words.
+More on that below.</p>
+<p><strong>Step 4 — type something that isn't a phrase at all.</strong> <code>banana banana
+banana</code>, or your own name. It derives addresses from that too, perfectly
+happily.</p>
+<p>That is not a shortcoming of the tool; it is what the derivation does.
+Turning a phrase into a seed is one fixed calculation over the characters
+you typed, and it has no opinion about whether those characters were words.
+The wordlist and the checksum are checks a <strong>wallet</strong> runs <em>before</em> this
+point — which is why your wallet rejects a mistyped phrase and this tool
+accepts it. Worth noticing, because it's the same division as the <code>60</code> in
+the path: real rules, enforced entirely by software, nowhere in the
+protocol.</p>
+<p>The phrase shown is the standard test vector from the specification. It is
+famous, publicly known, and holds nothing — a good thing to experiment
+with, and the worst conceivable thing to use.</p>
+</details>
+<h2 id="why-words">Why words</h2>
+<p>A seed could perfectly well be written as hex. The reason it isn't:</p>
+<ul>
+<li><strong>You can copy words by hand without error.</strong> Sixty-four hex characters transcribed onto paper is a mistake waiting to happen; <code>abandon</code> is not.</li>
+<li><strong>You can read them aloud</strong>, and spell them if needed.</li>
+<li><strong>Most typos become detectable</strong>, because the words come from a fixed list of 2048. Write <code>abandonn</code> and it simply isn't in the list, so a wallet can refuse it before deriving anything.</li>
+<li><strong>And part of the phrase is a checksum</strong>, so a phrase with one word swapped for another valid word usually still fails.</li>
+</ul>
+<h3 id="where-the-numbers-come-from">Where the numbers come from</h3>
+<p>The list holds exactly <strong>2048 words</strong>, and 2048 is 2<sup>11</sup>. That number was chosen for precisely that reason: picking one word out of 2<sup>11</sup> carries exactly <strong>11 bits</strong>, with nothing left over.</p>
+<p>That makes the arithmetic tidy:</p>
+<table>
+<thead>
+<tr>
+<th>Words</th>
+<th>Bits total</th>
+<th>Of which random</th>
+<th>Of which checksum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12</td>
+<td>132</td>
+<td><strong>128</strong></td>
+<td>4</td>
+</tr>
+<tr>
+<td>18</td>
+<td>198</td>
+<td>192</td>
+<td>6</td>
+</tr>
+<tr>
+<td>24</td>
+<td>264</td>
+<td><strong>256</strong></td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+<p>Which is where the twelve and the twenty-four come from. They aren't arbitrary, and they aren't the only lengths the standard allows — they're the two that land on round numbers of random bits. Twelve words is exactly 128 bits of randomness; twenty-four is exactly 256. Those were the two security levels anyone wanted, so those are the two counts you meet in practice.</p>
+<details class="warning">
+<summary>12 words is not half as strong as 24</summary>
+<p>It's 2<sup>128</sup> against 2<sup>256</sup> — and 2<sup>128</sup> is
+already far beyond reach, by the same argument as on the
+<a href="../../crypto/private-keys/">private keys</a> page. Both are unguessable. The
+difference matters only against attacks that don't exist yet.</p>
+</details>
+<h2 id="the-path-and-why-two-wallets-can-disagree">The path, and why two wallets can disagree</h2>
+<p>The seed can produce unlimited keys, so something has to say <strong>which</strong> ones. That's the <strong>derivation path</strong> — the route taken down the tree. Wallets handling Ethereum keys have settled on this one:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>m / 44' / 60' / 0' / 0 / 0
+</code></pre></div>
+<p>Read left to right, each segment picks a branch:</p>
+<table>
+<thead>
+<tr>
+<th>Segment</th>
+<th>What it selects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>m</code></td>
+<td>the seed itself — the root of the tree</td>
+</tr>
+<tr>
+<td><code>44'</code></td>
+<td>a standard structured layout, rather than an ad-hoc one</td>
+</tr>
+<tr>
+<td><code>60'</code></td>
+<td><strong>Ethereum.</strong> 60 is the number registered for it in the wallet standard</td>
+</tr>
+<tr>
+<td><code>0'</code></td>
+<td>which account, if the wallet offers more than one</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>ordinary receiving addresses</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>the address index — 0, 1, 2, … the list your wallet shows you</td>
+</tr>
+</tbody>
+</table>
+<p>Note what that <code>60</code> is and isn't. It's an entry in a registry <strong>wallet software keeps</strong>, so that two wallets don't derive different keys for the same chain. Ethereum doesn't publish it, doesn't read it, and doesn't know it exists. The path is a convention among wallets about where to look — not something the protocol specifies.</p>
+<p>Walk a different path and you get entirely different keys from the same seed. Which is exactly why <strong>the same phrase can show different addresses in two different wallets</strong> — not a bug, and not a lost wallet. The phrase was fine; the wallet was looking somewhere else in the tree.</p>
+<details class="abstract">
+<summary>The standards underneath, and what each one does</summary>
+<p>Three separate specifications stack up here, all of them originally
+Bitcoin's:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Does what</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BIP-39</strong> <a href="#ref-bip39">(Palatinus et al., 2013)</a></td>
+<td>words ⇄ seed. Defines the 2048-word list, the checksum, and the function that stretches a phrase into a 512-bit seed</td>
+</tr>
+<tr>
+<td><strong>BIP-32</strong> <a href="#ref-bip32">(Wuille, 2012)</a></td>
+<td>seed → a tree of keys. Defines how a parent key and an index produce a child key</td>
+</tr>
+<tr>
+<td><strong>BIP-44</strong> <a href="#ref-bip44">(Palatinus &amp; Rusnak, 2014)</a></td>
+<td>which branches to use. Defines the <code>m/44'/coin'/account'/change/index</code> layout and the registered coin numbers</td>
+</tr>
+</tbody>
+</table>
+<p>The apostrophes mark <strong>hardened</strong> derivation — a variant that uses the
+parent <em>private</em> key rather than the public one, so a leaked child key and
+chain code can't be walked back up the tree.</p>
+<p>Stretching the phrase into a seed is deliberately slow: 2048 rounds of
+PBKDF2-HMAC-SHA512. That's not for elegance, it's to make guessing
+phrases expensive, which matters because human-chosen phrases would
+otherwise be weak.</p>
+</details>
+<details class="question">
+<summary>Then what is the optional passphrase?</summary>
+<p>A thirteenth secret, mixed in when the phrase is stretched into a seed.
+Change it and you get a completely different tree — different keys,
+different addresses, everything.</p>
+<p>Which has an unusual consequence. <strong>Any passphrase is valid</strong>, so one
+phrase plus one passphrase is one wallet, one phrase plus a <em>different</em>
+passphrase is a different wallet, and there is no way to tell from the
+phrase alone which passphrase, if any, was meant. There's no "wrong
+passphrase" error, because there's nothing to check against — you simply
+land on an empty wallet.</p>
+<p>That's deliberate: it means a phrase found in a drawer doesn't
+necessarily unlock anything. It also means a forgotten passphrase is
+indistinguishable from a lost phrase. Try it in the tool above.</p>
+</details>
+<h2 id="ethereum-knows-about-keys-it-has-no-idea-how-you-got-them">Ethereum knows about keys. It has no idea how you got them.</h2>
+<p>That sentence is the whole boundary, and it's worth being exact about, because the claim gets both over- and under-stated.</p>
+<p><strong>Keys are protocol.</strong> Three things on the previous pages are written into the specification and enforced by every node: that an <a href="../../crypto/addresses/">address</a> is derived from a public key in one particular way, that a public key comes from a private key on one particular curve, and that a <a href="../../crypto/signatures/">signature</a> from that key is the only thing which can authorise a change to that address. Those rules are Ethereum.</p>
+<p><strong>Where your key came from is not.</strong> Nothing on <em>this</em> page — not seed phrases, not the key tree, not derivation paths — appears anywhere in Ethereum. The protocol cares that you hold a key. It has no interest in how you came by it.</p>
+<h3 id="what-a-node-actually-sees">What a node actually sees</h3>
+<p>When you send a transaction, a node receives the fields plus <code>v</code>, <code>r</code> and <code>s</code>. It <a href="../../crypto/signatures/">recovers an address</a>, checks that account's nonce and balance, and executes.</p>
+<p>Nothing in that sequence mentions a seed, a phrase, a path or a wallet. The node <strong>cannot tell</strong> whether your key came from twelve words, a hardware device, or a number you made up — and it has no way to ask.</p>
+<h3 id="the-dice-test">The dice test</h3>
+<p>Here's the version that settles it.</p>
+<p>Roll a die 256 times. Write the results down as bits. Treat that number as a private key, derive the public key, derive the address, and send ether to it.</p>
+<p><strong>Ethereum accepts that key exactly as readily as one from any wallet.</strong> There's no registration step, no scheme to declare, nothing to opt into. There is no field anywhere that says <em>"this key was generated properly"</em>, because there would be nothing to put in it.</p>
+<p>If the protocol cared where keys came from, that wouldn't work. It does work. So it doesn't care.</p>
+<div class="admonition danger">
+<p class="admonition-title">Don't actually do that</p>
+<p>The dice test is sound as an argument and a poor idea in practice. Real
+dice are slightly biased, counting 256 results by hand goes wrong, and
+you'd have no checksum to catch the error — so you could lose everything
+to a miscount you never notice.</p>
+<p>It demonstrates what the protocol will accept. It is not a method.</p>
+</div>
+<h3 id="then-what-is-a-seed-phrase-for">Then what is a seed phrase for?</h3>
+<p>It solves a <strong>human</strong> problem, not a protocol one.</p>
+<p>A 64-character hex key is miserable to write on paper and verify, and you would need a fresh one for every account you wanted. So BIP-39 turns one number into words you can transcribe by hand, and BIP-32 turns one secret into a whole tree of keys so you never need to back up more than once.</p>
+<p>Both are conveniences. Neither makes anything possible that wasn't possible before — you could always have written down raw keys, one per account, and Ethereum would have been equally content.</p>
+<h3 id="three-things-this-explains">Three things this explains</h3>
+<p>Each of them looks like a defect until you see where the line falls.</p>
+<p><strong>Two wallets can show different addresses for the same phrase.</strong></p>
+<p>Each wallet picks a path down the tree, and nothing <em>forces</em> two wallets to pick the same one. If Ethereum defined paths, they would all have to agree, because disagreeing would mean breaking the rules. Ethereum doesn't define them, so a wallet is free to look somewhere else — and some older ones did. Your keys weren't lost. The second wallet was reading a different branch of the same tree, and the addresses it showed you were real, just unused.</p>
+<p><strong>A hardware wallet and a browser extension can share one phrase.</strong></p>
+<p>Not because Ethereum coordinates them — it has no idea either exists. Because both vendors independently chose to implement the same three published standards. That's co-operation between competitors, which can be relied on in practice and could in principle stop at any time.</p>
+<p><strong>Anyone could invent a different scheme tomorrow.</strong></p>
+<p>A new way of turning a backup into keys would need no permission, no proposal, and no change to Ethereum — because Ethereum only ever sees the finished keys. It would need other wallets to adopt it to be <em>useful</em>, but nothing about the protocol would resist it.</p>
+<p>That last point is the test for whether something is protocol or convention: <strong>could you replace it unilaterally?</strong> Seed phrases, yes. The curve that turns a private key into an address, no.</p>
+<h3 id="what-it-does-not-mean">What it does <em>not</em> mean</h3>
+<p>Not that wallets are unimportant. They're the only reason any of this is usable, and a flaw in one costs you everything. The point is narrower: the protocol doesn't <strong>define</strong> them — so they vary, compete, and improve without anyone needing to change Ethereum.</p>
+<details class="info">
+<summary>History: the boundary is starting to move</summary>
+<p>The clean story above is becoming less clean, and it's worth knowing which
+direction it's going.</p>
+<p><strong>Account abstraction</strong> is, in part, about pulling wallet logic <em>into</em>
+contract code — so that "what authorises a transaction" can be a rule
+rather than a single key: several signers required, spending limits, a
+recovery procedure, fees paid by somebody else.</p>
+<p>That is the protocol beginning to care about something it had left
+entirely to software. The layer this page describes doesn't go away — a
+contract still ultimately checks signatures made by keys — but "one key,
+one account" stops being the only arrangement available.</p>
+<p>Everything in the <a href="../../crypto/private-keys/">cryptography</a> section stays
+exactly as described. What changes is how much gets built on top of it.</p>
+</details>
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li>A wallet holds <strong>keys, not money.</strong> Your ether is in the state; the wallet can only sign.</li>
+<li>A <strong>seed</strong> can produce unlimited private keys; a private key still gives exactly one address.</li>
+<li>Because the procedure is <strong>repeatable</strong>, the phrase is a complete backup.</li>
+<li>The word list is <strong>2048 = 2<sup>11</sup></strong>, chosen so each word carries exactly 11 bits. That's why 12 words comes to 128 bits of randomness and 24 comes to 256, plus a checksum in each case.</li>
+<li>The <strong>derivation path</strong> decides which keys. Two wallets disagreeing about your addresses are walking different paths, not losing your money.</li>
+<li>The optional <strong>passphrase</strong> makes a different wallet from the same words, with no way to detect a wrong one.</li>
+<li><strong>None of it is part of Ethereum.</strong> It's convention on top, and the protocol would not notice if it changed.</li>
+</ul>
+<p><strong>Next:</strong> <a href="../losing-your-keys/">What losing your keys means</a> — the other side of holding the only secret.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-bip32"></a><strong>Wuille, P.</strong> (2012). <em>BIP-32: Hierarchical Deterministic Wallets.</em> Bitcoin Improvement Proposals. Defines the key tree and the hardened/normal child derivation used above. <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki</a></li>
+<li><a id="ref-bip39"></a><strong>Palatinus, M., Rusnak, P., Voisine, A., &amp; Bowe, S.</strong> (2013). <em>BIP-39: Mnemonic code for generating deterministic keys.</em> Bitcoin Improvement Proposals. Defines the 2048-word list, the checksum, and the PBKDF2 stretch verified against this specification's own test vectors. <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki</a></li>
+<li><a id="ref-bip44"></a><strong>Palatinus, M., &amp; Rusnak, P.</strong> (2014). <em>BIP-44: Multi-Account Hierarchy for Deterministic Wallets.</em> Bitcoin Improvement Proposals. Defines the path layout and the coin number 60 used for Ethereum. <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki">https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki</a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../crypto/signatures/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Signatures">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Signatures
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../losing-your-keys/" class="md-footer__link md-footer__link--next" aria-label="Next: What losing your keys means">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                What losing your keys means
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../javascripts/converters.js"></script>
+      
+        <script src="../../javascripts/keccak.js"></script>
+      
+        <script src="../../javascripts/keys.js"></script>
+      
+        <script src="../../javascripts/secp256k1.js"></script>
+      
+        <script src="../../javascripts/addresses.js"></script>
+      
+        <script src="../../javascripts/signatures.js"></script>
+      
+        <script src="../../javascripts/wallets.js"></script>
+      
+        <script src="../../javascripts/boxes.js"></script>
+      
+    
+  </body>
+</html>

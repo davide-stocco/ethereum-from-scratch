@@ -1,0 +1,2669 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Ethereum explained as a state machine — a shared state plus deterministic rules for changing it, and why that makes trust unnecessary.">
+      
+      
+        <meta name="author" content="Davide">
+      
+      
+        <link rel="canonical" href="https://davide-stocco.github.io/ethereum-from-scratch/foundations/what-is-ethereum/">
+      
+      
+        <link rel="prev" href="../..">
+      
+      
+        <link rel="next" href="../ether/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>What is Ethereum? - Ethereum from Scratch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="robots" content="noindex, nofollow">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#what-is-ethereum" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Ethereum from Scratch" class="md-header__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ethereum from Scratch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              What is Ethereum?
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Ethereum from Scratch" class="md-nav__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ethereum from Scratch
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it is
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it is
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Ethereum?
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Ethereum?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A state machine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-it-different-from-bitcoin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes it different from Bitcoin
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What makes it different from Bitcoin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accounts-have-persistent-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accounts have persistent memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accounts-can-hold-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accounts can hold code
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-would-anyone-want-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why would anyone want this?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why would anyone want this?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#but-theres-a-catch-and-its-a-big-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        But there's a catch, and it's a big one
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-two-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two layers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ether/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ether, wei and gwei
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hex-and-bytes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hex and bytes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/keccak256/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keccak-256
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who can act
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Who can act
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cryptography
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/private-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/public-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/addresses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addresses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/signatures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signatures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wallets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/seed-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets and seed phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/losing-your-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What losing your keys means
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where it runs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Where it runs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/what-a-node-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a node is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/clients-and-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients and the two layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/running-one/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running one yourself
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it holds
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it holds
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts and state
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Accounts and state
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/nonce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The nonce
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/why-accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why accounts, and what they cost
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/what-it-reveals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it reveals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contracts/smart-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a smart contract is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it's written
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it's written
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/rlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLP encoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/merkle-patricia-trie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Merkle Patricia Trie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it changes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it changes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/why-metering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why metering is necessary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/gas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/fees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/gas-costs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas costs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When it's settled
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    When it's settled
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/blocks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blocks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/block-header/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The block header
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/the-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The chain and reorgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why anyone bothers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Why anyone bothers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/security-budget/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why security has to be paid for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/who-pays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who pays: issuance or fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/supply-cap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fixed cap or flexible supply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who decides, when nobody is in charge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/forks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ethereum changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/fork-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fork history
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about-me/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who's writing this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#a-state-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A state machine
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-makes-it-different-from-bitcoin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What makes it different from Bitcoin
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What makes it different from Bitcoin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accounts-have-persistent-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accounts have persistent memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accounts-can-hold-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Accounts can hold code
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-would-anyone-want-this" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why would anyone want this?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why would anyone want this?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#but-theres-a-catch-and-its-a-big-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        But there's a catch, and it's a big one
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-two-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two layers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="what-is-ethereum">What is Ethereum?</h1>
+<p>Ethereum is a <strong>shared computer that nobody owns</strong>.</p>
+<p>That sentence is doing a lot of work, so let's take it apart properly. The most useful way to understand Ethereum is not as a currency, or a blockchain, or a network. It's as a <strong>state machine</strong> — and once that clicks, most other things about it stop being surprising.</p>
+<div class="admonition definition">
+<p class="admonition-title">Ethereum</p>
+<p>A <strong>state machine</strong> run in step by thousands of computers: a shared
+record of what every account holds and what every program has stored,
+plus rules for changing it that are identical everywhere.</p>
+<p>Because those rules are deterministic, anybody can recompute the result
+and check it. That is why the system needs nobody in charge.</p>
+</div>
+<h2 id="a-state-machine">A state machine</h2>
+<p>A state machine is just two things:</p>
+<ol>
+<li><strong>State</strong> — everything that is stored as of now.</li>
+<li><strong>Rules</strong> — which changes are valid, and what the state becomes after one.</li>
+</ol>
+<p>A chess board is a state machine. The state is where the pieces are. The rules are the legal moves. Given a board and a move, everyone in the world can work out the new board and they'll all get the same answer. There's no ambiguity, and there's no need to trust the person who told you the move was made — you can work out the result and check it yourself.</p>
+<p>This isn't a metaphor invented to help beginners, incidentally. Ethereum's formal specification — the <a href="../../glossary/#yellow-paper" title="Ethereum's formal specification, by Gavin Wood">Yellow Paper</a>, <a href="#ref-wood-2014">Wood (2014)</a> — describes it in exactly these terms: a transaction-based state machine. The framing is the protocol's own.</p>
+<details class="abstract">
+<summary>The formal version: the state transition function</summary>
+<p><a href="#ref-wood-2014">Wood (2014)</a> writes the state transition as a function. If
+<strong>σ</strong> is the world state and <strong>T</strong> a transaction:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>σ(t+1)  ≡  Υ(σ(t), T)
+</code></pre></div>
+<p><strong>Υ</strong> (upsilon) is the state transition function: it takes a state and a
+transaction and returns the next state. Because Υ is a deterministic
+function, every node computing it on the same inputs necessarily arrives at
+the same output — which is the formal statement of the "no need to trust
+anyone" property described above.</p>
+<p>The same idea applies one level up, at the level of a <strong>block</strong> — a batch of
+transactions, bundled together and added to the chain as a single unit.
+(Blocks get a section of their own later; for now, a batch is all you need.)
+Writing <strong>B</strong> for a block, there is a block-level function <strong>Π</strong> that applies
+each of the block's transactions in order and then finalises the result:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>σ(t+1)  ≡  Π(σ(t), B)
+</code></pre></div>
+<p>This is why state is committed per block rather than per transaction: Π is
+the function whose output gets recorded, and Υ is applied internally along
+the way.</p>
+</details>
+<p>Ethereum works exactly like this. Its state is every account and what each one holds:</p>
+<table>
+<thead>
+<tr>
+<th>Address</th>
+<th>Nonce</th>
+<th>Balance</th>
+<th>Code?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x5aAe...b48</code></td>
+<td>12</td>
+<td>2.5 ether</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>0xA0b8...Eb48</code></td>
+<td>1</td>
+<td>0 ether</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>0xd8dA...6045</code></td>
+<td>847</td>
+<td>1,337 ether</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>Its rule for changing that state is the <strong>transaction</strong>. One transaction in, one new state out.</p>
+<pre class="mermaid"><code>graph LR
+    A[State 1] --&gt;|transaction| B[State 2]
+    B --&gt;|transaction| C[State 3]
+    C --&gt;|transaction| D[State 4]</code></pre>
+<p>Thousands of computers each hold a copy of that state. When a transaction arrives, each one applies the rules independently — and because the rules are <a href="../../glossary/#determinism" title="The same inputs always produce the same result, for everyone">deterministic</a>, meaning the same state and the same transaction always produce the same new state, they all arrive at an identical answer. Any machine reporting something different would be caught immediately, the same way you'd catch someone lying about a chess position.</p>
+<p>That property is the whole point, and it's worth stating bluntly: <strong>nobody has to trust anyone, and nobody is in charge.</strong> Not that everyone trusts each other — trust is simply not required, because anyone can recompute the result and check.</p>
+<p>That's Ethereum. Everything else on this site is detail about what's inside the state, what's inside a transaction, and how thousands of computers agree on which transactions happened and in what order.</p>
+<details class="note">
+<summary>Two simplifications in the table above</summary>
+<p><strong>The address isn't one of the account's fields.</strong> It's the key you look an
+account <em>up</em> by — like a name in an index — not something the account
+stores. So that table has four columns but shows only three stored values.</p>
+<p>An account stores exactly four things: the <strong><a href="../../accounts/nonce/" title="A per-account counter of transactions already sent">nonce</a></strong>, the <strong>balance</strong>, and
+two 32-byte fingerprints — one standing for everything the account holds in
+storage, one for its code. The <code>Code?</code> column above is a yes-or-no
+stand-in for that second fingerprint. Both fingerprints need groundwork to
+explain, so they wait for the <a href="../../accounts/accounts/">accounts</a> page.</p>
+<p><strong>State is recorded per block, not per transaction.</strong> Transactions really
+are applied one at a time, exactly as the diagram shows. But transactions
+travel in <strong><a href="../../glossary/#block" title="A batch of transactions, added to the chain as one unit">blocks</a></strong> — batches of a hundred or two,
+added to the chain as a single unit — and Ethereum only <em>records</em> the state
+once per block, after every transaction in it has run.</p>
+<p>It's the difference between typing and saving. Every keystroke changes your
+document; only hitting <strong>Save</strong> writes anything to disk. The states in
+between genuinely existed, but nothing kept them.</p>
+<p>So the states between transactions are real, and no one has a record of
+them. Only the state at a block boundary is permanent and agreed on — which
+is why the <strong>block</strong> is the unit the network agrees about, and why you'll see
+everything from finality to reorganisations discussed per block rather than
+per transaction.</p>
+</details>
+<details class="info">
+<summary>History: why not record state per transaction? They tried.</summary>
+<p>It's a fair question, and Ethereum's first answer was the opposite of the
+current one.</p>
+<p>Before the <strong>Byzantium</strong> upgrade in 2017, every transaction carried its own
+post-transaction <a href="../../glossary/#state-root" title="A single 32-byte fingerprint of the entire state">state root</a> — exactly the
+per-transaction snapshot the design now lacks. You really could point at a single transaction and prove
+the state immediately after it.</p>
+<p><a href="#ref-eip-658">EIP-658 (2017)</a> removed that and replaced it with a one-bit
+success-or-failure status code. The reasoning was practical: computing and
+storing a full state fingerprint after every single transaction was
+expensive, and almost nothing used them.</p>
+<p>So the answer to "why not per transaction?" is that they did, and it wasn't
+worth the cost.</p>
+<p>One thing <em>is</em> still kept per transaction: its
+<strong><a href="../../glossary/#receipt" title="The record of what a transaction did — gas used, logs, success or failure">receipt</a></strong>,
+recording gas used, any logs emitted, and whether it succeeded. So per-transaction
+<strong>outcomes</strong> are committed; per-transaction <strong>state snapshots</strong> are not.
+That's the precise line.</p>
+</details>
+<h2 id="what-makes-it-different-from-bitcoin">What makes it different from Bitcoin</h2>
+<p>Bitcoin is also a state machine, with a narrower job.</p>
+<p>It's often said that the difference is that Ethereum has code and Bitcoin doesn't. <strong>That's not true.</strong> Bitcoin has a scripting language, called <a href="../../glossary/#script" title="Bitcoin's scripting language — deliberately stateless and limited">Script</a>, and it's used for real things — wallets that need several people to approve a payment, or payments that can't be collected until a particular date.</p>
+<p>The difference is what the code is allowed to <em>do</em>.</p>
+<p><strong>A Bitcoin script answers one yes-or-no question:</strong> may this particular piece of money be spent, by this person, right now? It runs, it gives its answer, and it forgets everything. It has nowhere to store anything, and no way to look at what happened last week.</p>
+<p><strong>An Ethereum program has a memory of its own.</strong> It gets its own space to write things down, and what it writes survives — so it can keep a count, record who did what, and read back a year later something it wrote today. It also isn't confined to a single yes-or-no answer; it can work through any calculation you can describe.</p>
+<p>That's the real divide. Not code versus no code, but <strong>a one-off check versus a program that remembers.</strong></p>
+<details class="abstract">
+<summary>The formal version: stateless versus stateful</summary>
+<p>In the usual terminology: Bitcoin's Script is <strong>stateless</strong> and
+deliberately <strong>not <a href="../../glossary/#turing-complete" title="Able to express any computation, loops included">Turing-complete</a></strong> —
+it has no loops or recursion, so
+every script provably terminates, and its only output is whether a spend is
+authorised. Bounded execution comes free from the restricted language.</p>
+<p>Ethereum's contracts are <strong>stateful</strong> — each has a persistent key–value
+store, addressed by 32-byte keys, that survives between calls — and the
+<a href="../../glossary/#evm" title="The Ethereum Virtual Machine, which executes contract code">EVM</a> <em>is</em> Turing-complete. Termination therefore cannot come from the
+language, so it's imposed economically instead: every operation costs gas,
+the caller fixes a limit in advance, and execution halts when the limit is
+reached.</p>
+<p>The design trade is explicit. Bitcoin buys guaranteed termination by giving
+up expressiveness. Ethereum keeps expressiveness and buys termination with
+metering.</p>
+</details>
+<p>Two things follow from this, and both matter.</p>
+<h3 id="accounts-have-persistent-memory">Accounts have persistent memory</h3>
+<p><strong>In Bitcoin, the state is a collection of separate chunks of money</strong> <a href="#ref-nakamoto-2008">(Nakamoto, 2008)</a>. Each chunk was produced by some earlier payment, and each can be spent exactly once, in full. There is no stored balance anywhere: your wallet works out "you have 0.4 bitcoin" by adding up the chunks it's able to spend. Spending one destroys it and creates new chunks — one for the recipient, one returning your change.</p>
+<details class="note">
+<summary>The name for those chunks: UTXOs</summary>
+<p>They're called <strong>UTXOs</strong> — unspent transaction outputs. You'll meet the
+term constantly in comparisons between the two systems, and it's worth
+knowing even though nothing on Ethereum uses it.</p>
+</details>
+<p><strong>In Ethereum, accounts are the state.</strong> Your balance is a single number recorded against your address, and it goes up and down. Much closer to a bank account.</p>
+<p>Both halves of that comparison in one picture, with Alice paying Bob 6:</p>
+<p><svg viewBox="0 0 470 292" role="img" aria-label="Two models side by side. In Bitcoin, paying six destroys the coins worth five and three and creates two new coins, six to the recipient and two as change. In Ethereum, one balance falls from ten to four and another rises from zero to six; nothing is created or destroyed." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><path d="M235 26 L235 252" stroke-dasharray="4 4" opacity="0.35"/><circle cx="42" cy="70" r="17"/><circle cx="92" cy="70" r="17"/><circle cx="142" cy="70" r="17"/><circle cx="42" cy="186" r="17"/><circle cx="92" cy="186" r="17"/><circle cx="142" cy="186" r="17"/><path d="M100 108 L100 140"/><rect x="268" y="52" width="150" height="34" rx="4"/><rect x="268" y="94" width="150" height="34" rx="4"/><rect x="268" y="168" width="150" height="34" rx="4"/><rect x="268" y="210" width="150" height="34" rx="4"/><path d="M343 128 L343 160"/></g><g fill="currentColor" stroke="none"><path d="M95 140 L100 150 L105 140 Z"/><path d="M338 160 L343 170 L348 160 Z"/><text x="14" y="18" font-size="11" font-weight="700">BITCOIN &#183; coins</text><text x="264" y="18" font-size="11" font-weight="700">ETHEREUM &#183; balances</text><text x="42" y="75" font-size="13" text-anchor="middle">5</text><text x="92" y="75" font-size="13" text-anchor="middle">3</text><text x="142" y="75" font-size="13" text-anchor="middle">2</text><text x="14" y="104" font-size="9" opacity="0.75">what Alice holds</text><text x="110" y="128" font-size="10">Alice pays 6</text><text x="42" y="191" font-size="13" text-anchor="middle">6</text><text x="92" y="191" font-size="13" text-anchor="middle">2</text><text x="142" y="191" font-size="13" text-anchor="middle">2</text><text x="25" y="214" font-size="9" opacity="0.75">to Bob</text><text x="74" y="214" font-size="9" opacity="0.75">change</text><text x="128" y="214" font-size="9" opacity="0.75">untouched</text><text x="14" y="266" font-size="9" opacity="0.75">The 5 and the 3 no longer exist.</text><text x="14" y="280" font-size="9" opacity="0.75">New coins replaced them.</text><text x="282" y="74" font-size="12">Alice&#160;&#160;10</text><text x="282" y="116" font-size="12">Bob&#160;&#160;&#160;&#160;0</text><text x="353" y="152" font-size="10">Alice pays 6</text><text x="282" y="190" font-size="12">Alice&#160;&#160;&#160;4</text><text x="282" y="232" font-size="12">Bob&#160;&#160;&#160;&#160;6</text><text x="264" y="266" font-size="9" opacity="0.75">Two numbers changed.</text><text x="264" y="280" font-size="9" opacity="0.75">Nothing created, nothing destroyed.</text></g></svg></p>
+<p>Read the left side first. Alice holds three coins — a 5, a 3 and a 2 — and she owes 6. No coin is worth 6, so she hands over the 5 and the 3 together, and those two <strong>cease to exist</strong>. In their place the payment creates a new 6 for Bob and a new 2 as her change. Her 2 at the end is not the 2 she started with; it's change from coins that are gone. This is why Bitcoin transactions are described as <em>consuming</em> their inputs.</p>
+<p>The right side has none of that machinery. Alice's balance falls from 10 to 4 and Bob's rises from 0 to 6. No object was consumed and none was created — <strong>two numbers were edited.</strong> Which is also why there's no change to receive: she paid 6, not "a 5 and a 3 and please give me 2 back".</p>
+<p>This sounds like a small implementation difference. It isn't — <a href="#ref-buterin-2014">Buterin (2014)</a> argues the case for accounts over separate outputs at length — and it's why we cover <a href="../../accounts/accounts/">accounts</a> early on this site. It means an address is a thing that <em>persists</em> — somewhere to attach a balance, a counter, and eventually storage and code. Bitcoin has no equivalent place to put any of that, because it has no lasting object to attach it to.</p>
+<h3 id="accounts-can-hold-code">Accounts can hold code</h3>
+<p>Some accounts have a program attached. These are <strong><a href="../../glossary/#smart-contract" title="A program stored at an account, run by the network when called">smart contracts</a></strong>.</p>
+<p>When you send a transaction to a contract account, you're not just moving money — you're <em>calling the program</em>, and it runs. It can check conditions, do arithmetic, store results, and send ether onward. Every node on the network runs the same code on the same state and gets the same answer.</p>
+<p>Every step of that execution is <strong>metered and capped</strong>. The caller pays for each individual operation, and sets a ceiling in advance on how much work they're willing to pay for. (The unit that work is counted in is called <strong><a href="../../glossary/#gas" title="The unit computational work is measured in">gas</a></strong>; it gets a page of its own later.) When the ceiling is reached, execution stops — which is why an infinite loop in somebody's contract can't hang the network.</p>
+<p>That's the actual novelty. Bitcoin lets you agree on <em>who owns what</em>. Ethereum lets you agree on <em>what a program computed</em>.</p>
+<details class="question">
+<summary>So where does the 'world computer' phrase come from?</summary>
+<p>This is the kernel of truth in it. Ethereum really does execute programs, and the whole network agrees on the results.</p>
+<p>But it's a terrible computer by any normal measure — it's slower than a phone from 2007, every operation costs real money, and all its data is public. It isn't useful because it's powerful. It's useful because <strong>tampering with it is extraordinarily expensive, and no single party decides what it computed.</strong></p>
+<p>Worth being precise about that, though: it's <em>hard</em> to stop, not impossible. Validators can decline to include particular transactions, and the concentration of the firms that assemble blocks is a live, openly-debated concern. <a href="#ref-daian-2019">Daian et al. (2019)</a> document how profitable it is to control transaction ordering — evidence that the position is contested rather than neutral. Censorship resistance is a matter of cost and probability, not a guarantee.</p>
+</details>
+<h2 id="why-would-anyone-want-this">Why would anyone want this?</h2>
+<p>Because the expensive part of a lot of agreements isn't the computing — it's the trusting.</p>
+<p>Suppose you're buying a second-hand camera from a stranger in another country. You'd rather not send the money before the camera arrives. They'd rather not post it before they've been paid. Someone has to go first, and whoever goes first carries all the risk.</p>
+<p>Normally an institution solves this: a marketplace that holds the payment until delivery, a bank, a card issuer who will reverse the charge. These work — but they cost money, take time, can refuse you, and only exist in some countries.</p>
+<p>On Ethereum you can instead put the money somewhere <strong>neither of you controls</strong>, with the release rule written as code. Neither of you has to be trusted to hold it, and neither does any third party.</p>
+<h3 id="but-theres-a-catch-and-its-a-big-one">But there's a catch, and it's a big one</h3>
+<p>A contract can hold the money and release it without trusting anyone. <strong>It cannot know whether the camera arrived.</strong></p>
+<p>Contracts can only see what's on the chain. They have no internet connection, and they can't look anything up — if they could, two nodes might get different answers and the determinism that makes the whole system work would collapse.</p>
+<p>So something outside has to report the result. That reporter is called an <strong><a href="../../glossary/#oracle" title="A service that reports off-chain facts to a contract">oracle</a></strong>, and the moment you need one, you're trusting it. You've moved the trust rather than removed it. <a href="#ref-zhang-2016">Zhang et al. (2016)</a> set the problem out formally.</p>
+<p>This is worth being honest about, because it's the gap most introductions skip. What smart contracts genuinely eliminate is the need to trust a <strong>custodian</strong> — whoever would otherwise hold the money. They do nothing about trusting whoever supplies facts about the outside world.</p>
+<p>Which is why the applications that work best are the ones where <strong>every relevant fact is already on-chain</strong>: swapping one token for another, lending against on-chain collateral, an escrow both parties sign off on. No oracle needed, nothing to trust.</p>
+<p>Whether the trade is worth it depends enormously on the situation. Plenty of things built on Ethereum would be better as an ordinary database. But when you genuinely can't agree on who should hold the money, it's a real answer.</p>
+<h2 id="the-two-layers">The two layers</h2>
+<p>One last thing before we move on, because it explains a lot of confusing terminology.</p>
+<p>Modern Ethereum is split in two:</p>
+<ul>
+<li>The <strong>execution layer</strong> holds the accounts and runs the code. This is the state machine described above.</li>
+<li>The <strong>consensus layer</strong> decides the <em>order</em> of transactions, using <a href="../../glossary/#proof-of-stake" title="How Ethereum has agreed transaction order since 2022">Proof of Stake</a>.</li>
+</ul>
+<p>Here's how it ended up that way, because the history is counter-intuitive.</p>
+<p>Until 2022, Ethereum mainnet did both jobs in one system, ordering transactions by mining. Meanwhile a second, separate chain called the <strong>Beacon Chain</strong> had been running since December 2020 — doing Proof of Stake consensus with no accounts and no transactions on it at all. It was a consensus layer with nothing to order, deliberately run in parallel so the mechanism could be proven before anything of value depended on it.</p>
+<p>In September 2022, an upgrade called <strong>The Merge</strong> connected the two: the execution layer stopped running its own mining-based consensus and began taking its ordering from the beacon chain instead <a href="#ref-eip-3675">(EIP-3675, 2021)</a>. Hence the name — two existing systems were joined together, which is why "merge" and not "split".</p>
+<p>You'll see this division everywhere once you notice it — it's why Ethereum has two kinds of client software, and why blocks have two sets of fields. The consensus layer isn't covered on this site yet, for reasons explained in <a href="../../about/forks/">how this site handles forks</a>; <a href="#ref-edgington">Edgington's <em>Upgrading Ethereum</em></a> is the most thorough treatment available in the meantime. For now, just know that <strong>execution and ordering are separate jobs.</strong></p>
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li>Ethereum is a state machine: everything stored as of now, plus rules for what may change it.</li>
+<li>Those rules are deterministic, so anyone can recompute the result and check it. <strong>Nobody has to trust anyone, and nobody is in charge.</strong></li>
+<li>Its state is every <strong>account</strong> and its balance — not coins.</li>
+<li>Accounts can hold <strong>code</strong>, so the network can agree on the result of a computation. That code is stateful and general-purpose, unlike Bitcoin's, and every step of it is metered.</li>
+<li>Its value isn't speed. It's that tampering is prohibitively expensive and no single party decides the outcome.</li>
+<li>Contracts remove the need for a trusted <strong>custodian</strong>. They don't remove the need to trust whoever reports facts from outside the chain.</li>
+</ul>
+<p><strong>Next:</strong> <a href="../ether/">Ether, wei and gwei</a> — the units, so the numbers on later pages mean something.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-buterin-2014"></a><strong>Buterin, V.</strong> (2014). <em>Ethereum white paper: A next-generation smart contract and decentralized application platform.</em> <a href="https://ethereum.org/en/whitepaper/">https://ethereum.org/en/whitepaper/</a></li>
+<li><a id="ref-daian-2019"></a><strong>Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., &amp; Juels, A.</strong> (2019). <em>Flash boys 2.0: Frontrunning, transaction reordering, and consensus instability in decentralized exchanges.</em> arXiv:1904.05234. Published in <em>IEEE Symposium on Security and Privacy</em>, 2020. <a href="https://arxiv.org/abs/1904.05234">https://arxiv.org/abs/1904.05234</a></li>
+<li><a id="ref-edgington"></a><strong>Edgington, B.</strong> <em>Upgrading Ethereum: A technical handbook on Ethereum's move to proof of stake and beyond.</em> Continuously updated; accessed November 2026. <a href="https://eth2book.info">https://eth2book.info</a></li>
+<li><a id="ref-eip-658"></a><strong>EIP-658</strong> (2017). <em>Embedding transaction status code in receipts.</em> Ethereum Improvement Proposals. <a href="https://eips.ethereum.org/EIPS/eip-658">https://eips.ethereum.org/EIPS/eip-658</a></li>
+<li><a id="ref-eip-3675"></a><strong>EIP-3675</strong> (2021). <em>Upgrade consensus to proof-of-stake.</em> Ethereum Improvement Proposals. <a href="https://eips.ethereum.org/EIPS/eip-3675">https://eips.ethereum.org/EIPS/eip-3675</a></li>
+<li><a id="ref-nakamoto-2008"></a><strong>Nakamoto, S.</strong> (2008). <em>Bitcoin: A peer-to-peer electronic cash system.</em> <a href="https://bitcoin.org/bitcoin.pdf">https://bitcoin.org/bitcoin.pdf</a></li>
+<li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Continuously revised; §2 and §4 cover the state transition function and account state. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
+<li><a id="ref-zhang-2016"></a><strong>Zhang, F., Cecchetti, E., Croman, K., Juels, A., &amp; Shi, E.</strong> (2016). <em>Town Crier: An authenticated data feed for smart contracts.</em> In <em>Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security</em> (CCS '16). <a href="https://doi.org/10.1145/2976749.2978326">https://doi.org/10.1145/2976749.2978326</a>. Open-access preprint: <a href="https://eprint.iacr.org/2016/168">https://eprint.iacr.org/2016/168</a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../.." class="md-footer__link md-footer__link--prev" aria-label="Previous: Home">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Home
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../ether/" class="md-footer__link md-footer__link--next" aria-label="Next: Ether, wei and gwei">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Ether, wei and gwei
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../javascripts/converters.js"></script>
+      
+        <script src="../../javascripts/keccak.js"></script>
+      
+        <script src="../../javascripts/keys.js"></script>
+      
+        <script src="../../javascripts/secp256k1.js"></script>
+      
+        <script src="../../javascripts/addresses.js"></script>
+      
+        <script src="../../javascripts/signatures.js"></script>
+      
+        <script src="../../javascripts/wallets.js"></script>
+      
+        <script src="../../javascripts/boxes.js"></script>
+      
+    
+  </body>
+</html>

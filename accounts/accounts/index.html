@@ -1,0 +1,2954 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An account is an entry in Ethereum's state with four fields. There are two kinds, and only one of them can start anything.">
+      
+      
+        <meta name="author" content="Davide">
+      
+      
+        <link rel="canonical" href="https://davide-stocco.github.io/ethereum-from-scratch/accounts/accounts/">
+      
+      
+        <link rel="prev" href="../../nodes/running-one/">
+      
+      
+        <link rel="next" href="../nonce/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Accounts - Ethereum from Scratch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="robots" content="noindex, nofollow">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#accounts" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Ethereum from Scratch" class="md-header__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ethereum from Scratch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Accounts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Ethereum from Scratch" class="md-nav__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ethereum from Scratch
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it is
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it is
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/what-is-ethereum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Ethereum?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/ether/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ether, wei and gwei
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/hex-and-bytes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hex and bytes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/keccak256/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keccak-256
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who can act
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Who can act
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cryptography
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/private-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/public-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/addresses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addresses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crypto/signatures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signatures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wallets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/seed-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets and seed phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/losing-your-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What losing your keys means
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where it runs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Where it runs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/what-a-node-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a node is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/clients-and-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients and the two layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/running-one/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running one yourself
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it holds
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it holds
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts and state
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Accounts and state
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-each-thing-lives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where each thing lives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-an-account-actually-looks-like" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What an account actually looks like
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The four fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-two-fingerprints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two fingerprints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#so-one-account-can-hold-code-and-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        So one account can hold code and storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#and-yes-a-contract-can-hold-ether" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        And yes, a contract can hold ether
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-an-address-finds-an-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How an address finds an account
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How an address finds an account">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-hash-the-address-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why hash the address first?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#which-kind-is-it-look-at-one-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which kind is it? Look at one field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nothing-creates-an-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nothing creates an account
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#only-an-eoa-can-start-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Only an EOA can start anything
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-design-needs-a-nonce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this design needs a nonce
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nonce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The nonce
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../why-accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why accounts, and what they cost
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../what-it-reveals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it reveals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contracts/smart-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a smart contract is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it's written
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it's written
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/rlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLP encoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/merkle-patricia-trie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Merkle Patricia Trie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it changes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it changes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/why-metering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why metering is necessary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/gas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/fees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/gas-costs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas costs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When it's settled
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    When it's settled
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/blocks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blocks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/block-header/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The block header
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/the-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The chain and reorgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why anyone bothers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Why anyone bothers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/security-budget/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why security has to be paid for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/who-pays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who pays: issuance or fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/supply-cap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fixed cap or flexible supply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who decides, when nobody is in charge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/forks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ethereum changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/fork-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fork history
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about-me/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who's writing this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-each-thing-lives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where each thing lives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-an-account-actually-looks-like" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What an account actually looks like
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The four fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-two-fingerprints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The two fingerprints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#so-one-account-can-hold-code-and-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        So one account can hold code and storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#and-yes-a-contract-can-hold-ether" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        And yes, a contract can hold ether
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-an-address-finds-an-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How an address finds an account
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How an address finds an account">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-hash-the-address-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why hash the address first?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#which-kind-is-it-look-at-one-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which kind is it? Look at one field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nothing-creates-an-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nothing creates an account
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#only-an-eoa-can-start-anything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Only an EOA can start anything
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-design-needs-a-nonce" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why this design needs a nonce
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="accounts">Accounts</h1>
+<p><strong><a href="../../about/forks/">Permanent, except one part</a>.</strong> The four fields have been the same since Ethereum launched in 2015. The clean split between the two <em>kinds</em> of account is the part that has started to soften.</p>
+<div class="admonition info">
+<p class="admonition-title">Current as of Fusaka (December 2025)</p>
+<p>The four fields and the "only an EOA can start a transaction" rule are
+unchanged since 2015. <strong>EIP-7702</strong> weakened the distinction between the
+two kinds when it shipped in May 2025 — explained in its own box below.
+Nothing in Fusaka touched accounts.</p>
+<p><em>EIP</em> stands for <strong>Ethereum Improvement Proposal</strong>: the numbered documents
+in which every change to Ethereum is proposed, argued over and finally
+specified. They're the primary sources this site cites, and EIP-7702 is
+simply the 7702nd.</p>
+<p>If you're reading much later, check <a href="../../about/forks/">how this site handles
+forks</a>.</p>
+</div>
+<div class="admonition definition">
+<p class="admonition-title">Account</p>
+<p>An <strong>entry in Ethereum's state</strong>, looked up by a 20-byte
+<a href="../../crypto/addresses/">address</a>, holding exactly four fields: a
+<strong>nonce</strong>, a <strong>balance</strong>, a <strong>storage root</strong> and a <strong>code hash</strong>.</p>
+<p>Two kinds exist. An <strong>EOA</strong> is controlled by whoever holds the matching
+<a href="../../crypto/private-keys/">private key</a>. A <strong>contract account</strong> is
+controlled by its own code.</p>
+<p>The address is how you find the account, not something the account stores.</p>
+</div>
+<p>Two words in that box need settling before anything else, because both are doing heavy lifting.</p>
+<p><strong>The state</strong> is the complete record of every account — the thing the <a href="../../foundations/what-is-ethereum/">state machine</a> page described as "the current situation", as opposed to the history that produced it. Every node keeps a copy. This page only needs that much; <a href="../state/">its own page</a> comes two pages from here.</p>
+<p><strong>EOA</strong> stands for <em>externally owned account</em>, and the name is badly chosen, because it suggests the account is somehow outside Ethereum. It isn't. <strong>An EOA is on the chain exactly as much as any other account</strong> — an entry in the state, with the same four fields, stored by every node.</p>
+<p>What's external is only <strong>the thing that controls it</strong>: a private key, sitting on somebody's device, which the network has never seen and knows nothing about. The account is on-chain; its owner is off-chain.</p>
+<p>A contract account is the other way round. What controls it is code, and that code is stored <em>on</em> the chain in plain view, where every node can read it.</p>
+<p>So the two kinds differ in <strong>where the controller lives</strong>, not where the account lives. Both accounts live in the state, and neither could do anything otherwise.</p>
+<p><svg viewBox="0 0 470 306" role="img" aria-label="A dashed box labelled on the chain contains two account panels. The left panel is an EOA, whose code hash is the empty constant and which is controlled by a private key drawn above and outside the dashed box, with an arrow crossing into it. The right panel is a contract account, holding its own code inside it, controlled by that code." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="30" y="26" width="178" height="40" rx="5"/><rect x="10" y="92" width="450" height="200" rx="8" stroke-dasharray="5 4" opacity="0.5"/><rect x="32" y="126" width="192" height="146" rx="5"/><rect x="248" y="126" width="192" height="146" rx="5"/><rect x="262" y="176" width="164" height="54" rx="4" opacity="0.6"/><path d="M121 66 L121 120"/><path d="M426 203 L440 203 L440 252 L344 252"/></g><rect x="134" y="74" width="60" height="16" rx="3" fill="var(--md-default-bg-color)" stroke="none"/><g fill="currentColor" stroke="none"><path d="M116 120 L121 130 L126 120 Z"/><path d="M344 247 L334 252 L344 257 Z"/><text x="30" y="18" font-size="10" opacity="0.75">OFF THE CHAIN &#183; your device only</text><text x="119" y="52" font-size="14" text-anchor="middle">private key</text><text x="139" y="85" font-size="10" opacity="0.8">authorises</text><text x="22" y="110" font-size="10" opacity="0.75">ON THE CHAIN &#183; every node stores both of these</text><text x="48" y="154" font-size="14" font-weight="700">EOA</text><text x="48" y="186" font-size="12">codeHash = empty</text><text x="48" y="204" font-size="10" opacity="0.8">so: no code of its own</text><text x="48" y="240" font-size="11">controlled from</text><text x="48" y="256" font-size="11">outside, by that key</text><text x="264" y="154" font-size="13" font-weight="700">CONTRACT ACCOUNT</text><text x="276" y="200" font-size="12">its own code</text><text x="276" y="218" font-size="10" opacity="0.8">anyone can read it</text><text x="264" y="266" font-size="11">controlled from inside</text></g></svg></p>
+<p>Worth walking through, because the whole point is in the geometry.</p>
+<p><strong>The dashed border is the chain</strong> — everything inside it is stored by every node on the network. Both account panels are inside, which is the thing to take away: an EOA is no less on-chain than a contract.</p>
+<p><strong>Only the key is outside.</strong> It sits on your device, and the arrow crossing the border is the entirety of what an EOA's owner contributes: an authorisation, arriving from somewhere the network cannot see.</p>
+<p><strong>The contract's arrow doesn't leave the box.</strong> Its controller is the code drawn inside it — stored on the chain, readable by anyone, and looping back to govern the account that holds it. Nothing outside is required, and nothing outside can intervene.</p>
+<p>So the two panels hold the same four fields and differ in one respect: where the arrow comes from.</p>
+<details class="note">
+<summary>Nobody says “EOA” out loud</summary>
+<p>It's specification vocabulary. In conversation people say <strong>wallet</strong> — "send
+it to my wallet" — which is loose but unambiguous in context.</p>
+<p>Worth knowing the term anyway, because it's what you'll meet in every EIP,
+every client's source code and every technical discussion, always
+unexplained. This site uses it where precision matters and "wallet" where
+it doesn't.</p>
+</details>
+<h2 id="where-each-thing-lives">Where each thing lives</h2>
+<p>The previous few pages built up a chain of objects — seed phrase, private key, address — and this page adds a fourth. They are easy to run together, so here is the whole picture at once, with the one thing that matters marked: <strong>the line down the middle.</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>  YOUR DEVICE                    EVERY NODE
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  ───────────                    ──────────
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  seed phrase
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      ↓  derives
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  private key
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      ↓  derives, one way
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>  address  ········ looks up ········▶  account
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                                          nonce
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                                          balance
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>                                          storageRoot
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>                                          codeHash
+</code></pre></div>
+<p>Everything on the left is yours and private. Everything on the right is public and held by thousands of machines. <strong>The address is the only thing that appears on both sides</strong>, and it carries no secret — which is the entire reason it can be handed out.</p>
+<p>Three consequences, each of which surprises somebody:</p>
+<ul>
+<li><strong>The account is not in your wallet.</strong> It never was. Your wallet holds keys; the account is an entry in the state that every node stores. So when your wallet shows you a balance, it has asked a node and is displaying the answer — it owns none of that information.</li>
+<li><strong>Deleting your wallet changes no balance.</strong> The account is untouched, because it was never there. What you lose is the key, and with it the ability to authorise anything — which is the whole of the <a href="../../wallets/losing-your-keys/">previous page</a>.</li>
+<li><strong>Neither side determines the other's contents.</strong> An address tells you nothing about a balance, and an account holds no trace of the key that controls it. The arrow is a <em>lookup</em>, not a calculation.</li>
+</ul>
+<p>And the pairing isn't as neat as it looks, in both directions:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Happens when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A key with <strong>no account</strong></td>
+<td>the key is fresh and its address has never been used, so nothing is recorded</td>
+</tr>
+<tr>
+<td>An account with <strong>no key</strong></td>
+<td>every contract account — plus any address somebody sent ether to in error</td>
+</tr>
+</tbody>
+</table>
+<details class="note">
+<summary>A wallet usually doesn't store your keys either</summary>
+<p>One more refinement, since it changes what a backup is.</p>
+<p>It's natural to picture a wallet as a folder of private keys. Most modern
+wallets hold <strong>one seed</strong> and re-derive the keys whenever they're needed,
+exactly as the <a href="../../wallets/seed-phrases/">seed phrases</a> page described.
+The keys are a <em>product</em>, not a stored collection.</p>
+<p>Which is why twelve words restore everything, and why "back up your keys"
+is the wrong instruction — there is usually only one thing to back up, and
+it sits upstream of all of them.</p>
+</details>
+<h2 id="what-an-account-actually-looks-like">What an account actually looks like</h2>
+<p>Easiest to start with one in front of you. Take the address <code>0x7E5F…95Bdf</code> — the one the <a href="../../crypto/addresses/">addresses</a> page derived from the private key <code>1</code>, picked there because it's the simplest number a key can be and makes every step checkable by hand. Ask a node what that address holds — the lookup itself is explained <a href="#how-an-address-finds-an-account">further down</a>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>nonce        3
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>balance      1500000000000000000
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>storageRoot  56e81f17…b421
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>codeHash     c5d24601…a470
+</code></pre></div>
+<p>Four values, and that is the entire account. The address isn't in there — it's what you looked the account <em>up</em> by, like a word in an index rather than part of the entry. The balance is in <a href="../../foundations/ether/">wei</a>, so it reads as 1.5 ether. The nonce says three transactions have been sent from here. The last two are hashes, and the specific ones shown mean <em>nothing stored</em> and <em>no code</em> — more on them shortly.</p>
+<p>Now a contract account, same four fields:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>nonce        0
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>balance      0
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>storageRoot  ⟨fingerprint of its stored values⟩
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>codeHash     ⟨fingerprint of its code⟩
+</code></pre></div>
+<p>Neither of those last two is the empty constant, and that is the only thing distinguishing this account from the one above. Same shape, different contents. <strong>There is no fifth field marking it as a contract.</strong> The difference is entirely in those last two values, and we'll come back to exactly how you read it.</p>
+<p>A note on those numbers. The address is real — it's the one <a href="../../crypto/addresses/">private key <code>1</code> produces</a>, the most-guessed key in existence — but the nonce and balance shown for it are made up for illustration. The two hashes in the wallet account are genuine fixed constants, and you'll meet them again in a moment. The contract's two are written in words rather than invented hex, because a plausible-looking fake hash is worse than no hash at all.</p>
+<h2 id="the-four-fields">The four fields</h2>
+<p>Every account, of either kind, holds these and nothing else <a href="#ref-wood-2014">(Wood, 2014)</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it holds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nonce</code></td>
+<td>A counter — transactions sent, or contracts created</td>
+</tr>
+<tr>
+<td><code>balance</code></td>
+<td>Ether owned, in <a href="../../foundations/ether/">wei</a></td>
+</tr>
+<tr>
+<td><code>storageRoot</code></td>
+<td>Fingerprint of everything in storage</td>
+</tr>
+<tr>
+<td><code>codeHash</code></td>
+<td>Fingerprint of the code</td>
+</tr>
+</tbody>
+</table>
+<p>The first two are plain numbers, but the word <strong>nonce</strong> needs defusing immediately, because it invites exactly the wrong guess.</p>
+<p><strong>It does not mean "random number" here.</strong> The account nonce is a plain sequential counter: it starts at 0 and goes up by one each time the account sends a transaction — 0, 1, 2, 3. It is public, anyone can read yours, and it is <em>meant</em> to be predictable, since your wallet has to know which number comes next and so does every node checking your transaction. A secret or random counter would be unusable.</p>
+<p>The confusion is the vocabulary's fault. <em>Nonce</em> is merely short for <strong>"number used once"</strong>, which promises nothing about <em>how</em> the number is chosen.</p>
+<details class="abstract">
+<summary>This site has already used “nonce” in the other sense</summary>
+<p>So the collision is worth naming, rather than letting you trip over it
+later.</p>
+<ul>
+<li><strong>Random, and necessarily unpredictable.</strong> The <code>k</code> in <a href="../../crypto/signatures/">signing a
+  message</a> is this kind. Reuse one and your
+  private key can be recovered — that page shows the arithmetic. Bitcoin's
+  mining nonce is similar: a value searched for, essentially at random.</li>
+<li><strong>Sequential, and entirely predictable.</strong> The account nonce on this page.
+  Counting, not guessing.</li>
+</ul>
+<p>What they share is only the guarantee in the name: <strong>each value is used
+exactly once.</strong> For <code>k</code> that's achieved by drawing unpredictably from a
+space too large to repeat by accident. For an account it's achieved by
+adding one. Same promise, opposite methods — and for <code>k</code>, secrecy is
+essential, while for the account nonce it would break everything.</p>
+<p>There are more than two senses in play, in fact — the block header has a
+nonce, and so do many contracts. The <a href="../nonce/">nonce page</a> lists them all
+in one table.</p>
+</details>
+<h3 id="the-two-fingerprints">The two fingerprints</h3>
+<p>These are the fields that needed groundwork, and the groundwork is now in place.</p>
+<p>A contract can hold a great deal — thousands of stored values, and a program of some size. <strong>None of it is in the account entry.</strong> What the account holds is a <em>hash</em> of each: the kind of fingerprint the <a href="../../crypto/keccak256/">Keccak-256</a> page described, where changing any input byte produces a completely different output.</p>
+<p>That buys one specific thing. The account entry stays small and fixed-size no matter how much the contract stores, while still <strong>committing</strong> to every byte of it — you cannot alter one stored value without changing <code>storageRoot</code>, and you cannot change the code without changing <code>codeHash</code>.</p>
+<p>What's still deferred is how you hash a <em>collection</em>. Hashing one lump of bytes is simple; hashing a mapping of thousands of keys and values, such that you can prove one entry belongs without presenting all the others, needs a structure. That structure is the <a href="../../encoding/merkle-patricia-trie/">Merkle Patricia Trie</a>, and it has a page. Here, it's enough that a fingerprint exists and nothing can change beneath it unnoticed.</p>
+<p>An account with no storage and no code still has both fields. They hold the fingerprints <strong>of emptiness</strong>, which are two fixed constants:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>codeHash — the hash of no code at all
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>storageRoot — the root of an empty trie
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
+</code></pre></div>
+<p>The first is Keccak-256 of nothing at all — the empty-input hash the Keccak page used to check its own implementation against the published value. The second is the root of an empty trie. <strong>Every ordinary wallet account on Ethereum carries that identical pair</strong>, which is what makes the next section possible.</p>
+<h3 id="so-one-account-can-hold-code-and-storage">So one account can hold code <em>and</em> storage</h3>
+<p>Yes, and for a contract that's the normal case. The two fields are independent, which gives the combinations you actually meet:</p>
+<table>
+<thead>
+<tr>
+<th>Account</th>
+<th><code>codeHash</code></th>
+<th><code>storageRoot</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ordinary wallet</td>
+<td>empty constant</td>
+<td>empty constant</td>
+</tr>
+<tr>
+<td>Contract holding data</td>
+<td>its code</td>
+<td>its storage</td>
+</tr>
+<tr>
+<td>Freshly deployed contract</td>
+<td>its code</td>
+<td>empty constant</td>
+</tr>
+</tbody>
+</table>
+<p>The missing fourth row — storage but no code — isn't something you meet, because the only thing that can write to an account's storage is that account's own code.</p>
+<h3 id="and-yes-a-contract-can-hold-ether">And yes, a contract can hold ether</h3>
+<p>Worth being explicit, since it surprises people. <strong>The <code>balance</code> field is on every account</strong>, because there is only one kind of entry in the state. A contract isn't a different sort of object with a different shape; it's an account that happens to have code.</p>
+<p>It also has to be that way for contracts to be good for anything. An escrow must actually hold the money it's holding. A trading pool must own the assets it trades. If contracts couldn't own ether they could only ever direct other people's, which is a far weaker thing to be.</p>
+<p>What differs is <strong>how the ether gets out</strong>. An EOA's balance moves when its key signs a transaction. A contract's balance moves only if the contract's own code contains instructions to send it — and if the code has no such path, the ether stays there permanently, as unreachable as if the key had been lost. That has happened at scale more than once, and the reason is worth remembering: nobody can override the code, for precisely the reasons the <a href="../../wallets/losing-your-keys/">previous page</a> set out.</p>
+<p>How contracts work beyond that — what the code is, how it runs, what it costs — is <a href="../../contracts/smart-contracts/">its own page</a>.</p>
+<h2 id="how-an-address-finds-an-account">How an address finds an account</h2>
+<p>This page has twice said "ask a node" without saying what that involves, and the answer is more specific than <em>it looks it up in a list</em>.</p>
+<p>The state is a key–value mapping. The value is the four fields, written out with <a href="../../encoding/rlp/">RLP</a> — Ethereum's way of encoding structured data as bytes, which has its own page. The key is the part worth noticing: <strong>it is not the address.</strong> It's the address put through <a href="../../crypto/keccak256/">Keccak-256</a> first.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>address      0x7E5F…95Bdf
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    │
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    │  keccak256
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    ▼
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>key          a 32-byte value, which is where to look
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>    │
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>    ▼
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>value        RLP[ nonce, balance, storageRoot, codeHash ]
+</code></pre></div>
+<p>So nothing about the account is <em>computed</em> from the address. The contents are whatever transactions have put there over time, and no amount of arithmetic on an address could tell you a balance. What the address gives you is <strong>where to look</strong> — and the precise structure it's looking in, which makes that lookup provable rather than merely fast, is the <a href="../../encoding/merkle-patricia-trie/">Merkle Patricia Trie</a>.</p>
+<h3 id="why-hash-the-address-first">Why hash the address first?</h3>
+<p>It seems like a pointless step — the address is already a hash, and already a fixed 20 bytes. There's a reason, and it's a defence.</p>
+<p><strong>Without it, anybody could choose where in the structure their account lands.</strong> That sounds harmless until you notice that <em>creating an account costs almost nothing and needs no key</em>: send one wei to any address and an entry appears, as the empty-accounts box above describes. Nobody has to control an address to put something at it.</p>
+<p>So an attacker could pick a million addresses sharing a long leading prefix, dust each one, and force the structure into a single pathologically deep branch — making every lookup along it slow, for every node, permanently. Choosing the keys was free, and the cost landed on everybody else.</p>
+<p>Hashing removes the choice. To place two accounts near each other you'd now have to find two addresses whose <em>hashes</em> share a long prefix, and that's a brute-force search for every account you want to add. The attack goes from free to expensive, which is the whole of the defence.</p>
+<p>A secondary benefit falls out: hash outputs are spread evenly, so keys distribute evenly and no region of the structure ends up much deeper than another even by accident.</p>
+<h2 id="which-kind-is-it-look-at-one-field">Which kind is it? Look at one field</h2>
+<p>Suppose somebody hands you an address and you want to know whether it's a person's wallet or a contract. You cannot tell by looking: <a href="../../crypto/addresses/">addresses</a> are 20 bytes either way, and that page made the point that nothing in one reveals which kind it is.</p>
+<p>The answer is in the account, and it takes one comparison. Ask any node for the account, then look at <code>codeHash</code>:</p>
+<ul>
+<li>It equals <code>c5d2…a470</code> → there is <strong>no code</strong> → it's an <strong>EOA</strong>.</li>
+<li>It's anything else → there <strong>is</strong> code → it's a <strong>contract</strong>.</li>
+</ul>
+<p>That's the entire test. Which is worth dwelling on for a second, because of what it implies: <strong>no field says which kind of account this is.</strong> Nothing was declared when the account came into being, and there's no flag anybody set. The kind is <em>read off</em> from what the account holds.</p>
+<p>Everything else follows from that one difference:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>EOA</th>
+<th>Contract account</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Controlled by</td>
+<td>whoever holds the private key</td>
+<td>its own code</td>
+</tr>
+<tr>
+<td>Comes into being when</td>
+<td>an address derived from a key is first used</td>
+<td>a transaction deploys code</td>
+</tr>
+<tr>
+<td>Can start a transaction</td>
+<td><strong>yes</strong></td>
+<td><strong>no</strong></td>
+</tr>
+<tr>
+<td>Its nonce counts</td>
+<td>transactions sent</td>
+<td>contracts created</td>
+</tr>
+</tbody>
+</table>
+<p>Both can hold ether, both are addressed identically, and both appear in the state the same way.</p>
+<details class="abstract">
+<summary>Why there's no type field — or an owner, or a name</summary>
+<p>Four fields is a strikingly short list, so it's worth asking what <em>isn't</em>
+there. Each absence is deliberate.</p>
+<p><strong>No type</strong>, as above. It would be redundant, and redundancy in consensus
+data is a liability: two fields that can disagree need a rule for which
+one wins. Deriving the type from <code>codeHash</code> makes disagreement impossible.</p>
+<p><strong>No owner.</strong> For a contract there's nothing to put — control is whatever
+the code says, which might be one key, five keys, a vote, or nobody. For an
+EOA it would be the public key, which is exactly what the address already
+commits to.</p>
+<p><strong>No name, no creation date, no history.</strong> The state answers <em>what is true
+now</em> and nothing else. How an account reached its current contents is
+recoverable from the blocks, so putting it in the state would mean every
+node storing a second copy of something it already has.</p>
+<p>The pattern recurs all over Ethereum: <strong>the state holds the minimum from
+which everything else can be derived.</strong> Anything inferable is left out,
+because storing it anyway only creates a way for a node to be wrong.</p>
+</details>
+<h2 id="nothing-creates-an-account">Nothing creates an account</h2>
+<p>With the concrete picture in place, one consequence is worth drawing out.</p>
+<p>"Opening an account" is a thing you do at a bank — an application, an approval, a record created in your name. None of that has an equivalent here. The <a href="../../crypto/addresses/">addresses</a> page established that <strong>nothing creates an address</strong>: all 2<sup>160</sup> exist already, and a wallet merely derives one. Accounts inherit that. An account isn't created; it <strong>begins to be recorded</strong> the first time there's something to record.</p>
+<p>So an address nobody has ever used is not in the state at all. Not stored as a row of zeros — absent. Which is indistinguishable from an account holding nothing, and that's the point: zero balance and no stored entry describe the same situation. Ask a node for the balance of an untouched address and it answers zero, because that's the correct answer, not because it found a record saying so.</p>
+<details class="abstract">
+<summary>Which makes “empty” an awkward category</summary>
+<p>A case where a tidy idea needed patching.</p>
+<p>Early on you could create entries that existed while holding nothing: send
+zero ether to an untouched address and a record appeared with a zero
+balance, a zero nonce and no code. Functionally identical to absence, but
+occupying space on every node — and millions were made cheaply as a
+result.</p>
+<p><strong>EIP-161</strong> <a href="#ref-eip161">(Wood, 2016)</a> fixed it in the <a href="../../reference/fork-history/" title="The 2016 hard fork that introduced state-trie clearing">Spurious Dragon
+upgrade</a>
+of 2016, by deleting such accounts at the end of any transaction that
+touched them — so "holds nothing" and "isn't recorded" converged again.</p>
+<p>More than trivia, because of what it reveals: <strong>everything in the state is
+something every node must store, forever, at a real cost.</strong> Storing nothing
+therefore has to cost nothing, or the accounting breaks. That pressure
+turns up again and again once you reach <a href="../../transactions/gas/">gas</a>.</p>
+</details>
+<h2 id="only-an-eoa-can-start-anything">Only an EOA can start anything</h2>
+<p>This is the most clarifying fact about how Ethereum runs, and it's routinely assumed to work the other way.</p>
+<p><strong>Nothing on Ethereum happens by itself.</strong> There are no timers, no scheduled jobs, no background processes. A contract cannot wake up at midnight, cannot poll a price, cannot notice that a deadline has passed. It has no thread of its own and no way to get one.</p>
+<p>A contract's code runs only when something <strong>calls</strong> it. Follow any chain of calls back far enough and it begins in the same place: a transaction, signed by a private key, sent from an EOA. Contracts can call other contracts, and one transaction can touch dozens — but all of it descends from a single signature at the root.</p>
+<p><svg viewBox="0 0 470 212" role="img" aria-label="A call tree. One signature produces a transaction, which calls contract A, which in turn calls contracts B and C, and C calls D. Every arrow descends from the single signature at the root." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="6" y="80" width="92" height="40" rx="5"/><rect x="128" y="80" width="92" height="40" rx="5"/><rect x="250" y="80" width="86" height="40" rx="5"/><rect x="366" y="24" width="96" height="38" rx="5"/><rect x="366" y="138" width="96" height="38" rx="5"/><path d="M98 100 L120 100"/><path d="M220 100 L242 100"/><path d="M336 100 L350 100 L350 43 L358 43"/><path d="M336 100 L350 100 L350 157 L358 157"/></g><g fill="currentColor" stroke="none"><path d="M120 95 L130 100 L120 105 Z"/><path d="M242 95 L252 100 L242 105 Z"/><path d="M358 38 L368 43 L358 48 Z"/><path d="M358 152 L368 157 L358 162 Z"/><text x="52" y="97" font-size="11" text-anchor="middle" font-weight="700">one</text><text x="52" y="112" font-size="11" text-anchor="middle" font-weight="700">signature</text><text x="174" y="105" font-size="11" text-anchor="middle">transaction</text><text x="293" y="105" font-size="11" text-anchor="middle">contract A</text><text x="414" y="48" font-size="11" text-anchor="middle">contract B</text><text x="414" y="162" font-size="11" text-anchor="middle">contract C</text><text x="6" y="200" font-size="10" opacity="0.75">Remove the signature and nothing to its right can happen.</text></g></svg></p>
+<p>Two reasons it has to be this way:</p>
+<ul>
+<li><strong>Somebody has to pay.</strong> Execution is metered and the fee comes from the account that sent the transaction. Self-starting code would be work with no payer.</li>
+<li><strong>Somebody has to be the cause.</strong> Every node must reach the same result, so all of them must run the same operations in the same order. Spontaneous execution would require agreement on <em>when</em> it fired — and there is no shared clock to agree with.</li>
+</ul>
+<p>Which raises an obvious question: plenty of things on Ethereum visibly happen without anyone pressing a button. <strong>They aren't exceptions</strong> — somebody is being paid to send those transactions, and <a href="../../contracts/smart-contracts/">the contracts page</a> takes that apart.</p>
+<details class="warning">
+<summary>One thing here is changing: EIP-7702</summary>
+<p>The rule above holds. The tidy <em>statement</em> of the previous section doesn't,
+quite.</p>
+<p><strong>EIP-7702</strong> <a href="#ref-eip7702">(Buterin et al., 2024)</a>, live since Pectra in
+May 2025, lets an EOA set its <code>codeHash</code> to point at contract code. So
+"EOAs have no code" is no longer strictly true, and the
+compare-against-the-constant test now has an exception.</p>
+<p>What it's for: giving ordinary wallets abilities that used to require a
+contract account — batching several actions into one transaction, letting
+somebody else pay your fee, setting spending permissions. The same goals
+ERC-4337 <a href="#ref-erc4337">(Buterin et al., 2021)</a> pursues as a layer on top.</p>
+<p>What it does <strong>not</strong> change: an EOA still needs a key to authorise
+anything, and transactions still originate only from EOAs. Both rules this
+page rests on survive. What's blurring is the tidy two-kinds taxonomy —
+which is why this page carries a date stamp at the top, and why you should
+hold that taxonomy loosely.</p>
+</details>
+<details class="question">
+<summary>So is an account the same thing as a wallet?</summary>
+<p>No, and the words get used interchangeably constantly.</p>
+<ul>
+<li>An <strong>account</strong> is the entry in the state. It exists whether or not any
+  software knows about it.</li>
+<li>A <strong><a href="../../wallets/seed-phrases/">wallet</a></strong> is the program on your device.
+  It holds keys and builds transactions, and Ethereum has never heard of
+  it.</li>
+<li>An <strong>EOA</strong> is an account whose key some wallet happens to hold.</li>
+</ul>
+<p>So "my wallet has three accounts" means one piece of software holding keys
+for three addresses. The accounts aren't <em>in</em> the wallet, and losing the
+wallet doesn't touch them — as the <a href="../../wallets/losing-your-keys/">previous
+page</a> laboured.</p>
+<p>Harmless in conversation. A problem the moment you read a specification,
+where "account" never means "app".</p>
+</details>
+<h2 id="why-this-design-needs-a-nonce">Why this design needs a nonce</h2>
+<p>One last consequence, to set up the next page.</p>
+<p>Ethereum records <strong>balances</strong> where Bitcoin records individual coins. The <a href="../../foundations/what-is-ethereum/">state machine</a> page covered the comparison, and <a href="#ref-buterin-2014">Buterin (2014)</a> argues the case at length. Here is what the choice costs.</p>
+<p>The difference is roughly <strong>cash versus a bank statement.</strong> Bitcoin is the cash: you hold particular notes, paying someone means handing over specific notes, and you get different ones back as change. The notes <em>are</em> the money, and each individual one either exists or has been spent. Ethereum is the statement: there are no notes at all, just a number beside your address that goes up and down.</p>
+<p>That distinction decides whether replay is even possible.</p>
+<p>A Bitcoin transaction consumes specific coins — it names them. Submit it twice and the second attempt fails on its own terms, because the coins it names are already gone: not merely disallowed, but meaningless, like trying to hand over a note you no longer have. <strong>The protection is a property of the thing being spent.</strong></p>
+<p>An account has no such property. "Send 1 ether from A to B" names nothing that gets used up. It's a valid instruction before it executes and an equally valid instruction afterwards, because A's balance is just a number and the instruction never referred to any particular part of it. A signed transaction would be a <strong>reusable cheque</strong>: anyone who saw it could submit it again, and every copy would verify perfectly.</p>
+<p>So the protection has to be supplied separately, and it's supplied as a counter. That's the <a href="../nonce/">nonce</a>.</p>
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li><strong>The account is not in your wallet.</strong> Your wallet holds keys; the account is held by every node. The address is the only thing on both sides of that line, and it carries no secret.</li>
+<li>An account is an <strong>entry in the state</strong>, looked up by address, with exactly four fields: <strong>nonce, balance, storageRoot, codeHash.</strong> The address isn't one of them.</li>
+<li>The lookup key is <strong><code>keccak256(address)</code></strong>, not the address — so nobody can choose where their account sits, which stops an attacker dusting a million chosen addresses to force one deep, slow branch.</li>
+<li><strong>EOA</strong> means <em>externally owned</em> — what controls it sits outside Ethereum, namely a person with a key. A contract's controller is code on the chain.</li>
+<li>The account <strong>nonce is a sequential counter</strong>, not a random number. It shares only the "used once" guarantee with the random nonces elsewhere in cryptography.</li>
+<li><code>storageRoot</code> and <code>codeHash</code> are <strong>fingerprints</strong>, letting a fixed-size entry commit to unbounded data. The structure behind them is the <a href="../../encoding/merkle-patricia-trie/">Merkle Patricia Trie</a>.</li>
+<li>An account with neither carries the two constants for empty — <code>c5d2…a470</code> and <code>56e8…b421</code>.</li>
+<li><strong>The kind of account is read off <code>codeHash</code></strong>, not declared. There is no type field, because the type is derivable.</li>
+<li><strong>Nothing creates an account.</strong> An unused address is absent from the state, which is indistinguishable from holding nothing.</li>
+<li><strong>Only an EOA can start a transaction.</strong> No timers, no scheduled jobs. Anything that looks automatic is somebody paid to send a transaction, racing others for the reward.</li>
+<li><strong>EIP-7702 has begun blurring the EOA/contract split</strong> without changing either rule above.</li>
+<li>Balances aren't consumable the way coins are, so replay protection must be added separately — by the <strong>nonce</strong>.</li>
+</ul>
+<p><strong>Next:</strong> <a href="../nonce/">The nonce</a> — the counter that stops a signed transaction being reused.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-erc4337"></a><strong>Buterin, V., Weiss, Y., Tirosh, D., Nacson, S., Forshtat, A., Gazso, K., &amp; Hess, T.</strong> (2021). <em>ERC-4337: Account Abstraction Using Alt Mempool.</em> Ethereum Improvement Proposals. Pursues contract-account capabilities for ordinary users without a protocol change. <a href="https://eips.ethereum.org/EIPS/eip-4337">https://eips.ethereum.org/EIPS/eip-4337</a></li>
+<li><a id="ref-buterin-2014"></a><strong>Buterin, V.</strong> (2014). <em>Ethereum white paper: A next-generation smart contract and decentralized application platform.</em> Argues the case for an account model over Bitcoin's transaction outputs, including the replay problem it creates. <a href="https://ethereum.org/en/whitepaper/">https://ethereum.org/en/whitepaper/</a></li>
+<li><a id="ref-eip7702"></a><strong>Buterin, V., Wilson, S., Dietrichs, A., &amp; lightclient</strong> (2024). <em>EIP-7702: Set Code for EOAs.</em> Ethereum Improvement Proposals. Lets a key-controlled account carry contract code, weakening the EOA/contract distinction. <a href="https://eips.ethereum.org/EIPS/eip-7702">https://eips.ethereum.org/EIPS/eip-7702</a></li>
+<li><a id="ref-eip161"></a><strong>Wood, G.</strong> (2016). <em>EIP-161: State trie clearing (invariant-preserving alternative).</em> Ethereum Improvement Proposals. Activated in Spurious Dragon; deletes accounts left empty at the end of a transaction, so that "holds nothing" and "not recorded" describe the same thing. <a href="https://eips.ethereum.org/EIPS/eip-161">https://eips.ethereum.org/EIPS/eip-161</a></li>
+<li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. §4.1 defines the account state as the four-field tuple, and gives the empty-code and empty-trie constants. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../nodes/running-one/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Running one yourself">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Running one yourself
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../nonce/" class="md-footer__link md-footer__link--next" aria-label="Next: The nonce">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                The nonce
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../javascripts/converters.js"></script>
+      
+        <script src="../../javascripts/keccak.js"></script>
+      
+        <script src="../../javascripts/keys.js"></script>
+      
+        <script src="../../javascripts/secp256k1.js"></script>
+      
+        <script src="../../javascripts/addresses.js"></script>
+      
+        <script src="../../javascripts/signatures.js"></script>
+      
+        <script src="../../javascripts/wallets.js"></script>
+      
+        <script src="../../javascripts/boxes.js"></script>
+      
+    
+  </body>
+</html>

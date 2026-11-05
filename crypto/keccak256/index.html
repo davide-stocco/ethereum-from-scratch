@@ -1,0 +1,2722 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Keccak-256 is Ethereum's hash function — any input in, 32 bytes out. What that buys, why it can't be reversed, and why it is not quite SHA-3.">
+      
+      
+        <meta name="author" content="Davide">
+      
+      
+        <link rel="canonical" href="https://davide-stocco.github.io/ethereum-from-scratch/crypto/keccak256/">
+      
+      
+        <link rel="prev" href="../../foundations/hex-and-bytes/">
+      
+      
+        <link rel="next" href="../private-keys/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Keccak-256 - Ethereum from Scratch</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+    <meta name="robots" content="noindex, nofollow">
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#keccak-256" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Ethereum from Scratch" class="md-header__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ethereum from Scratch
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Keccak-256
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Ethereum from Scratch" class="md-nav__button md-logo" aria-label="Ethereum from Scratch" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ethereum from Scratch
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it is
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it is
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/what-is-ethereum/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What is Ethereum?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/ether/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ether, wei and gwei
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../foundations/hex-and-bytes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Hex and bytes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keccak-256
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Keccak-256
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four properties
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The four properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#avalanche-demonstrated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avalanche, demonstrated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nearly-every-character-but-only-half-the-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nearly every character, but only half the bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-it-cant-be-reversed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why it can't be reversed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works-the-sponge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works: the sponge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How it works: the sponge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-the-capacity-is-the-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why the capacity is the point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nothing-here-is-random" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nothing here is random
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keccak-256-is-not-sha-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keccak-256 is not SHA-3
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-ethereum-uses-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where Ethereum uses it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-it-is-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is not
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who can act
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Who can act
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cryptography
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cryptography
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../private-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Private keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../public-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Public keys
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../addresses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Addresses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../signatures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Signatures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wallets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/seed-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wallets and seed phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wallets/losing-your-keys/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What losing your keys means
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Where it runs
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Where it runs
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/what-a-node-is/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a node is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/clients-and-layers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Clients and the two layers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nodes/running-one/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Running one yourself
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it holds
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    What it holds
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts and state
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Accounts and state
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accounts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/nonce/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The nonce
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    State
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/why-accounts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why accounts, and what they cost
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../accounts/what-it-reveals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What it reveals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contracts
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contracts
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contracts/smart-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What a smart contract is
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it's written
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it's written
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/rlp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RLP encoding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../encoding/merkle-patricia-trie/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The Merkle Patricia Trie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How it changes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    How it changes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/transactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Transactions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/why-metering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why metering is necessary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/gas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../transactions/fees/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/gas-costs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gas costs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    When it's settled
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    When it's settled
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/blocks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blocks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/block-header/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The block header
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/the-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    The chain and reorgs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why anyone bothers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Why anyone bothers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/security-budget/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why security has to be paid for
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/who-pays/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who pays: issuance or fees
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/supply-cap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fixed cap or flexible supply
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../economics/governance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who decides, when nobody is in charge
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    About
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/forks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ethereum changes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/fork-history/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fork history
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/about-me/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Who's writing this
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four properties
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The four properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#avalanche-demonstrated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Avalanche, demonstrated
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nearly-every-character-but-only-half-the-bits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nearly every character, but only half the bits
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-it-cant-be-reversed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why it can't be reversed
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works-the-sponge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works: the sponge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How it works: the sponge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-the-capacity-is-the-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why the capacity is the point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nothing-here-is-random" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nothing here is random
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keccak-256-is-not-sha-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keccak-256 is not SHA-3
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-ethereum-uses-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where Ethereum uses it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-it-is-not" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it is not
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="keccak-256">Keccak-256</h1>
+<p><strong><a href="../../about/forks/">Permanent</a>.</strong> Ethereum's hash function since it launched in 2015, specified as such throughout the Yellow Paper <a href="#ref-wood-2014">(Wood, 2014)</a>. Addresses, the state root, transaction hashes and function selectors all depend on it, so it cannot be changed.</p>
+<div class="admonition definition">
+<p class="admonition-title">Keccak-256</p>
+<p>A <strong>hash function</strong>: it takes any input at all — a word, a book, a
+transaction, a gigabyte of video — and returns a fixed-size fingerprint.
+Keccak-256's output is always exactly <strong>32 bytes</strong>, which is
+<a href="../../foundations/hex-and-bytes/">64 hex characters</a>.</p>
+<p>The same input always gives the same fingerprint. A slightly different
+input gives an unrecognisably different one. And there is no way to work
+backwards from a fingerprint to what produced it.</p>
+</div>
+<details class="example">
+<summary>Try it: hash anything</summary>
+<p><div class="tool" markdown="0">
+  <label for="kec-in">Input</label>
+  <input id="kec-in" type="text" autocomplete="off" spellcheck="false" value="hello">
+  <p class="tool__out" id="kec-out"></p>
+</div></p>
+<p>Type anything. Empty the field, paste a paragraph, use emoji. <strong>The output
+is always 32 bytes</strong> — that's the first thing to notice, and it already
+tells you something important: the hash cannot contain the input, because
+the input can be larger than the output.</p>
+</details>
+<h2 id="the-four-properties">The four properties</h2>
+<p>Everything Ethereum does with hashing rests on these, and nothing else.</p>
+<p><strong>1. Deterministic.</strong> The same input always gives the same output — on every machine, in every language, forever. Hash <code>hello</code> here, hash it in ten years on different hardware, and you get the same 32 bytes. This is what makes hashes usable in a system where thousands of computers must <a href="../../foundations/what-is-ethereum/">agree</a>.</p>
+<p><strong>2. Fixed size.</strong> Any input, 32 bytes out. A single character and the complete works of Shakespeare both come out the same length.</p>
+<p><strong>3. Avalanche.</strong> Change the input by the smallest possible amount and <strong>nearly every character of the output changes</strong>. Not "the output changes a bit" — the output is unrecognisable.</p>
+<p><strong>4. One-way.</strong> Given an output, there is no practical way to find an input that produces it. Easy forwards, infeasible backwards.</p>
+<h3 id="avalanche-demonstrated">Avalanche, demonstrated</h3>
+<p>The third property is the one people underestimate, so it's worth seeing. Two inputs differing by one letter:</p>
+<details class="example">
+<summary>Try it: the avalanche effect</summary>
+<p><div class="tool" markdown="0">
+  <label for="av-a">Input A</label>
+  <input id="av-a" type="text" autocomplete="off" spellcheck="false" value="hello">
+  <label for="av-b">Input B</label>
+  <input id="av-b" type="text" autocomplete="off" spellcheck="false" value="hellp">
+  <p class="tool__out" id="av-out"></p>
+</div></p>
+<p><code>hello</code> and <code>hellp</code> differ in a single letter. Yet <strong>61 of the 64 hex
+characters differ</strong> — the output isn't similar, it's unrelated.</p>
+<p>Worth trying: make the two inputs <strong>identical</strong>. Every character matches,
+every time. That's determinism and avalanche together — wildly sensitive to
+any change, and perfectly stable when there's none.</p>
+</details>
+<h3 id="nearly-every-character-but-only-half-the-bits">Nearly every character, but only half the bits</h3>
+<p>The tool reports two numbers, and the gap between them is worth a moment: <strong>61 of 64 characters</strong> changed, but only <strong>132 of 256 bits</strong>.</p>
+<p>That isn't a contradiction. Recall from <a href="../../foundations/hex-and-bytes/">hex and bytes</a> that each hex character is exactly four bits. A character <em>looks</em> different if <strong>any one</strong> of its four bits flipped — so characters are a much blunter instrument than bits.</p>
+<p>If the function is doing its job, each output bit flips with probability one half. The chance that all four bits of a character survive untouched is then:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>(1/2)^4  =  1/16
+</code></pre></div>
+<p>So a character changes 15 times out of 16, and across 64 characters you'd expect about 64 × 15/16 = <strong>60</strong> of them to change. We observed 61.</p>
+<p><strong>Half the bits is the design target; nearly every character is what that looks like in hex.</strong> The bit figure is the precise statement of the property, and the character figure is what you actually see.</p>
+<p>And half is not an accident. If similar inputs produced similar hashes, you could hill-climb your way to a desired output: tweak the input, check whether you got closer, tweak again. Avalanche destroys that strategy, because "closer" carries no information at all.</p>
+<h2 id="why-it-cant-be-reversed">Why it can't be reversed</h2>
+<p>The honest answer is simpler than people expect: <strong>the output is too small to hold the input.</strong></p>
+<p>Hash a one-megabyte file and you get 32 bytes. Eight million bits in, 256 bits out. The information is not hidden — it is <em>gone</em>. There is no key, nothing encrypted, nothing to decrypt. Most of the input was discarded by construction.</p>
+<p>Which means infinitely many inputs share any given hash. That sounds alarming until you ask how you'd <em>find</em> one.</p>
+<details class="abstract">
+<summary>Collisions exist, and that's fine. Finding one is the problem.</summary>
+<p>Since inputs are unlimited and outputs number only 2<sup>256</sup>,
+collisions must exist — two different inputs with the same hash. This is
+the pigeonhole principle and it isn't a weakness.</p>
+<p>The security claim isn't "no collisions exist". It's that <strong>nobody can find
+one.</strong> And 2<sup>256</sup> is a number that resists intuition:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>2^256 ≈ 115,792,089,237,316,195,423,570,985,008,
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>        687,907,853,269,984,665,640,564,039,457,
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        584,007,913,129,639,936
+</code></pre></div>
+<p>Roughly 10<sup>77</sup> — comparable to estimates of the number of atoms in
+the observable universe. A machine testing a billion billion hashes per
+second, running since the universe began, would have covered an utterly
+negligible fraction of it.</p>
+<p>So "one-way" is an economic claim, not a mathematical impossibility. The
+same distinction appears everywhere in this subject: not <em>cannot</em>, but
+<em>costs more than any conceivable benefit</em>.</p>
+</details>
+<h2 id="how-it-works-the-sponge">How it works: the sponge</h2>
+<p>The page so far has treated the function as a box you drop bytes into. The inside is worth a look, because Keccak's shape is unusual and it's what the next section's one-byte difference actually modifies.</p>
+<p>The design is called a <strong>sponge</strong> <a href="#ref-bertoni-2011">(Bertoni et al., 2011)</a>, for the obvious reason: it absorbs, then it squeezes.</p>
+<p><svg viewBox="0 0 470 306" role="img" aria-label="The sponge. One state of 1600 bits, drawn as a bar split into a rate of 136 bytes and a capacity of 64 bytes, together making 200 bytes. Message blocks are exclusive-ored into the rate only. Between blocks a permutation mixes all 1600 bits. The hash is read from the rate at the end." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="46" y="14" width="76" height="26" rx="3"/><rect x="150" y="14" width="76" height="26" rx="3"/><rect x="254" y="14" width="76" height="26" rx="3"/><path d="M84 40 L84 86"/><path d="M188 40 L188 86"/><path d="M292 40 L292 86"/><rect x="40" y="92" width="340" height="58" rx="4"/><rect x="40" y="150" width="340" height="40" rx="4" stroke-dasharray="4 3"/><path d="M380 120 L414 120"/><path d="M40 202 L40 210 L380 210 L380 202"/></g><g fill="currentColor" stroke="none"><path d="M79 86 L84 96 L89 86 Z"/><path d="M183 86 L188 96 L193 86 Z"/><path d="M287 86 L292 96 L297 86 Z"/><path d="M414 115 L424 120 L414 125 Z"/><text x="84" y="31" font-size="10" text-anchor="middle">block 1</text><text x="188" y="31" font-size="10" text-anchor="middle">block 2</text><text x="292" y="31" font-size="10" text-anchor="middle">block 3</text><text x="338" y="31" font-size="11" opacity="0.7">&#8230;</text><text x="46" y="58" font-size="9" opacity="0.75">136 bytes each, XORed in &#8212; nothing else enters</text><text x="52" y="116" font-size="11" font-weight="700">RATE</text><text x="52" y="132" font-size="10" opacity="0.85">136 bytes (1088 bits) &#183; input in, hash out</text><text x="52" y="168" font-size="11" font-weight="700">CAPACITY</text><text x="52" y="182" font-size="10" opacity="0.85">64 bytes (512 bits) &#183; the input never reaches it</text><text x="210" y="228" font-size="10" text-anchor="middle">136 + 64 = 200 bytes, which is the whole state: <tspan font-weight="700">1600 bits</tspan></text><text x="384" y="112" font-size="9">32 bytes out</text><text x="40" y="256" font-size="10" opacity="0.85">After each block the permutation stirs all 1600 bits together, so the capacity</text><text x="40" y="270" font-size="10" opacity="0.85">does change &#8212; but only as a side effect of input that went into the rate.</text><text x="40" y="294" font-size="10" opacity="0.6">24 rounds of the permutation per block &#183; state is 25 lanes of 64 bits</text></g></svg></p>
+<p><strong>There is a state of 1600 bits</strong>, starting at all zeros. That's the whole memory of the function — no matter how much data you hash, this is all it ever holds.</p>
+<p>The 1600 isn't arbitrary. The permutation is defined over a 5 × 5 grid of 64-bit <strong>lanes</strong>, and 25 × 64 = 1600. That grid is the shape the five round steps are written in terms of, so the state size follows from the design rather than the other way round. In bytes it's 200, which is the number to hold onto: <strong>136 + 64.</strong></p>
+<p>The state is split in two, and the split is the entire security story:</p>
+<ul>
+<li>the <strong>rate</strong>, 1088 bits or 136 bytes, which your input is allowed to touch</li>
+<li>the <strong>capacity</strong>, 512 bits, which it is <strong>not</strong></li>
+</ul>
+<p>Hashing then goes:</p>
+<ol>
+<li><strong>Pad</strong> the message so its length is a multiple of 136 bytes.</li>
+<li><strong>Absorb.</strong> Take the first 136-byte block and XOR it into the rate. Leave the capacity alone.</li>
+<li><strong>Permute.</strong> Run the whole 1600 bits through a fixed scrambling function, 24 rounds of it. This mixes rate into capacity and back.</li>
+<li>Repeat 2 and 3 for every remaining block.</li>
+<li><strong>Squeeze.</strong> Read the first 256 bits of the state. That's your hash.</li>
+</ol>
+<h3 id="why-the-capacity-is-the-point">Why the capacity is the point</h3>
+<p>An attacker trying to steer the output controls the input — and therefore controls what gets XORed into the rate, exactly. If that were the whole state, they would have complete knowledge of it at every step, and the function would be a calculation they could run backwards.</p>
+<p>The capacity denies them that. <strong>512 bits of the state are never written by the message directly.</strong> They change constantly, but only as a side effect of the permutation stirring the rate into them. So each block arrives into a state the attacker has not fully specified, and that gap compounds with every block absorbed.</p>
+<h3 id="nothing-here-is-random">Nothing here is random</h3>
+<p>Worth heading off straight away, because "the attacker can't control the capacity" sounds like it must involve randomness somewhere. It doesn't. <strong>There is no randomness anywhere in Keccak</strong> — that would contradict the determinism at the top of this page, which is the property the whole of Ethereum rests on.</p>
+<p>The state begins at all zeros. Every step afterwards is fixed arithmetic. Anybody who hashes the same input gets the same 1600 bits at every stage, capacity included, on any machine, forever. You could print the capacity out at each step and compare notes; two people doing it would agree exactly. It is neither secret nor unpredictable, and there is nothing to "check for randomness" because nothing claims to be random.</p>
+<p>What the capacity actually is, is <strong>not independently choosable.</strong> The attacker picks the input and thereby fixes everything, including the capacity — but only <em>via</em> the permutation. To make the capacity take some particular value they'd have to work backwards from that value to an input producing it, and that is precisely the problem the permutation is built to make infeasible. They can always compute what the capacity will be. They cannot choose the rate and the capacity to suit them at the same time.</p>
+<p>So the security doesn't come from hidden information. It comes from the input and the state being tied together by something that is cheap to run forwards and hopeless to run backwards — the same asymmetry the <a href="#why-it-cant-be-reversed">one-way section</a> above described, applied to the function's own internals.</p>
+<p>That's also why the number is 512 rather than something smaller: it's sized so the capacity is never the weakest link. With a 256-bit output, the binding limit is the birthday bound on the output itself — the 2<sup>128</sup> of the collisions box above — not anything about the internal state.</p>
+<details class="abstract">
+<summary>The permutation, in one paragraph</summary>
+<p>Each of the 24 rounds applies five steps, traditionally named with Greek
+letters: <strong>θ</strong> mixes each bit with the parity of two nearby columns, <strong>ρ</strong>
+rotates each of the 25 lanes by a different fixed amount, <strong>π</strong> moves the
+lanes around, <strong>χ</strong> is the only non-linear step and the one that makes the
+whole thing irreversible in practice, and <strong>ι</strong> XORs in a round constant so
+that the rounds aren't identical to each other.</p>
+<p>You don't need the detail to use the function, and this site's
+implementation doesn't need you to trust it — the rotation amounts and
+round constants are <strong>computed from the specification's own formulas</strong>
+rather than copied from a table, then checked against the published test
+values. A transcription error in a table of 24 constants would be invisible
+on inspection and fatal in use.</p>
+</details>
+<h2 id="keccak-256-is-not-sha-3">Keccak-256 is not SHA-3</h2>
+<p>This causes real confusion and real bugs, so it's worth being precise.</p>
+<p>Keccak, designed by Bertoni, Daemen, Peeters and Van Assche <a href="#ref-bertoni-2011">(Bertoni et al., 2011)</a>, won an open competition to become SHA-3. The competition was run by <strong><a href="../../glossary/#nist" title="The US government agency that publishes technical standards, cryptography included">NIST</a></strong> — the United States standards agency, which publishes the cryptographic standards most of the world ends up using.</p>
+<p>Between Keccak winning and the standard being published, <strong>NIST changed the padding</strong>: the bytes appended to the input before hashing <a href="#ref-fips202">(NIST, 2015)</a>. Ethereum had already adopted the original Keccak and kept it.</p>
+<p>So Ethereum uses <strong>Keccak-256</strong>, and the NIST standard is <strong>SHA3-256</strong>, and they are <em>not the same function</em>. The difference is a single byte: <code>0x01</code> where the standard uses <code>0x06</code>.</p>
+<p>One byte, and the outputs share nothing:</p>
+<details class="example">
+<summary>Try it: Keccak-256 against SHA3-256</summary>
+<p><div class="tool" markdown="0">
+  <label for="sha-in">Input</label>
+  <input id="sha-in" type="text" autocomplete="off" spellcheck="false" value="hello">
+  <p class="tool__out" id="sha-out"></p>
+</div></p>
+<p>Both functions use the identical permutation, the identical structure, the
+identical number of rounds. They differ by one byte of padding — and almost
+every character of the output differs as a result. Avalanche doesn't care
+<em>where</em> the difference came from.</p>
+<p>The empty string is the pair worth remembering, since both turn up
+constantly in different contexts:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>keccak256("")  =  c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sha3_256("")   =  a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a
+</code></pre></div>
+</details>
+<p><strong>What goes wrong in practice:</strong> a library function named <code>sha3</code> may implement either one, depending on its age and author. Call the wrong one and nothing errors — you simply get a hash that no other Ethereum tool agrees with. Addresses won't match, signatures won't verify, and nothing tells you why.</p>
+<p>If you take one thing from this page: <strong>when Ethereum says SHA-3, it means Keccak.</strong> Check which your library gives you.</p>
+<h2 id="where-ethereum-uses-it">Where Ethereum uses it</h2>
+<p>Almost everywhere, which is why this page comes first in the cryptography section:</p>
+<table>
+<thead>
+<tr>
+<th>Use</th>
+<th>What gets hashed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../addresses/">Addresses</a></td>
+<td>a public key — the last 20 bytes of the hash become the address</td>
+</tr>
+<tr>
+<td><a href="../addresses/">Address checksums</a></td>
+<td>the address itself, to detect typos</td>
+</tr>
+<tr>
+<td>Transaction hashes</td>
+<td>the signed transaction</td>
+</tr>
+<tr>
+<td><a href="../../accounts/state/">State and storage roots</a></td>
+<td>every node of the trie</td>
+</tr>
+<tr>
+<td>Function selectors</td>
+<td>a function's name and parameter types</td>
+</tr>
+<tr>
+<td>Contract addresses</td>
+<td>the creator's address and <a href="../../accounts/nonce/">nonce</a></td>
+</tr>
+</tbody>
+</table>
+<p>In each case the job is the same: <strong>compress something arbitrary into a fixed-size identifier nobody can forge.</strong></p>
+<h2 id="what-it-is-not">What it is not</h2>
+<p>Two misconceptions worth killing off.</p>
+<p><strong>It isn't encryption.</strong> Encryption is reversible by design — that's its entire purpose. Hashing is not, and there's no key. "Decrypting a hash" is not a difficult problem; it's an incoherent request.</p>
+<p><strong>It isn't random.</strong> It's perfectly predictable: the same input always yields the same output. Hash output <em>looks</em> random, and that's useful, but anyone with the input can reproduce it exactly. Using a hash as a source of randomness is a well-trodden route to losing money, because whoever supplies the input chooses the result.</p>
+<hr />
+<h2 id="recap">Recap</h2>
+<ul>
+<li>Keccak-256 takes <strong>any input</strong> and returns exactly <strong>32 bytes</strong>.</li>
+<li>It is <strong>deterministic</strong> — the same input gives the same output everywhere, forever.</li>
+<li><strong>Avalanche</strong>: a one-letter change rewrites nearly every character of the output — half the bits, which in hex means about 60 of the 64 characters. Similar inputs tell you nothing about each other.</li>
+<li>It is <strong>one-way</strong> because the output is too small to hold the input. The information is gone, not hidden.</li>
+<li>Collisions must exist; the claim is that <strong>nobody can find one</strong>, and 2<sup>256</sup> is why.</li>
+<li><strong>Keccak-256 is not SHA3-256.</strong> One padding byte apart, and completely different outputs.</li>
+<li>It is neither encryption nor a source of randomness.</li>
+</ul>
+<p><strong>Next:</strong> <a href="../private-keys/">Private keys</a> — where a 256-bit number starts being worth something.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-bertoni-2011"></a><strong>Bertoni, G., Daemen, J., Peeters, M., &amp; Van Assche, G.</strong> (2011). <em>The Keccak reference</em>, version 3.0. The designers' own specification of the sponge construction and the permutation. <a href="https://keccak.team/files/Keccak-reference-3.0.pdf">https://keccak.team/files/Keccak-reference-3.0.pdf</a></li>
+<li><a id="ref-fips202"></a><strong>National Institute of Standards and Technology</strong> (2015). <em>SHA-3 Standard: Permutation-Based Hash and Extendable-Output Functions.</em> FIPS PUB 202. The standard whose padding differs from Ethereum's. <a href="https://doi.org/10.6028/NIST.FIPS.202">https://doi.org/10.6028/NIST.FIPS.202</a></li>
+<li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Specifies Keccak-256 as Ethereum's hash function throughout. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../foundations/hex-and-bytes/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Hex and bytes">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Hex and bytes
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../private-keys/" class="md-footer__link md-footer__link--next" aria-label="Next: Private keys">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Private keys
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.top", "navigation.footer", "search.suggest", "search.highlight", "content.code.copy", "content.tooltips", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../javascripts/converters.js"></script>
+      
+        <script src="../../javascripts/keccak.js"></script>
+      
+        <script src="../../javascripts/keys.js"></script>
+      
+        <script src="../../javascripts/secp256k1.js"></script>
+      
+        <script src="../../javascripts/addresses.js"></script>
+      
+        <script src="../../javascripts/signatures.js"></script>
+      
+        <script src="../../javascripts/wallets.js"></script>
+      
+        <script src="../../javascripts/boxes.js"></script>
+      
+    
+  </body>
+</html>

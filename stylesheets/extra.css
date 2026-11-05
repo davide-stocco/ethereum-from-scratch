@@ -1,0 +1,420 @@
+/* ---------------------------------------------------------------------------
+   Headings
+   ---------------------------------------------------------------------------
+   Material's default heading weight is light, which reads fine on white but
+   nearly disappears against the dark background — headings end up the same
+   visual weight as body text and the page structure stops being scannable.
+   Heavier in both themes for consistency, plus full white and a hairline
+   rule in dark mode so sections are identifiable at a glance.
+   --------------------------------------------------------------------------- */
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5 {
+  font-weight: 700;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3,
+[data-md-color-scheme="slate"] .md-typeset h4,
+[data-md-color-scheme="slate"] .md-typeset h5 {
+  color: #ffffff;
+}
+
+/* Section separator. Makes the h2 boundaries visible without relying on
+   font size alone. */
+.md-typeset h2 {
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+
+/* ---------------------------------------------------------------------------
+   "Try it" boxes — interactive exercises
+   ---------------------------------------------------------------------------
+   Uses Material's `example` admonition type, which already has its own
+   purple, distinct from note (blue), info (cyan), abstract (light blue) and
+   warning (orange). Only the controls inside need styling.
+   --------------------------------------------------------------------------- */
+
+.md-typeset .tool {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 0.8rem;
+  align-items: center;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.md-typeset .tool label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.md-typeset .tool input {
+  width: 100%;
+  padding: 0.4em 0.6em;
+  font-family: var(--md-code-font-family, monospace);
+  font-size: 0.8rem;
+  color: var(--md-default-fg-color);
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.15rem;
+}
+
+.md-typeset .tool input:focus {
+  outline: none;
+  border-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .tool input.tool__input--bad {
+  border-color: #d32f2f;
+}
+
+.md-typeset .tool__out {
+  grid-column: 1 / -1;
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+/* Block, not inline: tools emit several of these in a row, and inline spans
+   ran together into "...10^37Fraction of all possible keys...". */
+.md-typeset .tool__hint {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  opacity: 0.7;
+  overflow-wrap: anywhere;
+}
+
+.md-typeset .tool__error {
+  font-size: 0.78rem;
+  color: #d32f2f;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .tool input.tool__input--bad,
+[data-md-color-scheme="slate"] .md-typeset .tool__error {
+  color: #ff8a80;
+  border-color: #ff8a80;
+}
+
+.md-typeset .tool__hash {
+  display: block;
+  margin: 0.15rem 0 0.35rem;
+  padding: 0.35em 0.5em;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  background: var(--md-code-bg-color);
+  border-radius: 0.15rem;
+}
+
+/* Field-name columns: a wrapped `storageRoot` reads as two words and makes
+   the column look broken. Only inline code in the first cell is protected,
+   so tables whose first column is prose still wrap normally. */
+.md-typeset table td:first-child > code,
+.md-typeset table th:first-child > code {
+  white-space: nowrap;
+}
+
+.md-typeset .tool__faint {
+  opacity: 0.35;
+}
+
+/* A secondary line inside a tool__hash block — a derived value shown under
+   the primary one. Quieter than the result it belongs to, but fully legible:
+   truncating it would defeat the point of displaying it. */
+.md-typeset .tool__sub {
+  display: block;
+  margin-top: 0.25em;
+  opacity: 0.6;
+}
+
+/* Two rows that must line up character by character: no wrapping, scroll
+   instead, or the alignment that carries the meaning is lost. */
+.md-typeset .tool__align {
+  white-space: pre;
+  overflow-x: auto;
+  overflow-wrap: normal;
+}
+
+.md-typeset .tool__rowlbl {
+  opacity: 0.5;
+  user-select: none;
+}
+
+.md-typeset .tool__hi {
+  font-weight: 700;
+  color: #00695c;
+  background: rgba(0, 105, 92, 0.12);
+  border-radius: 0.1rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .tool__hi {
+  color: #80cbc4;
+  background: rgba(128, 203, 196, 0.16);
+}
+
+/* Characters that differ between two hashes. */
+.md-typeset .tool__diff {
+  font-style: normal;
+  font-weight: 700;
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.1);
+  border-radius: 0.1rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .tool__diff {
+  color: #ff8a80;
+  background: rgba(255, 138, 128, 0.14);
+}
+
+.md-typeset .tool__label {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+.md-typeset .tool button {
+  justify-self: start;
+  padding: 0.45em 1em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--md-primary-bg-color);
+  background: var(--md-primary-fg-color);
+  border: none;
+  border-radius: 0.15rem;
+  cursor: pointer;
+}
+
+.md-typeset .tool button:hover {
+  background: var(--md-accent-fg-color);
+}
+
+/* Stack the labels above the fields on narrow screens. */
+@media screen and (max-width: 44.9em) {
+  .md-typeset .tool {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar: section headers vs. chapter links
+   ---------------------------------------------------------------------------
+   Section headers were the same weight as the pages inside them, so the
+   hierarchy had to be inferred from indentation alone. Headers now read as
+   headers, and page links sit visibly below them.
+   --------------------------------------------------------------------------- */
+
+/* Three ranks now, since parts hold topics which hold pages. Each needs to
+   be distinguishable from the one above without shouting.
+
+   Two traps here, both of which produced bugs:
+
+   Specificity — the part selector is the least specific of the three, so the
+   topic and page rules must come after it, or the part rule wins everywhere
+   and all three render identically.
+
+   `margin-top` — Material sets `.md-nav__link { margin-top: .625em }`, and
+   that is what puts a gap between every row in the menu. Overriding it to 0
+   on the deeper ranks collapses the whole sidebar into overlapping text. So
+   only the part rule touches it, and only to ask for more.
+
+   Size carries the rank, not capitals: small caps shout, and these labels are
+   read far more often than they are clicked. */
+
+/* Rank 1 — anything at the top of the menu. Mostly the five parts, but also
+   the standalone pages up there: Home and Glossary. Keyed on being top-level
+   rather than on being a section, or those two render at page size among the
+   part labels and look like orphans. */
+.md-nav--primary > .md-nav__list > .md-nav__item > .md-nav__link {
+  font-weight: 700;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  letter-spacing: 0.005em;
+  margin-top: 1.1em;
+}
+
+/* Rank 2 — the topic: "Cryptography" */
+.md-nav--primary .md-nav__item--nested .md-nav__item--nested > .md-nav__link {
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Rank 3 — a page. Also covers pages sitting directly under a part, which is
+   how the two single-topic parts are arranged. */
+.md-nav--primary .md-nav__item--nested .md-nav__item:not(.md-nav__item--nested) > .md-nav__link {
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
+/* The expand/collapse chevron should turn rather than jump. */
+.md-nav__link .md-nav__icon {
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Sidebar: animate expanding a section
+   ---------------------------------------------------------------------------
+   Material toggles nested navigation with `display`, which cannot be
+   transitioned — so a section appears instantly. Keeping it in the layout and
+   animating height and opacity instead gives the movement somewhere to go.
+   Scoped to desktop: the mobile drawer slides between panes already, and has
+   its own animation.
+   --------------------------------------------------------------------------- */
+
+@media screen and (min-width: 76.25em) {
+  .md-nav--primary .md-nav__item--nested > .md-nav {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-height 0.45s cubic-bezier(0.25, 0.1, 0.25, 1),
+      opacity 0.32s ease-out;
+  }
+
+  /* The ceiling has to exceed the tallest open section, but not by much: the
+     animation runs until max-height passes the real content height and then
+     visibly stops, so an oversized ceiling makes short sections snap open.
+     Two ceilings now, because a part holding three expanded topics is far
+     taller than a topic holding four pages. */
+  .md-nav--primary > .md-nav__list > .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+    max-height: 32rem;
+    opacity: 1;
+  }
+
+  .md-nav--primary .md-nav__item--nested .md-nav__item--nested > .md-nav__toggle:checked ~ .md-nav {
+    max-height: 14rem;
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Sources sections
+   ---------------------------------------------------------------------------
+   Each page ends with its references. Set them slightly smaller and looser
+   than body text, the way a bibliography reads in a paper.
+   --------------------------------------------------------------------------- */
+
+.md-typeset .sources {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.md-typeset .sources li {
+  margin-bottom: 0.5em;
+}
+
+/* Subheadings inside a Sources list, for pages with enough references to
+   need grouping. Kept small and ruleless so they read as labels within the
+   bibliography rather than as sections of the page. */
+.md-typeset .sources h3,
+.md-typeset .sources h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 1.4em 0 0.6em;
+  border-bottom: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.75;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Collapsible boxes: smooth open and close
+   ---------------------------------------------------------------------------
+   The height itself is driven by javascripts/boxes.js, because a <details>
+   drops its content out of layout when closed and so has no height for CSS to
+   transition between. All this does is define the transition and hide the
+   overflow while it runs.
+
+   The .is-animating class is only present during the animation, so overflow
+   is never clipped at rest — which matters for tooltips inside a box.
+   --------------------------------------------------------------------------- */
+
+.md-typeset details.is-animating {
+  overflow: hidden;
+  transition: height 0.26s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Fade the contents in slightly behind the height, so the box doesn't look
+   like it's merely being stretched. */
+.md-typeset details[open] > :not(summary) {
+  animation: efs-box-in 0.3s ease-out;
+}
+
+@keyframes efs-box-in {
+  from { opacity: 0; transform: translateY(-0.2rem); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .md-typeset details.is-animating { transition: none; }
+  .md-typeset details[open] > :not(summary) { animation: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   "Definition" boxes
+   ---------------------------------------------------------------------------
+   Material has no definition type, so this adds one: teal, with a bookmark
+   icon, distinct from every colour already in use (blue, light blue, cyan,
+   light green, orange, red, purple).
+
+   These are the ONE content box that stays open. A definition isn't
+   supplementary reading — it's the page's central term stated plainly, and a
+   reader scanning the page should be able to spot it without clicking.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --md-admonition-icon--definition: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6 2 L18 2 L18 22 L12 17 L6 22 Z"/></svg>');
+}
+
+.md-typeset .admonition.definition,
+.md-typeset details.definition {
+  border-color: #00897b;
+}
+
+.md-typeset .definition > .admonition-title,
+.md-typeset .definition > summary {
+  background-color: rgba(0, 137, 123, 0.1);
+}
+
+.md-typeset .definition > .admonition-title::before,
+.md-typeset .definition > summary::before {
+  background-color: #00897b;
+  -webkit-mask-image: var(--md-admonition-icon--definition);
+  mask-image: var(--md-admonition-icon--definition);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition.definition,
+[data-md-color-scheme="slate"] .md-typeset details.definition {
+  border-color: #4db6ac;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset .definition > summary {
+  background-color: rgba(77, 182, 172, 0.12);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .definition > .admonition-title::before,
+[data-md-color-scheme="slate"] .md-typeset .definition > summary::before {
+  background-color: #4db6ac;
+}
