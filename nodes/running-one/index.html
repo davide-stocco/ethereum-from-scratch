@@ -2377,7 +2377,7 @@ re-derive is the choice being made</strong>, and it decides how long this takes.
 </div>
 <h2 id="what-it-takes-in-shape">What it takes, in shape</h2>
 <p>Four requirements, and they are not equally binding.</p>
-<p><strong>Disk is the one that decides.</strong> Not how much — what <em>kind</em>, and which direction it moves. You need <strong>terabytes rather than gigabytes</strong>, on a solid-state drive rather than a spinning one, because the work is constant small random writes rather than bulk reading. And the requirement <strong>only ever rises</strong>, because nothing removes an account from the state.</p>
+<p><strong>Disk is the one that rules machines out.</strong> The other three requirements are rarely what stops somebody; this is. And the useful facts about it aren't the quantity — they're the kind and the direction. You need <strong>terabytes rather than gigabytes</strong>, on a solid-state drive rather than a spinning one, because the work is constant small random writes rather than bulk reading. And the requirement <strong>only ever rises</strong>, because nothing removes an account from the state.</p>
 <p><strong>Memory and processor are ordinary.</strong> A small desktop machine of recent vintage is enough. This is the reassuring part and the part people get wrong in both directions — you don't need a server, and a ten-year-old laptop won't do.</p>
 <p><strong>Bandwidth is continuous rather than large.</strong> A node is always talking: receiving blocks, forwarding them, answering peers. The monthly total is unremarkable; the requirement is that it never stops.</p>
 <p><strong>And the real cost is that last word.</strong> A node that runs for eight hours a day is a node that spends every morning catching up. The expense isn't the hardware, it's <strong>a machine that stays on</strong> — electricity, a corner of a room, and the fact that you now own something that breaks.</p>
@@ -2403,8 +2403,10 @@ re-derive is the choice being made</strong>, and it decides how long this takes.
 <p>That is why node counts get watched, and why "what does a node cost" is a question about Ethereum rather than about computers.</p>
 <h2 id="what-keeps-it-affordable">What keeps it affordable?</h2>
 <p><strong>Nothing automatic</strong>, and this is the uncomfortable part.</p>
-<p>The state only grows, every node stores all of it, and the protocol charges a one-time fee for storage it then keeps forever. <a href="../../accounts/why-accounts/">Why accounts</a> argues that as a pricing failure — a perpetual cost met by a single payment, borne by operators who were never asked. <strong>This page is the invoice that argument describes</strong>, denominated in disk.</p>
-<p>The responses are the three named there — charging rent for occupied state, expiring what goes untouched, and arranging that validators need not hold the state at all — and none has shipped. Hardware gets cheaper, which changes the rate. It does not change the direction.</p>
+<p>The state only grows, because nothing removes an account from it. So every operator's disk requirement rises for as long as the network runs.</p>
+<p>And notice where the money sits. <strong>Writing something into the state is paid for once</strong>, by whoever writes it, at a price set by how congested the network is that day. <strong>Keeping it is paid for indefinitely</strong>, by every operator, including everyone who starts a node years later. Those are not the same people, and the second group was never asked.</p>
+<p>That mismatch is a question about <strong>pricing</strong>, not about hardware — which is why no amount of cheaper disk resolves it. Cheaper hardware changes how fast the requirement bites. It does not change which way it moves.</p>
+<p>It's also not this page's argument to make: it needs the account model, and so it's taken apart properly in <a href="../../accounts/why-accounts/">why accounts, and what they cost</a>, two parts ahead. What's worth carrying there from here is the concrete end of it — <strong>the cost is real, it's denominated in disk, and it only goes one way.</strong></p>
 <p><strong>EIP-4444</strong> <a href="#ref-eip4444">(Kadianakis et al., 2021)</a> addresses the other half: making old <em>history</em> somebody's deliberate job rather than everybody's default, so a node need not carry a decade of blocks it will never read.</p>
 <h2 id="if-youre-not-going-to-run-one">If you're not going to run one</h2>
 <p>Most readers won't, and that's a reasonable decision rather than a failure of duty. The useful thing isn't guilt — it's knowing <strong>what is being assumed on your behalf.</strong></p>
@@ -2419,7 +2421,7 @@ re-derive is the choice being made</strong>, and it decides how long this takes.
 <li>What you get: <strong>your own answers</strong>, no audience for your queries, and nobody able to cut you off.</li>
 <li>What you don't get: <strong>money.</strong> Nodes earn nothing; the paid role is a validator, which is a node plus stake plus duties.</li>
 <li>The cost matters because <strong>the site's central claim depends on it.</strong> While a node is affordable, "anyone can check" is true. If it needed a datacentre, the rules wouldn't change and the claim would quietly stop being true.</li>
-<li><strong>Nothing keeps it affordable automatically.</strong> Cheaper hardware changes the rate, not the direction — the pricing problem is the one <a href="../../accounts/why-accounts/">why accounts</a> sets out.</li>
+<li><strong>Nothing keeps it affordable automatically.</strong> Writing to the state is paid for once; keeping it is paid for indefinitely, by different people. That's a pricing mismatch rather than a hardware problem, and <a href="../../accounts/why-accounts/">why accounts</a> takes it apart two parts ahead.</li>
 <li>If you don't run one, the useful thing is knowing <strong>what you're assuming on somebody else's behalf</strong> — and that you benefit from nodes staying cheap regardless.</li>
 </ul>
 <p><strong>Next:</strong> <a href="../../accounts/accounts/">Accounts</a> — what all these machines are actually storing.</p>
