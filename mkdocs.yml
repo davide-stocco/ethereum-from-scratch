@@ -171,6 +171,13 @@ nav:
       # provokes and defers, so it should arrive soon after.
       - Contracts:
           - What a smart contract is: contracts/smart-contracts.md
+          # Order within the topic: what a contract is, then what is literally
+          # stored at it, then the one thing it can write and not read, then
+          # the thing most people mean by "contract" in the first place.
+          # Tokens last because they lean on logs for transfer records.
+          - What the code actually is: contracts/what-the-code-is.md
+          - Events and logs: contracts/events-and-logs.md
+          - Tokens aren't special: contracts/tokens.md
       # Named for what it answers, not for the technique, so it reads like a
       # question the way the other topics do. "Encoding" was a method sitting
       # among subjects, which is why it looked as though it had wandered in.

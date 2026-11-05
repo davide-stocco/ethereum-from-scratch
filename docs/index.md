@@ -78,7 +78,7 @@ That's the whole site in a line. The topic names under each card are what the ma
 
     *Accounts and state* — [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md) · [Why accounts, and what they cost](accounts/why-accounts.md) · [What it reveals](accounts/what-it-reveals.md)
 
-    *Contracts* — [What a smart contract is](contracts/smart-contracts.md)
+    *Contracts* — [What a smart contract is](contracts/smart-contracts.md) · [What the code actually is](contracts/what-the-code-is.md) · [Events and logs](contracts/events-and-logs.md) · [Tokens aren't special](contracts/tokens.md)
 
     *How it's written* — [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
 

@@ -55,6 +55,21 @@ When a transaction calls a contract, **every node runs the code** — independen
 
 Which brings us to the part worth the page.
 
+## What it can do
+
+A short list, and worth having before the absences, because the absences only mean something against it.
+
+- **Read and write its own storage.** Its private mapping of 32-byte slots, fingerprinted as `storageRoot`. Nothing else can write it; anybody can read it.
+- **Send ether**, from the balance it holds.
+- **Call other contracts**, and be called by them. This is what composability is made of.
+- **Create contracts**, which is why its nonce counts deployments.
+- **Read some chain context** — its own balance, who called it, how much was sent, the current block's number.
+- **Emit a log.**
+
+That last one needs a sentence, because it's the odd one out. A **log** is a record a contract writes that is *not part of the state*: it goes into the block alongside the transaction, where anything outside Ethereum can read it. The peculiarity is that **a contract can write a log and cannot read one** — not its own, not anybody's. Logs exist for the benefit of the outside world, which is why they're the practical way to watch what a contract has been doing, and why they're cheap: no node has to keep them available for execution. [Events and logs](events-and-logs.md) takes it from there.
+
+And that's the whole of it. Six capabilities, all of them inside Ethereum.
+
 ## What it cannot do, and why that's the point
 
 A contract is a program with almost everything taken away. The list of absences is short and total:
@@ -136,6 +151,7 @@ The warning for anyone using chain data: **published usage figures aren't compar
 
 ## Recap
 
+- A contract can **read and write its own storage, send ether, call and create other contracts, read some chain context, and emit a log** — and nothing else. All of it inside Ethereum.
 - A smart contract is **a program stored at an account**, identified by its `codeHash` not being the empty constant. Not a special object — an account with code.
 - It is **neither smart nor a contract**: no judgement, no parties, no remedy. The word predates Ethereum by two decades and meant something broader [(Szabo, 1997)](#ref-szabo-1997).
 - **Nobody holds its keys**, because there are none. Control is the code, and the code is public.
@@ -148,7 +164,7 @@ The warning for anyone using chain data: **published usage figures aren't compar
 - Functions are a **convention**: four bytes of a Keccak-256 hash of the signature, by agreement. The protocol knows nothing about functions.
 - **Nothing counts how often a contract is used.** It's a history question, answerable three ways that disagree.
 
-**Next:** [RLP encoding](../encoding/rlp.md) — how all of this gets written down as bytes.
+**Next:** [What the code actually is](what-the-code-is.md) — bytecode, source, and why "verified" is a claim rather than a fact.
 
 ---
 
