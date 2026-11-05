@@ -2346,29 +2346,33 @@
 
 
 <h1 id="clients-and-the-two-layers">Clients and the two layers</h1>
+<p><strong>Mostly <a href="../../about/forks/">permanent</a>.</strong> How the work of a node is divided, and why several independent implementations of it exist on purpose, are both structural. Which particular implementations exist is not.</p>
 <div class="admonition info">
 <p class="admonition-title">Current as of Fusaka (December 2025)</p>
-<p>The two-program split and the argument for many implementations are
-durable. <strong>Which implementations exist, who maintains them and what share
-each has are not</strong> — teams start and stop, and shares move. This page
-names roles and reasons rather than products, and any figure that does
-appear carries its date.</p>
+<p><strong>Which implementations exist, who maintains them, and what share each
+has will all have moved</strong> by the time you read this — teams start and
+stop. So this page names roles and reasons rather than products, and any
+figure that does appear carries its date.</p>
 </div>
-<p><strong>Mostly <a href="../../about/forks/">permanent</a>.</strong> That a node runs two cooperating programs, and why having several independent implementations of each matters, are structural. Which programs exist is not.</p>
 <div class="admonition definition">
 <p class="admonition-title">Client</p>
-<p>A program that implements Ethereum's rules. <strong>Not</strong> an app, not a wallet —
-the software that <em>is</em> a <a href="../what-a-node-is/">node</a>, or half of one.</p>
-<p>Several independent clients exist for each half of the job. They are
-written by different teams in different programming languages, and they
-must agree exactly, because a disagreement about the rules is a
-disagreement about what happened.</p>
+<p><strong>The software that implements Ethereum's rules.</strong> Not an app, not a
+wallet — the program itself.</p>
+<p>So <em>node</em> and <em>client</em> are not two words for one thing. A
+<a href="../what-a-node-is/">node</a> is what a machine <strong>does</strong>: hold the state,
+check every arriving block, reject anything invalid. A <strong>client</strong> is the
+program it runs in order to do that. The same relation as <em>web server</em> and
+the particular software serving the pages.</p>
+<p>Several independent clients exist, written by different teams in different
+programming languages. They must agree exactly, because a disagreement
+about the rules is a disagreement about what happened.</p>
 </div>
 <h2 id="one-node-two-programs">One node, two programs</h2>
-<p>A node is not a single piece of software. It is <strong>two programs running side by side</strong>, each doing a job the other can't, talking over a defined interface.</p>
-<p><svg viewBox="0 0 470 236" role="img" aria-label="One node drawn as a dashed box containing two programs side by side: an execution client holding the accounts and running the code, and a consensus client deciding the order of transactions. An arrow runs between them, and the consensus client also connects outward to other nodes." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="8" y="30" width="454" height="134" rx="8" stroke-dasharray="5 4" opacity="0.5"/><rect x="26" y="56" width="186" height="90" rx="5"/><rect x="258" y="56" width="186" height="90" rx="5"/><path d="M212 90 L258 90"/><path d="M212 112 L258 112"/><path d="M351 164 L351 196"/></g><g fill="currentColor" stroke="none"><path d="M254 85 L264 90 L254 95 Z"/><path d="M216 107 L206 112 L216 117 Z"/><path d="M346 196 L351 206 L356 196 Z"/><text x="20" y="22" font-size="10" opacity="0.75">ONE NODE &#183; one machine</text><text x="38" y="78" font-size="11" font-weight="700">execution client</text><text x="38" y="98" font-size="10" opacity="0.85">holds the accounts</text><text x="38" y="114" font-size="10" opacity="0.85">runs the code</text><text x="38" y="130" font-size="10" opacity="0.85">keeps the state</text><text x="270" y="78" font-size="11" font-weight="700">consensus client</text><text x="270" y="98" font-size="10" opacity="0.85">decides the order</text><text x="270" y="114" font-size="10" opacity="0.85">of transactions</text><text x="270" y="130" font-size="10" opacity="0.85">votes on blocks</text><text x="351" y="222" font-size="10" text-anchor="middle" opacity="0.8">other nodes&#8217; consensus clients</text><text x="8" y="186" font-size="9" opacity="0.7">Neither half is a node on its own.</text></g></svg></p>
+<p>Now the complication. A node doesn't run <em>one</em> client — it runs <strong>two</strong>, side by side, and needs both.</p>
+<p>They do different jobs, and neither can do the other's. One holds the accounts and checks what the transactions did; the other works out which block comes next. They talk to each other over a defined interface, and the pair of them is what makes one node.</p>
+<p><svg viewBox="0 0 470 236" role="img" aria-label="One node drawn as a dashed box containing two programs side by side: an execution client that holds the accounts, runs the code and keeps the state, and a consensus client that orders the transactions, votes on other blocks and talks to other nodes. Arrows run between the two programs, and outward from the consensus client to other nodes." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="8" y="30" width="454" height="134" rx="8" stroke-dasharray="5 4" opacity="0.5"/><rect x="26" y="56" width="186" height="90" rx="5"/><rect x="258" y="56" width="186" height="90" rx="5"/><path d="M212 90 L258 90"/><path d="M212 112 L258 112"/><path d="M351 164 L351 196"/></g><g fill="currentColor" stroke="none"><path d="M254 85 L264 90 L254 95 Z"/><path d="M216 107 L206 112 L216 117 Z"/><path d="M346 196 L351 206 L356 196 Z"/><text x="20" y="22" font-size="10" opacity="0.75">ONE NODE &#183; one machine</text><text x="38" y="78" font-size="11" font-weight="700">execution client</text><text x="38" y="98" font-size="10" opacity="0.85">holds the accounts</text><text x="38" y="114" font-size="10" opacity="0.85">runs the code</text><text x="38" y="130" font-size="10" opacity="0.85">keeps the state</text><text x="270" y="78" font-size="11" font-weight="700">consensus client</text><text x="270" y="98" font-size="10" opacity="0.85">orders the transactions</text><text x="270" y="114" font-size="10" opacity="0.85">votes on other blocks</text><text x="270" y="130" font-size="10" opacity="0.85">talks to other nodes</text><text x="351" y="222" font-size="10" text-anchor="middle" opacity="0.8">other nodes&#8217; consensus clients</text><text x="8" y="186" font-size="9" opacity="0.7">Neither program is a node on its own.</text></g></svg></p>
 <p><strong>The execution client</strong> is the <a href="../../foundations/what-is-ethereum/">state machine</a> this site has been describing. It holds the accounts, runs contract code, keeps the <a href="../../accounts/state/">state</a>, and checks that transactions follow the rules.</p>
-<p><strong>The consensus client</strong> decides <em>which</em> block comes next and in what order — the problem that <a href="../../blocks/why-somebody-chosen/">has to be solved by somebody</a> because the rules don't settle it. It talks to other nodes' consensus clients, and tells its own execution client which block to apply.</p>
+<p><strong>The consensus client</strong> works out <em>which</em> block comes next — the problem that <a href="../../blocks/why-somebody-chosen/">has to be solved by somebody</a> because the rules don't settle it. It talks to other nodes' consensus clients, and tells its own execution client which block to apply.</p>
 <p>Neither is a node by itself. The execution client can check whether a block is valid but has no opinion about which block is the real one. The consensus client can tell you which block the network has agreed on but cannot check whether its contents make sense. <strong>A node is the pair.</strong></p>
 <details class="info">
 <summary>History: they were separate systems first</summary>
@@ -2415,7 +2419,7 @@ seam is still visible in every node today.</p>
 <hr />
 <h2 id="recap">Recap</h2>
 <ul>
-<li>A node is <strong>two programs</strong>: an <strong>execution client</strong> holding the accounts, state and code, and a <strong>consensus client</strong> deciding the order and voting on blocks. Neither is a node alone.</li>
+<li>A node is <strong>two programs</strong>: an <strong>execution client</strong> holding the accounts, state and code, and a <strong>consensus client</strong> deciding the order and voting on blocks. Neither program is a node alone.</li>
 <li>The split is <strong>historical, not architectural</strong>. The consensus system ran as a separate chain from December 2020 and was joined to the execution system in September 2022 — the Merge.</li>
 <li>A <strong>client</strong> is an implementation of the rules. Several independent ones exist for each half, written by different teams in different languages.</li>
 <li><strong>One official implementation would be more dangerous, not safer.</strong> If everyone runs the same software, a bug in it isn't a bug — it silently becomes the rules.</li>
