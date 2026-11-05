@@ -17,7 +17,11 @@ import re
 import sys
 import pathlib
 
-BAD = re.compile(r"[A-Z][A-Za-zÀ-ÿ'’-]+(?:\s+et\s+al\.)?\s+\[\((?:\d{4}|[^)]*,\s*\d{4})\)\]")
+# Only the year inside the brackets is the fault. [(Author, year)] is the
+# correct parenthetical form, and any capitalised word may legitimately
+# precede it — "the Yellow Paper [(Wood, 2014)]" is right, and an earlier
+# version of this pattern flagged three such lines as errors.
+BAD = re.compile(r"[A-Z][A-Za-zÀ-ÿ'’-]+(?:\s+et\s+al\.)?\s+\[\(\d{4}\)\]")
 
 def main():
     root = pathlib.Path(__file__).resolve().parent.parent
