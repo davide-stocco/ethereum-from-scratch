@@ -36,11 +36,15 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **Beacon Chain**{ #beacon-chain }
 : The Proof of Stake chain that ran separately from December 2020, holding no accounts or transactions. The Merge connected Ethereum's execution layer to it. → [What is Ethereum?](foundations/what-is-ethereum.md)
 
+**Beige Paper**{ #beige-paper }
+: A community rewrite of the [Yellow Paper](#yellow-paper) in ordinary prose, covering the same material without the formal notation. Useful for *reading*; not cited on this site, because it is somebody's restatement of the specification rather than the specification — and its own introduction describes it as a beta with known errata. If the Yellow Paper is impenetrable, start here and check anything load-bearing against Wood. <https://github.com/chronaeon/beigepaper>
+
 **Block**{ #block }
 : A batch of transactions, added to the chain as a single unit. State is recorded once per block, not per transaction.
 
 **Byte**{ #byte }
 : Eight bits. The unit everything in Ethereum is measured in — addresses are 20 bytes, hashes are 32. → [Hex and bytes](foundations/hex-and-bytes.md)
+
 
 ## C
 
@@ -83,14 +87,15 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 ## G
 
-**Genesis**{ #genesis }
-: The very first block, and the starting state it defined — Ethereum's launch in July 2015. "Since genesis" is the usual way of saying "for the whole life of the network"; this site generally says the plainer thing instead.
-
 **Gas**{ #gas }
 : The unit measuring computational work. Not money — gas is the *amount* of work, and the fee is what that work costs. Exists so that computation is paid for and so no contract can run forever.
 
+**Genesis**{ #genesis }
+: The very first block, and the starting state it defined — Ethereum's launch in July 2015. "Since genesis" is the usual way of saying "for the whole life of the network"; this site generally says the plainer thing instead.
+
 **gwei**{ #gwei }
 : 10<sup>9</sup> wei. The unit fees are normally quoted in. → [Ether, wei and gwei](foundations/ether.md)
+
 
 ## H
 
@@ -147,11 +152,11 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 ## S
 
-**secp256k1**{ #secp256k1 }
-: The elliptic curve Ethereum uses for signatures — the same one Bitcoin uses. → [Public keys](crypto/public-keys.md)
-
 **Script**{ #script }
 : Bitcoin's scripting language. Deliberately stateless and limited, which is the real contrast with Ethereum's contracts — not that Bitcoin lacks code. → [What is Ethereum?](foundations/what-is-ethereum.md)
+
+**secp256k1**{ #secp256k1 }
+: The elliptic curve Ethereum uses for signatures — the same one Bitcoin uses. → [Public keys](crypto/public-keys.md)
 
 **Smart contract**{ #smart-contract }
 : A program stored at an account, run by the network when called. Stateful and general-purpose, but metered and capped. → [What is Ethereum?](foundations/what-is-ethereum.md)
@@ -164,6 +169,7 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 **State root**{ #state-root }
 : A single 32-byte fingerprint committing to the entire state, carried in each block header. Any change to any account changes it.
+
 
 ## T
 
@@ -186,7 +192,11 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **wei**{ #wei }
 : The smallest unit of ether. 10<sup>18</sup> wei = 1 ether. All amounts are integers in wei; Ethereum never uses decimals. → [Ether, wei and gwei](foundations/ether.md)
 
+**White Paper**{ #white-paper }
+: Ethereum's original proposal, by Vitalik Buterin in 2014 — what the system was *for* and why it was designed this way, including the case for [accounts](accounts/accounts.md) over Bitcoin's coins. The [Yellow Paper](#yellow-paper) says what the rules **are**; the white paper says **why**. This site cites it for design arguments and Wood for mechanisms. <https://ethereum.org/en/whitepaper/>
+
+
 ## Y
 
 **Yellow Paper**{ #yellow-paper }
-: Ethereum's formal specification, by Gavin Wood. The authority on how the execution layer behaves. <https://ethereum.github.io/yellowpaper/paper.pdf>
+: Ethereum's formal specification, by Gavin Wood. The authority on how the execution layer behaves, and the source most often cited here. Dense formal notation — see the [Beige Paper](#beige-paper) for the same material in prose, and the [White Paper](#white-paper) for why any of it was designed this way. <https://ethereum.github.io/yellowpaper/paper.pdf>

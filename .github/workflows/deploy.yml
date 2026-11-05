@@ -56,6 +56,9 @@ jobs:
       - name: Check citation style
         run: python3 tools/citecheck.py
 
+      - name: Check the glossary is in order
+        run: python3 tools/glosscheck.py
+
       - name: Check diagram text for overlaps
         run: python3 tools/svgcheck.py
 
