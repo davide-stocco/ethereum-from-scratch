@@ -63,6 +63,9 @@ extra_javascript:
   # Sends links to other sites to a new tab, so a citation doesn't cost you
   # your place in the page. Internal links are left alone on purpose.
   - javascripts/external-links.js
+  # The RLP decoder. Lives on the RLP page; the transactions and block-header
+  # pages reuse EFS.rlp.decode to take real examples apart field by field.
+  - javascripts/rlp.js
 
 # ---------------------------------------------------------------------------
 # unlisted: true  ->  every page carries <meta name="robots" content="noindex">
