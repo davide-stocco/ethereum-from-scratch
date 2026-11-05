@@ -955,6 +955,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="If nobody pays them, why does anyone run one?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#not-every-node-keeps-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not every node keeps everything
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1798,6 +1815,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../blocks/why-somebody-chosen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Why somebody has to be chosen
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/proof-of-stake/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proof of stake
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../blocks/the-chain/" class="md-nav__link">
         
   
@@ -2258,6 +2331,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="If nobody pays them, why does anyone run one?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#not-every-node-keeps-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not every node keeps everything
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2400,18 +2490,17 @@ above still holds — a good sign the two subjects separate cleanly.</p>
 <p><strong>To avoid trusting somebody else's answer.</strong> That's the whole return, and for some parties it plainly covers the cost: an exchange that must be certain of its own deposits, a wallet provider serving millions of lookups, anyone building something where being lied to about the chain is expensive.</p>
 <p>For an individual it's thinner. You get certainty that nobody is misreporting your balance, and you stop revealing which addresses you care about to whoever's node you were querying. Real, but modest against an always-on machine with a lot of disk.</p>
 <p>Which is exactly why <strong>the number of nodes is watched, and why the cost of running one is a question about the system rather than about your hardware.</strong> If running a node becomes impractical for everyone but large operators, nothing in the rules changes — but <em>anybody can check for themselves</em> quietly becomes <em>anybody with a datacentre can</em>, and the property that made trust unnecessary ends up resting on fewer and fewer people. <a href="../running-one/">Running one yourself</a> takes that apart.</p>
-<details class="note">
-<summary>Nodes aren't all the same</summary>
-<p>One difference deliberately deferred: nodes vary in <strong>how much history</strong>
-they keep, from everything ever recorded to barely any. That changes which
-questions they can answer about the past, while leaving what they can
-verify about the present identical.</p>
-<p>The distinction belongs with <a href="../../accounts/state/">state</a>, because it's
-really about the difference between the current state and the record that
-produced it. Here it's enough to know that two nodes can hold very
-different amounts of data and still agree perfectly about what is true
-now.</p>
-</details>
+<h3 id="not-every-node-keeps-everything">Not every node keeps everything</h3>
+<p>Which raises a fair question: if catching up means obtaining all that, why don't nodes simply keep it? Many don't, and the reasoning is worth knowing.</p>
+<p><strong>They always drop the oldest, never a selection.</strong> The data a node keeps has to run contiguously backwards from the present, because checking block N requires the state left by block N−1. A node holding a scattered sample of past blocks could do nothing with it. So the only decision is <em>how far back</em>, and it's set by whoever runs the node — nothing in the protocol says.</p>
+<p>Recency wins because of what each part is <em>for</em>. The <strong>current state</strong> is the only thing required to validate new blocks. A <strong>short recent window</strong> is needed in case the tip of the chain changes and work has to be rewound. <strong>Everything older</strong> answers questions about the past, and nothing else.</p>
+<p>And discarding it is safe for the same reason the state root works:</p>
+<blockquote>
+<p><strong>A node can safely forget anything it can re-obtain and re-verify.</strong></p>
+</blockquote>
+<p>Old blocks are linked by hash, so a node needing one later asks a peer and checks that what arrives matches what the chain already commits to. No trust required — a lie is detectable. <strong>Verification doesn't require possession</strong>, which is also why a new node can accept a state it was handed and check it against the root instead of replaying years of transactions.</p>
+<p>So the trade is never about how much a node can <em>verify</em>; it's about which questions it can answer. <strong>Pruning costs you memory, not judgement.</strong></p>
+<p>The catch is collective. If everybody prunes, the history is gone from the network — nobody's copy means nobody's copy. That is exactly the question <strong>EIP-4444</strong> <a href="#ref-eip4444">(Kadianakis et al., 2021)</a> raises by proposing that clients stop serving old history: it makes keeping it somebody's explicit job rather than an accident of everyone's defaults. <a href="../../accounts/state/">State</a> sets out the three sizes of node this produces.</p>
 <hr />
 <h2 id="recap">Recap</h2>
 <ul>
@@ -2422,6 +2511,7 @@ now.</p>
 <li>Blocks arrive by <strong>gossip</strong> from a few peers. No server, nobody authoritative, nothing to switch off.</li>
 <li>The <strong>mempool is per-node</strong>, not a shared queue — which is why pending transactions behave inconsistently.</li>
 <li><strong>Catching up is slow</strong> because the state has to be re-derived or verified, not merely downloaded.</li>
+<li>Many nodes keep only recent data, always dropping the oldest, because <strong>anything re-obtainable and hash-checkable is safe to forget.</strong> Pruning costs you memory, not judgement — though if everybody prunes, the history is gone.</li>
 <li>Nobody pays you to run one. The return is <strong>not having to trust anybody's answer</strong> — and how many people find that worth paying for decides whether the whole arrangement means anything.</li>
 </ul>
 <p><strong>Next:</strong> <a href="../clients-and-layers/">Clients and the two layers</a> — the software that does all this, and why there are two pieces of it.</p>
@@ -2429,6 +2519,7 @@ now.</p>
 <h2 id="references">References</h2>
 <div class="sources">
 <ul>
+<li><a id="ref-eip4444"></a><strong>Kadianakis, G., lightclient, &amp; Stokes, A.</strong> (2021). <em>EIP-4444: Bound Historical Data in Execution Clients.</em> Ethereum Improvement Proposals. Proposes that clients stop serving block bodies and receipts past a cutoff, which turns history retention from a default into a deliberate role. <a href="https://eips.ethereum.org/EIPS/eip-4444">https://eips.ethereum.org/EIPS/eip-4444</a></li>
 <li><a id="ref-nakamoto-2008"></a><strong>Nakamoto, S.</strong> (2008). <em>Bitcoin: A peer-to-peer electronic cash system.</em> Sets out the peer-to-peer broadcast arrangement Ethereum inherits, and the principle of accepting the result of applying rules rather than the word of any participant. <a href="https://bitcoin.org/bitcoin.pdf">https://bitcoin.org/bitcoin.pdf</a></li>
 <li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Defines the block-level state transition function every node applies independently, and the conditions a block must satisfy to be accepted. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
 </ul>
