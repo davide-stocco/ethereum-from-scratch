@@ -37,7 +37,7 @@ If you arrived from a search engine and a word on some page made no sense, this 
 : The Proof of Stake chain that ran separately from December 2020, holding no accounts or transactions. The Merge connected Ethereum's execution layer to it. → [What is Ethereum?](foundations/what-is-ethereum.md)
 
 **Beige Paper**{ #beige-paper }
-: A community rewrite of the [Yellow Paper](#yellow-paper) in ordinary prose, covering the same material without the formal notation. Useful for *reading*; not cited on this site, because it is somebody's restatement of the specification rather than the specification — and its own introduction describes it as a beta with known errata. If the Yellow Paper is impenetrable, start here and check anything load-bearing against Wood. <https://github.com/chronaeon/beigepaper>
+: Micah Dameron's rewrite of the [Yellow Paper](#yellow-paper) in ordinary prose, covering the same material without the formal notation. Useful for *reading*; not cited on this site, because it is one person's restatement of the specification rather than the specification, and the project's repository describes it as a beta with errata. If the Yellow Paper is impenetrable, start here and check anything load-bearing against Wood. <https://cryptopapers.info/assets/pdf/eth_beige.pdf>
 
 **Block**{ #block }
 : A batch of transactions, added to the chain as a single unit. State is recorded once per block, not per transaction.
