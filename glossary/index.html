@@ -2139,6 +2139,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#l" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#n" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2498,6 +2509,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#l" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        L
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#n" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2667,6 +2689,8 @@ without a link don't have their own page yet.</p>
 <dd>An account controlled by a private key rather than by code — what people mean by a wallet. The only kind that can start a transaction. → <a href="../accounts/accounts/">Accounts</a></dd>
 <dt><strong id="ether">ether</strong></dt>
 <dd>Ethereum's native currency. Counted internally in <a href="../foundations/ether/">wei</a>, never in decimals.</dd>
+<dt><strong id="event">Event</strong></dt>
+<dd>What a <a href="#log">log</a> is called in the language a contract is written in. An event in source code compiles into a log on the chain — the same relationship as a function and its four-byte selector. The two words get used interchangeably; the log is the protocol-level thing. → <a href="../contracts/events-and-logs/">Events and logs</a></dd>
 <dt><strong id="evm">EVM</strong> (Ethereum Virtual Machine)</dt>
 <dd>The machine that executes contract code — a stack machine working on 256-bit words. Every node runs it identically.</dd>
 <dt><strong id="execution-layer">Execution layer</strong></dt>
@@ -2692,6 +2716,11 @@ without a link don't have their own page yet.</p>
 <dl>
 <dt><strong id="keccak-256">Keccak-256</strong></dt>
 <dd>Ethereum's hash function. Takes any input, returns 32 bytes. Nearly the same as SHA-3 but <strong>not identical</strong> — the padding differs, so the two give different results. → <a href="../crypto/keccak256/">Keccak-256</a></dd>
+</dl>
+<h2 id="l">L</h2>
+<dl>
+<dt><strong id="log">Log</strong></dt>
+<dd>A record a contract writes for the outside world, attached to a transaction's result rather than to the <a href="../accounts/state/">state</a>. The one thing a contract can <strong>write and never read</strong> — not its own, not any other's — which is why logs are cheap: no node needs them in order to execute anything. Called an <a href="#event">event</a> in source code. → <a href="../contracts/events-and-logs/">Events and logs</a></dd>
 </dl>
 <h2 id="n">N</h2>
 <dl>
