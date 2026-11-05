@@ -79,9 +79,13 @@ The obvious fix is to encrypt the sensitive parts and leave the rest. It fails i
 
 A node validating a transfer must establish that the sender's balance covers it. If the balance is hidden, the node cannot do that — so it would have to **take somebody's word**, which is precisely the thing the design exists to avoid. Hiding data from the verifier doesn't make the system private; it makes it trusted.
 
-So confidentiality here is not a matter of withholding information. It requires **replacing verification with proof**: instead of showing the node a balance to check, you give it a mathematical argument that the balance was sufficient, which it can verify without learning the number. That is a real and active field, and it is a different and much harder design than the one this site describes.
+So confidentiality here can't be a matter of withholding information. The node still has to end up convinced. What it needs is a way to be convinced **without being shown** — and that is a real technique, usually called a **zero-knowledge proof**.
 
-The point for now is only this: **"just hide it" is not a small change.** It is a change to what checking means.
+The everyday version: proving you are over eighteen without disclosing your date of birth. The bouncer needs certainty, not your birthday, and the two are separable. Or a bank's letter saying *this customer can cover £5,000* — the recipient learns what they need and not the balance. The difference with a zero-knowledge proof is that nobody has to trust the bank: the argument itself is checkable, and checking it reveals nothing beyond the fact it was valid.
+
+Applied here, a transaction would carry a proof that *the sender's balance covered this amount and the arithmetic was done correctly*, which a node could verify without learning any balance at all. The verification still happens. What's removed is the node's need to see.
+
+That is an active field rather than a finished one, and it's a different design from the one this site describes. The point for now is just this: **"hide the amounts" is not a small change.** It changes what checking means.
 
 ## What the transparency buys
 
@@ -121,7 +125,7 @@ Four approaches exist. Naming them as classes rather than products is deliberate
 
 **Move the activity off the main chain**, so only summaries are published. Reduces what is visible without changing what the main chain does with what it does see.
 
-**Prove rather than reveal** — the approach described above, where a verifier checks an argument instead of reading the data. The most promising and the least finished.
+**Prove rather than reveal.** Attach a zero-knowledge proof instead of the data, so a node can confirm the rules were followed without learning the amounts — the over-eighteen trick above, applied to balances. The most promising of the four and the least finished.
 
 Each is a different point on the same dial, and **none of them moves the dial for the record you have already written.**
 
@@ -131,7 +135,9 @@ The question is badly formed, and that's worth saying rather than answering it.
 
 "Private" suggests a property the system either has or lacks. What actually exists is a set of specific answerable questions: **what can be inferred, about whom, by whom, and for how long?** On Ethereum the answers are roughly *everything financial*, *about anybody whose address is known*, *by anyone at all*, *for ever*.
 
-Which is a defensible arrangement and an extreme one. Economic treatments of privacy describe it as a trade rather than a good — disclosure creates value by enabling verification and enforcement, and destroys value by exposing people to those who would use the information against them, with the optimum depending on who holds what and why [(Acquisti et al., 2016)](#ref-acquisti-2016). Regulated markets spend enormous effort *tuning* that trade: what must be disclosed, to whom, in what detail, and — crucially — **after what delay.**
+Which is a defensible arrangement and an extreme one. Economic treatments of privacy describe disclosure as a **trade rather than a good**: it creates value by letting people verify and enforce things, and destroys value by exposing people to anyone who would use the information against them [(Acquisti et al., 2016)](#ref-acquisti-2016).
+
+So there is no amount of disclosure that is simply correct. **It depends who ends up holding the information, and what they want it for** — your salary disclosed to a tax authority and your salary disclosed to a burglar are the same fact with opposite consequences. Which is why the question is never "how private is this?" but "visible to whom, and what can they do with it?". Regulated markets spend enormous effort *tuning* that trade: what must be disclosed, to whom, in what detail, and — crucially — **after what delay.**
 
 Ethereum has no tuning. There is no "disclose to regulators only", no "publish after ninety days", no "aggregate figures but not individual positions". The dial is welded at one end, and the weld is what makes the verification work.
 
@@ -146,7 +152,7 @@ So the honest summary is not that Ethereum is private, or that it isn't. It's th
 - Not public: your **private key**. The protocol hides what grants control and publishes the rest.
 - Ethereum is **pseudonymous**, which is weaker than it sounds: a pseudonym **accumulates** a permanent record, and **one** link to the real world reveals that record **backwards**.
 - Clustering chain activity into identities has been demonstrated against users who *were* rotating addresses [(Meiklejohn et al., 2013)](#ref-meiklejohn-2013). Ethereum discourages rotating them.
-- **"Just hide the amounts" isn't a small change.** A verifier that can't read a balance must trust someone — so confidentiality means replacing verification with proof, a different and harder design.
+- **"Just hide the amounts" isn't a small change.** A verifier that can't read a balance must trust someone. Confidentiality therefore needs a **zero-knowledge proof** — convincing the node without showing it, the way you can prove you're over eighteen without giving your birthday. The checking still happens; the seeing doesn't.
 - What it buys: **universal auditability with no gatekeeper**, compact proofs of specific facts, and bugs findable by outsiders.
 - What it costs falls on anyone paid on-chain, any business, and anyone whose address becomes known — **retroactively**, which no other privacy regime assumes.
 - **Published data cannot be unpublished.** No mitigation helps the record already written.
