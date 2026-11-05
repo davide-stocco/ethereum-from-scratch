@@ -76,9 +76,7 @@ That's the whole site in a line. The topic names under each card are what the ma
 
     Everything every node stores, how much of it everyone else can see, and how one 32-byte number commits to all of it.
 
-    *Accounts and state* — [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md) · [Why accounts, and what they cost](accounts/why-accounts.md)
-
-    *Privacy* — [What it reveals](privacy/what-it-reveals.md)
+    *Accounts and state* — [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md) · [Why accounts, and what they cost](accounts/why-accounts.md) · [What it reveals](accounts/what-it-reveals.md)
 
     *Contracts* — [What a smart contract is](contracts/smart-contracts.md)
 

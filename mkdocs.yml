@@ -144,11 +144,11 @@ nav:
           - The nonce: accounts/nonce.md
           - State: accounts/state.md
           - Why accounts, and what they cost: accounts/why-accounts.md
-      # Right after the accounts argument, which raises privacy as one cost
-      # among several and leaves it there. Needs transactions to be complete,
-      # so it forward-references them.
-      - Privacy:
-          - What it reveals: privacy/what-it-reveals.md
+          # Belongs in this topic rather than a "Privacy" one of its own: a
+          # subsection with a single page is a level earning nothing, and the
+          # page's spine is that the state is public. It needs transactions to
+          # be complete and forward-references them.
+          - What it reveals: accounts/what-it-reveals.md
       # Here, not under "How it changes": this page is what a contract IS —
       # an account with code. Execution, opcodes and their costs come later
       # and belong there. It also answers the question the accounts page

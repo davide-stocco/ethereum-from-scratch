@@ -624,7 +624,7 @@ economics pages, *What it reveals*, and the client-diversity argument on
 *Clients and the two layers*.
 
 Both gaps from the missing-topics audit are now stubbed as argument pages:
-**privacy** (*What it reveals*, closing Part 4) and **governance** (*Who
+**privacy** (*What it reveals*, closing the accounts topic in Part 4) and **governance** (*Who
 decides, when nobody is in charge*, closing Part 7). Neither can be written
 yet — privacy needs transactions, governance needs the fork material — but both
 are in the menu so the plan is visible rather than remembered.
