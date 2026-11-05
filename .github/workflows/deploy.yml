@@ -1,0 +1,58 @@
+# Publishes the site whenever main changes, so there is one step instead of
+# two. Before this, `git push` updated the source and `mkdocs gh-deploy`
+# updated the site, and forgetting the second silently left the published
+# site behind the repository.
+#
+# Deploys by pushing the built HTML to the gh-pages branch, which is what
+# Pages is already serving — so nothing needs reconfiguring in Settings.
+
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  # Lets you trigger a rebuild by hand from the Actions tab, which is useful
+  # if a deploy fails and you want to retry it without an empty commit.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # If two pushes land close together, finish the later one and cancel the
+  # earlier — otherwise two deploys race to force-push the same branch.
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # gh-deploy writes a commit to gh-pages, so it needs the history
+          # rather than a shallow clone.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # Fails the build on a broken internal link rather than publishing it.
+      - name: Check links and build
+        run: mkdocs build --strict
+
+      - name: Check Next links match the nav order
+        run: python3 tools/navcheck.py
+
+      - name: Check diagram text for overlaps
+        run: python3 tools/svgcheck.py
+
+      - name: Deploy
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdocs gh-deploy --force
