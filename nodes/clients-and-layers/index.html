@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Ethereum is run by two pieces of software per node — one holding the accounts, one deciding the order — and by several independent implementations of each.">
+        <meta name="description" content="A node runs two cooperating programs, and several independent implementations of each exist on purpose — because one implementation means one bug can take the network with it.">
       
       
         <meta name="author" content="Davide">
@@ -909,10 +909,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#one-node-two-programs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        One node, two programs
       
     </span>
   </a>
@@ -920,10 +920,82 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#why-several-of-each-rather-than-one-official-one" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        Why several of each, rather than one official one?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why several of each, rather than one official one?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-real-is-that-risk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How real is that risk?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sharp-edge-when-one-client-has-most-of-the-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The sharp edge: when one client has most of the network
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-writes-them-and-who-pays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who writes them, and who pays?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#do-you-ever-choose-a-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do you ever choose a client?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2163,10 +2235,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#one-node-two-programs" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        One node, two programs
       
     </span>
   </a>
@@ -2174,10 +2246,82 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#why-several-of-each-rather-than-one-official-one" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        Why several of each, rather than one official one?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why several of each, rather than one official one?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-real-is-that-risk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How real is that risk?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sharp-edge-when-one-client-has-most-of-the-network" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The sharp edge: when one client has most of the network
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#who-writes-them-and-who-pays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who writes them, and who pays?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#do-you-ever-choose-a-client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Do you ever choose a client?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2202,38 +2346,95 @@
 
 
 <h1 id="clients-and-the-two-layers">Clients and the two layers</h1>
-<div class="admonition warning">
-<p class="admonition-title">Stub — not written yet</p>
-<p>This page is an outline. Delete this box when you fill it in.</p>
-</div>
 <div class="admonition info">
-<p class="admonition-title">Current as of: <em>(fill in the fork and date)</em></p>
-<p>The two-layer split and the reasons for many implementations are durable.
-<strong>Client names, their market shares and which teams maintain them are
-not</strong> — they change, teams stop, new ones start. Name the <em>classes</em> and
-the <em>reasons</em>; keep specific products and percentages out, or on the
-<a href="../../reference/fork-history/">fork history</a> page with a date on them.</p>
+<p class="admonition-title">Current as of Fusaka (December 2025)</p>
+<p>The two-program split and the argument for many implementations are
+durable. <strong>Which implementations exist, who maintains them and what share
+each has are not</strong> — teams start and stop, and shares move. This page
+names roles and reasons rather than products, and any figure that does
+appear carries its date.</p>
 </div>
-<p><strong>Mostly <a href="../../about/forks/">permanent</a>.</strong> That a node runs two cooperating programs, and why having several independent implementations matters, are structural. Which programs exist is not.</p>
-<h2 id="questions-this-page-should-answer">Questions this page should answer</h2>
+<p><strong>Mostly <a href="../../about/forks/">permanent</a>.</strong> That a node runs two cooperating programs, and why having several independent implementations of each matters, are structural. Which programs exist is not.</p>
+<div class="admonition definition">
+<p class="admonition-title">Client</p>
+<p>A program that implements Ethereum's rules. <strong>Not</strong> an app, not a wallet —
+the software that <em>is</em> a <a href="../what-a-node-is/">node</a>, or half of one.</p>
+<p>Several independent clients exist for each half of the job. They are
+written by different teams in different programming languages, and they
+must agree exactly, because a disagreement about the rules is a
+disagreement about what happened.</p>
+</div>
+<h2 id="one-node-two-programs">One node, two programs</h2>
+<p>A node is not a single piece of software. It is <strong>two programs running side by side</strong>, each doing a job the other can't, talking over a defined interface.</p>
+<p><svg viewBox="0 0 470 236" role="img" aria-label="One node drawn as a dashed box containing two programs side by side: an execution client holding the accounts and running the code, and a consensus client deciding the order of transactions. An arrow runs between them, and the consensus client also connects outward to other nodes." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="8" y="30" width="454" height="134" rx="8" stroke-dasharray="5 4" opacity="0.5"/><rect x="26" y="56" width="186" height="90" rx="5"/><rect x="258" y="56" width="186" height="90" rx="5"/><path d="M212 90 L258 90"/><path d="M212 112 L258 112"/><path d="M351 164 L351 196"/></g><g fill="currentColor" stroke="none"><path d="M254 85 L264 90 L254 95 Z"/><path d="M216 107 L206 112 L216 117 Z"/><path d="M346 196 L351 206 L356 196 Z"/><text x="20" y="22" font-size="10" opacity="0.75">ONE NODE &#183; one machine</text><text x="38" y="78" font-size="11" font-weight="700">execution client</text><text x="38" y="98" font-size="10" opacity="0.85">holds the accounts</text><text x="38" y="114" font-size="10" opacity="0.85">runs the code</text><text x="38" y="130" font-size="10" opacity="0.85">keeps the state</text><text x="270" y="78" font-size="11" font-weight="700">consensus client</text><text x="270" y="98" font-size="10" opacity="0.85">decides the order</text><text x="270" y="114" font-size="10" opacity="0.85">of transactions</text><text x="270" y="130" font-size="10" opacity="0.85">votes on blocks</text><text x="351" y="222" font-size="10" text-anchor="middle" opacity="0.8">other nodes&#8217; consensus clients</text><text x="8" y="186" font-size="9" opacity="0.7">Neither half is a node on its own.</text></g></svg></p>
+<p><strong>The execution client</strong> is the <a href="../../foundations/what-is-ethereum/">state machine</a> this site has been describing. It holds the accounts, runs contract code, keeps the <a href="../../accounts/state/">state</a>, and checks that transactions follow the rules.</p>
+<p><strong>The consensus client</strong> decides <em>which</em> block comes next and in what order — the problem that <a href="../../blocks/why-somebody-chosen/">has to be solved by somebody</a> because the rules don't settle it. It talks to other nodes' consensus clients, and tells its own execution client which block to apply.</p>
+<p>Neither is a node by itself. The execution client can check whether a block is valid but has no opinion about which block is the real one. The consensus client can tell you which block the network has agreed on but cannot check whether its contents make sense. <strong>A node is the pair.</strong></p>
+<details class="info">
+<summary>History: they were separate systems first</summary>
+<p>The division looks like an architectural decision. It's a historical
+accident that turned out well.</p>
+<p>Until 2022, Ethereum did both jobs in one program: one piece of software
+held the accounts and also ordered the transactions, by mining. Meanwhile a
+second, entirely separate network — the <strong>Beacon Chain</strong> — had been running
+since December 2020, doing nothing but practising consensus. It held no
+accounts and processed no transactions. For about twenty-one months it ran
+alongside the real thing, agreeing on the order of nothing in particular.</p>
+<p>In September 2022 the two were connected: the old system stopped ordering
+transactions and started taking its order from the Beacon Chain instead.
+<strong>EIP-3675</strong> <a href="#ref-eip3675">(Kalinin et al., 2021)</a> is the specification
+for that change, and the event is called <strong>the Merge</strong>.</p>
+<p>Which is why the split exists at all. Nobody set out to build a node from
+two programs; two systems were built separately and then joined, and the
+seam is still visible in every node today.</p>
+</details>
+<h2 id="why-several-of-each-rather-than-one-official-one">Why several of each, rather than one official one?</h2>
+<p>Here is the part worth understanding, because the obvious intuition is backwards.</p>
+<p>It would seem simpler — and safer — to have <strong>one</strong> correct implementation that everybody runs. One codebase to audit, one team to fund, no risk of two programs disagreeing about the rules.</p>
+<p>That arrangement has a fatal property: <strong>a bug in it is a bug in Ethereum.</strong></p>
+<p>If every node runs the same software and that software accepts a block it shouldn't, every node accepts it. There is no one left to notice. The rules of Ethereum would no longer be the specification — they would be whatever that program happened to do, bugs included, and nobody could tell the difference.</p>
+<p>Several independent implementations change the shape of that failure. A bug in one is <strong>a disagreement rather than a catastrophe</strong>: the affected nodes reject blocks the others accept, the discrepancy is visible immediately, and the remaining network carries on. The bug becomes a problem for that client's users instead of a rewriting of the rules.</p>
+<p>So <strong>diversity here is a safety property, not an absence of standardisation.</strong> The duplicated effort is the point, in the same way a second opinion is not an inefficiency.</p>
+<h3 id="how-real-is-that-risk">How real is that risk?</h3>
+<p>Not hypothetical, and not rare enough to be reassuring.</p>
+<p>Researchers at Seoul National University and Georgia Tech built a tool that feeds the same transactions to different clients and watches for disagreement — differential fuzzing. It found <strong>two previously unknown consensus bugs</strong> in a single widely used client, and <strong>one of them later caused a split on the live network</strong> <a href="#ref-yang-2021">(Yang et al., 2021)</a>.</p>
+<p>That one sentence contains the whole argument. The bugs existed. They were found by comparing implementations against each other, which is only possible if more than one exists. And one of them went on to do real damage anyway.</p>
+<h2 id="the-sharp-edge-when-one-client-has-most-of-the-network">The sharp edge: when one client has most of the network</h2>
+<p>Diversity is only protective if it exists in practice, and it hasn't always.</p>
+<p>On <strong>11 November 2020</strong>, a consensus bug in the client then running most of the network caused exactly the failure described above. A fix had been released earlier but not flagged as urgent, so many operators hadn't applied it. A single transaction triggered the bug, and nodes on the old version split away from the rest — following a different chain, reporting different balances, and in some cases serving wrong answers to the applications built on them <a href="#ref-de-2020">(De, 2020)</a>.</p>
+<p>Two things about that incident are worth separating, because they're usually run together.</p>
+<p><strong>It was a version split, not a client-diversity failure</strong> in the strict sense — old and new releases of the <em>same</em> client disagreed. But the reason it mattered so much is dominance: because one implementation held most of the network, a mistake in its release process became most of the network's problem.</p>
+<p><strong>And this is why client share is counted and published.</strong> It isn't a popularity contest. Under <a href="../../blocks/proof-of-stake/">proof of stake</a> the thresholds become sharper still — a client with a large enough share of validators can stall the network's ability to settle anything, or in the worst case carry an invalid chain to settlement. The exact fractions are parameters and belong on that page; the structural point is that <strong>share is a safety variable, and a client being popular is a risk rather than an endorsement.</strong></p>
+<h2 id="who-writes-them-and-who-pays">Who writes them, and who pays?</h2>
+<p>A fair question once "nobody is in charge" is taken seriously, and the answer is less tidy than people expect.</p>
+<p>Each client is built and maintained by its <strong>own team</strong>, independently, in different languages, funded variously — foundation grants, company sponsorship, public goods funding, and in some cases unpaid work. No team can compel the others to do anything. The specification is the shared reference, and agreeing with it is voluntary in the sense that nothing but consequence enforces it.</p>
+<p>Which produces a situation worth stating plainly: <strong>the rules of Ethereum are maintained by several small groups of people who are not obliged to continue.</strong> Who decides what those rules become is a different question again, and gets <a href="../../economics/governance/">its own page</a>.</p>
+<h2 id="do-you-ever-choose-a-client">Do you ever choose a client?</h2>
+<p><strong>Running a node: yes, and it's the one decision an individual operator makes that affects everybody else.</strong> You pick one implementation of each half. Choosing a less common one slightly increases your own risk — fewer users means bugs are found later — while reducing the network's. That tension is real and worth naming rather than smoothing over.</p>
+<p><strong>Using Ethereum through a wallet: no.</strong> You're relying on somebody else's node, running somebody else's client, chosen by them. The <a href="../what-a-node-is/">previous page</a> made this point about nodes; it applies one level down as well. Most people have never chosen a client and never will, which is precisely why the share figures matter to people who aren't running anything.</p>
+<hr />
+<h2 id="recap">Recap</h2>
 <ul>
-<li>Why <strong>two</strong> pieces of software? (One keeps the accounts and runs the code — the <a href="../../foundations/what-is-ethereum/">state machine</a>. The other decides the <em>order</em> of transactions. They do different jobs and talk to each other over a defined interface.)</li>
-<li>Where did that split come from? (The Merge, 2022. The consensus layer ran separately for nearly two years before being connected — history is the clearest way in, per the site's usual approach.)</li>
-<li>What is a <strong>client</strong>? (An implementation of the rules. Not an app, not a wallet — the program that <em>is</em> a node's half of the job.)</li>
-<li>Why are there several of each, rather than one official one? (<strong>The key argument of the page.</strong> A single implementation means a single bug is a network-wide bug. Several independent ones mean a bug in any one is outvoted rather than fatal — so diversity is a safety property, not an accident or a failure to standardise.)</li>
-<li>And the sharp edge of that: what happens when one implementation has most of the network? (A bug in it can finalise something wrong, or stall the chain. This is why client share is watched and published.)</li>
-<li>Who writes them, and who pays for that? (Several independent teams, variously funded. Worth stating plainly, because "nobody is in charge" raises the obvious question of who maintains the thing.)</li>
-<li>Does a user ever choose? (Running a node, yes. Using a wallet, no — and it's worth saying that most people are relying on somebody else's client without knowing it.)</li>
-</ul>
-<h2 id="notes-to-self">Notes to self</h2>
-<ul>
-<li><strong>Name mechanism classes, never products.</strong> Per <a href="../../about/forks/">FORKS.md</a>, the sentence "there are several independent implementations, and that is deliberate" stays true forever; a list of names and shares is stale within a year. If specific clients must appear, date-stamp them.</li>
-<li>The <strong>two-layer split</strong> is already introduced in a collapsed box on <a href="../../foundations/what-is-ethereum/">What is Ethereum?</a>. That box should become a pointer here once this page exists, rather than two explanations drifting apart.</li>
-<li>Lead with the <em>problem</em> diversity solves, not with the list. The problem is permanent; the list is not. Same pattern as "why metering is necessary" sitting above "gas".</li>
-<li>Worth a history box: the 2016 and 2020 incidents where implementation differences caused real trouble are the concrete argument for why this is taken seriously. <strong>Verify them against primary sources before writing</strong> — exactly the kind of detail that gets misremembered.</li>
-<li>Likely diagram: one node as two boxes with an arrow between them, labelled with what each half owns — accounts and code on one side, ordering on the other.</li>
+<li>A node is <strong>two programs</strong>: an <strong>execution client</strong> holding the accounts, state and code, and a <strong>consensus client</strong> deciding the order and voting on blocks. Neither is a node alone.</li>
+<li>The split is <strong>historical, not architectural</strong>. The consensus system ran as a separate chain from December 2020 and was joined to the execution system in September 2022 — the Merge.</li>
+<li>A <strong>client</strong> is an implementation of the rules. Several independent ones exist for each half, written by different teams in different languages.</li>
+<li><strong>One official implementation would be more dangerous, not safer.</strong> If everyone runs the same software, a bug in it isn't a bug — it silently becomes the rules.</li>
+<li>With several, a bug is <strong>a disagreement rather than a rewriting</strong>: visible immediately, survivable by the rest of the network. The duplicated effort is the point.</li>
+<li>The risk is documented: differential fuzzing across clients found <strong>two unknown consensus bugs in one client, and one later split the live chain.</strong></li>
+<li><strong>Dominance is the danger.</strong> In November 2020 a bug in the most-used client split the network, which is why client share is treated as a safety variable rather than a popularity measure.</li>
+<li>Clients are maintained by <strong>independent, variously funded teams</strong> that nothing obliges to continue.</li>
+<li>Running a node means choosing clients; <strong>using a wallet means somebody chose for you.</strong></li>
 </ul>
 <p><strong>Next:</strong> <a href="../running-one/">Running one yourself</a> — what it actually takes, and why that number is an argument rather than a footnote.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-de-2020"></a><strong>De, N.</strong> (2020, 11 November). <em>Ethereum's "unannounced hard fork" was trying to prevent the very disruption it caused.</em> CoinDesk. Contemporaneous account of the chain split caused by a consensus bug in the then-dominant client, and of the patch-communication failure behind it. <a href="https://www.coindesk.com/tech/2020/11/11/ethereums-unannounced-hard-fork-was-trying-to-prevent-the-very-disruption-it-caused">https://www.coindesk.com/tech/2020/11/11/ethereums-unannounced-hard-fork-was-trying-to-prevent-the-very-disruption-it-caused</a></li>
+<li><a id="ref-eip3675"></a><strong>Kalinin, M., Ryan, D., &amp; Buterin, V.</strong> (2021). <em>EIP-3675: Upgrade consensus to Proof-of-Stake.</em> Ethereum Improvement Proposals. The specification for connecting the two layers, and the reason a node now runs two programs. <a href="https://eips.ethereum.org/EIPS/eip-3675">https://eips.ethereum.org/EIPS/eip-3675</a></li>
+<li><a id="ref-yang-2021"></a><strong>Yang, Y., Kim, T., &amp; Chun, B.-G.</strong> (2021). <em>Finding consensus bugs in Ethereum via multi-transaction differential fuzzing.</em> <em>15th USENIX Symposium on Operating Systems Design and Implementation (OSDI '21)</em>. Feeds identical transactions to different clients and reports the disagreements; found two previously unknown consensus bugs in one client, one of which subsequently caused a mainnet fork. <a href="https://www.usenix.org/conference/osdi21/presentation/yang">https://www.usenix.org/conference/osdi21/presentation/yang</a></li>
+</ul>
+</div>
 
 
 
