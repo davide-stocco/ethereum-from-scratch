@@ -144,6 +144,11 @@ nav:
           - The nonce: accounts/nonce.md
           - State: accounts/state.md
           - Why accounts, and what they cost: accounts/why-accounts.md
+      # Right after the accounts argument, which raises privacy as one cost
+      # among several and leaves it there. Needs transactions to be complete,
+      # so it forward-references them.
+      - Privacy:
+          - What it reveals: privacy/what-it-reveals.md
       # Here, not under "How it changes": this page is what a contract IS —
       # an account with code. Execution, opcodes and their costs come later
       # and belong there. It also answers the question the accounts page
@@ -182,6 +187,8 @@ nav:
       - Why security has to be paid for: economics/security-budget.md
       - 'Who pays: issuance or fees': economics/who-pays.md
       - Fixed cap or flexible supply: economics/supply-cap.md
+      # The institutional question this part was always meant to hold.
+      - 'Who decides, when nobody is in charge': economics/governance.md
 
   - Glossary: glossary.md
   - About:

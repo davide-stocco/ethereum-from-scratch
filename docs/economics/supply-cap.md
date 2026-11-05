@@ -46,4 +46,4 @@ Verify before citing.
 - Budish, E. (2018). *The Economic Limits of Bitcoin and the Blockchain.* NBER working paper 24717. Relevant to whether fee-funded security scales.
 - The monetary-policy-rules literature on rules versus discretion is the natural comparison. Pick whichever treatment you know best — this is your field, not mine.
 
-**Next:** [Glossary](../glossary.md) — every term the site uses, defined in one place. That's the end of the reading path; the rest is reference.
+**Next:** [Who decides, when nobody is in charge](governance.md) — the question every page has assumed an answer to.

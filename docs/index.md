@@ -74,9 +74,11 @@ That's the whole site in a line. The topic names under each card are what the ma
 
 - **Part 4 · What it holds**
 
-    Everything every node stores, and how it's written down — including how one 32-byte number commits to all of it.
+    Everything every node stores, how much of it everyone else can see, and how one 32-byte number commits to all of it.
 
     *Accounts and state* — [Accounts](accounts/accounts.md) · [The nonce](accounts/nonce.md) · [State](accounts/state.md) · [Why accounts, and what they cost](accounts/why-accounts.md)
+
+    *Privacy* — [What it reveals](privacy/what-it-reveals.md)
 
     *Contracts* — [What a smart contract is](contracts/smart-contracts.md)
 
@@ -96,9 +98,9 @@ That's the whole site in a line. The topic names under each card are what the ma
 
 - **Part 7 · Why anyone bothers**
 
-    What keeping this running costs, who ends up paying, and what capping a supply buys and costs.
+    What keeping this running costs, who ends up paying, what capping a supply buys — and who gets to decide any of it when nobody is in charge.
 
-    [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md)
+    [Why security has to be paid for](economics/security-budget.md) · [Who pays](economics/who-pays.md) · [Fixed cap or flexible supply](economics/supply-cap.md) · [Who decides, when nobody is in charge](economics/governance.md)
 
 </div>
 

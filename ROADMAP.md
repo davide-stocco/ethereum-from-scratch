@@ -598,6 +598,37 @@ Note that every one of these operates on **fork-proof** material, so they won't 
 
 ---
 
+## Two page types, and which one to reach for
+
+The site writes in two registers, and the distinction is worth keeping explicit
+because the second one is what a reader with outside expertise actually values.
+
+**Mechanism pages** describe how something works. *Accounts*, *The nonce*,
+*State*, *Keccak-256*. They're the majority, and they're what makes the other
+kind possible — you can't argue about what persistence costs until the reader
+knows what an account holds.
+
+**Argument pages** take a design decision and argue it. *Why accounts, and what
+they cost* is the model. What makes them work:
+
+- **One thesis in a sentence**, with everything serving it.
+- **Costs and benefits as the same property seen twice**, never a pros-and-cons
+  list. Privacy and persistent identity are one fact, not two.
+- **A frame borrowed from outside Ethereum** — the mispriced-commons reading of
+  state growth, cited to Hardin — so a reader has somewhere to stand.
+- **Refusing the lazy evaluative question.** "Was it the right call" is badly
+  formed; "which of its bills are still outstanding" is answerable.
+
+Already planned in this register: *Why metering is necessary*, all four
+economics pages, *What it reveals*, and the client-diversity argument on
+*Clients and the two layers*.
+
+Both gaps from the missing-topics audit are now stubbed as argument pages:
+**privacy** (*What it reveals*, closing Part 4) and **governance** (*Who
+decides, when nobody is in charge*, closing Part 7). Neither can be written
+yet — privacy needs transactions, governance needs the fork material — but both
+are in the menu so the plan is visible rather than remembered.
+
 ## Page conventions
 
 Every page follows the same template. The point is that a beginner and a

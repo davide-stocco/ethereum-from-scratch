@@ -196,7 +196,7 @@ Which is a reasonable thing to know about any system you rely on: not whether it
 - Responses divide into **rent, expiry and statelessness.** None has shipped. The problem is permanent; the solutions are plans.
 - It was a **judgement call**, argued at the time with UTXO's advantages acknowledged, and its largest cost unforeseen.
 
-**Next:** [What a smart contract is](../contracts/smart-contracts.md) — the thing persistence made possible, which this page has been arguing towards without ever saying what one is.
+**Next:** [What it reveals](../privacy/what-it-reveals.md) — the cost this page listed in one line, which deserves rather more than that.
 
 ---
 
