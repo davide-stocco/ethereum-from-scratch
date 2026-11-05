@@ -418,3 +418,30 @@
 [data-md-color-scheme="slate"] .md-typeset .definition > summary::before {
   background-color: #4db6ac;
 }
+
+/* ---------------------------------------------------------------------------
+   External links
+   ---------------------------------------------------------------------------
+   A small arrow after any link that leaves the site, added by
+   external-links.js. Not decoration: a link that opens a new tab without
+   saying so is a known accessibility complaint, since it takes the back
+   button away from someone who didn't ask for a new tab. The marker is the
+   warning. Kept faint and small so a references list with twenty of them
+   doesn't turn into a field of arrows.
+   --------------------------------------------------------------------------- */
+
+.md-typeset a[target="_blank"]::after {
+  content: "\2197";          /* ↗ */
+  display: inline-block;
+  margin-left: 0.15em;
+  font-size: 0.8em;
+  line-height: 1;
+  opacity: 0.45;
+  text-decoration: none;
+}
+
+/* The buttons on the about page are links too, and an arrow inside a button
+   reads as a mistake. */
+.md-typeset a.md-button[target="_blank"]::after {
+  content: none;
+}
