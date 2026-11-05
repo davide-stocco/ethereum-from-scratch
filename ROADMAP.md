@@ -598,6 +598,37 @@ Note that every one of these operates on **fork-proof** material, so they won't 
 
 ---
 
+## The decoder tools: one engine, three pages
+
+A reader suggestion worth recording, because it's the strongest tool idea the
+site has had and it was already half-planned in the RLP stub.
+
+**Decode real things, and let the tool prove they're real.** Embed the raw
+bytes of an actual transaction and an actual block header, decode them in the
+browser, then hash the bytes and show the output equals the published
+transaction hash or block hash. The reader doesn't take the example on trust —
+they watch it verify. No other tool on the site can establish its own
+authenticity that way.
+
+**Hard-coded bytes, never a live API.** The site keeps working offline, nothing
+breaks when an endpoint is retired, and no request goes out that would reveal
+who is reading. The existing tools already set this precedent: the signatures
+page hard-codes real secp256k1 values rather than generating them remotely.
+
+**Build the decoder once.** It belongs in `docs/javascripts/` as a general RLP
+decoder, serving *RLP encoding*, *Transactions* and *The block header*. The
+later two are presentation over the same engine.
+
+**And a validation tool on the transactions page**, which is the better
+pedagogy because the split carries the lesson: stateless checks (RLP parses,
+signature recovers, chain id, intrinsic gas) compute for real; stateful checks
+(nonce matches, balance sufficient) need the state, so the reader supplies the
+account's nonce and balance as inputs. Output is accept-or-reject **with the
+failing check named** — the four steps from *What a node is*, made operable.
+
+Not built yet: all four pages are stubs, and the engine should be written once
+*RLP* is being written rather than guessed at in advance.
+
 ## Two page types, and which one to reach for
 
 The site writes in two registers, and the distinction is worth keeping explicit

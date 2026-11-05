@@ -28,6 +28,13 @@ description: Field by field through a block header — and what each one commits
 
 ## Notes to self
 
+- **Take a real header apart field by field**, reusing the
+  [RLP](../encoding/rlp.md) decoder built for that page and the
+  self-proving trick from [transactions](../transactions/transactions.md):
+  hash the header bytes and show the result is the block hash everybody
+  quotes. That demonstrates in one step what the page argues in prose — that
+  a few hundred bytes commit to the whole block.
+
 - This is the most fork-volatile page on the site. Date-stamp it clearly and expect to revisit it after every upgrade.
 - The vestigial fields are genuinely interesting — `difficulty` and `nonce` survive as fixed values, which tells a small story about how upgrades preserve compatibility. Good candidate for a `??? info "History"` box.
 - One table, one row per field, with a "why it exists" column. That column is what makes this teaching material rather than a spec dump.

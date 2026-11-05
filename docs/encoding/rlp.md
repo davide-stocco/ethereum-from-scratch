@@ -30,6 +30,11 @@ tier: 1
 - This page lives or dies on worked examples. Encode `"dog"`, then `["cat", "dog"]`, then an empty list, byte by byte.
 - The canonicality point is the one that makes RLP make *sense*. Lead with it — most explanations bury it and leave readers wondering why Ethereum didn't just use JSON.
 - Don't cover the Merkle Patricia Trie here, even though it's built on RLP. Separate page, and it's not fork-proof (Verkle trees are planned).
-- Excellent candidate for an interactive encoder/decoder widget later.
+- **This page owns the decoder, and two later pages reuse it.** An
+  encode/decode widget here is the obvious tool, but build it as a general
+  RLP decoder in `docs/javascripts/`, because [transactions](../transactions/transactions.md)
+  and [the block header](../blocks/block-header.md) both need exactly the same
+  engine to take a real example apart field by field. One implementation,
+  three pages.
 
 **Next:** [The Merkle Patricia Trie](merkle-patricia-trie.md)

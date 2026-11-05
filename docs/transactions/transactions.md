@@ -79,7 +79,32 @@ So state-agnosticism is deliberate: it's what lets a transaction sit in a queue 
 
 ## Notes to self
 
-- Decode one real transaction field by field. That single worked example teaches more than any amount of prose.
+- Decode one real transaction field by field. That single worked example
+  teaches more than any amount of prose.
+
+- **Make it a tool, and make it prove itself.** Embed the raw bytes of an
+  actual transaction, decode them in the browser with the [RLP](../encoding/rlp.md)
+  decoder, then **hash the bytes and show the result equals the published
+  transaction hash**. The reader isn't told the example is real — they watch
+  it check out. Nothing else on the site can do that.
+
+  Hard-coded bytes, not a live API: it then works offline, cannot break when
+  somebody's endpoint dies, and makes no request that reveals who is reading.
+
+- **Second tool: validation, split by what it needs.** This is the stronger
+  one, because the split is the lesson.
+
+    - **Stateless checks** compute for real in the browser — does the RLP
+      parse, does the signature recover to an address, is the chain id right,
+      does it cover intrinsic gas?
+    - **Stateful checks** need the state, which a static site doesn't have. So
+      let the reader *supply* it: two inputs for the account's nonce and
+      balance.
+
+    The tool then reports **accept or reject, and which check failed** — which
+    turns the four steps on [what a node is](../nodes/what-a-node-is.md) into
+    something you operate, and teaches the stateless/stateful distinction by
+    making you provide one half of it.
 - Don't explain the signature maths here — point at the signatures page.
 - The `data` field is the gateway to the whole EVM section. Flag it as important and move on.
 
