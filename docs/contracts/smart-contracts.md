@@ -61,6 +61,28 @@ it rather than rewriting it.
     execute, and so far somebody has.* Let the reward stop covering the fee and
     the automation quietly stops.
 
+- **How many times has a contract been used?** Worth a section, because the
+  answer is instructive rather than merely practical. **Nothing records it.**
+  A contract account has the same four fields as any other, and its nonce
+  counts contracts it *created*, not calls it received — so this is a question
+  about [history](../accounts/state.md), not state, and a pruned node cannot
+  answer it however well it validates the present.
+
+    Three ways to count, giving three different numbers:
+
+    - **Transactions sent to the address.** Undercounts badly — misses every
+      call arriving from another contract, since those aren't transactions.
+    - **Logs it emitted.** The practical method, and cheap at scale because
+      each block header carries a `logsBloom` that lets you skip blocks with
+      none. Misses any execution that emitted nothing, which is the author's
+      choice.
+    - **Re-execution with tracing.** Complete, expensive, archive-node work.
+
+    The payoff for a reader using chain data: **published usage figures are
+    not comparable unless you know which was counted**, and sources rarely
+    say. Same family as *addresses are not people* and *a failed transaction
+    still happened and still cost gas*.
+
 ## Notes to self
 
 - The name is the first obstacle. Say plainly that it is neither smart nor a contract, then move on — people have met the term long before the mechanism, and the wrong mental model is the thing to dislodge.
