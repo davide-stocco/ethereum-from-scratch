@@ -2660,6 +2660,8 @@ without a link don't have their own page yet.</p>
 <dd>How much ether an account holds, counted in <a href="../foundations/ether/">wei</a>.</dd>
 <dt><strong id="beacon-chain">Beacon Chain</strong></dt>
 <dd>The Proof of Stake chain that ran separately from December 2020, holding no accounts or transactions. The Merge connected Ethereum's execution layer to it. → <a href="../foundations/what-is-ethereum/">What is Ethereum?</a></dd>
+<dt><strong id="beige-paper">Beige Paper</strong></dt>
+<dd>A community rewrite of the <a href="#yellow-paper">Yellow Paper</a> in ordinary prose, covering the same material without the formal notation. Useful for <em>reading</em>; not cited on this site, because it is somebody's restatement of the specification rather than the specification — and its own introduction describes it as a beta with known errata. If the Yellow Paper is impenetrable, start here and check anything load-bearing against Wood. <a href="https://github.com/chronaeon/beigepaper">https://github.com/chronaeon/beigepaper</a></dd>
 <dt><strong id="block">Block</strong></dt>
 <dd>A batch of transactions, added to the chain as a single unit. State is recorded once per block, not per transaction.</dd>
 <dt><strong id="byte">Byte</strong></dt>
@@ -2698,10 +2700,10 @@ without a link don't have their own page yet.</p>
 </dl>
 <h2 id="g">G</h2>
 <dl>
-<dt><strong id="genesis">Genesis</strong></dt>
-<dd>The very first block, and the starting state it defined — Ethereum's launch in July 2015. "Since genesis" is the usual way of saying "for the whole life of the network"; this site generally says the plainer thing instead.</dd>
 <dt><strong id="gas">Gas</strong></dt>
 <dd>The unit measuring computational work. Not money — gas is the <em>amount</em> of work, and the fee is what that work costs. Exists so that computation is paid for and so no contract can run forever.</dd>
+<dt><strong id="genesis">Genesis</strong></dt>
+<dd>The very first block, and the starting state it defined — Ethereum's launch in July 2015. "Since genesis" is the usual way of saying "for the whole life of the network"; this site generally says the plainer thing instead.</dd>
 <dt><strong id="gwei">gwei</strong></dt>
 <dd>10<sup>9</sup> wei. The unit fees are normally quoted in. → <a href="../foundations/ether/">Ether, wei and gwei</a></dd>
 </dl>
@@ -2754,10 +2756,10 @@ without a link don't have their own page yet.</p>
 </dl>
 <h2 id="s">S</h2>
 <dl>
-<dt><strong id="secp256k1">secp256k1</strong></dt>
-<dd>The elliptic curve Ethereum uses for signatures — the same one Bitcoin uses. → <a href="../crypto/public-keys/">Public keys</a></dd>
 <dt><strong id="script">Script</strong></dt>
 <dd>Bitcoin's scripting language. Deliberately stateless and limited, which is the real contrast with Ethereum's contracts — not that Bitcoin lacks code. → <a href="../foundations/what-is-ethereum/">What is Ethereum?</a></dd>
+<dt><strong id="secp256k1">secp256k1</strong></dt>
+<dd>The elliptic curve Ethereum uses for signatures — the same one Bitcoin uses. → <a href="../crypto/public-keys/">Public keys</a></dd>
 <dt><strong id="smart-contract">Smart contract</strong></dt>
 <dd>A program stored at an account, run by the network when called. Stateful and general-purpose, but metered and capped. → <a href="../foundations/what-is-ethereum/">What is Ethereum?</a></dd>
 <dt><strong id="state">State</strong></dt>
@@ -2785,11 +2787,13 @@ without a link don't have their own page yet.</p>
 <dl>
 <dt><strong id="wei">wei</strong></dt>
 <dd>The smallest unit of ether. 10<sup>18</sup> wei = 1 ether. All amounts are integers in wei; Ethereum never uses decimals. → <a href="../foundations/ether/">Ether, wei and gwei</a></dd>
+<dt><strong id="white-paper">White Paper</strong></dt>
+<dd>Ethereum's original proposal, by Vitalik Buterin in 2014 — what the system was <em>for</em> and why it was designed this way, including the case for <a href="../accounts/accounts/">accounts</a> over Bitcoin's coins. The <a href="#yellow-paper">Yellow Paper</a> says what the rules <strong>are</strong>; the white paper says <strong>why</strong>. This site cites it for design arguments and Wood for mechanisms. <a href="https://ethereum.org/en/whitepaper/">https://ethereum.org/en/whitepaper/</a></dd>
 </dl>
 <h2 id="y">Y</h2>
 <dl>
 <dt><strong id="yellow-paper">Yellow Paper</strong></dt>
-<dd>Ethereum's formal specification, by Gavin Wood. The authority on how the execution layer behaves. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></dd>
+<dd>Ethereum's formal specification, by Gavin Wood. The authority on how the execution layer behaves, and the source most often cited here. Dense formal notation — see the <a href="#beige-paper">Beige Paper</a> for the same material in prose, and the <a href="#white-paper">White Paper</a> for why any of it was designed this way. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></dd>
 </dl>
 
 
