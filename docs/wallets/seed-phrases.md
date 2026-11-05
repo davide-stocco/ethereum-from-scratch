@@ -343,8 +343,8 @@ Not that wallets are unimportant. They're the only reason any of this is usable,
 
 <div class="sources" markdown>
 
-- <a id="ref-bip32"></a>**Wuille, P.** (2012). *BIP-32: Hierarchical Deterministic Wallets.* Bitcoin Improvement Proposals. Defines the key tree and the hardened/normal child derivation used above. <https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki>
 - <a id="ref-bip39"></a>**Palatinus, M., Rusnak, P., Voisine, A., & Bowe, S.** (2013). *BIP-39: Mnemonic code for generating deterministic keys.* Bitcoin Improvement Proposals. Defines the 2048-word list, the checksum, and the PBKDF2 stretch verified against this specification's own test vectors. <https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki>
 - <a id="ref-bip44"></a>**Palatinus, M., & Rusnak, P.** (2014). *BIP-44: Multi-Account Hierarchy for Deterministic Wallets.* Bitcoin Improvement Proposals. Defines the path layout and the coin number 60 used for Ethereum. <https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki>
+- <a id="ref-bip32"></a>**Wuille, P.** (2012). *BIP-32: Hierarchical Deterministic Wallets.* Bitcoin Improvement Proposals. Defines the key tree and the hardened/normal child derivation used above. <https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki>
 
 </div>

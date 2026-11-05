@@ -19,6 +19,20 @@ I committed over it each time. A check that can be read past is not a check.
 import re
 import sys
 import pathlib
+import unicodedata
+
+
+def sortkey(name):
+    """Compare the way a person alphabetises a bibliography.
+
+    Codepoint order gets two things wrong that look like faults and are not:
+    lowercase sorts after uppercase, so "ethereum.org" lands after "Kadianakis";
+    and accented letters sort after every unaccented one, so "Böhme" lands
+    after "Buterin". Strip the accents and fold the case first.
+    """
+    stripped = "".join(c for c in unicodedata.normalize("NFD", name)
+                       if not unicodedata.combining(c))
+    return stripped.casefold()
 
 def main():
     root = pathlib.Path(__file__).resolve().parent.parent
@@ -35,7 +49,7 @@ def main():
             print(f"  MISSING  {rel}: citation points at '{a}', which is not defined")
             problems += 1
         surnames = re.findall(r'</a>\*\*([^,*]+)', text)
-        if surnames != sorted(surnames):
+        if surnames != sorted(surnames, key=sortkey):
             print(f"  UNSORTED {rel}: bibliography is not in surname order")
             print(f"           {surnames}")
             problems += 1

@@ -119,7 +119,7 @@ That's Ethereum. Everything else on this site is detail about what's inside the 
     per-transaction snapshot the design now lacks. You really could point at a single transaction and prove
     the state immediately after it.
 
-    [EIP-658 (2017)](#ref-eip-658) removed that and replaced it with a one-bit
+    [Johnson (2017)](#ref-eip-658) removed that and replaced it with a one-bit
     success-or-failure status code. The reasoning was practical: computing and
     storing a full state fingerprint after every single transaction was
     expensive, and almost nothing used them.
@@ -271,8 +271,8 @@ You'll see this division everywhere once you notice it — it's why Ethereum has
 - <a id="ref-buterin-2014"></a>**Buterin, V.** (2014). *Ethereum white paper: A next-generation smart contract and decentralized application platform.* <https://ethereum.org/en/whitepaper/>
 - <a id="ref-daian-2019"></a>**Daian, P., Goldfeder, S., Kell, T., Li, Y., Zhao, X., Bentov, I., Breidenbach, L., & Juels, A.** (2019). *Flash boys 2.0: Frontrunning, transaction reordering, and consensus instability in decentralized exchanges.* arXiv:1904.05234. Published in *IEEE Symposium on Security and Privacy*, 2020. <https://arxiv.org/abs/1904.05234>
 - <a id="ref-edgington"></a>**Edgington, B.** *Upgrading Ethereum: A technical handbook on Ethereum's move to proof of stake and beyond.* Continuously updated; accessed November 2026. <https://eth2book.info>
-- <a id="ref-eip-658"></a>**EIP-658** (2017). *Embedding transaction status code in receipts.* Ethereum Improvement Proposals. <https://eips.ethereum.org/EIPS/eip-658>
-- <a id="ref-eip-3675"></a>**EIP-3675** (2021). *Upgrade consensus to proof-of-stake.* Ethereum Improvement Proposals. <https://eips.ethereum.org/EIPS/eip-3675>
+- <a id="ref-eip-658"></a>**Johnson, N.** (2017). *EIP-658: Embedding transaction status code in receipts.* Ethereum Improvement Proposals. Activated in Byzantium; replaced the per-transaction intermediate state root in receipts with a status code. <https://eips.ethereum.org/EIPS/eip-658>
+- <a id="ref-eip-3675"></a>**Kalinin, M., Ryan, D., & Buterin, V.** (2021). *EIP-3675: Upgrade consensus to Proof-of-Stake.* Ethereum Improvement Proposals. The specification for the Merge, which connected the two layers. <https://eips.ethereum.org/EIPS/eip-3675>
 - <a id="ref-nakamoto-2008"></a>**Nakamoto, S.** (2008). *Bitcoin: A peer-to-peer electronic cash system.* <https://bitcoin.org/bitcoin.pdf>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Continuously revised; §2 and §4 cover the state transition function and account state. <https://ethereum.github.io/yellowpaper/paper.pdf>
 - <a id="ref-zhang-2016"></a>**Zhang, F., Cecchetti, E., Croman, K., Juels, A., & Shi, E.** (2016). *Town Crier: An authenticated data feed for smart contracts.* In *Proceedings of the 2016 ACM SIGSAC Conference on Computer and Communications Security* (CCS '16). <https://doi.org/10.1145/2976749.2978326>. Open-access preprint: <https://eprint.iacr.org/2016/168>
