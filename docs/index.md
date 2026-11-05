@@ -80,7 +80,7 @@ That's the whole site in a line. The topic names under each card are what the ma
 
     *Contracts* — [What a smart contract is](contracts/smart-contracts.md)
 
-    *Encoding* — [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
+    *How it's written* — [RLP encoding](encoding/rlp.md) · [The Merkle Patricia Trie](encoding/merkle-patricia-trie.md)
 
 - **Part 5 · How it changes**
 

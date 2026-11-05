@@ -769,6 +769,14 @@ than maintaining two versions that drift apart.
    being made tasteful enough not to clash** — which is the argument that
    colour was the wrong instrument, not merely the wrong palette.
 
+   **Topic names answer something too.** *Encoding* was renamed *How it's
+   written* because it was the one topic named for a technique while its
+   neighbours — *Accounts and state*, *Contracts* — were named for subjects,
+   which made it read as though it had wandered in from another part. The
+   searchable word survives in the page titles beneath it. Asked twice why
+   encoding sat under *What it holds*, the answer each time was that the
+   placement was right and the label was wrong.
+
 5. **An opening durability label**, the first line of every content page,
    bolded and linking to `about/forks.md`:
 

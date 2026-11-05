@@ -155,12 +155,18 @@ nav:
       # provokes and defers, so it should arrive soon after.
       - Contracts:
           - What a smart contract is: contracts/smart-contracts.md
-      # Neither page is about change: RLP is a notation, the trie a structure.
-      # The trie in particular has nowhere else to go — it IS what the state
-      # root commits to, and the state page defers to it by name. RLP could
-      # sit in part one by dependency, but would arrive with nothing yet to
-      # encode and no reason to care.
-      - Encoding:
+      # Named for what it answers, not for the technique, so it reads like a
+      # question the way the other topics do. "Encoding" was a method sitting
+      # among subjects, which is why it looked as though it had wandered in.
+      #
+      # Stays in this part rather than heading "How it changes": the trie IS
+      # what the state root commits to and the state page defers to it by
+      # name, and a part about change should open with a transaction, not a
+      # serialisation format. RLP has a genuine pull the other way — the
+      # transactions page plans to decode real bytes — but it must precede
+      # the trie, which is RLP-encoded, so the two cannot be split. Here they
+      # sit before both of RLP's uses, which is the property that matters.
+      - How it's written:
           - RLP encoding: encoding/rlp.md
           - The Merkle Patricia Trie: encoding/merkle-patricia-trie.md
 
