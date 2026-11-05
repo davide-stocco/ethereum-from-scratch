@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> **The site is currently unlisted.** `extra.unlisted: true` in `mkdocs.yml`
+> puts a `noindex` tag on every page, so it is readable by anyone with the
+> link but kept out of search results. See the publishing checklist below
+> before announcing it anywhere.
+
 # Ethereum from Scratch
 
 How Ethereum works, built up from first principles — written while I learn it myself.
@@ -67,3 +73,48 @@ mechanical: `grep -rl "^tier: 3" docs/`.
 ## Corrections
 
 If you find a mistake, please open an issue. I'm learning this as I write it, and I'd rather be corrected than confidently wrong.
+
+---
+
+## Publishing checklist
+
+The site is live but unlisted. Work through this when it's ready to be found.
+
+**1. Make it findable.** Set `extra.unlisted: false` in `mkdocs.yml` and
+redeploy. This is the one that matters — leave it `true` and the site stays
+invisible to search however long you wait. A forgotten `noindex` is the
+standard way a finished site gets no readers.
+
+**2. Submit the sitemap** at `<site>/sitemap.xml` to Google Search Console.
+This doesn't *cause* indexing — crawling does that — but it is how you find
+out what Google has actually taken, and whether anything is erroring.
+
+**3. Decide about the stubs.** Around twenty pages still say *"Stub — not
+written yet"*. Keeping them is defensible: they show the plan, and the notice
+is honest. But they will be indexed as thin pages, so either accept that or
+trim `nav` to the written pages and restore entries as they're filled in.
+
+**4. Check `site_url`.** It must match where the site actually lives, because
+MkDocs uses it for canonical tags and the sitemap. If a custom domain is added
+later, this moves with it — otherwise every page tells Google the old address
+is the authoritative one.
+
+**5. Grep for internal vocabulary.** Terms invented for maintenance have
+reached reader-facing prose three times (`Tier 2`, `Tier 3`, `fork-proof`):
+
+```bash
+grep -rn --include="*.md" -E "Tier [0-9]|fork-proof" docs | grep -v "Notes to self"
+```
+
+**6. Run the checks.**
+
+```bash
+python3 tools/navcheck.py    # every "Next:" link matches the nav order
+python3 tools/svgcheck.py    # no diagram text overlapping or off-canvas
+mkdocs build --strict        # no broken internal links
+```
+
+**If a custom domain is added**, put the domain in `docs/CNAME` rather than
+relying on GitHub's settings page. `mkdocs gh-deploy` force-pushes over the
+published branch and would delete a `CNAME` written there by the UI; a file in
+`docs/` is copied to the site root on every build.

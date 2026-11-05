@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{#
+  Adds a noindex tag while the site is being reviewed, controlled by
+  `extra.unlisted` in mkdocs.yml.
+
+  Why a meta tag and not robots.txt: a robots.txt `Disallow` stops crawlers
+  reading the page, which means they never see a noindex instruction — and
+  Google may still list a bare URL it found in a link. The meta tag is the
+  instruction that actually removes a page from results, so blocking crawling
+  would make it less effective, not more.
+
+  Switch `unlisted` to false when the site is ready to be found. Nothing else
+  needs changing, and the publishing checklist in README.md says so.
+#}
+
+{% block extrahead %}
+  {{ super() }}
+  {% if config.extra.unlisted %}
+    <meta name="robots" content="noindex, nofollow">
+  {% endif %}
+{% endblock %}

@@ -10,6 +10,9 @@ site_url: https://davide-stocco.github.io/ethereum-from-scratch/
 
 theme:
   name: material
+  # Holds overrides/main.html, which adds a noindex tag while extra.unlisted
+  # is true. Nothing else lives in there.
+  custom_dir: overrides
   features:
     # Three navigation features are deliberately NOT enabled:
     #
@@ -57,6 +60,16 @@ extra_javascript:
   - javascripts/signatures.js
   - javascripts/wallets.js
   - javascripts/boxes.js
+
+# ---------------------------------------------------------------------------
+# unlisted: true  ->  every page carries <meta name="robots" content="noindex">
+#
+# The site is readable by anyone with the link, and deliberately kept out of
+# search results while it is being reviewed. Set this to false to be findable;
+# see the publishing checklist in README.md. Nothing else has to change.
+# ---------------------------------------------------------------------------
+extra:
+  unlisted: true
 
 markdown_extensions:
   - admonition                 # the coloured "note" / "warning" boxes
