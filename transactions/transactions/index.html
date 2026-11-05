@@ -2397,9 +2397,39 @@ bit of far more useful information.</p>
 </ul>
 <h2 id="notes-to-self">Notes to self</h2>
 <ul>
-<li>Decode one real transaction field by field. That single worked example teaches more than any amount of prose.</li>
-<li>Don't explain the signature maths here — point at the signatures page.</li>
-<li>The <code>data</code> field is the gateway to the whole EVM section. Flag it as important and move on.</li>
+<li>
+<p>Decode one real transaction field by field. That single worked example
+  teaches more than any amount of prose.</p>
+</li>
+<li>
+<p><strong>Make it a tool, and make it prove itself.</strong> Embed the raw bytes of an
+  actual transaction, decode them in the browser with the <a href="../../encoding/rlp/">RLP</a>
+  decoder, then <strong>hash the bytes and show the result equals the published
+  transaction hash</strong>. The reader isn't told the example is real — they watch
+  it check out. Nothing else on the site can do that.</p>
+</li>
+</ul>
+<p>Hard-coded bytes, not a live API: it then works offline, cannot break when
+  somebody's endpoint dies, and makes no request that reveals who is reading.</p>
+<ul>
+<li>
+<p><strong>Second tool: validation, split by what it needs.</strong> This is the stronger
+  one, because the split is the lesson.</p>
+<ul>
+<li><strong>Stateless checks</strong> compute for real in the browser — does the RLP
+  parse, does the signature recover to an address, is the chain id right,
+  does it cover intrinsic gas?</li>
+<li><strong>Stateful checks</strong> need the state, which a static site doesn't have. So
+  let the reader <em>supply</em> it: two inputs for the account's nonce and
+  balance.</li>
+</ul>
+<p>The tool then reports <strong>accept or reject, and which check failed</strong> — which
+turns the four steps on <a href="../../nodes/what-a-node-is/">what a node is</a> into
+something you operate, and teaches the stateless/stateful distinction by
+making you provide one half of it.
+- Don't explain the signature maths here — point at the signatures page.
+- The <code>data</code> field is the gateway to the whole EVM section. Flag it as important and move on.</p>
+</li>
 </ul>
 <p><strong>Next:</strong> <a href="../why-metering/">Why metering is necessary</a></p>
 <h2 id="references">References</h2>

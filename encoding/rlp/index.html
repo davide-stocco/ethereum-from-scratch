@@ -2233,7 +2233,12 @@
 <li>This page lives or dies on worked examples. Encode <code>"dog"</code>, then <code>["cat", "dog"]</code>, then an empty list, byte by byte.</li>
 <li>The canonicality point is the one that makes RLP make <em>sense</em>. Lead with it — most explanations bury it and leave readers wondering why Ethereum didn't just use JSON.</li>
 <li>Don't cover the Merkle Patricia Trie here, even though it's built on RLP. Separate page, and it's not fork-proof (Verkle trees are planned).</li>
-<li>Excellent candidate for an interactive encoder/decoder widget later.</li>
+<li><strong>This page owns the decoder, and two later pages reuse it.</strong> An
+  encode/decode widget here is the obvious tool, but build it as a general
+  RLP decoder in <code>docs/javascripts/</code>, because <a href="../../transactions/transactions/">transactions</a>
+  and <a href="../../blocks/block-header/">the block header</a> both need exactly the same
+  engine to take a real example apart field by field. One implementation,
+  three pages.</li>
 </ul>
 <p><strong>Next:</strong> <a href="../merkle-patricia-trie/">The Merkle Patricia Trie</a></p>
 

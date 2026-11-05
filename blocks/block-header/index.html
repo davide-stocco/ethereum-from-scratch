@@ -2224,7 +2224,17 @@ not from any secondary source including this outline.</p>
 </ul>
 <h2 id="notes-to-self">Notes to self</h2>
 <ul>
-<li>This is the most fork-volatile page on the site. Date-stamp it clearly and expect to revisit it after every upgrade.</li>
+<li>
+<p><strong>Take a real header apart field by field</strong>, reusing the
+  <a href="../../encoding/rlp/">RLP</a> decoder built for that page and the
+  self-proving trick from <a href="../../transactions/transactions/">transactions</a>:
+  hash the header bytes and show the result is the block hash everybody
+  quotes. That demonstrates in one step what the page argues in prose — that
+  a few hundred bytes commit to the whole block.</p>
+</li>
+<li>
+<p>This is the most fork-volatile page on the site. Date-stamp it clearly and expect to revisit it after every upgrade.</p>
+</li>
 <li>The vestigial fields are genuinely interesting — <code>difficulty</code> and <code>nonce</code> survive as fixed values, which tells a small story about how upgrades preserve compatibility. Good candidate for a <code>??? info "History"</code> box.</li>
 <li>One table, one row per field, with a "why it exists" column. That column is what makes this teaching material rather than a spec dump.</li>
 </ul>
