@@ -247,7 +247,7 @@ Until 2022, Ethereum mainnet did both jobs in one system, ordering transactions 
 
 In September 2022, an upgrade called **The Merge** connected the two: the execution layer stopped running its own mining-based consensus and began taking its ordering from the beacon chain instead [(EIP-3675, 2021)](#ref-eip-3675). Hence the name — two existing systems were joined together, which is why "merge" and not "split".
 
-You'll see this division everywhere once you notice it — it's why Ethereum has two kinds of client software, and why blocks have two sets of fields. The consensus layer isn't covered on this site yet, for reasons explained in [how this site handles forks](../about/forks.md); [Edgington's *Upgrading Ethereum*](#ref-edgington) is the most thorough treatment available in the meantime. For now, just know that **execution and ordering are separate jobs.**
+You'll see this division everywhere once you notice it — it's why Ethereum has two kinds of client software, and why blocks have two sets of fields. [Clients and the two layers](../nodes/clients-and-layers.md) takes the split apart properly, including why it exists at all. The consensus mechanism itself is still to come, for reasons explained in [how this site handles forks](../about/forks.md); [Edgington's *Upgrading Ethereum*](#ref-edgington) is the most thorough treatment available in the meantime. For now, just know that **execution and ordering are separate jobs.**
 
 ---
 
