@@ -48,6 +48,11 @@ jobs:
       - name: Check Next links match the nav order
         run: python3 tools/navcheck.py
 
+      # Added after the inline version of this check fired three times in one
+      # day and got committed over each time. In CI it blocks the deploy.
+      - name: Check citations and references agree
+        run: python3 tools/refcheck.py
+
       - name: Check diagram text for overlaps
         run: python3 tools/svgcheck.py
 
