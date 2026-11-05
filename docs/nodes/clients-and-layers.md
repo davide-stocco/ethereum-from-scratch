@@ -108,7 +108,7 @@ Which produces a situation worth stating plainly: **the rules of Ethereum are ma
 
 ## Do you ever choose a client?
 
-**Running a node: yes, and it's the one decision an individual operator makes that affects everybody else.** You pick one implementation of each half. Choosing a less common one slightly increases your own risk — fewer users means bugs are found later — while reducing the network's. That tension is real and worth naming rather than smoothing over.
+**Running a node: yes, and it's the one decision an individual operator makes that affects everybody else.** You pick one execution client and one consensus client. Choosing a less common one slightly increases your own risk — fewer users means bugs are found later — while reducing the network's. That tension is real and worth naming rather than smoothing over.
 
 **Using Ethereum through a wallet: no.** You're relying on somebody else's node, running somebody else's client, chosen by them. The [previous page](what-a-node-is.md) made this point about nodes; it applies one level down as well. Most people have never chosen a client and never will, which is precisely why the share figures matter to people who aren't running anything.
 
@@ -118,7 +118,7 @@ Which produces a situation worth stating plainly: **the rules of Ethereum are ma
 
 - A node is **two programs**: an **execution client** holding the accounts, state and code, and a **consensus client** deciding the order and voting on blocks. Neither program is a node alone.
 - The split is **historical, not architectural**. The consensus system ran as a separate chain from December 2020 and was joined to the execution system in September 2022 — the Merge.
-- A **client** is an implementation of the rules. Several independent ones exist for each half, written by different teams in different languages.
+- A **client** is an implementation of the rules — the program, not the machine. Several independent ones exist for each of the two jobs, written by different teams in different languages.
 - **One official implementation would be more dangerous, not safer.** If everyone runs the same software, a bug in it isn't a bug — it silently becomes the rules.
 - With several, a bug is **a disagreement rather than a rewriting**: visible immediately, survivable by the rest of the network. The duplicated effort is the point.
 - The risk is documented: differential fuzzing across clients found **two unknown consensus bugs in one client, and one later split the live chain.**
