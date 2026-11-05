@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="How Ethereum works, built up from first principles — starting with the parts that have never changed.">
+        <meta name="description" content="RLP turns nested lists of bytes into one flat string of bytes, and its whole purpose is that each value has exactly one valid encoding.">
       
       
         <meta name="author" content="Davide">
@@ -1430,10 +1430,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#it-encodes-two-things-and-nothing-else" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        It encodes two things, and nothing else
       
     </span>
   </a>
@@ -1441,10 +1441,93 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#the-four-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        The four rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worked-byte-by-byte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked, byte by byte
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-not-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why not JSON?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why not JSON?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-is-why-there-are-no-leading-zeros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which is why there are no leading zeros
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-rlp-doesnt-tell-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What RLP doesn't tell you
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-its-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where it's used
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2249,10 +2332,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#it-encodes-two-things-and-nothing-else" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        It encodes two things, and nothing else
       
     </span>
   </a>
@@ -2260,10 +2343,93 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#the-four-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        The four rules
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#worked-byte-by-byte" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Worked, byte by byte
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-not-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why not JSON?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why not JSON?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-is-why-there-are-no-leading-zeros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which is why there are no leading zeros
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-rlp-doesnt-tell-you" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What RLP doesn't tell you
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-its-used" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where it's used
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2288,43 +2454,164 @@
 
 
 <h1 id="rlp-encoding">RLP encoding</h1>
-<div class="admonition warning">
-<p class="admonition-title">Stub — not written yet</p>
-<p>This page is an outline. Delete this box when you fill it in.</p>
+<p><strong><a href="../../about/forks/">Permanent</a>.</strong> Recursive Length Prefix has not been revised since Ethereum launched in 2015, and cannot be: every hash the network has ever agreed on was taken over bytes it produced.</p>
+<div class="admonition definition">
+<p class="admonition-title">RLP</p>
+<p><strong>Recursive Length Prefix.</strong> A way of turning nested lists of byte strings
+into one flat sequence of bytes, reversibly.</p>
+<p>It encodes exactly two things: a <strong>byte string</strong>, and a <strong>list</strong> of items
+which may themselves be strings or lists. Nothing else — no integers, no
+booleans, no names, no types.</p>
+<p>Its defining property is <strong>canonicality</strong>: each value has exactly one
+valid encoding, and anything else is rejected.</p>
 </div>
-<p><strong><a href="../../about/forks/">Permanent</a>.</strong> Recursive Length Prefix has not been revised since Ethereum launched in 2015.</p>
-<h2 id="questions-this-page-should-answer">Questions this page should answer</h2>
+<h2 id="it-encodes-two-things-and-nothing-else">It encodes two things, and nothing else</h2>
+<p>Start with what it refuses to do, because that is most of the design.</p>
+<p>RLP has <strong>no integers.</strong> No booleans, no decimals, no field names, no types, no maps. The two things it knows about are a run of bytes and a list.</p>
+<p>So <code>nonce: 3</code> isn't something RLP can express. What gets encoded is the byte <code>0x03</code>, in a particular position in a list, and <strong>the position is what makes it the nonce.</strong> Anything wanting to encode a number converts it to bytes first; anything wanting to label a field relies on the reader knowing the order.</p>
+<p>That sounds like an omission and is a deliberate narrowing. A format that describes types has to have opinions about them — how big an integer may be, how text is encoded, what a missing field means — and every opinion is something two implementations could implement differently. RLP has almost nothing to disagree about.</p>
+<h2 id="the-four-rules">The four rules</h2>
+<p>That's the whole specification <a href="#ref-wood-2014">(Wood, 2014)</a>, and it fits in a table.</p>
+<table>
+<thead>
+<tr>
+<th>First byte</th>
+<th>Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x00</code>–<code>0x7f</code></td>
+<td>this byte is the data, encoding itself</td>
+</tr>
+<tr>
+<td><code>0x80</code>–<code>0xb7</code></td>
+<td>a string of <strong>0 to 55 bytes</strong>; length is the byte minus <code>0x80</code></td>
+</tr>
+<tr>
+<td><code>0xb8</code>–<code>0xbf</code></td>
+<td>a <strong>longer string</strong>; the byte minus <code>0xb7</code> says how many bytes of <em>length</em> follow</td>
+</tr>
+<tr>
+<td><code>0xc0</code>–<code>0xf7</code></td>
+<td>a <strong>list</strong> whose contents are 0 to 55 bytes; length is the byte minus <code>0xc0</code></td>
+</tr>
+<tr>
+<td><code>0xf8</code>–<code>0xff</code></td>
+<td>a <strong>longer list</strong>; same length-of-the-length trick</td>
+</tr>
+</tbody>
+</table>
+<p>Two values worth memorising, because they turn up constantly: <strong><code>0x80</code> is the empty string</strong> and <strong><code>0xc0</code> is the empty list.</strong></p>
+<p>The fourth and fifth rows are the only clever part. A length under 56 fits in the prefix byte itself. Beyond that there isn't room, so the prefix instead says <em>how many bytes the length takes</em>, and the length follows. Hence the name: a prefix that describes a length, applied recursively to whatever is inside.</p>
+<h2 id="worked-byte-by-byte">Worked, byte by byte</h2>
+<p><strong><code>"dog"</code></strong> → three bytes of data, so the prefix is <code>0x80 + 3</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>83 64 6f 67
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>^^ ^^^^^^^^
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>|  d  o  g
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>prefix: short string, 3 bytes
+</code></pre></div>
+<p><strong><code>["cat", "dog"]</code></strong> → encode each, then wrap. <code>"cat"</code> is <code>83636174</code>, <code>"dog"</code> is <code>83646f67</code>, which is 8 bytes of contents, so the list prefix is <code>0xc0 + 8</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>c8 83 63 61 74 83 64 6f 67
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>^^ ^^^^^^^^^^^ ^^^^^^^^^^^
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>|     "cat"       "dog"
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>prefix: list, 8 bytes of contents
+</code></pre></div>
+<p><strong><code>1024</code></strong> → first becomes the bytes <code>0x04 0x00</code>, then encodes as a two-byte string: <code>82 04 00</code>.</p>
+<p><strong>The single byte <code>0x0f</code></strong> → <code>0f</code>. It's below <code>0x80</code>, so it encodes as itself with no prefix at all.</p>
+<p><strong>The single byte <code>0x80</code></strong> → <code>81 80</code>. It is <em>not</em> below <code>0x80</code>, so it needs the prefix, and the result is two bytes where the input was one.</p>
+<details class="example">
+<summary>Try it: take any RLP apart</summary>
+<p><div class="tool" markdown="0">
+  <label for="rlp-in">RLP bytes, as hex</label>
+  <input id="rlp-in" type="text" autocomplete="off" spellcheck="false" value="c88363617483646f67">
+  <div class="tool__row">
+    <button type="button" data-rlp="83646f67">"dog"</button>
+    <button type="button" data-rlp="c88363617483646f67">["cat","dog"]</button>
+    <button type="button" data-rlp="c7c0c1c0c3c0c1c0">nested lists</button>
+    <button type="button" data-rlp="80">empty string</button>
+    <button type="button" data-rlp="8100">non-canonical</button>
+  </div>
+  <p class="tool__out" id="rlp-out"></p>
+</div></p>
+<p>Highlighted bytes are <strong>prefixes</strong> — structure rather than content. The
+number at the start of each line is the byte offset, so you can find any
+piece in the original hex.</p>
+<p><strong>Step 1 — press <em>nested lists</em>.</strong> <code>c7c0c1c0c3c0c1c0</code> is eight bytes and
+contains six lists, three of them nested two deep. Every byte is either a
+prefix or a prefix inside a prefix: there is no data at all.</p>
+<p><strong>Step 2 — press <em>non-canonical</em>.</strong> <code>8100</code> says "a one-byte string
+containing <code>0x00</code>". That value already has an encoding — the byte <code>0x00</code>
+on its own — so this one is rejected rather than tolerated. <strong>The refusal
+is the feature</strong>, for reasons the next section explains.</p>
+<p><strong>Step 3 — break something deliberately.</strong> Change <code>c8</code> to <code>c9</code> in the
+second example: the list now claims nine bytes of contents and only eight
+follow, so it fails. RLP has no padding and no end markers, which means a
+single wrong byte is detected rather than silently reinterpreted.</p>
+</details>
+<h2 id="why-not-json">Why not JSON?</h2>
+<p>The obvious question. JSON exists, every language reads it, and it would have been free.</p>
+<p>Because of what Ethereum does with these bytes: <strong>it hashes them.</strong> The state root, every transaction hash, every block hash — all are hashes of RLP-encoded data. And <a href="../../crypto/keccak256/">Keccak-256</a> gives a completely different output for a single changed byte.</p>
+<p>Now consider two programs encoding the same transaction as JSON. One writes <code>{"nonce":3,"gas":21000}</code>, the other <code>{"gas":21000, "nonce":3}</code>. Same data, different bytes, <strong>different hash</strong>. Add whitespace, key order, <code>3</code> versus <code>3.0</code>, escaped versus literal characters, and you have dozens of ways to write one value.</p>
+<p>For an API that is harmless. For Ethereum it is fatal: two nodes with identical state would compute different state roots and reject each other's blocks, and the network would stop. The <a href="../../accounts/state/">state</a> page's whole argument — <em>two nodes agreeing on 32 bytes agree on everything</em> — holds only if identical data always produces identical bytes.</p>
+<p>So RLP is built around the opposite priority. <strong>One value, one encoding, and every alternative rejected.</strong> It isn't a better JSON; it's a format for a job JSON cannot do.</p>
+<h3 id="which-is-why-there-are-no-leading-zeros">Which is why there are no leading zeros</h3>
+<p>The same reasoning, applied to numbers.</p>
+<p>The number 1 encodes as the byte <code>0x01</code>. It must <em>not</em> also be encodable as <code>0x0001</code>, or <code>0x000001</code> — because those are different bytes, and different bytes hash differently. So the rule is that a number's byte form carries no leading zeros, and an encoder that emits them has produced something a strict decoder will refuse.</p>
+<p>Every canonicality rule has this shape. <strong>A rule exists wherever a value could otherwise have been written two ways:</strong> no leading zeros in numbers, no leading zeros in lengths, no long form where the short form fits, no prefix on a byte that encodes itself. Together they leave exactly one path from any value to its bytes.</p>
+<h2 id="what-rlp-doesnt-tell-you">What RLP doesn't tell you</h2>
+<p>A thing people assume and shouldn't: <strong>the bytes don't say what they mean.</strong></p>
+<p>Decode a transaction and you get a list of byte strings. Nothing in it says which is the nonce, which is the recipient, or that the twenty-byte one is an address at all. A decoder returns structure; interpretation comes from the reader knowing what shape to expect.</p>
+<p>Which is why the tool above can tell you that something is a three-item list of strings and not what any of it is <em>for</em>. Meaning lives in the specification and in the code, never in the encoding — the same division as the <a href="../../contracts/smart-contracts/">ABI</a>, where the protocol sees bytes and the convention supplies the names.</p>
+<h2 id="where-its-used">Where it's used</h2>
+<p>Everywhere the execution layer writes something down:</p>
 <ul>
-<li>What problem does RLP solve? (Turning structured data — a list of items, possibly containing lists — into a single flat string of bytes, reversibly.)</li>
-<li>Why does Ethereum need its own encoding rather than using JSON or Protobuf? Two reasons, and the second is the important one:<ol>
-<li>It's minimal and cheap to implement.</li>
-<li>It's <strong>canonical</strong> — one piece of data has exactly one valid encoding. Without that, two nodes could hash the same data and get different answers, and consensus would collapse.</li>
-</ol>
-</li>
-<li>What are the only two things RLP can encode? (A <strong>byte string</strong>, and a <strong>list</strong> of items. That's it. No integers, no booleans, no maps — those get converted to byte strings first.)</li>
-<li>What are the four encoding rules?<ul>
-<li>A single byte below <code>0x80</code> encodes as itself</li>
-<li>A short string (0–55 bytes) gets a <code>0x80 + length</code> prefix</li>
-<li>A long string gets a prefix encoding the <em>length of the length</em></li>
-<li>Lists work identically, starting at <code>0xc0</code></li>
+<li><strong>Transactions</strong>, so that signing has a defined set of bytes to sign</li>
+<li><strong>Block headers</strong>, so that a block hash is the hash of something definite</li>
+<li><strong>Account entries</strong> in the state, which is why the <a href="../../accounts/accounts/">accounts</a> page described a state value as <code>RLP[nonce, balance, storageRoot, codeHash]</code></li>
+<li><strong>Every node of the trie</strong> — the <a href="../merkle-patricia-trie/">next page</a> builds on this one for exactly that reason</li>
 </ul>
-</li>
-<li>Where is RLP used? (Transaction encoding, block headers, and every node in the state trie.)</li>
-<li>Why are integers encoded with no leading zeros? (Canonicality again — <code>0x01</code> and <code>0x0001</code> must not both be valid.)</li>
-</ul>
-<h2 id="notes-to-self">Notes to self</h2>
+<p>So RLP is underneath every hash this site has mentioned. It is also the reason the trie page has to come after this one.</p>
+<details class="warning">
+<summary>RLP is no longer the only answer</summary>
+<p>Worth knowing, because "Ethereum uses RLP" is close to true and not quite.</p>
+<p><strong>Newer transactions are not plain RLP.</strong> Since <strong>EIP-2718</strong>
+<a href="#ref-eip2718">(Zoltu, 2020)</a>, a transaction may be a single <strong>type byte</strong>
+followed by a payload, and the specification deliberately treats that
+payload as opaque bytes so that future types need not use RLP at all.
+Current types do use RLP inside the envelope, so in practice you decode
+the first byte, then decode the rest as RLP.</p>
+<p><strong>And the consensus layer doesn't use RLP at all.</strong> It uses a different
+serialisation, chosen partly because RLP is awkward to produce proofs
+about. So the two halves of a node described on <a href="../../nodes/clients-and-layers/">clients and the two
+layers</a> differ even in how they write
+bytes down.</p>
+<p>Neither changes anything on this page. RLP still encodes what it encodes,
+unchanged — it simply isn't the only format in the building any more.</p>
+</details>
+<hr />
+<h2 id="recap">Recap</h2>
 <ul>
-<li>This page lives or dies on worked examples. Encode <code>"dog"</code>, then <code>["cat", "dog"]</code>, then an empty list, byte by byte.</li>
-<li>The canonicality point is the one that makes RLP make <em>sense</em>. Lead with it — most explanations bury it and leave readers wondering why Ethereum didn't just use JSON.</li>
-<li>Don't cover the Merkle Patricia Trie here, even though it's built on RLP. Separate page, and it's not fork-proof (Verkle trees are planned).</li>
-<li><strong>This page owns the decoder, and two later pages reuse it.</strong> An
-  encode/decode widget here is the obvious tool, but build it as a general
-  RLP decoder in <code>docs/javascripts/</code>, because <a href="../../transactions/transactions/">transactions</a>
-  and <a href="../../blocks/block-header/">the block header</a> both need exactly the same
-  engine to take a real example apart field by field. One implementation,
-  three pages.</li>
+<li>RLP turns <strong>nested lists of byte strings</strong> into one flat byte sequence. It encodes strings and lists, and nothing else — no integers, no names, no types.</li>
+<li>A field is identified by <strong>its position</strong>, not by a label.</li>
+<li><strong>Four rules</strong>, keyed on the first byte: self-encoding bytes below <code>0x80</code>, short strings from <code>0x80</code>, long strings from <code>0xb8</code>, lists from <code>0xc0</code>. <code>0x80</code> is the empty string; <code>0xc0</code> the empty list.</li>
+<li>Lengths under 56 fit in the prefix; beyond that the prefix says <strong>how many bytes the length takes</strong>.</li>
+<li>The reason for all of it is <strong>canonicality</strong>: one value, one encoding. Ethereum hashes these bytes, so two spellings of the same data would mean two different hashes and a network that cannot agree.</li>
+<li>Hence <strong>no leading zeros</strong>, no long form where short fits, no prefix on a self-encoding byte. <strong>A rule exists wherever a value could have been written two ways.</strong></li>
+<li>JSON cannot do this job — key order and whitespace alone give one value many spellings.</li>
+<li>RLP carries <strong>no meaning.</strong> Decoding gives structure; what the fields <em>are</em> comes from the specification, like the ABI.</li>
+<li>Used for transactions, block headers, account entries and every trie node — so it sits underneath every hash on this site.</li>
+<li><strong>Not universal any more</strong>: typed transactions wrap an opaque payload, and the consensus layer uses something else entirely.</li>
 </ul>
-<p><strong>Next:</strong> <a href="../merkle-patricia-trie/">The Merkle Patricia Trie</a></p>
+<p><strong>Next:</strong> <a href="../merkle-patricia-trie/">The Merkle Patricia Trie</a> — what the state root actually is, built out of RLP and hashes.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Appendix B defines RLP in full, including the canonicality requirements this page describes. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
+<li><a id="ref-eip2718"></a><strong>Zoltu, M.</strong> (2020). <em>EIP-2718: Typed transaction envelope.</em> Ethereum Improvement Proposals. Introduces the type-byte prefix and deliberately treats the payload after it as opaque bytes, so that future transaction types need not be RLP. <a href="https://eips.ethereum.org/EIPS/eip-2718">https://eips.ethereum.org/EIPS/eip-2718</a></li>
+</ul>
+</div>
 
 
 
@@ -2445,6 +2732,8 @@
         <script src="../../javascripts/boxes.js"></script>
       
         <script src="../../javascripts/external-links.js"></script>
+      
+        <script src="../../javascripts/rlp.js"></script>
       
     
   </body>
