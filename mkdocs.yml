@@ -201,6 +201,12 @@ nav:
   - When it's settled:
       - Blocks: blocks/blocks.md
       - The block header: blocks/block-header.md
+      # The durable problem page sits above the mechanism that solves it, the
+      # same split as "Why metering is necessary" above "Gas". Both precede
+      # the-chain, because reorgs and finality cannot be explained before you
+      # know who proposes and who votes.
+      - Why somebody has to be chosen: blocks/why-somebody-chosen.md
+      - Proof of stake: blocks/proof-of-stake.md
       - The chain and reorgs: blocks/the-chain.md
 
   # Only the durable economics questions. The pages depending on Ethereum's

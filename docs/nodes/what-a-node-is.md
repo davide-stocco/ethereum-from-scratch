@@ -112,18 +112,23 @@ For an individual it's thinner. You get certainty that nobody is misreporting yo
 
 Which is exactly why **the number of nodes is watched, and why the cost of running one is a question about the system rather than about your hardware.** If running a node becomes impractical for everyone but large operators, nothing in the rules changes — but *anybody can check for themselves* quietly becomes *anybody with a datacentre can*, and the property that made trust unnecessary ends up resting on fewer and fewer people. [Running one yourself](running-one.md) takes that apart.
 
-??? note "Nodes aren't all the same"
+### Not every node keeps everything
 
-    One difference deliberately deferred: nodes vary in **how much history**
-    they keep, from everything ever recorded to barely any. That changes which
-    questions they can answer about the past, while leaving what they can
-    verify about the present identical.
+Which raises a fair question: if catching up means obtaining all that, why don't nodes simply keep it? Many don't, and the reasoning is worth knowing.
 
-    The distinction belongs with [state](../accounts/state.md), because it's
-    really about the difference between the current state and the record that
-    produced it. Here it's enough to know that two nodes can hold very
-    different amounts of data and still agree perfectly about what is true
-    now.
+**They always drop the oldest, never a selection.** The data a node keeps has to run contiguously backwards from the present, because checking block N requires the state left by block N−1. A node holding a scattered sample of past blocks could do nothing with it. So the only decision is *how far back*, and it's set by whoever runs the node — nothing in the protocol says.
+
+Recency wins because of what each part is *for*. The **current state** is the only thing required to validate new blocks. A **short recent window** is needed in case the tip of the chain changes and work has to be rewound. **Everything older** answers questions about the past, and nothing else.
+
+And discarding it is safe for the same reason the state root works:
+
+> **A node can safely forget anything it can re-obtain and re-verify.**
+
+Old blocks are linked by hash, so a node needing one later asks a peer and checks that what arrives matches what the chain already commits to. No trust required — a lie is detectable. **Verification doesn't require possession**, which is also why a new node can accept a state it was handed and check it against the root instead of replaying years of transactions.
+
+So the trade is never about how much a node can *verify*; it's about which questions it can answer. **Pruning costs you memory, not judgement.**
+
+The catch is collective. If everybody prunes, the history is gone from the network — nobody's copy means nobody's copy. That is exactly the question **EIP-4444** [(Kadianakis et al., 2021)](#ref-eip4444) raises by proposing that clients stop serving old history: it makes keeping it somebody's explicit job rather than an accident of everyone's defaults. [State](../accounts/state.md) sets out the three sizes of node this produces.
 
 ---
 
@@ -136,6 +141,7 @@ Which is exactly why **the number of nodes is watched, and why the cost of runni
 - Blocks arrive by **gossip** from a few peers. No server, nobody authoritative, nothing to switch off.
 - The **mempool is per-node**, not a shared queue — which is why pending transactions behave inconsistently.
 - **Catching up is slow** because the state has to be re-derived or verified, not merely downloaded.
+- Many nodes keep only recent data, always dropping the oldest, because **anything re-obtainable and hash-checkable is safe to forget.** Pruning costs you memory, not judgement — though if everybody prunes, the history is gone.
 - Nobody pays you to run one. The return is **not having to trust anybody's answer** — and how many people find that worth paying for decides whether the whole arrangement means anything.
 
 **Next:** [Clients and the two layers](clients-and-layers.md) — the software that does all this, and why there are two pieces of it.
@@ -146,6 +152,7 @@ Which is exactly why **the number of nodes is watched, and why the cost of runni
 
 <div class="sources" markdown>
 
+- <a id="ref-eip4444"></a>**Kadianakis, G., lightclient, & Stokes, A.** (2021). *EIP-4444: Bound Historical Data in Execution Clients.* Ethereum Improvement Proposals. Proposes that clients stop serving block bodies and receipts past a cutoff, which turns history retention from a default into a deliberate role. <https://eips.ethereum.org/EIPS/eip-4444>
 - <a id="ref-nakamoto-2008"></a>**Nakamoto, S.** (2008). *Bitcoin: A peer-to-peer electronic cash system.* Sets out the peer-to-peer broadcast arrangement Ethereum inherits, and the principle of accepting the result of applying rules rather than the word of any participant. <https://bitcoin.org/bitcoin.pdf>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Defines the block-level state transition function every node applies independently, and the conditions a block must satisfy to be accepted. <https://ethereum.github.io/yellowpaper/paper.pdf>
 

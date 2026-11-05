@@ -90,9 +90,9 @@ That's the whole site in a line. The topic names under each card are what the ma
 
 - **Part 6 · When it's settled**
 
-    How changes get batched, chained, and occasionally un-chained — and what "confirmed" is actually worth.
+    How changes get batched and chained, who gets to propose one and why anybody must, and what "confirmed" is actually worth.
 
-    [Blocks](blocks/blocks.md) · [The block header](blocks/block-header.md) · [The chain and reorgs](blocks/the-chain.md)
+    [Blocks](blocks/blocks.md) · [The block header](blocks/block-header.md) · [Why somebody has to be chosen](blocks/why-somebody-chosen.md) · [Proof of stake](blocks/proof-of-stake.md) · [The chain and reorgs](blocks/the-chain.md)
 
 - **Part 7 · Why anyone bothers**
 

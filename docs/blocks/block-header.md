@@ -32,4 +32,4 @@ description: Field by field through a block header — and what each one commits
 - The vestigial fields are genuinely interesting — `difficulty` and `nonce` survive as fixed values, which tells a small story about how upgrades preserve compatibility. Good candidate for a `??? info "History"` box.
 - One table, one row per field, with a "why it exists" column. That column is what makes this teaching material rather than a spec dump.
 
-**Next:** [The chain and reorgs](the-chain.md)
+**Next:** [Why somebody has to be chosen](why-somebody-chosen.md) — before who proposes a block, why anybody has to.
