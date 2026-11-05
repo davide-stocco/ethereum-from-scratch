@@ -881,10 +881,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-this-page-exists-at-all" class="md-nav__link">
+  <a href="#what-a-node-actually-does" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why this page exists at all
+        What a node actually does
       
     </span>
   </a>
@@ -892,10 +892,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#what-it-refuses-to-do" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        What it refuses to do
       
     </span>
   </a>
@@ -903,10 +903,76 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#node-validator-miner-wallet" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        Node, validator, miner, wallet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-blocks-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where blocks come from
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#each-node-has-its-own-waiting-room" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Each node has its own waiting room
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catching-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catching up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-nobody-pays-them-why-does-anyone-run-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If nobody pays them, why does anyone run one?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2118,10 +2184,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-this-page-exists-at-all" class="md-nav__link">
+  <a href="#what-a-node-actually-does" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why this page exists at all
+        What a node actually does
       
     </span>
   </a>
@@ -2129,10 +2195,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#what-it-refuses-to-do" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        What it refuses to do
       
     </span>
   </a>
@@ -2140,10 +2206,76 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#node-validator-miner-wallet" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        Node, validator, miner, wallet
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-blocks-come-from" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where blocks come from
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#each-node-has-its-own-waiting-room" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Each node has its own waiting room
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catching-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Catching up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-nobody-pays-them-why-does-anyone-run-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        If nobody pays them, why does anyone run one?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2168,36 +2300,139 @@
 
 
 <h1 id="what-a-node-is">What a node is</h1>
-<div class="admonition warning">
-<p class="admonition-title">Stub — not written yet</p>
-<p>This page is an outline. Delete this box when you fill it in.</p>
+<p><strong><a href="../../about/forks/">Permanent</a>.</strong> What a node does, and why checking rather than trusting is the whole point, follows from the design and has not changed. The software it runs, and what it costs, are the next two pages.</p>
+<div class="admonition definition">
+<p class="admonition-title">Node</p>
+<p>A computer running Ethereum's rules. It keeps its own copy of the
+<strong>state</strong>, receives <strong>blocks</strong> from other computers, applies each block's
+transactions to its own copy, and <strong>rejects any block that breaks the
+rules</strong>.</p>
+<p>It holds no keys, signs nothing, and is paid nothing. Those are different
+jobs, done by different things.</p>
 </div>
-<p><strong><a href="../../about/forks/">Permanent</a>.</strong> What a node does, and why checking rather than trusting is the whole point, follows from the design and has not changed. The <em>software</em>, and what it costs to run, are the next two pages.</p>
 <p>This part comes early on purpose. It would read better after <a href="../../accounts/state/">state</a> and <a href="../../blocks/blocks/">blocks</a>, whose detail makes the argument sharper — but <strong>"node" is load-bearing from the <a href="../../crypto/signatures/">signatures</a> page onward</strong>, and a word the site leans on repeatedly cannot stay undefined that long.</p>
-<p>So this part borrows two things from later and states them plainly, exactly as the state page borrows four facts about blocks: the <strong>state</strong> is the record of every account, and a <strong>block</strong> is a batch of transactions added to the chain as one unit. Both were introduced on <a href="../../foundations/what-is-ethereum/">What is Ethereum?</a>. Everything else here is built on what you already have.</p>
-<h2 id="why-this-page-exists-at-all">Why this page exists at all</h2>
-<p>The word <strong>node</strong> appears on nearly every page of this site, and until now nothing defined it. Worse, several arguments lean on it hard: the <a href="../../accounts/state/">state</a> page's entire case is that each node computes the state privately and compares one 32-byte number, and the <a href="../../foundations/what-is-ethereum/">determinism</a> argument is about thousands of them reaching identical answers. The reader has been asked to accept a load-bearing word on trust.</p>
-<h2 id="questions-this-page-should-answer">Questions this page should answer</h2>
+<p>So it borrows two things from later and states them plainly: the <strong>state</strong> is the record of every account and what it holds, and a <strong>block</strong> is a batch of transactions added to the chain as one unit. Both were introduced on <a href="../../foundations/what-is-ethereum/">What is Ethereum?</a>. Everything else here is built on what you already have.</p>
+<h2 id="what-a-node-actually-does">What a node actually does</h2>
+<p>Four steps, repeated indefinitely.</p>
+<ol>
+<li><strong>Receive</strong> a block from another computer.</li>
+<li><strong>Check</strong> it — are the signatures valid, the nonces in order, the balances sufficient, the rules followed?</li>
+<li><strong>Apply</strong> its transactions to its own copy of the state, in the order the block gives.</li>
+<li><strong>Keep it, or throw it away.</strong> A block that breaks any rule is rejected outright. Not flagged, not reported to anybody. Discarded.</li>
+</ol>
+<p>That is the entire job. The interesting part is what <em>isn't</em> in the list: at no point does the node ask another computer whether the block is good. There is nobody to ask, and asking would defeat the point.</p>
+<p><svg viewBox="0 0 470 258" role="img" aria-label="One block is sent to three independent nodes. Each applies the rules to its own copy of the state and computes a state root. All three roots are identical, and no node consulted another." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="8" y="98" width="88" height="56" rx="5"/><rect x="178" y="14" width="192" height="60" rx="5"/><rect x="178" y="96" width="192" height="60" rx="5"/><rect x="178" y="178" width="192" height="60" rx="5"/><path d="M96 126 L136 126 L136 44 L170 44"/><path d="M96 126 L170 126"/><path d="M96 126 L136 126 L136 208 L170 208"/></g><g fill="currentColor" stroke="none"><path d="M170 39 L180 44 L170 49 Z"/><path d="M170 121 L180 126 L170 131 Z"/><path d="M170 203 L180 208 L170 213 Z"/><text x="52" y="122" font-size="11" text-anchor="middle" font-weight="700">one block</text><text x="52" y="138" font-size="9" text-anchor="middle" opacity="0.75">of transactions</text><text x="190" y="34" font-size="11" font-weight="700">node</text><text x="190" y="50" font-size="9" opacity="0.8">applies the rules to its own state</text><text x="190" y="66" font-size="10" font-family="monospace">root 3a7f&#8230;c91</text><text x="190" y="116" font-size="11" font-weight="700">node</text><text x="190" y="132" font-size="9" opacity="0.8">applies the rules to its own state</text><text x="190" y="148" font-size="10" font-family="monospace">root 3a7f&#8230;c91</text><text x="190" y="198" font-size="11" font-weight="700">node</text><text x="190" y="214" font-size="9" opacity="0.8">applies the rules to its own state</text><text x="190" y="230" font-size="10" font-family="monospace">root 3a7f&#8230;c91</text><text x="382" y="122" font-size="9" opacity="0.75">&#8230; and</text><text x="382" y="134" font-size="9" opacity="0.75">thousands</text><text x="382" y="146" font-size="9" opacity="0.75">more</text><text x="8" y="256" font-size="10" opacity="0.85">Same block, same starting state, same rules &#8212; so the same answer. None asked the others.</text></g></svg></p>
+<p>The three results match because the rules are deterministic, which is the property the <a href="../../foundations/what-is-ethereum/">state machine</a> page opened with. A node doesn't <em>discover</em> that it agrees with everyone else. It computes the only answer the rules allow, and therefore agrees by construction.</p>
+<h2 id="what-it-refuses-to-do">What it refuses to do</h2>
+<p>The shortest accurate description of a node:</p>
+<blockquote>
+<p><strong>A machine that refuses to take anybody's word for anything.</strong></p>
+</blockquote>
+<p>Every other property follows. It won't accept a balance it was told — it computes balances. It won't accept that a block is valid because a well-known company says so — it checks. It won't accept a chain because that chain arrived first — it applies the rules and sees what survives.</p>
+<p>This is what the site has meant, page after page, by <em>nobody has to trust anybody</em>. It isn't a claim about people being honest. It's a claim about a particular computer in a particular room being able to <strong>redo the work</strong> — which means the number of such computers is the extent to which the claim is true at all.</p>
+<h2 id="node-validator-miner-wallet">Node, validator, miner, wallet</h2>
+<p>The distinction most worth getting straight, because nearly all confusion about "who runs Ethereum" is one of these four mistaken for another.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>What it does</th>
+<th>Paid?</th>
+<th>Holds keys?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Node</strong></td>
+<td>checks blocks, keeps the state</td>
+<td><strong>no</strong></td>
+<td>no</td>
+</tr>
+<tr>
+<td><strong>Validator</strong></td>
+<td>proposes blocks and votes on others'</td>
+<td><strong>yes</strong></td>
+<td>yes, staking keys</td>
+</tr>
+<tr>
+<td><strong>Miner</strong></td>
+<td>the pre-2022 name for that paid role</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Wallet</strong></td>
+<td>holds your keys, builds transactions</td>
+<td>no</td>
+<td><strong>yes, yours</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Three things fall out of that table.</p>
+<p><strong>Nodes are unpaid.</strong> No reward, no registration, and nothing in the protocol that knows you exist. This surprises people, and it's why <a href="../running-one/">what it costs</a> gets a page of its own.</p>
+<p><strong>A validator is a node plus a job.</strong> It must run a node — you cannot vote on the validity of blocks you haven't checked — and then additionally proposes and attests, for which it is paid and for which it stakes something it can lose. So <strong>every validator is a node; almost no node is a validator.</strong></p>
+<p><strong>"Miner" is a historical word.</strong> Mining was the paid proposing role under the old consensus rules, retired in 2022. Meeting it in current writing means the author means a validator, or is working from old material.</p>
+<p><strong>A wallet is none of the above.</strong> It holds keys, as the <a href="../../wallets/seed-phrases/">wallets</a> section laboured, and usually keeps no copy of the state at all — it asks somebody else's node. Which is worth sitting with: <strong>most people using Ethereum are trusting a node they don't run.</strong></p>
+<details class="question">
+<summary>So who gets to propose a block, and when?</summary>
+<p>Deliberately not answered here. That's the <strong>consensus mechanism</strong> —
+<a href="../../glossary/#proof-of-stake">proof of stake</a> — and it needs its own
+treatment.</p>
+<p>The reason it can wait is that nothing on this page depends on it. The
+checking role is identical under any consensus rule: receive, verify,
+apply, keep or reject. Change how proposers are chosen and every sentence
+above still holds — a good sign the two subjects separate cleanly.</p>
+</details>
+<h2 id="where-blocks-come-from">Where blocks come from</h2>
+<p>There is no server. Worth saying flatly, because "connecting to Ethereum" sounds like connecting to <em>something</em>, and there is nothing there to connect to.</p>
+<p>A node connects to a handful of other nodes — <strong>peers</strong> — which are connected to further nodes. Blocks and transactions are passed along those links, each node forwarding to its neighbours, until they've reached everybody. The pattern is called <strong>gossip</strong>, and the word is apt: no announcement, no central source, just repetition until the news is everywhere. Bitcoin's design paper sets out the same arrangement <a href="#ref-nakamoto-2008">(Nakamoto, 2008)</a>, and Ethereum inherits it.</p>
+<p>Two consequences:</p>
+<p><strong>Nobody is authoritative.</strong> A node cannot ask "what is the real chain?", because no computer holds that position. It can only apply the rules to what reaches it.</p>
+<p><strong>And there is nothing to switch off.</strong> No operator, no address, no company — which is the practical content of a claim that otherwise sounds like a slogan.</p>
+<h2 id="each-node-has-its-own-waiting-room">Each node has its own waiting room</h2>
+<p>Transactions arrive by gossip too, and one that's been broadcast but not yet included has to wait somewhere. That somewhere is the <strong>mempool</strong> — and the thing to notice is that <strong>it is per-node, not shared.</strong></p>
+<p>There is no single queue. Each node keeps its own set of pending transactions, decides how many to hold and for how long, and may discard yours while another keeps it. This is why the <a href="../../accounts/nonce/">nonce</a> page could say clients differ in what they'll hold onto, and why a transaction can appear to vanish and then come back: it was never in one place to begin with.</p>
+<h2 id="catching-up">Catching up</h2>
+<p>A node starting today has to get from the first block to the present, and that's the slow part — hours at best.</p>
+<p>What makes it slow is the arithmetic, not the download. Having the blocks is not the same as having the state: the state is the <em>result</em> of applying every transaction ever sent, so a node arriving late must either redo that work or obtain the current state and check it against the chain. <strong>How much history you re-derive is the choice being made</strong>, and it's the distinction <a href="../../accounts/state/">state</a> draws between history and state.</p>
+<h2 id="if-nobody-pays-them-why-does-anyone-run-one">If nobody pays them, why does anyone run one?</h2>
+<p>The honest answer is narrower than the usual one.</p>
+<p><strong>To avoid trusting somebody else's answer.</strong> That's the whole return, and for some parties it plainly covers the cost: an exchange that must be certain of its own deposits, a wallet provider serving millions of lookups, anyone building something where being lied to about the chain is expensive.</p>
+<p>For an individual it's thinner. You get certainty that nobody is misreporting your balance, and you stop revealing which addresses you care about to whoever's node you were querying. Real, but modest against an always-on machine with a lot of disk.</p>
+<p>Which is exactly why <strong>the number of nodes is watched, and why the cost of running one is a question about the system rather than about your hardware.</strong> If running a node becomes impractical for everyone but large operators, nothing in the rules changes — but <em>anybody can check for themselves</em> quietly becomes <em>anybody with a datacentre can</em>, and the property that made trust unnecessary ends up resting on fewer and fewer people. <a href="../running-one/">Running one yourself</a> takes that apart.</p>
+<details class="note">
+<summary>Nodes aren't all the same</summary>
+<p>One difference deliberately deferred: nodes vary in <strong>how much history</strong>
+they keep, from everything ever recorded to barely any. That changes which
+questions they can answer about the past, while leaving what they can
+verify about the present identical.</p>
+<p>The distinction belongs with <a href="../../accounts/state/">state</a>, because it's
+really about the difference between the current state and the record that
+produced it. Here it's enough to know that two nodes can hold very
+different amounts of data and still agree perfectly about what is true
+now.</p>
+</details>
+<hr />
+<h2 id="recap">Recap</h2>
 <ul>
-<li>What is a node, concretely? (A computer running software that holds a copy of the <a href="../../accounts/state/">state</a>, receives blocks, applies them to its own copy, and rejects any that don't follow the rules.)</li>
-<li>What does "validating for yourself" actually buy? (The thing the whole site keeps asserting: you need not trust anybody, because you recompute the answer. This is the page where that stops being a slogan.)</li>
-<li>What does a node <em>not</em> do? (It doesn't hold your keys, doesn't sign anything, and isn't paid. Those are separate roles — see below.)</li>
-<li>Where does it get blocks from? (Other nodes. Peer-to-peer gossip, no central server, no canonical source — worth saying plainly, since "connecting to Ethereum" sounds like connecting to something.)</li>
-<li>What is the <strong>mempool</strong>, and why is it per-node rather than a shared thing? (Each node keeps its own set of broadcast-but-not-included transactions, which is why the <a href="../../accounts/nonce/">nonce</a> page can say clients differ in what they'll hold.)</li>
-<li><strong>Node, validator, miner, wallet — which is which?</strong> (The one most worth getting straight. A node checks; a validator proposes and attests and is paid; a wallet holds keys. One machine can do several, and the words get used interchangeably by people who should know better.)</li>
-<li>How does a new node catch up? (Syncing: it has to get from genesis to now. The <em>how</em> is implementation, but that it must happen, and that it's the slow part, is worth stating.)</li>
-<li>If nodes are unpaid, why does anyone run one? (Honest answer: to not have to trust somebody else's answer. Which is a real reason for exchanges, wallet providers and anyone building — and a thin one for most individuals, which is exactly why the count matters and is watched.)</li>
-</ul>
-<h2 id="notes-to-self">Notes to self</h2>
-<ul>
-<li><strong>Don't duplicate the node-type table.</strong> <a href="../../accounts/state/">State</a> distinguishes archive, full and pruned as a point about <em>history versus state</em> — and now comes <strong>after</strong> this page, so mention that nodes differ in how much history they keep and promise the distinction rather than making it here.</li>
-<li>The <strong>node/validator distinction</strong> is the single most clarifying thing here, in the same way "only an EOA can start a transaction" was on the accounts page. Give it room. Most confusion about "who runs Ethereum" is this distinction missing.</li>
-<li>Resist explaining Proof of Stake. Who gets to propose a block, and when, is the consensus mechanism, and it needs its own treatment. This page is about the <em>checking</em> role, which is the same under any consensus rule.</li>
-<li>Keep client names out of this page entirely — they belong on the next one, and they date.</li>
-<li>The strongest framing: <strong>a node is a machine that refuses to take anybody's word for anything.</strong> Every other property follows from that.</li>
-<li>Likely diagram: one block arriving at several independent nodes, each applying it to its own state and computing the same root — the picture the state page argues in prose.</li>
+<li>A node keeps its own copy of the <strong>state</strong>, applies arriving blocks to it, and <strong>rejects</strong> anything breaking the rules <a href="#ref-wood-2014">(Wood, 2014)</a>.</li>
+<li>It never asks another computer whether a block is valid. <strong>Same block, same starting state, same rules, same answer</strong> — agreement by construction, not by consultation.</li>
+<li>Shortest description: <strong>a machine that refuses to take anybody's word for anything.</strong> Every other property follows.</li>
+<li><strong>Nodes are unpaid and unregistered.</strong> A <strong>validator</strong> is a node plus a paid job, so every validator is a node and almost no node is a validator. <strong>Miner</strong> is the pre-2022 word for that job. A <strong>wallet</strong> is neither — it holds keys and usually asks someone else's node.</li>
+<li>Blocks arrive by <strong>gossip</strong> from a few peers. No server, nobody authoritative, nothing to switch off.</li>
+<li>The <strong>mempool is per-node</strong>, not a shared queue — which is why pending transactions behave inconsistently.</li>
+<li><strong>Catching up is slow</strong> because the state has to be re-derived or verified, not merely downloaded.</li>
+<li>Nobody pays you to run one. The return is <strong>not having to trust anybody's answer</strong> — and how many people find that worth paying for decides whether the whole arrangement means anything.</li>
 </ul>
 <p><strong>Next:</strong> <a href="../clients-and-layers/">Clients and the two layers</a> — the software that does all this, and why there are two pieces of it.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
+<ul>
+<li><a id="ref-nakamoto-2008"></a><strong>Nakamoto, S.</strong> (2008). <em>Bitcoin: A peer-to-peer electronic cash system.</em> Sets out the peer-to-peer broadcast arrangement Ethereum inherits, and the principle of accepting the result of applying rules rather than the word of any participant. <a href="https://bitcoin.org/bitcoin.pdf">https://bitcoin.org/bitcoin.pdf</a></li>
+<li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Defines the block-level state transition function every node applies independently, and the conditions a block must satisfy to be accepted. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
+</ul>
+</div>
 
 
 
@@ -2316,6 +2551,8 @@
         <script src="../../javascripts/wallets.js"></script>
       
         <script src="../../javascripts/boxes.js"></script>
+      
+        <script src="../../javascripts/external-links.js"></script>
       
     
   </body>
