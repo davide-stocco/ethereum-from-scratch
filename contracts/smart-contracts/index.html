@@ -2275,6 +2275,30 @@ examining: the honest version is usually <em>somebody is paid to make it
 execute, and so far somebody has.</em> Let the reward stop covering the fee and
 the automation quietly stops.</p>
 </details>
+<ul>
+<li>
+<p><strong>How many times has a contract been used?</strong> Worth a section, because the
+  answer is instructive rather than merely practical. <strong>Nothing records it.</strong>
+  A contract account has the same four fields as any other, and its nonce
+  counts contracts it <em>created</em>, not calls it received — so this is a question
+  about <a href="../../accounts/state/">history</a>, not state, and a pruned node cannot
+  answer it however well it validates the present.</p>
+<p>Three ways to count, giving three different numbers:</p>
+<ul>
+<li><strong>Transactions sent to the address.</strong> Undercounts badly — misses every
+  call arriving from another contract, since those aren't transactions.</li>
+<li><strong>Logs it emitted.</strong> The practical method, and cheap at scale because
+  each block header carries a <code>logsBloom</code> that lets you skip blocks with
+  none. Misses any execution that emitted nothing, which is the author's
+  choice.</li>
+<li><strong>Re-execution with tracing.</strong> Complete, expensive, archive-node work.</li>
+</ul>
+<p>The payoff for a reader using chain data: <strong>published usage figures are
+not comparable unless you know which was counted</strong>, and sources rarely
+say. Same family as <em>addresses are not people</em> and <em>a failed transaction
+still happened and still cost gas</em>.</p>
+</li>
+</ul>
 <h2 id="notes-to-self">Notes to self</h2>
 <ul>
 <li>The name is the first obstacle. Say plainly that it is neither smart nor a contract, then move on — people have met the term long before the mechanism, and the wrong mental model is the thing to dislodge.</li>
