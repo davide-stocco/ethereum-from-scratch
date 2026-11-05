@@ -33,7 +33,7 @@ Keep the word, since everybody uses it. Just don't let it do any reasoning for y
 
 Go back to the four fields. A contract account has the same ones as any other: nonce, balance, `storageRoot`, `codeHash`. What makes it a contract is simply that **`codeHash` isn't the empty constant** — there is code, so the account is controlled by that code rather than by any key.
 
-A contract is therefore not a special kind of object. It's **an account with a program attached**, which is why it can hold ether, receive transactions, and be looked up exactly like a wallet account.
+A contract is therefore not a special kind of object. It's **an account with a program attached**, which is why it can hold ether, receive transactions, and be looked up exactly like a wallet account. That was the point of choosing accounts in the first place — [Buterin (2014)](#ref-buterin-2014) presents contracts as what the model is *for*, rather than as something built on top of it.
 
 Two consequences people find surprising, both established earlier:
 
@@ -45,7 +45,7 @@ Two consequences people find surprising, both established earlier:
 
 A contract is created by a transaction carrying code instead of a recipient — a deployment. Once that transaction is included, the code is written to an account and stays there.
 
-**The address is computed, not chosen.** It comes from the creating account's address and that account's [nonce](../accounts/nonce.md), hashed together — which is why a contract's nonce counts deployments rather than transactions, and why two deployments from one account can never collide.
+**The address is computed, not chosen.** It comes from the creating account's address and that account's [nonce](../accounts/nonce.md), hashed together [(Wood, 2014)](#ref-wood-2014) — which is why a contract's nonce counts deployments rather than transactions, and why two deployments from one account can never collide.
 
 A useful consequence: **you can know the address before the contract exists.** Deployment is predictable, so ether can be sent to, or code written referring to, an address that will only be occupied later. That underpins several arrangements you'll meet, and it's possible only because address derivation is arithmetic rather than allocation.
 
