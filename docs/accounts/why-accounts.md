@@ -77,7 +77,7 @@ Account transactions don't declare what they'll touch. A call to a contract may 
 
 Bitcoin wallets generate a fresh address for each payment, so a user's activity is spread across many unlinked addresses. Ethereum does the opposite: **address reuse is universal and necessary**, because contracts, token balances and names all need an address that stays put.
 
-The consequence is that one address is one linkable history, permanently and publicly. And this isn't theoretical even in the system that *does* use fresh addresses — Meiklejohn et al. [(2013)](#ref-meiklejohn-2013) showed Bitcoin activity could be clustered into real identities using heuristics over the public chain, against users who were changing addresses. Ethereum hands over, by design, what those researchers had to work to reconstruct.
+The consequence is that one address is one linkable history, permanently and publicly. And this isn't theoretical even in the system that *does* use fresh addresses — [Meiklejohn et al. (2013)](#ref-meiklejohn-2013) showed Bitcoin activity could be clustered into real identities using heuristics over the public chain, against users who were changing addresses. Ethereum hands over, by design, what those researchers had to work to reconstruct.
 
 This is the loose end the [public keys](../crypto/public-keys.md) page left: the old advice against reusing an address had substance, and Ethereum spent it deliberately for a stable identifier.
 

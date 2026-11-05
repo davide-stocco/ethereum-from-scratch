@@ -50,7 +50,7 @@ What's **not** public is the one thing that matters: your [private key](../crypt
 
 **And it collapses all at once.** The record isn't linked to you until **one** link exists: an exchange that knows your identity and your withdrawal address, a published donation address, a name registered to your address, a payment to someone who knows you. The moment any single link is made, it doesn't reveal one transaction. **It reveals the whole history, backwards.**
 
-This is not hypothetical, and it has been demonstrated against a system that tries *harder* than Ethereum does. Meiklejohn et al. [(2013)](#ref-meiklejohn-2013) clustered Bitcoin activity into real-world identities using public data and a handful of heuristics — against users who were already generating a fresh address per payment, which is the practice the account model discourages.
+This is not hypothetical, and it has been demonstrated against a system that tries *harder* than Ethereum does. [Meiklejohn et al. (2013)](#ref-meiklejohn-2013) clustered Bitcoin activity into real-world identities using public data and a handful of heuristics — against users who were already generating a fresh address per payment, which is the practice the account model discourages.
 
 Ethereum hands over by design what that research had to reconstruct.
 

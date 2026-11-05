@@ -25,7 +25,7 @@ The name is the first obstacle, and worth clearing before anything else, because
 
 **It isn't a contract.** There are no parties, no offer and acceptance, no consideration, no court, no remedy. The word imports a set of expectations from law that are all false here: that intent matters, that ambiguity gets resolved reasonably, that breach has consequences someone will impose. None of that exists. There is a program, and it runs.
 
-The term is older than Ethereum by about two decades. Szabo [(1997)](#ref-szabo-1997) used it for embedding contractual terms into hardware and software so that breaking them becomes impractical rather than merely actionable — a vending machine being the primitive ancestor, enforcing *payment, then goods* with no lawyer involved. Ethereum's contracts are related to that idea and narrower than it. They don't enforce agreements. They execute.
+The term is older than Ethereum by about two decades. [Szabo (1997)](#ref-szabo-1997) used it for embedding contractual terms into hardware and software so that breaking them becomes impractical rather than merely actionable — a vending machine being the primitive ancestor, enforcing *payment, then goods* with no lawyer involved. Ethereum's contracts are related to that idea and narrower than it. They don't enforce agreements. They execute.
 
 Keep the word, since everybody uses it. Just don't let it do any reasoning for you.
 
@@ -66,7 +66,7 @@ A short list, and worth having before the absences, because the absences only me
 - **Read some chain context** — its own balance, who called it, how much was sent, the current block's number.
 - **Emit a log.**
 
-That last one needs a sentence, because it's the odd one out. A **log** is a record a contract writes that is *not part of the state*: it goes into the block alongside the transaction, where anything outside Ethereum can read it. The peculiarity is that **a contract can write a log and cannot read one** — not its own, not anybody's. Logs exist for the benefit of the outside world, which is why they're the practical way to watch what a contract has been doing, and why they're cheap: no node has to keep them available for execution. [Events and logs](events-and-logs.md) takes it from there.
+That last one needs a sentence, because it's the odd one out. A **[log](../glossary.md#log "A record a contract writes for the outside world, not part of the state")** is a record a contract writes that is *not part of the state*: it goes into the block alongside the transaction, where anything outside Ethereum can read it. The peculiarity is that **a contract can write a log and cannot read one** — not its own, not anybody's. Logs exist for the benefit of the outside world, which is why they're the practical way to watch what a contract has been doing, and why they're cheap: no node has to keep them available for execution. [Events and logs](events-and-logs.md) takes it from there.
 
 And that's the whole of it. Six capabilities, all of them inside Ethereum.
 
@@ -131,7 +131,7 @@ The protocol has no concept of a function. A call arrives as **bytes**, and the 
 
 Two things worth noticing. **[Keccak-256](../crypto/keccak256.md) is doing this job too** — the same function behind addresses and the state root also decides what a function is called. And because four bytes is short, two different signatures can in principle produce the same selector: rare, and a real source of trouble when it happens.
 
-The whole arrangement is the **ABI**, and nothing in the protocol enforces it. It's a shared convention, like the derivation path on the [seed phrases](../wallets/seed-phrases.md) page — universally followed, nowhere required.
+The whole arrangement is the **[ABI](../glossary.md#abi "Application Binary Interface — the convention for encoding calls to a contract")** — the *application binary interface* — and nothing in the protocol enforces it. It's a shared convention, like the derivation path on the [seed phrases](../wallets/seed-phrases.md) page — universally followed, nowhere required.
 
 ## How many times has a contract been used?
 

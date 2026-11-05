@@ -72,6 +72,9 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **ether**{ #ether }
 : Ethereum's native currency. Counted internally in [wei](foundations/ether.md), never in decimals.
 
+**Event**{ #event }
+: What a [log](#log) is called in the language a contract is written in. An event in source code compiles into a log on the chain — the same relationship as a function and its four-byte selector. The two words get used interchangeably; the log is the protocol-level thing. → [Events and logs](contracts/events-and-logs.md)
+
 **EVM**{ #evm } (Ethereum Virtual Machine)
 : The machine that executes contract code — a stack machine working on 256-bit words. Every node runs it identically.
 
@@ -101,6 +104,11 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 **Keccak-256**{ #keccak-256 }
 : Ethereum's hash function. Takes any input, returns 32 bytes. Nearly the same as SHA-3 but **not identical** — the padding differs, so the two give different results. → [Keccak-256](crypto/keccak256.md)
+
+## L
+
+**Log**{ #log }
+: A record a contract writes for the outside world, attached to a transaction's result rather than to the [state](accounts/state.md). The one thing a contract can **write and never read** — not its own, not any other's — which is why logs are cheap: no node needs them in order to execute anything. Called an [event](#event) in source code. → [Events and logs](contracts/events-and-logs.md)
 
 ## N
 
