@@ -31,7 +31,7 @@ description: What running a node actually costs, in shape rather than specificat
 
 Four requirements, and they are not equally binding.
 
-**Disk is the one that decides.** Not how much — what *kind*, and which direction it moves. You need **terabytes rather than gigabytes**, on a solid-state drive rather than a spinning one, because the work is constant small random writes rather than bulk reading. And the requirement **only ever rises**, because nothing removes an account from the state.
+**Disk is the one that rules machines out.** The other three requirements are rarely what stops somebody; this is. And the useful facts about it aren't the quantity — they're the kind and the direction. You need **terabytes rather than gigabytes**, on a solid-state drive rather than a spinning one, because the work is constant small random writes rather than bulk reading. And the requirement **only ever rises**, because nothing removes an account from the state.
 
 **Memory and processor are ordinary.** A small desktop machine of recent vintage is enough. This is the reassuring part and the part people get wrong in both directions — you don't need a server, and a ten-year-old laptop won't do.
 
@@ -83,9 +83,13 @@ That is why node counts get watched, and why "what does a node cost" is a questi
 
 **Nothing automatic**, and this is the uncomfortable part.
 
-The state only grows, every node stores all of it, and the protocol charges a one-time fee for storage it then keeps forever. [Why accounts](../accounts/why-accounts.md) argues that as a pricing failure — a perpetual cost met by a single payment, borne by operators who were never asked. **This page is the invoice that argument describes**, denominated in disk.
+The state only grows, because nothing removes an account from it. So every operator's disk requirement rises for as long as the network runs.
 
-The responses are the three named there — charging rent for occupied state, expiring what goes untouched, and arranging that validators need not hold the state at all — and none has shipped. Hardware gets cheaper, which changes the rate. It does not change the direction.
+And notice where the money sits. **Writing something into the state is paid for once**, by whoever writes it, at a price set by how congested the network is that day. **Keeping it is paid for indefinitely**, by every operator, including everyone who starts a node years later. Those are not the same people, and the second group was never asked.
+
+That mismatch is a question about **pricing**, not about hardware — which is why no amount of cheaper disk resolves it. Cheaper hardware changes how fast the requirement bites. It does not change which way it moves.
+
+It's also not this page's argument to make: it needs the account model, and so it's taken apart properly in [why accounts, and what they cost](../accounts/why-accounts.md), two parts ahead. What's worth carrying there from here is the concrete end of it — **the cost is real, it's denominated in disk, and it only goes one way.**
 
 **EIP-4444** [(Kadianakis et al., 2021)](#ref-eip4444) addresses the other half: making old *history* somebody's deliberate job rather than everybody's default, so a node need not carry a decade of blocks it will never read.
 
@@ -107,7 +111,7 @@ Which is fine, and worth being conscious of. It also means you have a stake in o
 - What you get: **your own answers**, no audience for your queries, and nobody able to cut you off.
 - What you don't get: **money.** Nodes earn nothing; the paid role is a validator, which is a node plus stake plus duties.
 - The cost matters because **the site's central claim depends on it.** While a node is affordable, "anyone can check" is true. If it needed a datacentre, the rules wouldn't change and the claim would quietly stop being true.
-- **Nothing keeps it affordable automatically.** Cheaper hardware changes the rate, not the direction — the pricing problem is the one [why accounts](../accounts/why-accounts.md) sets out.
+- **Nothing keeps it affordable automatically.** Writing to the state is paid for once; keeping it is paid for indefinitely, by different people. That's a pricing mismatch rather than a hardware problem, and [why accounts](../accounts/why-accounts.md) takes it apart two parts ahead.
 - If you don't run one, the useful thing is knowing **what you're assuming on somebody else's behalf** — and that you benefit from nodes staying cheap regardless.
 
 **Next:** [Accounts](../accounts/accounts.md) — what all these machines are actually storing.

@@ -121,6 +121,8 @@ The sharpest version of all this is not technical, and it's where the account mo
 
 A one-time fee against a perpetual liability. The payment is made by one party, at one moment, at a price set by a fee market concerned with present congestion — while the cost falls on thousands of operators who were not consulted, cannot refuse, cannot charge for it, and will carry it indefinitely.
 
+You have already met the far end of this. [Running one yourself](../nodes/running-one.md) described the disk requirement as the thing that rules machines out, and as something that only ever rises — that is this externality, arriving as a shopping constraint. The two are one fact: what looks like a hardware problem to an operator is a pricing problem to the protocol.
+
 That's a textbook externality, and the classic description of what follows is Hardin's [(1968)](#ref-hardin-1968): a resource nobody owns, which each user is individually rational to consume and collectively ruinous to exhaust. It reframes **state growth** from an engineering nuisance into a **pricing failure** — and that reframing matters, because it tells you no amount of faster disks fixes it. Cheaper storage changes the rate. It doesn't change the sign.
 
 The protocol does have one crude lever: it refunds gas when you *clear* storage, paying you a little to shrink the state. The refunds have been reduced over time because they were gameable, and they only ever applied to people willing to delete their own data. Nothing addresses the general case.
