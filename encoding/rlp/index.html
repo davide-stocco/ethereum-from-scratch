@@ -1441,13 +1441,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-four-rules" class="md-nav__link">
+  <a href="#the-entire-specification" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The four rules
+        The entire specification
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="The entire specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-thing-that-looks-like-a-mistake-and-isnt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One thing that looks like a mistake and isn't
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2343,13 +2360,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-four-rules" class="md-nav__link">
+  <a href="#the-entire-specification" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The four rules
+        The entire specification
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="The entire specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#one-thing-that-looks-like-a-mistake-and-isnt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        One thing that looks like a mistake and isn't
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2470,40 +2504,111 @@ valid encoding, and anything else is rejected.</p>
 <p>RLP has <strong>no integers.</strong> No booleans, no decimals, no field names, no types, no maps. The two things it knows about are a run of bytes and a list.</p>
 <p>So <code>nonce: 3</code> isn't something RLP can express. What gets encoded is the byte <code>0x03</code>, in a particular position in a list, and <strong>the position is what makes it the nonce.</strong> Anything wanting to encode a number converts it to bytes first; anything wanting to label a field relies on the reader knowing the order.</p>
 <p>That sounds like an omission and is a deliberate narrowing. A format that describes types has to have opinions about them — how big an integer may be, how text is encoded, what a missing field means — and every opinion is something two implementations could implement differently. RLP has almost nothing to disagree about.</p>
-<h2 id="the-four-rules">The four rules</h2>
-<p>That's the whole specification <a href="#ref-wood-2014">(Wood, 2014)</a>, and it fits in a table.</p>
+<h2 id="the-entire-specification">The entire specification</h2>
+<p>What follows is not a summary. <strong>These five cases are RLP's entire definition</strong> — the normative content of Appendix B of the Yellow Paper <a href="#ref-wood-2014">(Wood, 2014)</a>, plus the canonicality rules further down. There is nothing else to the format.</p>
+<p>Everything turns on <strong>the first byte</strong>, which says which of five cases applies and how long the thing is.</p>
 <table>
 <thead>
 <tr>
 <th>First byte</th>
-<th>Means</th>
+<th>Reading it</th>
+<th>Writing it</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>0x00</code>–<code>0x7f</code></td>
-<td>this byte is the data, encoding itself</td>
+<td>the byte <em>is</em> the data</td>
+<td>a byte under <code>0x80</code> is left alone</td>
 </tr>
 <tr>
 <td><code>0x80</code>–<code>0xb7</code></td>
-<td>a string of <strong>0 to 55 bytes</strong>; length is the byte minus <code>0x80</code></td>
+<td>string of 0–55 bytes, length = byte − <code>0x80</code></td>
+<td>prefix = <code>0x80</code> <strong>+</strong> length</td>
 </tr>
 <tr>
 <td><code>0xb8</code>–<code>0xbf</code></td>
-<td>a <strong>longer string</strong>; the byte minus <code>0xb7</code> says how many bytes of <em>length</em> follow</td>
+<td>longer string; byte − <code>0xb7</code> = how many bytes of <em>length</em> follow</td>
+<td>prefix = <code>0xb7</code> <strong>+</strong> number of length bytes</td>
 </tr>
 <tr>
 <td><code>0xc0</code>–<code>0xf7</code></td>
-<td>a <strong>list</strong> whose contents are 0 to 55 bytes; length is the byte minus <code>0xc0</code></td>
+<td>list, contents 0–55 bytes, length = byte − <code>0xc0</code></td>
+<td>prefix = <code>0xc0</code> <strong>+</strong> length of contents</td>
 </tr>
 <tr>
 <td><code>0xf8</code>–<code>0xff</code></td>
-<td>a <strong>longer list</strong>; same length-of-the-length trick</td>
+<td>longer list; byte − <code>0xf7</code> = bytes of length following</td>
+<td>prefix = <code>0xf7</code> <strong>+</strong> number of length bytes</td>
 </tr>
 </tbody>
 </table>
-<p>Two values worth memorising, because they turn up constantly: <strong><code>0x80</code> is the empty string</strong> and <strong><code>0xc0</code> is the empty list.</strong></p>
-<p>The fourth and fifth rows are the only clever part. A length under 56 fits in the prefix byte itself. Beyond that there isn't room, so the prefix instead says <em>how many bytes the length takes</em>, and the length follows. Hence the name: a prefix that describes a length, applied recursively to whatever is inside.</p>
+<p><strong>The two columns run in opposite directions, and mixing them up is the easiest mistake here.</strong> Decoding subtracts; encoding adds. So <code>"dog"</code> is three bytes and its prefix is <code>0x80 + 3 = 0x83</code> — not <code>0x80 − 3</code>. The subtraction is what a decoder does when it meets <code>0x83</code> and wants the length back.</p>
+<p>Two values worth memorising, because they turn up everywhere: <strong><code>0x80</code> is the empty string</strong> and <strong><code>0xc0</code> is the empty list.</strong></p>
+<h3 id="one-thing-that-looks-like-a-mistake-and-isnt">One thing that looks like a mistake and isn't</h3>
+<p>The long-string row subtracts <strong><code>0xb7</code></strong> while its range begins at <strong><code>0xb8</code></strong>. The bases and the range starts don't line up, and that's deliberate.</p>
+<p>A short string may be <em>empty</em>, so <code>0x80</code> has to mean "length 0" — the base and the range start coincide. A long string, by contrast, always carries <strong>at least one</strong> byte of length; there is no such thing as zero length bytes. So the smallest value that case ever expresses is 1, and <code>0xb7 + 1 = 0xb8</code>. The base sits one below the range because the count starts at one rather than zero.</p>
+<p>Same for lists: <code>0xc0</code> can mean an empty list, so its base is its range start; <code>0xf7</code> is one below <code>0xf8</code> for the same reason as <code>0xb7</code>.</p>
+<details class="abstract">
+<summary>The arithmetic behind the table</summary>
+<p>The whole format is squeezed into one byte's worth of possibilities, and
+the five cases divide those 256 values exactly:</p>
+<table>
+<thead>
+<tr>
+<th>Range</th>
+<th>Values</th>
+<th>Spent on</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0x00</code>–<code>0x7f</code></td>
+<td>128</td>
+<td>bytes that encode themselves</td>
+</tr>
+<tr>
+<td><code>0x80</code>–<code>0xb7</code></td>
+<td>56</td>
+<td>string lengths 0 to 55</td>
+</tr>
+<tr>
+<td><code>0xb8</code>–<code>0xbf</code></td>
+<td>8</td>
+<td>long strings: 1 to 8 bytes of length</td>
+</tr>
+<tr>
+<td><code>0xc0</code>–<code>0xf7</code></td>
+<td>56</td>
+<td>list lengths 0 to 55</td>
+</tr>
+<tr>
+<td><code>0xf8</code>–<code>0xff</code></td>
+<td>8</td>
+<td>long lists: 1 to 8 bytes of length</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>256</strong></td>
+<td>nothing spare, nothing overlapping</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why 55, and not a rounder number?</strong> It isn't chosen — it falls out.
+Half the byte values go to self-encoding bytes, leaving 128. Those split
+into two halves of 64 for strings and lists, and each half keeps 8 values
+at the top for the long form, leaving <strong>56</strong>. Fifty-six slots counted from
+zero reach 55.</p>
+<p><strong>Why 8 for the long form?</strong> Because a length never needs more than eight
+bytes. Eight bytes count to about 1.8 × 10<sup>19</sup>, which is beyond
+anything that will ever be encoded, so eight is both sufficient and the
+most that could be useful.</p>
+<p><strong>And the whole design is one trade.</strong> Short things — which is nearly
+everything — pay a single byte of overhead. Long things pay two to nine.
+A format that used a fixed four-byte length would be simpler to describe
+and would waste three bytes on every small field, in a system that stores
+and hashes billions of them.</p>
+</details>
 <h2 id="worked-byte-by-byte">Worked, byte by byte</h2>
 <p><strong><code>"dog"</code></strong> → three bytes of data, so the prefix is <code>0x80 + 3</code>:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>83 64 6f 67
@@ -2562,6 +2667,7 @@ single wrong byte is detected rather than silently reinterpreted.</p>
 <h2 id="what-rlp-doesnt-tell-you">What RLP doesn't tell you</h2>
 <p>A thing people assume and shouldn't: <strong>the bytes don't say what they mean.</strong></p>
 <p>Decode a transaction and you get a list of byte strings. Nothing in it says which is the nonce, which is the recipient, or that the twenty-byte one is an address at all. A decoder returns structure; interpretation comes from the reader knowing what shape to expect.</p>
+<p>Which is not in tension with what the first section said about position. <strong>RLP preserves order faithfully, and order is exactly what a convention can attach meaning to</strong> — the second item really is the nonce, every time, reliably. What the bytes never carry is the convention itself. Position is where the meaning is <em>kept</em>; it is not where the meaning is <em>written down</em>.</p>
 <p>Which is why the tool above can tell you that something is a three-item list of strings and not what any of it is <em>for</em>. Meaning lives in the specification and in the code, never in the encoding — the same division as the <a href="../../contracts/smart-contracts/">ABI</a>, where the protocol sees bytes and the convention supplies the names.</p>
 <h2 id="where-its-used">Where it's used</h2>
 <p>Everywhere the execution layer writes something down:</p>
