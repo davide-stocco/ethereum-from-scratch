@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="How Ethereum fingerprints its entire state in 32 bytes, so a block header can commit to gigabytes of data.">
+        <meta name="description" content="How one 32-byte number commits to Ethereum's entire state, and how a few kilobytes can prove a single balance against it.">
       
       
         <meta name="author" content="Davide">
@@ -1458,10 +1458,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#what-it-has-to-do" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        What it has to do
       
     </span>
   </a>
@@ -1469,10 +1469,109 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#first-the-merkle-part" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        First, the Merkle part
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#second-the-trie-part" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second, the trie part
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#third-the-patricia-part" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Third, the Patricia part
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-kinds-of-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three kinds of node
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-rlp-is-the-prerequisite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why RLP is the prerequisite
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-proof-actually-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a proof actually is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-the-keys-are-hashed-and-where-they-arent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why the keys are hashed — and where they aren't
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-tries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four tries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2249,10 +2348,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#what-it-has-to-do" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        What it has to do
       
     </span>
   </a>
@@ -2260,10 +2359,109 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#first-the-merkle-part" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        First, the Merkle part
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#second-the-trie-part" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Second, the trie part
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#third-the-patricia-part" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Third, the Patricia part
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-kinds-of-node" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The three kinds of node
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-rlp-is-the-prerequisite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why RLP is the prerequisite
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-proof-actually-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What a proof actually is
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-the-keys-are-hashed-and-where-they-arent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why the keys are hashed — and where they aren't
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-four-tries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The four tries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recap
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
       
     </span>
   </a>
@@ -2288,35 +2486,182 @@
 
 
 <h1 id="the-merkle-patricia-trie">The Merkle Patricia Trie</h1>
-<div class="admonition warning">
-<p class="admonition-title">Stub — not written yet</p>
-<p>This page is an outline. Delete this box when you fill it in.</p>
-</div>
+<p><strong>Mostly <a href="../../about/forks/">permanent</a>.</strong> The structure has not changed since 2015, and everything it achieves — a single root committing to everything, cheap updates, small proofs — is permanent regardless of how it is built. The <em>way</em> it is built is the part under long-running attempts at replacement.</p>
 <div class="admonition info">
-<p class="admonition-title">Current as of: <em>(fill in the fork and date)</em></p>
-<p>The trie structure is unchanged since genesis, but a replacement — Verkle
-trees — is actively planned. Check the current status before relying on
-this page.</p>
+<p class="admonition-title">Current as of Fusaka (December 2025)</p>
+<p>A replacement called a <strong>verkle tree</strong> has been proposed for years, to make
+proofs dramatically smaller. <strong>It has not shipped</strong>, and its specification
+<a href="#ref-eip6800">(Buterin et al., 2023)</a> is currently marked <em>Stagnant</em> —
+which is itself the useful status report. Treat verkle as a direction
+rather than a plan, and check before relying on anything about it.</p>
 </div>
-<h2 id="questions-this-page-should-answer">Questions this page should answer</h2>
+<div class="admonition definition">
+<p class="admonition-title">Merkle Patricia Trie</p>
+<p>The structure behind every <strong>root</strong> on Ethereum: the state root, each
+account's storage root, and a block's transactions and receipts roots.</p>
+<p>It is a tree in which <strong>the path to a value is determined by its key</strong>, and
+<strong>every node is identified by the hash of its contents</strong>. The first makes
+it a lookup table. The second makes the single hash at the top a
+commitment to every value inside.</p>
+</div>
+<h2 id="what-it-has-to-do">What it has to do</h2>
+<p>Four requirements, and no simpler structure meets all four. The <a href="../../accounts/state/">state</a> page set out the first three; the fourth is the one usually left out and is arguably the most important.</p>
+<p><strong>1. Commit to everything in 32 bytes.</strong> Change one wei in one account and the root must change. Otherwise two nodes could hold different states and agree.</p>
+<p><strong>2. Be cheap to update.</strong> A block changes perhaps a few hundred accounts out of hundreds of millions. Re-hashing everything per block would be absurd.</p>
+<p><strong>3. Support proofs about parts.</strong> Somebody holding only the root should be able to be <em>shown</em> that one account holds one balance, without receiving the rest of the state.</p>
+<p><strong>4. Depend on the contents and nothing else.</strong> Two nodes that applied the same transactions in different <em>internal orders</em> — different insertion sequences, different storage layouts, different software — must still arrive at the same root. The structure cannot depend on history or implementation, only on what is in it.</p>
+<p>That fourth requirement rules out most of the obvious answers. A sorted list depends on nothing but contents but fails (2) and (3). A hash of everything concatenated fails (2) and (3) too. A binary search tree meets (2) and (3) and fails (4), because its shape depends on the order things were inserted.</p>
+<h2 id="first-the-merkle-part">First, the Merkle part</h2>
+<p>Take a set of values. Hash each one. Then hash the hashes in pairs, and the results in pairs, until one hash is left. That top hash is the <strong>root</strong>, and the arrangement is a <strong>Merkle tree</strong> — the idea comes from Merkle's work on signing many messages with one public value <a href="#ref-merkle-1988">(Merkle, 1988)</a>.</p>
+<p>Two properties fall out, and they're the two that matter.</p>
+<p><strong>The root commits to every value.</strong> Change any one of them and its hash changes, so its parent's hash changes, and so on to the top. There is no way to alter a value and leave the root alone — that would require a hash collision.</p>
+<p><strong>And you can prove one value belongs without revealing the others.</strong> To convince somebody who knows only the root that a particular value is in the tree, you hand them the value plus the <strong>sibling hash at each level</strong> on the way up. They redo the hashing and see whether they arrive at the root they already trust. For a million values that's about twenty hashes — not a million.</p>
+<p>That second property is the whole reason this structure exists rather than something simpler. <strong>Verification without possession</strong>, which is the same principle the <a href="../../nodes/what-a-node-is/">node</a> page used to explain why pruning is safe.</p>
+<h2 id="second-the-trie-part">Second, the trie part</h2>
+<p>A Merkle tree commits to a <em>list</em>. Ethereum needs a <strong>mapping</strong>: given an address, find its account.</p>
+<p>So the arrangement is also a <strong>trie</strong> — a tree where the key tells you the path. Reading the key one piece at a time, each piece selects which child to descend into. Ethereum reads keys a <strong>nibble</strong> at a time, four bits, so every branching point has sixteen possible directions, one per hex digit.</p>
+<p>Two consequences:</p>
+<p><strong>Lookup needs no search.</strong> You don't hunt for a key; you follow it. The key <em>is</em> the route.</p>
+<p><strong>And the shape depends only on the keys.</strong> This is requirement (4), met for free. A trie containing the same keys has the same shape whatever order they were inserted in, because position is dictated by the key rather than by history. That is why two independent nodes compute the same root — not by coordinating, but because there was only ever one possible answer.</p>
+<h2 id="third-the-patricia-part">Third, the Patricia part</h2>
+<p>A pure trie has a problem. Keys here are 32 bytes — <strong>64 nibbles</strong> — so a key followed to its end passes through 64 levels. Where a key has no neighbours sharing its prefix, that means a long chain of nodes each with exactly one child, holding no information beyond "keep going".</p>
+<p>The fix is <strong>path compression</strong>: collapse any such run into a single node that says "the next <em>n</em> nibbles are all this". The technique and the acronym come from <a href="#ref-morrison-1968">Morrison (1968)</a> — PATRICIA, <em>Practical Algorithm To Retrieve Information Coded In Alphanumeric</em> — which is where Ethereum's structure gets the middle word of its name.</p>
+<p>So the full name is a description of its parts: <strong>Merkle</strong> for the hashing that makes it a commitment, <strong>Patricia</strong> for the compression that keeps it shallow, <strong>trie</strong> for the keys determining the path.</p>
+<h2 id="the-three-kinds-of-node">The three kinds of node</h2>
+<p>Those three ideas produce exactly three node types, specified in Appendix D of the Yellow Paper <a href="#ref-wood-2014">(Wood, 2014)</a> along with the encoding rules that distinguish them.</p>
+<table>
+<thead>
+<tr>
+<th>Node</th>
+<th>Holds</th>
+<th>Exists because</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Leaf</strong></td>
+<td>the rest of the key, and the value</td>
+<td>the path has ended</td>
+</tr>
+<tr>
+<td><strong>Extension</strong></td>
+<td>a shared run of nibbles, and one child</td>
+<td>path compression — the Patricia part</td>
+</tr>
+<tr>
+<td><strong>Branch</strong></td>
+<td>sixteen slots, one per nibble, plus a value</td>
+<td>the path divides here</td>
+</tr>
+</tbody>
+</table>
+<p>A branch node has <strong>seventeen</strong> places, not sixteen: the extra one holds a value for a key that <em>ends</em> exactly at that branch, when one key is a prefix of another.</p>
+<p><svg viewBox="0 0 470 352" role="img" aria-label="A small trie holding three keys. The root is a branch node using slots 1 and 7. Slot 1 leads to an extension node carrying the shared nibble 2, which leads to a second branch using slots 3 and 5, each ending in a leaf. Slot 7 of the root leads straight to a leaf carrying the remaining nibbles 89a." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="158" y="36" width="154" height="40" rx="5"/><rect x="14" y="110" width="158" height="40" rx="5"/><rect x="296" y="110" width="160" height="54" rx="5"/><rect x="14" y="184" width="158" height="40" rx="5"/><rect x="10" y="258" width="76" height="54" rx="5"/><rect x="98" y="258" width="76" height="54" rx="5"/><path d="M200 76 L120 104"/><path d="M272 76 L350 104"/><path d="M93 150 L93 178"/><path d="M60 224 L48 252"/><path d="M120 224 L136 252"/></g><g fill="currentColor" stroke="none"><text x="14" y="16" font-size="10" opacity="0.8">keys, as nibbles:  1234 &#8594; alice   1256 &#8594; bob   789a &#8594; carol</text><text x="170" y="56" font-size="11" font-weight="700">BRANCH</text><text x="170" y="70" font-size="9" opacity="0.8">slots 1 and 7 are used</text><text x="26" y="130" font-size="11" font-weight="700">EXTENSION</text><text x="26" y="144" font-size="9" opacity="0.8">shared nibble: 2</text><text x="308" y="130" font-size="11" font-weight="700">LEAF</text><text x="308" y="144" font-size="9" opacity="0.8">rest of key: 89a</text><text x="308" y="158" font-size="9" opacity="0.8">value: carol</text><text x="26" y="204" font-size="11" font-weight="700">BRANCH</text><text x="26" y="218" font-size="9" opacity="0.8">slots 3 and 5 are used</text><text x="20" y="276" font-size="10" font-weight="700">LEAF</text><text x="20" y="289" font-size="8" opacity="0.8">rest: 4</text><text x="20" y="302" font-size="8" opacity="0.8">alice</text><text x="108" y="276" font-size="10" font-weight="700">LEAF</text><text x="108" y="289" font-size="8" opacity="0.8">rest: 6</text><text x="108" y="302" font-size="8" opacity="0.8">bob</text><text x="14" y="334" font-size="10" opacity="0.85">Every box is RLP-encoded and hashed, and each parent stores its children&#8217;s</text><text x="14" y="346" font-size="10" opacity="0.85">hashes &#8212; so the hash of the top box depends on all three values.</text></g></svg></p>
+<p>Follow <code>1256</code> through it. The root branch takes the <code>1</code> and sends you left. The extension says the next nibble is <code>2</code>, which matches, so continue. The second branch takes the <code>5</code>. The leaf says the rest of the key is <code>6</code> — it matches — and the value is yours. Four nibbles, three hops.</p>
+<p>Now notice what the extension node bought: without it, <code>alice</code> and <code>bob</code> would need a separate single-child node for the shared <code>2</code>. With 64-nibble keys and millions of accounts, those runs are where nearly all the savings are.</p>
+<h2 id="why-rlp-is-the-prerequisite">Why RLP is the prerequisite</h2>
+<p>Each node is turned into bytes with <a href="../rlp/">RLP</a>, and <strong>the hash of a node is the hash of its RLP.</strong></p>
+<p>Which is why the previous page had to come first, and why its obsession with canonicality was not pedantry. If a node could be encoded two ways, it would have two hashes, so its parent would have two hashes, and the root would not be a function of the state. <strong>The root is well-defined only because the encoding is.</strong></p>
+<details class="abstract">
+<summary>Two details that surprise people</summary>
+<p><strong>Small nodes are inlined, not referenced.</strong> A parent normally stores its
+child's 32-byte hash. But if a child's RLP comes to <strong>less than 32 bytes</strong>,
+the child is embedded in the parent directly instead — because a hash
+would be larger than the thing it points at. So the structure is not
+uniformly hash-linked, and a node's encoding can contain whole subtrees
+rather than references to them.</p>
+<p><strong>The empty trie has a root anyway.</strong> It is the hash of RLP's empty
+string — <code>keccak256(0x80)</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
+</code></pre></div>
+<p>That constant is the <code>storageRoot</code> of every account with nothing stored,
+which is where the <a href="../../accounts/accounts/">accounts</a> page met it. It is
+the same arrangement as <code>keccak256("")</code> being the code hash of an account
+with no code: emptiness still has to have a fingerprint, or "nothing
+stored" could not be distinguished from "anything at all".</p>
+</details>
+<h2 id="what-a-proof-actually-is">What a proof actually is</h2>
+<p>This is the payoff, and the reason the structure is worth its complexity.</p>
+<p>A <strong>proof</strong> that some account holds some value is the chain of nodes from the root down to that account's leaf. Nothing more.</p>
+<p>Given it, somebody holding only the root can check the claim themselves:</p>
+<ol>
+<li>Hash the leaf, and confirm the node above references that hash.</li>
+<li>Hash that node, and confirm the node above references <em>it</em>.</li>
+<li>Continue to the top, and confirm the final hash is the root you already trusted.</li>
+</ol>
+<p>If every link holds, the value is in the state — and if any byte of it had been altered, some hash along the way would not match.</p>
+<p><strong>The size is the point.</strong> A proof is one node per level, and the depth is bounded by the key length, so it is a handful of kilobytes regardless of whether the state holds a thousand accounts or a billion. Which is what makes a <strong>light client</strong> possible: software that stores no state at all, keeps only block headers, and asks others for proofs it can verify. It isn't trusting the answers. It's checking them against a root it obtained independently.</p>
+<h2 id="why-the-keys-are-hashed-and-where-they-arent">Why the keys are hashed — and where they aren't</h2>
+<p>The <a href="../../accounts/accounts/">accounts</a> page established that the state trie is keyed by <code>keccak256(address)</code> rather than by the address, as a defence: creating an account needs no key, so an attacker could otherwise dust a million addresses sharing a long prefix and force one branch of the trie to be pathologically deep.</p>
+<p>What's worth adding here is <strong>the contrast</strong>, because it shows the hashing is a targeted defence and not a reflex.</p>
+<p>A block's <strong>transactions</strong> and <strong>receipts</strong> also live in tries. Their keys are not hashed — they are the transaction's index, <code>0</code>, <code>1</code>, <code>2</code>, encoded with RLP. And they don't need hashing, because <strong>nobody can choose them.</strong> Indices are assigned by position in the block, so there is no way to craft one, and therefore nothing to defend against.</p>
+<p>So the rule is sharper than "Ethereum hashes trie keys":</p>
+<blockquote>
+<p><strong>Hash the keys where an adversary picks them. Don't where they are assigned.</strong></p>
+</blockquote>
+<p>Which is also a useful test to carry into other systems: ask who chooses the key, and the need for hashing answers itself.</p>
+<h2 id="the-four-tries">The four tries</h2>
+<table>
+<thead>
+<tr>
+<th>Trie</th>
+<th>Key</th>
+<th>Value</th>
+<th>Keys hashed?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>State</strong></td>
+<td>an address</td>
+<td>the account's four fields</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Storage</strong>, one per contract</td>
+<td>a 32-byte slot number</td>
+<td>the stored value</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><strong>Transactions</strong>, one per block</td>
+<td>the index in the block</td>
+<td>the transaction</td>
+<td>no</td>
+</tr>
+<tr>
+<td><strong>Receipts</strong>, one per block</td>
+<td>the index in the block</td>
+<td>the receipt</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<p>The first two are the ones this site has been building towards: the state root in the block header, and each account's storage root inside its entry — <strong>a trie whose leaves contain the roots of other tries.</strong> Change one storage slot in one contract and that contract's storage root changes, so its account entry changes, so the state root changes. One number at the top, all the way down.</p>
+<hr />
+<h2 id="recap">Recap</h2>
 <ul>
-<li>What problem does it solve? (Committing to a huge mapping with a single 32-byte value, such that any change to any entry changes the fingerprint.)</li>
-<li>What's a <strong>Merkle tree</strong> first, and what does it let you prove?</li>
-<li>Why a <strong>trie</strong> as well? (The keys matter: you need to look things up by address, not just verify a list.)</li>
-<li>What does "Patricia" add? (Path compression — collapsing long stretches of shared prefix so the structure stays shallow.)</li>
-<li>What are the node types, and why are there several?</li>
-<li>What is a <strong>proof</strong>, and why does it matter that proofs are small? (It's how a light client verifies a balance without holding the state.)</li>
-<li>Where does Ethereum use this? (The state root, each account's storage root, the transactions root, the receipts root.)</li>
-<li>Why is <a href="../rlp/">RLP</a> a prerequisite? (Nodes are RLP-encoded before hashing, so canonical encoding is what makes the root well-defined.)</li>
+<li>The structure must do four things: <strong>commit to everything in 32 bytes, update cheaply, prove parts, and depend only on contents.</strong> The fourth rules out most alternatives, because it forbids any shape that depends on insertion order.</li>
+<li><strong>Merkle</strong>: hash the values, hash the hashes, up to one root. Changing any value changes the root, and one value can be proved with the sibling hashes along its path.</li>
+<li><strong>Trie</strong>: the key is the route, read a nibble at a time, sixteen directions per branch. Lookup needs no search, and the shape comes from the keys rather than from history.</li>
+<li><strong>Patricia</strong>: collapse single-child runs, so 64-nibble keys don't mean 64 levels.</li>
+<li>Three node types — <strong>leaf, extension, branch</strong> — and a branch has <strong>seventeen</strong> slots because a key can end where another divides.</li>
+<li>Nodes are hashed <strong>after RLP encoding</strong>, so the root is well-defined only because the encoding is canonical.</li>
+<li>A <strong>proof</strong> is the chain of nodes from root to leaf: a few kilobytes whatever the state's size, which is what makes light clients possible. <strong>Verification without possession</strong>, again.</li>
+<li>Keys are hashed in the state and storage tries and <strong>not</strong> in the transactions and receipts tries — because the first two have keys an adversary can choose and the last two do not. <strong>Hash the keys where an adversary picks them.</strong></li>
+<li>Storage roots sit inside account entries, so it is <strong>tries inside a trie</strong>, and one slot changing reaches the top.</li>
 </ul>
-<h2 id="notes-to-self">Notes to self</h2>
+<p><strong>Next:</strong> <a href="../../transactions/transactions/">Transactions</a> — what's actually in one, now that there's a way to write it down.</p>
+<hr />
+<h2 id="references">References</h2>
+<div class="sources">
 <ul>
-<li>The hardest page in the Encoding section. Build it up in the order above — Merkle, then trie, then compression — and resist starting from the finished structure.</li>
-<li>A diagram is essential. Possibly several, one per step.</li>
-<li>Be clear about <em>why</em> anyone should care: it's what lets a 500-byte block header commit to hundreds of gigabytes of state, and what makes light clients possible.</li>
-<li>Verkle trees are the reason this is Tier 2. Mention the plan, don't chase it.</li>
+<li><a id="ref-eip6800"></a><strong>Buterin, V., Feist, D., Wedderburn, K., Ballet, G., Merriam, P., Herold, G., Hagopian, I., Jasoria, T., Singh, G., &amp; Ferrin, D.</strong> (2023). <em>EIP-6800: Ethereum state using a unified verkle tree.</em> Ethereum Improvement Proposals. The proposed replacement, aimed at far smaller proofs; marked <em>Stagnant</em> at the time of writing, which is the reason this page describes it as a direction rather than a plan. <a href="https://eips.ethereum.org/EIPS/eip-6800">https://eips.ethereum.org/EIPS/eip-6800</a></li>
+<li><a id="ref-merkle-1988"></a><strong>Merkle, R. C.</strong> (1988). <em>A digital signature based on a conventional encryption function.</em> <em>Advances in Cryptology — CRYPTO '87</em>, 369–378. Springer. The origin of the hash tree: many values committed to by one, with membership provable from the hashes along a single path. <a href="https://doi.org/10.1007/3-540-48184-2_32">https://doi.org/10.1007/3-540-48184-2_32</a></li>
+<li><a id="ref-morrison-1968"></a><strong>Morrison, D. R.</strong> (1968). <em>PATRICIA — Practical Algorithm To Retrieve Information Coded In Alphanumeric.</em> <em>Journal of the ACM</em>, 15(4), 514–534. The path-compressed trie Ethereum's structure takes its middle name from, published twenty-six years before the web. <a href="https://doi.org/10.1145/321479.321481">https://doi.org/10.1145/321479.321481</a></li>
+<li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Appendix D specifies the trie, including the node types, the hex-prefix encoding and the rule that nodes under 32 bytes are inlined. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
 </ul>
-<p><strong>Next:</strong> <a href="../../transactions/transactions/">Transactions</a></p>
+</div>
 
 
 
