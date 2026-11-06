@@ -35,15 +35,23 @@ What follows is not a summary. **These five cases are RLP's entire definition** 
 
 Everything turns on **the first byte**, which says which of five cases applies and how long the thing is.
 
-| First byte | Reading it | Writing it |
+| First byte | **Decoding** — what that byte tells you | **Encoding** — how to produce it |
 | --- | --- | --- |
-| `0x00`–`0x7f` | the byte *is* the data | a byte under `0x80` is left alone |
-| `0x80`–`0xb7` | string of 0–55 bytes, length = byte − `0x80` | prefix = `0x80` **+** length |
-| `0xb8`–`0xbf` | longer string; byte − `0xb7` = how many bytes of *length* follow | prefix = `0xb7` **+** number of length bytes |
-| `0xc0`–`0xf7` | list, contents 0–55 bytes, length = byte − `0xc0` | prefix = `0xc0` **+** length of contents |
-| `0xf8`–`0xff` | longer list; byte − `0xf7` = bytes of length following | prefix = `0xf7` **+** number of length bytes |
+| `0x00`–`0x7f` | the byte *is* the data | a byte under `0x80` is left as it is |
+| `0x80`–`0xb7` | a string of 0–55 bytes; length = byte − `0x80` | prefix = `0x80` **+** length |
+| `0xb8`–`0xbf` | a longer string; byte − `0xb7` = how many bytes of *length* come next | prefix = `0xb7` **+** number of length bytes |
+| `0xc0`–`0xf7` | a list with 0–55 bytes of contents; length = byte − `0xc0` | prefix = `0xc0` **+** length of contents |
+| `0xf8`–`0xff` | a longer list; byte − `0xf7` = bytes of length coming next | prefix = `0xf7` **+** number of length bytes |
 
-**The two columns run in opposite directions, and mixing them up is the easiest mistake here.** Decoding subtracts; encoding adds. So `"dog"` is three bytes and its prefix is `0x80 + 3 = 0x83` — not `0x80 − 3`. The subtraction is what a decoder does when it meets `0x83` and wants the length back.
+### How to read it
+
+The same five rows serve both jobs, approached from opposite ends.
+
+**You have bytes and want the data.** Take the first byte, find the row whose range contains it, and read the middle column. Say the byte is `0x83`: it falls between `0x80` and `0xb7`, so it's a short string, and `0x83 − 0x80 = 3` means the next three bytes are the data. Done — `83 64 6f 67` is `"dog"`.
+
+**You have data and want bytes.** Measure what you're encoding, pick the row that fits, and read the right column. Three bytes of string: short-string row, so the prefix is `0x80 + 3 = 0x83`, followed by the three bytes.
+
+So **the subtraction and the addition are one fact read in two directions**, and that's the thing to keep hold of. `"dog"` encodes to `0x83` because 0x80 **+** 3; a decoder meeting `0x83` subtracts to get the 3 back. It is never `0x80 − 3`.
 
 Two values worth memorising, because they turn up everywhere: **`0x80` is the empty string** and **`0xc0` is the empty list.**
 
@@ -75,10 +83,26 @@ Same for lists: `0xc0` can mean an empty list, so its base is its range start; `
     at the top for the long form, leaving **56**. Fifty-six slots counted from
     zero reach 55.
 
-    **Why 8 for the long form?** Because a length never needs more than eight
-    bytes. Eight bytes count to about 1.8 × 10<sup>19</sup>, which is beyond
-    anything that will ever be encoded, so eight is both sufficient and the
-    most that could be useful.
+    **Why 8 for the long form?** Because eight values is all the space left,
+    and eight is more than enough. Eight bytes of length count to
+    2<sup>64</sup> − 1, about 1.8 × 10<sup>19</sup> — eighteen exabytes in a
+    single field.
+
+    **So what happens to something longer than that?** It cannot be encoded.
+    The first byte stops at `0xbf` for strings and `0xff` for lists, so there
+    is no way to say "nine bytes of length": the format has no case for it and
+    an encoder simply cannot express the value. The same hard ceiling applies
+    to both strings and lists.
+
+    This is a limit in the strict sense and irrelevant in practice. A single
+    field of eighteen exabytes is about a million times the whole of
+    Ethereum's state, and every field here is something a node must store and
+    a block must carry. **The ceiling exists; nothing will ever reach it.**
+
+    Worth keeping the two thresholds apart, since they're easy to conflate:
+    **55 bytes** is where a value switches from the short form to the long
+    one, and happens constantly. **Eight length bytes** is where the long form
+    itself runs out, and never happens.
 
     **And the whole design is one trade.** Short things — which is nearly
     everything — pay a single byte of overhead. Long things pay two to nine.
@@ -97,14 +121,18 @@ Same for lists: `0xc0` can mean an empty list, so its base is its range start; `
 prefix: short string, 3 bytes
 ```
 
-**`["cat", "dog"]`** → encode each, then wrap. `"cat"` is `83636174`, `"dog"` is `83646f67`, which is 8 bytes of contents, so the list prefix is `0xc0 + 8`:
+**`["cat", "dog"]`** → encode each item first, then wrap the results.
+
+`"cat"` is three characters, and encodes to **four** bytes: `83 63 61 74` — a one-byte prefix plus three of data. `"dog"` is the same shape, `83 64 6f 67`. So the contents of the list are 4 + 4 = **8 bytes**, and the list prefix is `0xc0 + 8 = 0xc8`:
 
 ```
 c8 83 63 61 74 83 64 6f 67
 ^^ ^^^^^^^^^^^ ^^^^^^^^^^^
-|     "cat"       "dog"
+|   4 bytes      4 bytes
 prefix: list, 8 bytes of contents
 ```
+
+**What the 8 counts is the thing most easily got wrong.** It is not the number of items, and not the number of characters. It is **the length of the already-encoded contents, prefixes included** — so each item's own `0x83` is part of what the list is measuring. A list of two three-letter words comes to eight bytes because each word costs four.
 
 **`1024`** → first becomes the bytes `0x04 0x00`, then encodes as a two-byte string: `82 04 00`.
 
