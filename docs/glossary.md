@@ -117,6 +117,9 @@ If you arrived from a search engine and a word on some page made no sense, this 
 
 ## N
 
+**Nibble**{ #nibble }
+: Four bits — half a byte, and exactly one [hexadecimal](foundations/hex-and-bytes.md) digit. The unit the [Merkle Patricia Trie](encoding/merkle-patricia-trie.md) reads keys in, which is why its branches have sixteen directions and a 32-byte key is 64 nibbles long.
+
 **NIST**{ #nist } (National Institute of Standards and Technology)
 : The United States government agency that publishes technical standards, cryptography among them, as documents called FIPS. It ran the competition that chose Keccak as SHA-3 — and then altered the padding before publication, which is why Ethereum's Keccak-256 and the SHA3-256 standard are different functions. → [Keccak-256](crypto/keccak256.md)
 

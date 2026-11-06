@@ -47,21 +47,68 @@ Two properties fall out, and they're the two that matter.
 
 **The root commits to every value.** Change any one of them and its hash changes, so its parent's hash changes, and so on to the top. There is no way to alter a value and leave the root alone — that would require a hash collision.
 
+<svg viewBox="0 0 470 288" role="img" aria-label="Five values A to E are each hashed. The first four are hashed in pairs, giving h(AB) and h(CD), which are then hashed together to give h(ABCD). The fifth hash has no partner at either level, so it is carried upward unchanged, and is finally hashed with h(ABCD) to give the root." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="30" y="26" width="72" height="34" rx="4"/><rect x="114" y="26" width="72" height="34" rx="4"/><rect x="198" y="26" width="72" height="34" rx="4"/><rect x="282" y="26" width="72" height="34" rx="4"/><rect x="366" y="26" width="72" height="34" rx="4"/><rect x="30" y="76" width="72" height="26" rx="4"/><rect x="114" y="76" width="72" height="26" rx="4"/><rect x="198" y="76" width="72" height="26" rx="4"/><rect x="282" y="76" width="72" height="26" rx="4"/><rect x="366" y="76" width="72" height="26" rx="4"/><path d="M66 60 L66 76"/><path d="M150 60 L150 76"/><path d="M234 60 L234 76"/><path d="M318 60 L318 76"/><path d="M402 60 L402 76"/><rect x="66" y="130" width="84" height="26" rx="4"/><rect x="234" y="130" width="84" height="26" rx="4"/><rect x="150" y="186" width="84" height="26" rx="4"/><rect x="255" y="242" width="84" height="30" rx="5"/><path d="M66 102 L108 126"/><path d="M150 102 L108 126"/><path d="M234 102 L276 126"/><path d="M318 102 L276 126"/><path d="M108 156 L192 182"/><path d="M276 156 L192 182"/><path d="M192 212 L297 238"/><path d="M402 102 L402 238 L339 238" stroke-dasharray="4 3"/></g><g fill="currentColor" stroke="none"><text x="66" y="47" font-size="12" text-anchor="middle" font-weight="700">A</text><text x="66" y="93" font-size="10" text-anchor="middle" font-family="monospace">h(A)</text><text x="150" y="47" font-size="12" text-anchor="middle" font-weight="700">B</text><text x="150" y="93" font-size="10" text-anchor="middle" font-family="monospace">h(B)</text><text x="234" y="47" font-size="12" text-anchor="middle" font-weight="700">C</text><text x="234" y="93" font-size="10" text-anchor="middle" font-family="monospace">h(C)</text><text x="318" y="47" font-size="12" text-anchor="middle" font-weight="700">D</text><text x="318" y="93" font-size="10" text-anchor="middle" font-family="monospace">h(D)</text><text x="402" y="47" font-size="12" text-anchor="middle" font-weight="700">E</text><text x="402" y="93" font-size="10" text-anchor="middle" font-family="monospace">h(E)</text><text x="108" y="147" font-size="10" text-anchor="middle" font-family="monospace">h(AB)</text><text x="276" y="147" font-size="10" text-anchor="middle" font-family="monospace">h(CD)</text><text x="192" y="203" font-size="10" text-anchor="middle" font-family="monospace">h(ABCD)</text><text x="297" y="262" font-size="11" text-anchor="middle" font-weight="700">ROOT</text><text x="408" y="150" font-size="9" opacity="0.8">no partner,</text><text x="408" y="162" font-size="9" opacity="0.8">so it rides</text><text x="408" y="174" font-size="9" opacity="0.8">up as it is</text><text x="14" y="16" font-size="10" opacity="0.8">five values &#8212; an odd number, so somebody has to decide what happens</text></g></svg>
+
 **And you can prove one value belongs without revealing the others.** To convince somebody who knows only the root that a particular value is in the tree, you hand them the value plus the **sibling hash at each level** on the way up. They redo the hashing and see whether they arrive at the root they already trust. For a million values that's about twenty hashes — not a million.
 
 That second property is the whole reason this structure exists rather than something simpler. **Verification without possession**, which is the same principle the [node](../nodes/what-a-node-is.md) page used to explain why pruning is safe.
 
+### What happens when the count is odd
+
+Five values, as above, and pairing leaves one hash with no partner — twice over. Something has to be decided, and the diagram shows one answer: **carry the lonely hash up unchanged** until it finds a partner.
+
+That is a choice, not a consequence. Other systems make different ones: Bitcoin duplicates the odd hash and pairs it with itself; some schemes pad the level out with a fixed dummy hash. All three work.
+
+What matters is that **the rule is fixed and the same everywhere.** If one implementation promoted and another duplicated, the same five values would give two different roots — and the fourth requirement above would be broken. The odd case is a small thing that has to be nailed down precisely *because* it is small and easy to leave to taste.
+
+??? abstract "Ethereum doesn't actually pair things up"
+
+    Worth saying before the picture sticks, because the binary tree above is a
+    teaching device rather than a description.
+
+    Pairwise hashing is the classic Merkle construction and the easiest way to
+    see why a root commits to everything. **Ethereum's execution layer doesn't
+    use it.** Its structure branches sixteen ways, not two, and a node hashes
+    its children's references rather than pairing siblings — so the odd-number
+    question never arises there at all. A branch node has however many
+    children it has, and empty slots are simply empty.
+
+    What carries over from Merkle is the *idea*: hash-linked nodes, a root that
+    commits to everything beneath it, and membership provable from the values
+    along one path. What doesn't carry over is the pairing.
+
+    (Ethereum's **consensus** layer is a different matter — it does use a
+    binary construction, padded out to a power of two. Which is one more way
+    the two halves of a node differ, on top of the encodings the [RLP](rlp.md)
+    page mentioned.)
+
 ## Second, the trie part
 
-A Merkle tree commits to a *list*. Ethereum needs a **mapping**: given an address, find its account.
+A Merkle tree commits to a *list*. Ethereum needs a **mapping**: given an address, find its account. So the second ingredient is a structure for looking things up.
 
-So the arrangement is also a **trie** — a tree where the key tells you the path. Reading the key one piece at a time, each piece selects which child to descend into. Ethereum reads keys a **nibble** at a time, four bits, so every branching point has sixteen possible directions, one per hex digit.
+Forget hashes for a moment and forget Ethereum. Suppose you want to store three words — `cat`, `car`, `do` — so that you can find any of them again.
 
-Two consequences:
+A **trie** stores them by **spelling them out**. Start at the root. Take the first letter of your key and follow the branch marked with that letter. Take the second letter, follow that branch. Carry on until the key runs out, and whatever you find there is the value.
 
-**Lookup needs no search.** You don't hunt for a key; you follow it. The key *is* the route.
+<svg viewBox="0 0 470 266" role="img" aria-label="A trie holding the keys cat, car and do. From the root, c leads to a, which divides into t and r, ending the keys cat and car. Separately d leads to o, which ends the key do. The c and d nodes each have a single child and carry no information beyond keep going." style="width:100%;max-width:27rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="150" y="14" width="80" height="28" rx="4"/><rect x="70" y="72" width="44" height="28" rx="4" stroke-dasharray="4 3"/><rect x="290" y="72" width="44" height="28" rx="4" stroke-dasharray="4 3"/><rect x="70" y="130" width="44" height="28" rx="4"/><rect x="268" y="130" width="92" height="40" rx="4"/><rect x="14" y="192" width="92" height="40" rx="4"/><rect x="118" y="192" width="92" height="40" rx="4"/><path d="M172 42 L92 68"/><path d="M208 42 L312 68"/><path d="M92 100 L92 126"/><path d="M312 100 L312 126"/><path d="M80 158 L60 188"/><path d="M104 158 L164 188"/></g><g fill="currentColor" stroke="none"><text x="190" y="33" font-size="11" text-anchor="middle" font-weight="700">root</text><text x="92" y="92" font-size="13" text-anchor="middle" font-family="monospace">c</text><text x="312" y="92" font-size="13" text-anchor="middle" font-family="monospace">d</text><text x="92" y="150" font-size="13" text-anchor="middle" font-family="monospace">a</text><text x="314" y="148" font-size="13" text-anchor="middle" font-family="monospace">o</text><text x="314" y="163" font-size="9" text-anchor="middle" opacity="0.8">ends "do"</text><text x="60" y="210" font-size="13" text-anchor="middle" font-family="monospace">t</text><text x="60" y="225" font-size="9" text-anchor="middle" opacity="0.8">ends "cat"</text><text x="164" y="210" font-size="13" text-anchor="middle" font-family="monospace">r</text><text x="164" y="225" font-size="9" text-anchor="middle" opacity="0.8">ends "car"</text><text x="366" y="88" font-size="9" opacity="0.8">one child,</text><text x="366" y="100" font-size="9" opacity="0.8">says nothing</text><text x="14" y="252" font-size="10" opacity="0.85">Keys: cat, car, do. Nothing is searched for &#8212; you spell the key out and arrive.</text><text x="14" y="264" font-size="9" opacity="0.7">The dashed nodes are the wasteful ones: one child each, carrying no information.</text></g></svg>
 
-**And the shape depends only on the keys.** This is requirement (4), met for free. A trie containing the same keys has the same shape whatever order they were inserted in, because position is dictated by the key rather than by history. That is why two independent nodes compute the same root — not by coordinating, but because there was only ever one possible answer.
+Two things to notice, and they're the reasons Ethereum wants this.
+
+**Nothing is ever searched for.** You don't look through the structure comparing keys — you *spell* your key and the spelling walks you there. `car` means: root, then `c`, then `a`, then `r`. Three steps, no comparisons, and it would still be three steps with a billion other words in the tree.
+
+**And the shape comes from the keys alone.** Insert the same three words in any order and you get the identical tree, because where a word sits is decided by its letters and nothing else. There is no rebalancing, no first-come advantage, no history.
+
+That second point is **requirement (4), met for free** — and it is why two nodes that have never communicated compute the same root. Not by agreeing on anything: there was only ever one possible shape for those keys.
+
+### What Ethereum does instead of letters
+
+Same idea, two substitutions.
+
+The keys aren't words, they're **32-byte hashes** — `keccak256` of an address, as the [accounts](../accounts/accounts.md) page described.
+
+And the "letters" aren't letters. Ethereum reads a key **four bits at a time**, a unit called a **[nibble](../glossary.md#nibble "Four bits — half a byte, and exactly one hex digit")** — half a byte, which is exactly one hex digit. So instead of 26 possible branches at each step there are **sixteen**, one per hex digit, and a 32-byte key is **64 nibbles** long: a 64-letter word in a sixteen-letter alphabet.
+
+Which is why the structure is drawn with hex digits on its branches. `a7f3…` is just a word spelled `a`, `7`, `f`, `3`, and finding its account means spelling it out.
 
 ## Third, the Patricia part
 
