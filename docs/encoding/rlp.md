@@ -29,21 +29,62 @@ So `nonce: 3` isn't something RLP can express. What gets encoded is the byte `0x
 
 That sounds like an omission and is a deliberate narrowing. A format that describes types has to have opinions about them — how big an integer may be, how text is encoded, what a missing field means — and every opinion is something two implementations could implement differently. RLP has almost nothing to disagree about.
 
-## The four rules
+## The entire specification
 
-That's the whole specification [(Wood, 2014)](#ref-wood-2014), and it fits in a table.
+What follows is not a summary. **These five cases are RLP's entire definition** — the normative content of Appendix B of the Yellow Paper [(Wood, 2014)](#ref-wood-2014), plus the canonicality rules further down. There is nothing else to the format.
 
-| First byte | Means |
-| --- | --- |
-| `0x00`–`0x7f` | this byte is the data, encoding itself |
-| `0x80`–`0xb7` | a string of **0 to 55 bytes**; length is the byte minus `0x80` |
-| `0xb8`–`0xbf` | a **longer string**; the byte minus `0xb7` says how many bytes of *length* follow |
-| `0xc0`–`0xf7` | a **list** whose contents are 0 to 55 bytes; length is the byte minus `0xc0` |
-| `0xf8`–`0xff` | a **longer list**; same length-of-the-length trick |
+Everything turns on **the first byte**, which says which of five cases applies and how long the thing is.
 
-Two values worth memorising, because they turn up constantly: **`0x80` is the empty string** and **`0xc0` is the empty list.**
+| First byte | Reading it | Writing it |
+| --- | --- | --- |
+| `0x00`–`0x7f` | the byte *is* the data | a byte under `0x80` is left alone |
+| `0x80`–`0xb7` | string of 0–55 bytes, length = byte − `0x80` | prefix = `0x80` **+** length |
+| `0xb8`–`0xbf` | longer string; byte − `0xb7` = how many bytes of *length* follow | prefix = `0xb7` **+** number of length bytes |
+| `0xc0`–`0xf7` | list, contents 0–55 bytes, length = byte − `0xc0` | prefix = `0xc0` **+** length of contents |
+| `0xf8`–`0xff` | longer list; byte − `0xf7` = bytes of length following | prefix = `0xf7` **+** number of length bytes |
 
-The fourth and fifth rows are the only clever part. A length under 56 fits in the prefix byte itself. Beyond that there isn't room, so the prefix instead says *how many bytes the length takes*, and the length follows. Hence the name: a prefix that describes a length, applied recursively to whatever is inside.
+**The two columns run in opposite directions, and mixing them up is the easiest mistake here.** Decoding subtracts; encoding adds. So `"dog"` is three bytes and its prefix is `0x80 + 3 = 0x83` — not `0x80 − 3`. The subtraction is what a decoder does when it meets `0x83` and wants the length back.
+
+Two values worth memorising, because they turn up everywhere: **`0x80` is the empty string** and **`0xc0` is the empty list.**
+
+### One thing that looks like a mistake and isn't
+
+The long-string row subtracts **`0xb7`** while its range begins at **`0xb8`**. The bases and the range starts don't line up, and that's deliberate.
+
+A short string may be *empty*, so `0x80` has to mean "length 0" — the base and the range start coincide. A long string, by contrast, always carries **at least one** byte of length; there is no such thing as zero length bytes. So the smallest value that case ever expresses is 1, and `0xb7 + 1 = 0xb8`. The base sits one below the range because the count starts at one rather than zero.
+
+Same for lists: `0xc0` can mean an empty list, so its base is its range start; `0xf7` is one below `0xf8` for the same reason as `0xb7`.
+
+??? abstract "The arithmetic behind the table"
+
+    The whole format is squeezed into one byte's worth of possibilities, and
+    the five cases divide those 256 values exactly:
+
+    | Range | Values | Spent on |
+    | --- | --- | --- |
+    | `0x00`–`0x7f` | 128 | bytes that encode themselves |
+    | `0x80`–`0xb7` | 56 | string lengths 0 to 55 |
+    | `0xb8`–`0xbf` | 8 | long strings: 1 to 8 bytes of length |
+    | `0xc0`–`0xf7` | 56 | list lengths 0 to 55 |
+    | `0xf8`–`0xff` | 8 | long lists: 1 to 8 bytes of length |
+    | | **256** | nothing spare, nothing overlapping |
+
+    **Why 55, and not a rounder number?** It isn't chosen — it falls out.
+    Half the byte values go to self-encoding bytes, leaving 128. Those split
+    into two halves of 64 for strings and lists, and each half keeps 8 values
+    at the top for the long form, leaving **56**. Fifty-six slots counted from
+    zero reach 55.
+
+    **Why 8 for the long form?** Because a length never needs more than eight
+    bytes. Eight bytes count to about 1.8 × 10<sup>19</sup>, which is beyond
+    anything that will ever be encoded, so eight is both sufficient and the
+    most that could be useful.
+
+    **And the whole design is one trade.** Short things — which is nearly
+    everything — pay a single byte of overhead. Long things pay two to nine.
+    A format that used a fixed four-byte length would be simpler to describe
+    and would waste three bytes on every small field, in a system that stores
+    and hashes billions of them.
 
 ## Worked, byte by byte
 
@@ -129,6 +170,8 @@ Every canonicality rule has this shape. **A rule exists wherever a value could o
 A thing people assume and shouldn't: **the bytes don't say what they mean.**
 
 Decode a transaction and you get a list of byte strings. Nothing in it says which is the nonce, which is the recipient, or that the twenty-byte one is an address at all. A decoder returns structure; interpretation comes from the reader knowing what shape to expect.
+
+Which is not in tension with what the first section said about position. **RLP preserves order faithfully, and order is exactly what a convention can attach meaning to** — the second item really is the nonce, every time, reliably. What the bytes never carry is the convention itself. Position is where the meaning is *kept*; it is not where the meaning is *written down*.
 
 Which is why the tool above can tell you that something is a three-item list of strings and not what any of it is *for*. Meaning lives in the specification and in the code, never in the encoding — the same division as the [ABI](../contracts/smart-contracts.md), where the protocol sees bytes and the convention supplies the names.
 

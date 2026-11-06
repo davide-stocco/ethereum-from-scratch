@@ -68,7 +68,7 @@
       }
       return { kind: "string", start: pos, headerEnd: pos + 1, end: end,
                payload: buf.subarray(pos + 1, end),
-               note: "short string: 0x" + p.toString(16) + " − 0x80 = " + n + " byte" + (n === 1 ? "" : "s") };
+               note: "0x" + p.toString(16) + " = 0x80 + " + n + ", so " + n + " byte" + (n === 1 ? "" : "s") + " of string" };
     }
 
     // 0xb8-0xbf: long string, next (p - 0xb7) bytes give the length
@@ -83,8 +83,8 @@
       if (e > buf.length) throw new Error("string at offset " + pos + " claims " + len + " bytes, and there aren't that many left");
       return { kind: "string", start: pos, headerEnd: pos + 1 + lenLen, end: e,
                payload: buf.subarray(pos + 1 + lenLen, e),
-               note: "long string: 0x" + p.toString(16) + " − 0xb7 = " + lenLen +
-                     " byte" + (lenLen === 1 ? "" : "s") + " of length, giving " + len };
+               note: "0x" + p.toString(16) + " = 0xb7 + " + lenLen + ", so " + lenLen +
+                     " length byte" + (lenLen === 1 ? "" : "s") + " — giving a string of " + len };
     }
 
     // 0xc0-0xf7: short list, payload length = p - 0xc0
@@ -94,7 +94,7 @@
       if (stop > buf.length) throw new Error("list at offset " + pos + " claims " + pl + " bytes, and there aren't that many left");
       return { kind: "list", start: pos, headerEnd: pos + 1, end: stop,
                items: decodeRange(buf, pos + 1, stop),
-               note: "short list: 0x" + p.toString(16) + " − 0xc0 = " + pl + " byte" + (pl === 1 ? "" : "s") + " of contents" };
+               note: "0x" + p.toString(16) + " = 0xc0 + " + pl + ", so " + pl + " byte" + (pl === 1 ? "" : "s") + " of contents" };
     }
 
     // 0xf8-0xff: long list
@@ -108,8 +108,8 @@
     if (stop2 > buf.length) throw new Error("list at offset " + pos + " claims " + plen + " bytes, and there aren't that many left");
     return { kind: "list", start: pos, headerEnd: pos + 1 + ll, end: stop2,
              items: decodeRange(buf, pos + 1 + ll, stop2),
-             note: "long list: 0x" + p.toString(16) + " − 0xf7 = " + ll +
-                   " byte" + (ll === 1 ? "" : "s") + " of length, giving " + plen };
+             note: "0x" + p.toString(16) + " = 0xf7 + " + ll + ", so " + ll +
+                   " length byte" + (ll === 1 ? "" : "s") + " — giving contents of " + plen };
   }
 
   function decodeRange(buf, from, to) {
@@ -207,11 +207,18 @@
         var c = node.payload[k];
         printable += (c >= 0x20 && c < 0x7f) ? String.fromCharCode(c) : ".";
       }
-      var shown = node.payload.length === 0 ? "<em>empty</em>" : hex;
+      // Long payloads have to be clipped: the tree is rendered pre-formatted so
+      // the offsets line up, which means a 500-byte field would scroll off
+      // rather than wrap. Show enough to recognise it and say what was cut.
+      var shown;
+      if (node.payload.length === 0) shown = "<em>empty</em>";
+      else if (hex.length > 40) shown = hex.slice(0, 40) + "<span class=\"tool__faint\">… " +
+             node.payload.length + " bytes</span>";
+      else shown = hex;
       lines.push(label + "string " +
         (head ? "<span class=\"tool__hi\">" + head + "</span> " : "") +
         shown +
-        (node.payload.length && /^[ -~]+$/.test(printable) ? " <span class=\"tool__faint\">&quot;" + printable + "&quot;</span>" : "") +
+        (node.payload.length && node.payload.length <= 20 && /^[ -~]+$/.test(printable) ? " <span class=\"tool__faint\">&quot;" + printable + "&quot;</span>" : "") +
         "  <span class=\"tool__faint\">" + node.note + "</span>");
     }
     return lines;
