@@ -1,114 +1,231 @@
 # What is INSIDE each page: the granular concepts it contains, and how they
-# depend on each other within that page. This is the second level of the
-# concept map — the map itself shows pages, and clicking one zooms in here.
+# depend on each other — within the page and across pages.
+#
+# This is the second level of the concept map. The map shows pages; clicking
+# one zooms in here.
 #
 # Hand-authored, unlike concepts.yml. There is no honest way to generate it:
 # the bold terms on a page are not its concepts, and the order they appear in
 # is not the order they depend on each other.
 #
-#   id     short, stable, used only to join the edges up
-#   label  what the box says; keep it under about 22 characters
+#   id     short, stable, local to its page; joins the edges up
+#   label  what the box says; keep it under about 21 characters
 #   note   one line, shown on hover
-#   needs  ids on this same page that must come first
-#   page   optional: the page where this concept gets a full treatment
+#   link   REQUIRED. Where the box goes. 'page.md' or 'page.md#anchor'.
+#   needs  what must come first — either a local id, or 'page.md:id' for a
+#          concept inside another page's zoom
 #
-# One page is authored so far, as a prototype. The rest follow if the shape
-# turns out to be worth it.
+# THE RULE: every box is a link. If a concept has nowhere to send a reader,
+# it does not go in. That is what keeps this from drifting into a private
+# vocabulary nobody else can follow — and tools/insidecheck.py enforces it,
+# including that every #anchor is a heading that really exists.
+#
+# A cross-page prerequisite must point BACKWARDS in reading order, the same
+# rule the map obeys one level up, and it is drawn as a dashed box above the
+# rest: something this page leans on but does not explain.
 
 pages:
 
-  accounts/accounts.md:
+  crypto/addresses.md:
     inside:
-      - id: state
-        label: The state
-        note: The complete record of every account, held by every node.
-        page: accounts/state.md
+      - id: derivation
+        label: The derivation
+        note: Public key, hashed with Keccak-256, last 20 bytes kept.
+        link: crypto/addresses.md#the-derivation
         needs: []
 
+      - id: one-key-one-address
+        label: One key, one address
+        note: The derivation is a function, so a key has exactly one address — not a choice.
+        link: crypto/addresses.md#one-private-key-gives-exactly-one-address
+        needs: [derivation]
+
+      - id: why-20-bytes
+        label: Why only 20 bytes
+        note: Half the hash is thrown away, and 160 bits is still far beyond reach.
+        link: crypto/addresses.md#why-keep-only-20-bytes
+        needs: [derivation]
+
+      - id: already-exists
+        label: They all exist already
+        note: Every 20-byte string is an address. None of them is created; most have no key anyone holds.
+        link: crypto/addresses.md#every-address-already-exists
+        needs: [why-20-bytes]
+
+      - id: checksum
+        label: Capitals are a check
+        note: The mix of upper and lower case encodes a checksum over the address itself.
+        link: crypto/addresses.md#the-capitalisation-is-a-checksum
+        needs: [derivation]
+
+      - id: what-it-catches
+        label: What it catches
+        note: Typos, yes. An address someone else chose to send you, no.
+        link: crypto/addresses.md#what-it-catches-and-what-it-doesnt
+        needs: [checksum]
+
+      - id: contract-addresses
+        label: Contract addresses
+        note: Not derived from a key at all — computed from the creator and a counter.
+        link: crypto/addresses.md#contract-addresses
+        needs: [derivation, one-key-one-address]
+
+  accounts/accounts.md:
+    inside:
       - id: entry
-        label: An entry in it
-        note: An account is one entry in that record — not an object, not a file.
-        needs: [state]
+        label: An entry in the state
+        note: An account is one entry in a global record — not an object, not a file.
+        link: accounts/accounts.md#what-an-account-actually-looks-like
+        needs: []
 
-      - id: address
-        label: Address
-        note: The 20 bytes that find the entry. The address is not the account.
-        page: crypto/addresses.md
-        needs: [entry]
-
-      - id: four-fields
-        label: The four fields
-        note: Every account, of either kind, holds exactly these four.
-        needs: [entry]
-
-      - id: nonce
-        label: nonce
-        note: A sequential counter of transactions sent. Public and predictable on purpose.
-        page: accounts/nonce.md
-        needs: [four-fields]
-
-      - id: balance
-        label: balance
-        note: Ether held by the account, counted in wei.
-        page: foundations/ether.md
-        needs: [four-fields]
-
-      - id: storage-root
-        label: storageRoot
-        note: A fingerprint of everything the account has stored.
-        page: encoding/merkle-patricia-trie.md
-        needs: [four-fields]
-
-      - id: code-hash
-        label: codeHash
-        note: A fingerprint of the account's code. The field that decides the kind.
-        page: contracts/what-the-code-is.md
-        needs: [four-fields]
-
-      - id: eoa
-        label: EOA
-        note: Controlled by a key that lives off the chain. On-chain exactly as much as any account.
+      - id: where-things-live
+        label: Where each thing lives
+        note: The key is off the chain; everything else, including an EOA, is on it.
+        link: accounts/accounts.md#where-each-thing-lives
         needs: [entry]
 
       - id: contract-account
         label: Contract account
         note: Controlled by code that lives on the chain, where anyone can read it.
-        page: contracts/smart-contracts.md
+        link: contracts/smart-contracts.md
+        needs: [where-things-live]
+
+      - id: four-fields
+        label: The four fields
+        note: Every account, of either kind, holds exactly these four and nothing else.
+        link: accounts/accounts.md#the-four-fields
         needs: [entry]
+
+      - id: nonce
+        label: nonce
+        note: A sequential counter of transactions sent. Public and predictable on purpose.
+        link: accounts/nonce.md
+        needs: [four-fields]
+
+      - id: balance
+        label: balance
+        note: Ether held by the account, counted in wei.
+        link: foundations/ether.md
+        needs: [four-fields]
+
+      - id: fingerprints
+        label: The two fingerprints
+        note: storageRoot and codeHash are hashes of things kept elsewhere, not the things.
+        link: accounts/accounts.md#the-two-fingerprints
+        needs: [four-fields]
+
+      - id: storage-root
+        label: storageRoot
+        note: A fingerprint of everything this account has stored.
+        link: encoding/merkle-patricia-trie.md
+        needs: [fingerprints]
+
+      - id: code-hash
+        label: codeHash
+        note: A fingerprint of the account's code. The field that decides the kind.
+        link: contracts/what-the-code-is.md
+        needs: [fingerprints]
+
+      - id: code-and-storage
+        label: Code and storage
+        note: One account can hold both, because the two fields are independent.
+        link: accounts/accounts.md#so-one-account-can-hold-code-and-storage
+        needs: [storage-root, code-hash]
+
+      - id: holds-ether
+        label: Contracts hold ether
+        note: balance is the same field for both kinds. Code can own money.
+        link: accounts/accounts.md#and-yes-a-contract-can-hold-ether
+        needs: [balance, contract-account]
 
       - id: which-kind
         label: Which kind is it?
         note: One field answers it — an empty codeHash means no code, so no contract.
-        needs: [code-hash, eoa, contract-account]
+        link: accounts/accounts.md#which-kind-is-it-look-at-one-field
+        needs: [code-hash, contract-account]
 
-      - id: holds-ether
-        label: Contracts hold ether
-        note: The balance field is the same field for both kinds. Code can own money.
-        needs: [balance, contract-account]
+      - id: address-finds
+        label: Finding the entry
+        note: The address is the key into the state. The address is not the account.
+        link: accounts/accounts.md#how-an-address-finds-an-account
+        needs: [entry, "crypto/addresses.md:derivation"]
 
-      - id: not-a-wallet
-        label: Not your wallet
-        note: The wallet is software holding keys. Losing it does not touch the account.
-        page: wallets/seed-phrases.md
-        needs: [eoa, address]
-
-      - id: only-eoa-acts
-        label: Only an EOA starts
-        note: Nothing happens by itself. Every chain of execution begins with a signature.
-        needs: [eoa, contract-account]
+      - id: hashed-key
+        label: keccak256(address)
+        note: The lookup key is the hash of the address, so nobody picks where they land.
+        link: accounts/accounts.md#why-hash-the-address-first
+        needs: [address-finds]
 
       - id: nothing-creates
         label: Nothing creates one
         note: An entry appears the moment something is put at an address. No act of creation.
-        needs: [entry, balance]
+        link: accounts/accounts.md#nothing-creates-an-account
+        needs: [balance, "crypto/addresses.md:already-exists"]
 
-      - id: hashed-key
-        label: keccak256(address)
-        note: The lookup key is the hash of the address, not the address itself.
-        page: crypto/keccak256.md
-        needs: [address]
+      - id: only-eoa-acts
+        label: Only an EOA starts
+        note: Nothing happens by itself. Every chain of execution begins with a signature.
+        link: accounts/accounts.md#only-an-eoa-can-start-anything
+        needs: [where-things-live, contract-account]
 
-      - id: cannot-choose
-        label: You cannot choose
-        note: Hashing the key is what stops anyone picking where in the structure they land.
-        needs: [hashed-key, nothing-creates]
+      - id: needs-a-nonce
+        label: Why it needs a nonce
+        note: Balances make a signed transaction reusable, which is the hole the counter fills.
+        link: accounts/accounts.md#why-this-design-needs-a-nonce
+        needs: [nonce, only-eoa-acts]
+
+  accounts/nonce.md:
+    inside:
+      - id: concretely
+        label: The counter itself
+        note: Starts at zero, rises by one per transaction sent. Nothing more.
+        link: accounts/nonce.md#the-account-nonce-concretely
+        needs: ["accounts/accounts.md:four-fields"]
+
+      - id: problem
+        label: The problem it solves
+        note: Without it a signature stays valid, so a payment could be replayed forever.
+        link: accounts/nonce.md#the-problem-it-solves
+        needs: [concretely, "accounts/accounts.md:needs-a-nonce"]
+
+      - id: bitcoin
+        label: Why Bitcoin differs
+        note: Spending a coin consumes it, so there is nothing left to replay.
+        link: accounts/nonce.md#why-bitcoin-needs-no-such-thing
+        needs: [problem]
+
+      - id: in-order
+        label: Strictly in order
+        note: No gaps. Nonce 5 waits until 4 is included, however much it pays.
+        link: accounts/nonce.md#strictly-in-order-no-gaps
+        needs: [problem]
+
+      - id: stuck
+        label: Why they get stuck
+        note: One cheap transaction low in the queue holds up every later one.
+        link: accounts/nonce.md#why-transactions-get-stuck
+        needs: [in-order]
+
+      - id: unsticking
+        label: Unsticking one
+        note: Replace it at the same nonce — you cannot cancel, only overwrite.
+        link: accounts/nonce.md#unsticking-one
+        needs: [stuck]
+
+      - id: contract-nonce
+        label: Contracts have one
+        note: For a contract the counter records deployments, not transactions sent.
+        link: accounts/nonce.md#contract-accounts-have-a-nonce-too
+        needs: [concretely, "crypto/addresses.md:contract-addresses"]
+
+      - id: not-random
+        label: What it is not
+        note: Not secret, not random, not a fee, not a position in a block.
+        link: accounts/nonce.md#what-the-nonce-is-not
+        needs: [concretely]
+
+      - id: other-nonces
+        label: The other nonces
+        note: Five unrelated mechanisms share the word. Only this one counts transactions.
+        link: accounts/nonce.md#other-things-called-a-nonce
+        needs: [not-random]

@@ -66,6 +66,11 @@ jobs:
 
       # The map is generated from concepts.yml, so it cannot be allowed to
       # drift from it: this fails if the committed page is stale.
+      # Every concept in a zoom must be clickable, and every #anchor must be
+      # a heading that really exists.
+      - name: Check the concepts inside the pages
+        run: python3 tools/insidecheck.py
+
       - name: Check the concept map matches the graph
         run: python3 tools/conceptmap.py
 

@@ -568,6 +568,22 @@
 
 .cm-zoomsvg { max-width: 44rem; min-width: 28rem; }
 
+/* A concept borrowed from an earlier page's zoom: drawn dashed, because it
+   is a prerequisite this page uses and does not explain. Clicking it opens
+   the zoom it came from. */
+.cm-outside .cm-box {
+  stroke-dasharray: 4 3;
+  opacity: 0.4;
+}
+
+.cm-outside .cm-label { opacity: 0.75; font-style: italic; }
+
+.cm-outside:hover .cm-box,
+.cm-outside:focus-within .cm-box { opacity: 1; }
+
+/* The line from a borrowed concept, dashed to match it. */
+.cm-crossing { stroke-dasharray: 4 3; }
+
 @media (max-width: 30rem) {
   /* Hover does not exist on a touch screen. Nothing to fall back to here —
      the pictures still read, and tapping a box still follows its link. */

@@ -80,6 +80,14 @@ def slug(path):
     return path[:-3].replace("/", "-")
 
 
+def href(link):
+    """A zoom's link: '#zoom-...', or 'page.md', or 'page.md#anchor'."""
+    if link.startswith("#"):
+        return link
+    target, hashmark, frag = link.partition("#")
+    return url(target) + hashmark + frag
+
+
 def esc(s):
     return (str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
                   .replace('"', "&quot;").replace("'", "&#39;"))
@@ -186,7 +194,7 @@ def the_map(data, bands, edges, insides):
     for p, (x, yy, _c, _r) in pos.items():
         title = data[p]["title"]
         zoom = p in insides
-        href = f"#zoom-{slug(p)}" if zoom else url(p)
+        target = f"#zoom-{slug(p)}" if zoom else url(p)
         note = ("open the concepts inside it" if zoom
                 else f'{len(data[p].get("needs") or [])} prerequisite(s)')
         # Each box carries hidden COPIES of its own lines. CSS cannot select
@@ -194,7 +202,7 @@ def the_map(data, bands, edges, insides):
         halo = "".join(f'<path class="cm-halo" d="{d}"/>' for d in incident[p])
         out.append(
             f'<g class="cm-node{" cm-has-zoom" if zoom else ""}">'
-            f'<title>{esc(title)} — {note}</title>{halo}<a href="{href}">'
+            f'<title>{esc(title)} — {note}</title>{halo}<a href="{target}">'
             f'<rect class="cm-box" x="{x:g}" y="{yy:g}" width="{NODE_W}" '
             f'height="{NODE_H}" rx="5"/>'
             f'{label(x, yy, NODE_W, NODE_H, wrap(title, 23), 11.5)}</a></g>')
@@ -205,32 +213,42 @@ def the_map(data, bands, edges, insides):
 # --------------------------------------------------------------------------
 # a zoom
 
-def layers(nodes):
-    """Longest path from a root, so a box always sits below everything it needs."""
-    need = {n["id"]: [i for i in (n.get("needs") or [])] for n in nodes}
-    depth, seen = {}, set()
+def zoom(path, data, insides):
+    """The concepts inside one page, laid out by how deep they sit.
 
-    def walk(i):
-        if i in depth:
-            return depth[i]
-        if i in seen:                      # a cycle would be an authoring bug
-            raise ValueError(f"inside.yml: '{i}' depends on itself")
-        seen.add(i)
-        depth[i] = 1 + max((walk(j) for j in need[i]), default=-1)
-        return depth[i]
+    Prerequisites borrowed from an earlier page's zoom are drawn too, in a
+    row above everything, dashed: things this page leans on but does not
+    explain. Clicking one opens that page's zoom.
+    """
+    nodes = list(insides[path]["inside"])
+    local = {n["id"] for n in nodes}
 
-    return {n["id"]: walk(n["id"]) for n in nodes}
-
-
-def zoom(path, data, entry):
-    """The concepts inside one page, laid out by how deep they sit."""
-    nodes = entry["inside"]
-    by_id = {n["id"]: n for n in nodes}
+    # Pull in the foreign prerequisites as extra, dashed boxes.
+    outside = []
     for n in nodes:
         for d in n.get("needs") or []:
-            if d not in by_id:
-                raise ValueError(f"inside.yml ({path}): '{n['id']}' needs unknown '{d}'")
-    depth = layers(nodes)
+            if ":" in d and d not in {o["id"] for o in outside}:
+                fp, fid = d.split(":", 1)
+                src = next(m for m in insides[fp]["inside"] if m["id"] == fid)
+                outside.append({
+                    "id": d, "label": src["label"], "foreign": True,
+                    "note": f'From {data[fp]["title"]} — {src["note"]}',
+                    "link": f"#zoom-{slug(fp)}", "needs": [],
+                })
+    nodes = outside + nodes
+
+    # Depth is the longest path from a root, so a box always sits below
+    # everything it needs. The borrowed ones are the roots by construction.
+    need = {n["id"]: list(n.get("needs") or []) for n in nodes}
+    depth = {}
+
+    def walk(i):
+        if i not in depth:
+            depth[i] = 1 + max((walk(j) for j in need[i]), default=-1)
+        return depth[i]
+
+    for n in nodes:
+        walk(n["id"])
 
     inner = ZPER_ROW * ZW + (ZPER_ROW - 1) * ZGX
     pos, y = {}, MARGIN
@@ -253,27 +271,28 @@ def zoom(path, data, entry):
             dy = (y2 - y1) / 2
             d = (f"M{x1:g},{y1:g} C{x1:g},{y1 + dy:g} "
                  f"{x2:g},{y2 - dy:g} {x2:g},{y2:g}")
-            paths.append(f'<path class="cm-edge" d="{d}"/>')
+            cls = "cm-edge cm-crossing" if ":" in dep else "cm-edge"
+            paths.append(f'<path class="{cls}" d="{d}"/>')
             incident[dep].append(d)
             incident[n["id"]].append(d)
 
     out = [f'<svg class="cm-svg cm-zoomsvg" viewBox="0 0 {w:g} {h:g}" role="group" '
-           f'aria-label="The {len(nodes)} concepts inside {esc(data[path]["title"])}, '
-           f'with a line from each to the ones it needs first.">']
+           f'aria-label="The {len(local)} concepts inside '
+           f'{esc(data[path]["title"])}, with a line from each to the ones it '
+           f'needs first, and {len(outside)} borrowed from earlier pages.">']
     out += paths
     for n in nodes:
         x, yy = pos[n["id"]]
         halo = "".join(f'<path class="cm-halo" d="{d}"/>' for d in incident[n["id"]])
-        body = (f'<rect class="cm-box" x="{x:g}" y="{yy:g}" width="{ZW}" '
-                f'height="{ZH}" rx="5"/>'
-                f'{label(x, yy, ZW, ZH, wrap(n["label"], 21), 11)}')
-        if n.get("page"):
-            body = f'<a href="{url(n["page"])}">{body}</a>'
-        out.append(f'<g class="cm-node"><title>{esc(n["note"])}'
-                   f'{"  →  " + esc(data[n["page"]]["title"]) if n.get("page") else ""}'
-                   f'</title>{halo}{body}</g>')
+        cls = "cm-node cm-outside" if n.get("foreign") else "cm-node"
+        out.append(
+            f'<g class="{cls}"><title>{esc(n["note"])}</title>{halo}'
+            f'<a href="{href(n["link"])}">'
+            f'<rect class="cm-box" x="{x:g}" y="{yy:g}" width="{ZW}" '
+            f'height="{ZH}" rx="5"/>'
+            f'{label(x, yy, ZW, ZH, wrap(n["label"], 21), 11)}</a></g>')
     out.append("</svg>")
-    return "".join(out), len(nodes), len(paths)
+    return "".join(out), len(local), len(paths), len(outside)
 
 
 # --------------------------------------------------------------------------
@@ -286,12 +305,13 @@ def build():
     for p in pages:
         if p not in insides:
             continue
-        svg, n, e = zoom(p, data, insides[p])
+        svg, n, e, borrowed = zoom(p, data, insides)
         zooms.append(
             f'<section class="cm-zoom" id="zoom-{slug(p)}">'
             f'<p class="cm-zoomhead"><strong>Inside {esc(data[p]["title"])}</strong> — '
-            f'{n} concepts, {e} lines. A box with a link opens the page that '
-            f'explains it properly. <a href="{url(p)}">Open the page</a> · '
+            f'{n} concepts, {e} lines'
+            f'{f", and {borrowed} dashed boxes borrowed from earlier pages" if borrowed else ""}. '
+            f'Every box is a link. <a href="{url(p)}">Open the page</a> · '
             f'<a href="#the-map">Back to the map</a></p>{svg}</section>')
 
     body = f"""---
