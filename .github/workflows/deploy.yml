@@ -59,6 +59,11 @@ jobs:
       - name: Check the glossary is in order
         run: python3 tools/glosscheck.py
 
+      # The site's first rule, mechanised: nothing is explained before its
+      # prerequisites. Until now that was enforced by reading.
+      - name: Check the concept graph and the reading order
+        run: python3 tools/conceptcheck.py
+
       - name: Check diagram text for overlaps
         run: python3 tools/svgcheck.py
 
