@@ -1302,6 +1302,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#where-the-bytecode-is-kept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the bytecode is kept
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the bytecode is kept">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-a-node-knows-it-has-the-right-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How a node knows it has the right code
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#where-the-source-went" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2337,6 +2365,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#where-the-bytecode-is-kept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the bytecode is kept
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where the bytecode is kept">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-a-node-knows-it-has-the-right-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How a node knows it has the right code
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#where-the-source-went" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2452,18 +2508,47 @@ in between them.</p>
 in <strong>source code</strong>, which is a separate file kept by people somewhere else
 and has never been on the chain at all.</p>
 </div>
+<p>When somebody writes a contract, they write it in a programming language — text with names, comments and structure, meant for people to read. The most widely used one is <strong><a href="../../glossary/#solidity" title="The language most Ethereum contracts are written in">Solidity</a></strong>, though several others exist.</p>
+<p><strong>That text never reaches the chain.</strong> It goes through a <em>compiler</em>, a program that translates it into instructions a machine can execute, and only that output is sent.</p>
+<p>So two different things get called "the code", and almost everything confusing here comes from running them together:</p>
+<ul>
+<li><strong>Source</strong> — what a person wrote and can read. Kept on somebody's computer.</li>
+<li><strong>Bytecode</strong> — what the compiler produced. The only one Ethereum has ever seen.</li>
+</ul>
 <h2 id="what-is-actually-at-the-address">What is actually at the address</h2>
 <p>Ask a node for the code at a contract's address and you get something like this:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>6080604052348015600f57600080fd5b50...
 </code></pre></div>
-<p>That is the code. Not a representation of it, not a compiled artefact of it — <strong>that is the thing the <a href="../../accounts/accounts/">accounts</a> page was pointing at</strong> when it said <code>codeHash</code> fingerprints the account's code.</p>
-<p>And it is readable, in a narrow sense. Each byte is an instruction, so the start of that run decodes as:</p>
+<p>That is the code. Not a description of it — the thing itself.</p>
+<p>And it <em>is</em> readable, in a narrow sense. Each byte is an instruction, so the beginning of that run says:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>60 80     PUSH1 0x80      put the value 0x80 on the stack
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>60 40     PUSH1 0x40      put the value 0x40 on the stack
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>52        MSTORE          write one to memory at the other
 </code></pre></div>
-<p>Which is perfectly determinate and tells you <strong>nothing whatsoever about what the contract is for.</strong> It happens to be the opening move of almost every contract compiled from Solidity — bookkeeping, performed before any of the contract's actual business begins.</p>
-<p>That gap, between what the code <em>does</em> and what it is <em>for</em>, is this page's whole subject.</p>
+<p>Three instructions, entirely unambiguous — and they tell you <strong>nothing about what the contract is for.</strong> They are the opening move of almost every Solidity contract: housekeeping, done before any of its actual business starts.</p>
+<p>That gap — between what the code <em>does</em> and what it is <em>for</em> — is this page's subject.</p>
+<h2 id="where-the-bytecode-is-kept">Where the bytecode is kept</h2>
+<p>A fair question the page has been skipping, and it closes a loop from two parts back.</p>
+<p>The <a href="../../accounts/accounts/">accounts</a> page said an account holds four fields, one of which is <code>codeHash</code> — <strong>a 32-byte hash, not the code itself.</strong> So where is the code?</p>
+<p><strong>Stored separately, and found by its hash.</strong> A node keeps a table from code hashes to code, and the account entry holds the key to it. Ask for the code at an address and the node reads the account, takes the <code>codeHash</code>, and looks the bytes up <a href="#ref-wood-2014">(Wood, 2014)</a>.</p>
+<h3 id="how-a-node-knows-it-has-the-right-code">How a node knows it has the right code</h3>
+<p>By hashing what it holds. If a node is handed some bytes claiming to be a contract's code, it hashes them and compares against the <code>codeHash</code> in the account — and if they differ, the bytes are wrong. Nothing has to be trusted.</p>
+<p>And that <code>codeHash</code> is itself covered by the <a href="../../accounts/state/">state root</a>, which the block header commits to. So the chain of commitment runs all the way down:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>block header → state root → the account entry → codeHash → the code
+</code></pre></div>
+<p>Alter one byte of a contract's code and its hash changes, so the account entry changes, so the state root changes, so the block header is wrong. <strong>A contract's code is as firmly committed to as anybody's balance</strong> — which is the same argument as the storage roots on the state page, applied to code.</p>
+<p>It also means <strong>identical contracts share one stored copy.</strong> Two deployments of the same bytecode have the same <code>codeHash</code>, so there is nothing to store twice. The account entries differ; the code they point at does not.</p>
+<details class="note">
+<summary>And how does it get called?</summary>
+<p>Mechanically: a transaction naming the contract's address as its
+recipient, carrying some bytes as input. The node looks up the account,
+fetches the code by its <code>codeHash</code>, and runs it with those input bytes
+available to it.</p>
+<p>Which bytes mean which function is the <strong>ABI</strong> convention from the
+<a href="../smart-contracts/">previous page</a> — the protocol just hands the code
+whatever was sent. The anatomy of the transaction that does this belongs
+with <a href="../../transactions/transactions/">transactions</a>.</p>
+</details>
 <h2 id="where-the-source-went">Where the source went</h2>
 <p>Nowhere. It was never sent.</p>
 <p><svg viewBox="0 0 470 240" role="img" aria-label="Source code passes through a compiler and becomes bytecode. Only the bytecode is inside a dashed box marked as what the chain holds. A crossed-out arrow pointing back from bytecode to source shows there is no way to recover the names, comments and types the compiler discarded." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="10" y="40" width="124" height="76" rx="5"/><rect x="166" y="60" width="86" height="36" rx="5"/><rect x="278" y="22" width="180" height="112" rx="8" stroke-dasharray="5 4" opacity="0.5"/><rect x="292" y="40" width="152" height="76" rx="5"/><path d="M134 78 L160 78"/><path d="M252 78 L286 78"/><path d="M292 162 L140 162" stroke-dasharray="4 3" opacity="0.55"/><path d="M209 154 L223 170"/><path d="M223 154 L209 170"/></g><g fill="currentColor" stroke="none"><path d="M160 73 L170 78 L160 83 Z"/><path d="M286 73 L296 78 L286 83 Z"/><path d="M150 157 L140 162 L150 167 Z"/><text x="22" y="34" font-size="10" opacity="0.75">what you read</text><text x="22" y="60" font-size="11" font-weight="700">source</text><text x="22" y="78" font-size="9" opacity="0.85">names, comments,</text><text x="22" y="91" font-size="9" opacity="0.85">types, structure,</text><text x="22" y="104" font-size="9" opacity="0.85">intent</text><text x="178" y="82" font-size="11">compiler</text><text x="292" y="16" font-size="10" opacity="0.75">what the chain holds</text><text x="304" y="60" font-size="11" font-weight="700">bytecode</text><text x="304" y="78" font-size="9" opacity="0.85">one byte per</text><text x="304" y="91" font-size="9" opacity="0.85">instruction, and</text><text x="304" y="104" font-size="9" opacity="0.85">nothing else</text><text x="238" y="186" font-size="9" text-anchor="middle" opacity="0.8">no way back</text><text x="14" y="214" font-size="10" opacity="0.85">The compiler throws away everything that made the source readable. Nothing</text><text x="14" y="228" font-size="10" opacity="0.85">on the chain ever held it, so nothing on the chain can give it back.</text></g></svg></p>
@@ -2479,7 +2564,7 @@ and has never been on the chain at all.</p>
 <p>That is genuinely useful — it is very strong evidence that the source you are reading is the source that produced the contract, because producing different source that compiles to identical bytes is not something you can do by accident or easily on purpose.</p>
 <p>But notice what it is not. It is not the protocol telling you anything. <strong>The chain holds bytecode and has no opinion about source</strong>, so verification happens entirely off to one side, performed by a party who chose to do it.</p>
 <details class="abstract">
-<summary>Why verification fails for honest code, and the hash hiding in the bytecode</summary>
+<summary>Why verification can fail for honest code</summary>
 <p>Two details that explain most confusion around this.</p>
 <p><strong>An exact match means exact.</strong> Compiling the same source with a different
 compiler version, or different optimiser settings, produces different
@@ -2537,7 +2622,10 @@ useful one.</p>
 <hr />
 <h2 id="recap">Recap</h2>
 <ul>
+<li>Two things get called "the code": the <strong>source</strong> a person wrote, and the <strong>bytecode</strong> a compiler produced. Only the second has ever been on the chain.</li>
 <li>A contract's code on-chain is <strong>bytecode</strong>: one byte per instruction, with constants between them. No names, no comments, no types.</li>
+<li>The account entry holds only a <strong><code>codeHash</code></strong>; the code is stored separately and found by that hash. A node checks it has the right code by hashing what it holds.</li>
+<li><code>codeHash</code> is covered by the state root, so <strong>a contract's code is committed to as firmly as anybody's balance</strong> — and identical contracts share one stored copy.</li>
 <li><strong>Source was never on the chain.</strong> The compiler uses it and discards everything that made it readable, so the relationship is one-way: source gives bytecode, bytecode cannot give source.</li>
 <li>Bytecode <em>is</em> readable as instructions and tells you nothing about purpose. The opening bytes of nearly every Solidity contract are memory bookkeeping.</li>
 <li><strong>"Verified" means somebody produced source that compiles to exactly these bytes.</strong> Strong evidence, performed off-chain by a party who chose to, and not a statement by the protocol.</li>
