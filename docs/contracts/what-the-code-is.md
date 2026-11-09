@@ -72,6 +72,18 @@ Code is part of the [state](../accounts/state.md), and the state is the thing ev
     it never needs rewriting — which makes it exactly the sort of thing to
     keep to one side and refer to, rather than carry around.
 
+### Which is why code has a size limit
+
+Because every node holds the code, and every node loads it whenever the contract is called, **a contract's size is not its author's private cost.** It lands on every machine in the network, every time anybody calls it.
+
+So there is a cap. **A contract's bytecode cannot exceed 24,576 bytes** — a consensus rule since 2016, and a deployment producing more is rejected outright. The motivation was exactly the arithmetic above: calling a contract costs work in proportion to its code size, so without a limit a single contract could make every node do unbounded work, with the lightest clients suffering worst [(Buterin, 2016)](#ref-eip170).
+
+Two consequences worth having.
+
+**Long source is free; complex logic is not.** Comments, descriptive names, whitespace and documentation are all discarded by the compiler, so they cost nothing on chain. What produces bytecode is branching, arithmetic and storage work. The cap constrains **complexity**, not verbosity.
+
+**And it is part of why Ethereum systems are many contracts rather than one.** Split the logic across several that call each other; put shared routines in one and delegate to it; keep heavy computation off-chain and have the contract check the result. The composability this site keeps describing as an elegance is also a **constraint** — you compose partly because you must.
+
 ### How a node knows it has the right code
 
 By hashing it.
@@ -226,6 +238,7 @@ Every language that targets Ethereum is an arrangement among people outside the 
 - Reading verified source means trusting the explorer's comparison; you can repeat it yourself, which is what makes it trustworthy.
 - **Unverified is a cost, not a confession.** The contract works identically; you just have to read machine code.
 - Decompilers recover **structure, never meaning**. So: you can always read what a contract **does**, and never what it was **for**.
+- Code is **capped at 24,576 bytes**, because every node must load it when the contract is called. Verbosity is free; complexity is not — which is part of why systems are built from many contracts rather than one.
 - The protocol has **no notion of any language.** Solidity is a convention among people, like the ABI.
 
 **Next:** [Events and logs](events-and-logs.md) — the one thing a contract can write and cannot read.
@@ -236,6 +249,7 @@ Every language that targets Ethereum is an arrangement among people outside the 
 
 <div class="sources" markdown>
 
+- <a id="ref-eip170"></a>**Buterin, V.** (2016). *EIP-170: Contract code size limit.* Ethereum Improvement Proposals. Caps a contract's code at 24,576 bytes, on the grounds that calling a contract costs work proportional to its code size and an uncapped contract would impose unbounded work on every node.  <https://eips.ethereum.org/EIPS/eip-170>
 - <a id="ref-solidity-metadata"></a>**Solidity documentation**, v0.8.26. *Contract metadata.* States that the compiler appends the IPFS hash of the canonical metadata file and the compiler version to the end of the runtime bytecode, encoded in CBOR with its length in the final two bytes. Version-pinned deliberately: the `latest` URL moves, and the default behaviour has changed between versions. <https://docs.soliditylang.org/en/v0.8.26/metadata.html>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Specifies code as a byte array and the machine's behaviour over it, with no reference to any source language — Appendix H lists the instruction set that gives each byte its meaning. <https://ethereum.github.io/yellowpaper/paper.pdf>
 
