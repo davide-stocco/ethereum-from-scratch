@@ -35,7 +35,7 @@ DATA = ROOT / "concepts.yml"
 # Linked from nearly everywhere and prerequisites for nothing. Left out, or
 # they dominate the graph and say nothing about dependency.
 REFERENCE = {
-    "glossary.md", "about/forks.md", "about/about-me.md",
+    "glossary.md", "concept-map.md", "about/forks.md", "about/about-me.md",
     "reference/fork-history.md",
 }
 

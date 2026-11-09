@@ -26,7 +26,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
-REFERENCE = {"glossary.md", "about/forks.md", "about/about-me.md",
+REFERENCE = {"glossary.md", "concept-map.md", "about/forks.md", "about/about-me.md",
              "reference/fork-history.md"}
 
 

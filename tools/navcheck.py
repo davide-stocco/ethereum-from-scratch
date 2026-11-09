@@ -13,7 +13,7 @@ import re, pathlib, sys
 # Pages with no "Next" by design: the homepage, and the reference tail after
 # the reading path ends. gas-costs is NOT here any more — it sits inside
 # "How it changes" now, so it is a reading step and needs a Next link.
-OUTSIDE = {"index.md", "glossary.md", "about/forks.md",
+OUTSIDE = {"index.md", "glossary.md", "concept-map.md", "about/forks.md",
            "reference/fork-history.md", "about/about-me.md"}
 
 def main():

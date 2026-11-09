@@ -8,7 +8,7 @@ Ethereum is usually explained badly. Most introductions either hand you a metaph
 
 This site tries something different, with two rules.
 
-**Nothing is explained before its prerequisites.** Start at [What is Ethereum?](foundations/what-is-ethereum.md), work down, and each page assumes you've read the ones above it and nothing more. The site is in **seven parts** for that reason — the order is the argument.
+**Nothing is explained before its prerequisites.** Start at [What is Ethereum?](foundations/what-is-ethereum.md), work down, and each page assumes you've read the ones above it and nothing more. The site is in **seven parts** for that reason — the order is the argument. The [concept map](concept-map.md) draws the dependencies that order comes from.
 
 **Everything here is permanent.** Ethereum upgrades through hard forks, and plenty of tutorials that were accurate when written are now quietly wrong. So this site begins with the part of Ethereum that has **not changed since 2015** — and realistically cannot, because altering any of it would break every wallet, library and deployed contract at once.
 

@@ -229,6 +229,11 @@ nav:
       - 'Who decides, when nobody is in charge': economics/governance.md
 
   - Glossary: glossary.md
+  # Not a reading step — a picture of the dependencies between the pages,
+  # generated from concepts.yml. Sits after the glossary because both are
+  # things you come back to rather than read through, and because putting it
+  # before breaks the Next chain out of the last reading page.
+  - Concept map: concept-map.md
   - About:
       - Ethereum changes: about/forks.md
       - Fork history: reference/fork-history.md

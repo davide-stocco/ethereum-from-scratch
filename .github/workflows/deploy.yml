@@ -64,6 +64,11 @@ jobs:
       - name: Check the concept graph and the reading order
         run: python3 tools/conceptcheck.py
 
+      # The map is generated from concepts.yml, so it cannot be allowed to
+      # drift from it: this fails if the committed page is stale.
+      - name: Check the concept map matches the graph
+        run: python3 tools/conceptmap.py
+
       - name: Check diagram text for overlaps
         run: python3 tools/svgcheck.py
 
