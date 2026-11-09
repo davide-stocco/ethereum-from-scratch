@@ -2557,6 +2557,13 @@ keep to one side and refer to, rather than carry around.</p>
 recipient, carrying some bytes as input. The node looks up the account,
 fetches the code by its <code>codeHash</code>, and runs it with those input bytes
 available to it.</p>
+<p><strong>The caller never sends the code.</strong> They couldn't usefully — the node
+already has it, and would reject anything whose hash didn't match the
+<code>codeHash</code> at that address. Which is also why calling an address reliably
+runs <em>the code committed there</em>: the caller has no say in what executes.</p>
+<p>Code travels inside a transaction <strong>exactly once</strong>, at deployment, because
+that is the one moment no node has it yet. After that it is addressed, not
+transmitted.</p>
 <p>Which bytes mean which function is the <strong>ABI</strong> convention from the
 <a href="../smart-contracts/">previous page</a> — the protocol just hands the code
 whatever was sent. The anatomy of the transaction that does this belongs
