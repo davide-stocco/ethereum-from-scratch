@@ -1349,6 +1349,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Event or log?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-the-compiler-does-with-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the compiler does with it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-is-the-previous-pages-problem-again" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which is the previous page's problem again
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2356,6 +2384,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Event or log?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-the-compiler-does-with-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the compiler does with it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#which-is-the-previous-pages-problem-again" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which is the previous page's problem again
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2463,10 +2519,47 @@ contract's, not even its own.</p>
 <p>That is precisely the cost the design refuses. Keeping logs <em>outside</em> execution means a node needs <strong>none of them</strong> in order to validate a block. It can store them, serve them, prune them, or never keep them at all, and its ability to check the chain is unaffected.</p>
 <p>Which is why <a href="../../nodes/what-a-node-is/">pruning</a> is possible, and why the three sizes of node on the <a href="../../accounts/state/">state</a> page differ in history without differing in what they can verify. <strong>Logs are on the discardable side of that line, and a contract being able to read them would have moved them.</strong></p>
 <h2 id="event-or-log">Event or log?</h2>
-<p>Two words for two levels, routinely used interchangeably.</p>
-<p>A <strong>log</strong> is the protocol-level object: an address, topics, data. It is what the machine produces and what ends up in a block.</p>
-<p>An <strong>event</strong> is the source-language construct that compiles into one. You declare an event in Solidity and emit it; the compiler turns that into the instruction that writes a log.</p>
-<p>The same relationship as a function and its <a href="../smart-contracts/">four-byte selector</a>: one is a convenience for people writing code, the other is what actually exists. The protocol has never heard of events.</p>
+<p>The two words are used interchangeably and mean different things, one level apart. Worth taking slowly, because the difference is the same one the <a href="../what-the-code-is/">previous page</a> was about.</p>
+<p><strong>A log is what exists.</strong> An address, up to four topics, and some data. Bytes in a block. That is the whole of it, and it is all the protocol knows.</p>
+<p><strong>An event is a declaration in source code</strong> — a description, written by the contract's author, of a log they intend to emit. In Solidity it looks roughly like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>event Transfer(address indexed from, address indexed to, uint256 value)
+</code></pre></div>
+<p>That line creates nothing and costs nothing. It is a <strong>schema</strong>: it names three fields, says what type each is, and marks which of them should be searchable. Then, somewhere in the contract's code, the author <em>emits</em> a <code>Transfer</code> with actual values, and the compiler turns that into the instruction that writes a log.</p>
+<h3 id="what-the-compiler-does-with-it">What the compiler does with it</h3>
+<p>The declaration decides how the log is laid out. Emitting the event above produces:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>topic 0    keccak256("Transfer(address,address,uint256)")
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>topic 1    the "from" address          ← indexed, so it became a topic
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>topic 2    the "to" address            ← indexed, so it became a topic
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>data       the value                   ← not indexed, so it went in the data
+</code></pre></div>
+<p>Two things to notice there.</p>
+<p><strong>The first topic is the event's identity</strong> — the Keccak hash of its name and argument types. That is what makes "find every <code>Transfer</code>" a question anybody can ask, and it is the same trick as the <a href="../smart-contracts/">four-byte function selector</a>, taken at full 32-byte length instead of truncated.</p>
+<p><strong>And the names are gone.</strong> <code>from</code>, <code>to</code> and <code>value</code> appear nowhere in the log. What survives is three values in fixed positions. The meaning lives in the positions, and the positions only mean something to somebody who has the declaration.</p>
+<h3 id="which-is-the-previous-pages-problem-again">Which is the previous page's problem again</h3>
+<p>A log on its own is an address and four 32-byte blobs. To read it as <em>"this address sent that address this much"</em>, you need the event declaration — and the declaration is <strong>source code</strong>, kept off-chain by people, exactly like everything else on the previous page.</p>
+<p>So the division is consistent all the way down:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>What it is</th>
+<th>Where it lives</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Event</strong></td>
+<td>a declaration naming the fields</td>
+<td>source code, off-chain</td>
+</tr>
+<tr>
+<td><strong>Log</strong></td>
+<td>the bytes that result</td>
+<td>in a block, on every node that kept it</td>
+</tr>
+</tbody>
+</table>
+<p>The protocol has never heard of events, in precisely the way it has never heard of <a href="../../glossary/#solidity">Solidity</a> or of functions. <strong>A log is bytes with meaning attached by convention</strong> — the same arrangement as the <a href="../smart-contracts/">ABI</a>, and as <a href="../../encoding/rlp/">RLP</a>, where position carries the meaning and nothing in the encoding says what the positions are for.</p>
 <h2 id="why-they-are-cheap">Why they are cheap</h2>
 <p>Because nothing has to be able to find them later.</p>
 <p>A storage slot is expensive for a reason the <a href="../../accounts/why-accounts/">why accounts</a> page set out: writing one obliges every node to hold that value, indefinitely, available for instant lookup during execution. You pay once and the network carries it forever.</p>
@@ -2518,7 +2611,9 @@ merely consistent with presence.</strong></p>
 <li>A <strong>log</strong> is a record a contract writes for the outside world: an emitting address, up to four 32-byte <strong>topics</strong>, and data of any length.</li>
 <li>A contract <strong>can emit a log and can never read one</strong> — not another's, not its own. That asymmetry is the design.</li>
 <li>The reason: if execution could depend on logs, <strong>every node would have to keep every log forever.</strong> Keeping them outside execution means a node needs none of them to validate a block, which is what makes pruning possible.</li>
-<li>An <strong>event</strong> is the source-language construct; a <strong>log</strong> is the protocol object it compiles into. The protocol has never heard of events.</li>
+<li>An <strong>event</strong> is a declaration in source code — a schema naming the fields and marking which are searchable. A <strong>log</strong> is the bytes that result. The protocol has never heard of events.</li>
+<li>The declaration decides the layout: <strong>topic zero is the hash of the event's name and argument types</strong>, indexed fields become the remaining topics, and the rest goes in the data.</li>
+<li><strong>The field names never reach the log.</strong> Reading one as anything but blobs requires the declaration, which is off-chain source — the previous page's problem exactly.</li>
 <li>Logs are <strong>cheap because they commit nobody to anything.</strong> Storage is dear because it obliges every node to hold a value retrievably, forever. <strong>Cost follows structure.</strong></li>
 <li>So: if only software outside Ethereum will need a value, <strong>emit it rather than storing it.</strong></li>
 <li>Each block header holds a <strong>bloom filter</strong>, 256 bytes, that answers <em>could this block hold this log?</em> — <strong>definitively no, or provisionally yes.</strong> Almost every block answers no, which is what makes searching practical.</li>
