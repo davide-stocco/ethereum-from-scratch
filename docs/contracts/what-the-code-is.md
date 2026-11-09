@@ -93,6 +93,15 @@ Alter one byte of a contract's code and its hash changes, so the account entry c
     fetches the code by its `codeHash`, and runs it with those input bytes
     available to it.
 
+    **The caller never sends the code.** They couldn't usefully — the node
+    already has it, and would reject anything whose hash didn't match the
+    `codeHash` at that address. Which is also why calling an address reliably
+    runs *the code committed there*: the caller has no say in what executes.
+
+    Code travels inside a transaction **exactly once**, at deployment, because
+    that is the one moment no node has it yet. After that it is addressed, not
+    transmitted.
+
     Which bytes mean which function is the **ABI** convention from the
     [previous page](smart-contracts.md) — the protocol just hands the code
     whatever was sent. The anatomy of the transaction that does this belongs
