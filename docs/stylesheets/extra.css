@@ -480,10 +480,15 @@
   color: var(--md-default-fg-color);
 }
 
+/* The stroke reads two custom properties rather than naming a colour. The
+   generated rules at the top of the page set them on a bubble's GROUP when a
+   bubble it connects to is hovered, and they inherit down to the ellipse —
+   which is how one rule can brighten the group and restyle the ellipse at
+   once. */
 .cm-bub {
   fill: var(--md-default-bg-color);   /* hides the lines running behind it */
-  stroke: currentColor;
-  stroke-width: 1;
+  stroke: var(--cm-stroke, currentColor);
+  stroke-width: var(--cm-weight, 1);
   opacity: 0.6;
 }
 
@@ -493,7 +498,7 @@
   font-family: var(--md-text-font-family, sans-serif);
 }
 
-.cm-label { font-weight: 500; }
+.cm-label { font-weight: var(--cm-label, 500); }
 
 .cm-band {
   letter-spacing: 0.1em;
@@ -544,6 +549,9 @@
 .cm-node:hover .cm-halo,
 .cm-node:focus-within .cm-halo { opacity: 0.9; }
 
+.cm-node:hover,
+.cm-node:focus-within { --cm-label: 700; }
+
 .cm-node:hover .cm-bub,
 .cm-node:focus-within .cm-bub {
   opacity: 1;
@@ -553,10 +561,21 @@
 
 /* Everything else steps back while one bubble is held, so the one that grew
    is legible even where it overlaps a neighbour. Without :has() support this
-   simply does not happen, which costs nothing. */
-.cm-svg:has(.cm-node:hover) .cm-node { opacity: 0.3; }
+   simply does not happen, which costs nothing.
+
+   Three states, deliberately distinguishable at a glance:
+
+     held        grows, and its lines are drawn
+     connected   stays its size, takes the accent border and bold text
+     the rest    fades out
+
+   Size separates the first two, so the one under the pointer is never
+   confused with the ones it points at. The connected bubbles keep their size
+   because several of them light up at once, and six growing bubbles would
+   collide. */
+.cm-svg:has(.cm-node:hover) .cm-node { opacity: 0.22; }
 .cm-svg:has(.cm-node:hover) .cm-node:hover { opacity: 1; }
-.cm-svg:has(.cm-node:hover) .cm-edge { opacity: 0.07; }
+.cm-svg:has(.cm-node:hover) .cm-edge { opacity: 0.06; }
 
 /* A bubble that opens a zoom rather than a page, marked faintly — otherwise
    clicking is a lottery. */

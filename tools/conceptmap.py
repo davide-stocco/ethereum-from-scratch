@@ -129,16 +129,45 @@ def bubble_rx(lines, size, ry):
     return max(44, rx + 11)
 
 
-def draw(cx, cy, rx, ry, lines, size, cls, link, note, halo):
-    """One bubble: an ellipse, its label, its hidden halo, wrapped in a link."""
+def draw(nid, cx, cy, rx, ry, lines, size, cls, link, note, halo):
+    """One bubble: an ellipse, its label, its hidden halo, wrapped in a link.
+
+    The id is what lets a generated rule say "when THIS one is hovered, mark
+    those ones": CSS has no way to ask which bubbles a line connects, so the
+    relationship is written out as selectors instead.
+    """
     ys = [cy + 4] if len(lines) == 1 else [cy - 3, cy + 11]
     text = "".join(
         f'<text class="cm-label" x="{cx:g}" y="{ty:g}" font-size="{size}" '
         f'text-anchor="middle">{esc(line)}</text>'
         for line, ty in zip(lines, ys))
-    return (f'<g class="{cls}"><title>{esc(note)}</title>{halo}'
+    return (f'<g class="{cls}" id="{nid}"><title>{esc(note)}</title>{halo}'
             f'<a href="{link}"><ellipse class="cm-bub" cx="{cx:g}" cy="{cy:g}" '
             f'rx="{rx:g}" ry="{ry}"/>{text}</a></g>')
+
+
+def neighbour_rules(nid_of, edges):
+    """One rule per bubble: hovering it marks everything it touches.
+
+    Has to be written out as selectors because CSS cannot follow a line —
+    :has() can ask "does this picture contain a hovered bubble", but not
+    "which bubbles does that one connect to". So the relationships become
+    rules, two selectors per edge, generated with the drawing they describe.
+
+    The declaration only sets custom properties; .cm-bub reads them. That way
+    one rule can brighten the group AND restyle the ellipse inside it.
+    """
+    near = collections.defaultdict(set)
+    for s, t in edges:
+        near[s].add(t)
+        near[t].add(s)
+    out = []
+    for k in sorted(near):
+        sel = ", ".join(f".cm-svg:has(#{nid_of[k]}:hover) #{nid_of[n]}"
+                        for n in sorted(near[k]))
+        out.append(sel + " { opacity: 1; --cm-stroke: var(--md-accent-fg-color, "
+                         "currentColor); --cm-weight: 2; --cm-label: 700; }")
+    return out
 
 
 def pack(items, widths, maxw):
@@ -227,12 +256,12 @@ def the_map(data, bands, edges, insides):
                 else f'{len(data[p].get("needs") or [])} prerequisite(s)')
         halo = "".join(f'<path class="cm-halo" d="{d}"/>' for d in incident[p])
         out.append(draw(
-            cx, cy, rx[p], MAP_RY, lines[p], MAP_SIZE,
+            f"m-{slug(p)}", cx, cy, rx[p], MAP_RY, lines[p], MAP_SIZE,
             "cm-node cm-has-zoom" if zoomed else "cm-node",
             f"#zoom-{slug(p)}" if zoomed else url(p),
             f'{data[p]["title"]} — {note}', halo))
     out.append("</svg>")
-    return "".join(out)
+    return "".join(out), neighbour_rules({p: f"m-{slug(p)}" for p in pos}, edges)
 
 
 # --------------------------------------------------------------------------
@@ -309,24 +338,29 @@ def zoom(path, data, insides):
         cx, cy = pos[n["id"]]
         halo = "".join(f'<path class="cm-halo" d="{d}"/>' for d in incident[n["id"]])
         out.append(draw(
+            f'z-{slug(path)}-{re.sub(r"[^a-z0-9-]", "-", n["id"])}',
             cx, cy, rx[n["id"]], ZOOM_RY, lines[n["id"]], ZOOM_SIZE,
             "cm-node cm-outside" if n.get("foreign") else "cm-node",
             href(n["link"]), n["note"], halo))
     out.append("</svg>")
-    return "".join(out), len(local), len(paths), len(outside)
+    nid = {i: f'z-{slug(path)}-{re.sub(r"[^a-z0-9-]", "-", i)}' for i in pos}
+    pairs = [(dep, n["id"]) for n in nodes for dep in (n.get("needs") or [])]
+    return ("".join(out), len(local), len(paths), len(outside),
+            neighbour_rules(nid, pairs))
 
 
 # --------------------------------------------------------------------------
 
 def build():
     data, pages, bands, edges, insides = load()
-    m = the_map(data, bands, edges, insides)
+    m, rules = the_map(data, bands, edges, insides)
 
     zooms = []
     for p in pages:
         if p not in insides:
             continue
-        svg, n, e, borrowed = zoom(p, data, insides)
+        svg, n, e, borrowed, zrules = zoom(p, data, insides)
+        rules += zrules
         zooms.append(
             f'<section class="cm-zoom" id="zoom-{slug(p)}">'
             f'<p class="cm-zoomhead"><strong>Inside {esc(data[p]["title"])}</strong> — '
@@ -351,6 +385,8 @@ menu down the side can only be a list; this is the shape underneath it.
 **Hover a bubble** to read it and light up its own lines. **Click one** to
 open the page — or, where the zoom exists, the granular network of concepts
 inside it.
+
+<style>{chr(10).join(rules)}</style>
 
 <figure class="cm-fig" id="the-map">{m}</figure>
 
