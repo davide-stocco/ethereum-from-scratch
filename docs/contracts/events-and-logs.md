@@ -40,13 +40,47 @@ Which is why [pruning](../nodes/what-a-node-is.md) is possible, and why the thre
 
 ## Event or log?
 
-Two words for two levels, routinely used interchangeably.
+The two words are used interchangeably and mean different things, one level apart. Worth taking slowly, because the difference is the same one the [previous page](what-the-code-is.md) was about.
 
-A **log** is the protocol-level object: an address, topics, data. It is what the machine produces and what ends up in a block.
+**A log is what exists.** An address, up to four topics, and some data. Bytes in a block. That is the whole of it, and it is all the protocol knows.
 
-An **event** is the source-language construct that compiles into one. You declare an event in Solidity and emit it; the compiler turns that into the instruction that writes a log.
+**An event is a declaration in source code** — a description, written by the contract's author, of a log they intend to emit. In Solidity it looks roughly like this:
 
-The same relationship as a function and its [four-byte selector](smart-contracts.md): one is a convenience for people writing code, the other is what actually exists. The protocol has never heard of events.
+```
+event Transfer(address indexed from, address indexed to, uint256 value)
+```
+
+That line creates nothing and costs nothing. It is a **schema**: it names three fields, says what type each is, and marks which of them should be searchable. Then, somewhere in the contract's code, the author *emits* a `Transfer` with actual values, and the compiler turns that into the instruction that writes a log.
+
+### What the compiler does with it
+
+The declaration decides how the log is laid out. Emitting the event above produces:
+
+```
+topic 0    keccak256("Transfer(address,address,uint256)")
+topic 1    the "from" address          ← indexed, so it became a topic
+topic 2    the "to" address            ← indexed, so it became a topic
+data       the value                   ← not indexed, so it went in the data
+```
+
+Two things to notice there.
+
+**The first topic is the event's identity** — the Keccak hash of its name and argument types. That is what makes "find every `Transfer`" a question anybody can ask, and it is the same trick as the [four-byte function selector](smart-contracts.md), taken at full 32-byte length instead of truncated.
+
+**And the names are gone.** `from`, `to` and `value` appear nowhere in the log. What survives is three values in fixed positions. The meaning lives in the positions, and the positions only mean something to somebody who has the declaration.
+
+### Which is the previous page's problem again
+
+A log on its own is an address and four 32-byte blobs. To read it as *"this address sent that address this much"*, you need the event declaration — and the declaration is **source code**, kept off-chain by people, exactly like everything else on the previous page.
+
+So the division is consistent all the way down:
+
+| | What it is | Where it lives |
+| --- | --- | --- |
+| **Event** | a declaration naming the fields | source code, off-chain |
+| **Log** | the bytes that result | in a block, on every node that kept it |
+
+The protocol has never heard of events, in precisely the way it has never heard of [Solidity](../glossary.md#solidity) or of functions. **A log is bytes with meaning attached by convention** — the same arrangement as the [ABI](smart-contracts.md), and as [RLP](../encoding/rlp.md), where position carries the meaning and nothing in the encoding says what the positions are for.
 
 ## Why they are cheap
 
@@ -123,7 +157,9 @@ Which is the same warning the [previous page](what-the-code-is.md) reached from 
 - A **log** is a record a contract writes for the outside world: an emitting address, up to four 32-byte **topics**, and data of any length.
 - A contract **can emit a log and can never read one** — not another's, not its own. That asymmetry is the design.
 - The reason: if execution could depend on logs, **every node would have to keep every log forever.** Keeping them outside execution means a node needs none of them to validate a block, which is what makes pruning possible.
-- An **event** is the source-language construct; a **log** is the protocol object it compiles into. The protocol has never heard of events.
+- An **event** is a declaration in source code — a schema naming the fields and marking which are searchable. A **log** is the bytes that result. The protocol has never heard of events.
+- The declaration decides the layout: **topic zero is the hash of the event's name and argument types**, indexed fields become the remaining topics, and the rest goes in the data.
+- **The field names never reach the log.** Reading one as anything but blobs requires the declaration, which is off-chain source — the previous page's problem exactly.
 - Logs are **cheap because they commit nobody to anything.** Storage is dear because it obliges every node to hold a value retrievably, forever. **Cost follows structure.**
 - So: if only software outside Ethereum will need a value, **emit it rather than storing it.**
 - Each block header holds a **bloom filter**, 256 bytes, that answers *could this block hold this log?* — **definitively no, or provisionally yes.** Almost every block answers no, which is what makes searching practical.
