@@ -17,6 +17,15 @@ description: The chain holds machine code, not the source you read on an explore
     in **source code**, which is a separate file kept by people somewhere else
     and has never been on the chain at all.
 
+When somebody writes a contract, they write it in a programming language — text with names, comments and structure, meant for people to read. The most widely used one is **[Solidity](../glossary.md#solidity "The language most Ethereum contracts are written in")**, though several others exist.
+
+**That text never reaches the chain.** It goes through a *compiler*, a program that translates it into instructions a machine can execute, and only that output is sent.
+
+So two different things get called "the code", and almost everything confusing here comes from running them together:
+
+- **Source** — what a person wrote and can read. Kept on somebody's computer.
+- **Bytecode** — what the compiler produced. The only one Ethereum has ever seen.
+
 ## What is actually at the address
 
 Ask a node for the code at a contract's address and you get something like this:
@@ -25,9 +34,9 @@ Ask a node for the code at a contract's address and you get something like this:
 6080604052348015600f57600080fd5b50...
 ```
 
-That is the code. Not a representation of it, not a compiled artefact of it — **that is the thing the [accounts](../accounts/accounts.md) page was pointing at** when it said `codeHash` fingerprints the account's code.
+That is the code. Not a description of it — the thing itself.
 
-And it is readable, in a narrow sense. Each byte is an instruction, so the start of that run decodes as:
+And it *is* readable, in a narrow sense. Each byte is an instruction, so the beginning of that run says:
 
 ```
 60 80     PUSH1 0x80      put the value 0x80 on the stack
@@ -35,9 +44,43 @@ And it is readable, in a narrow sense. Each byte is an instruction, so the start
 52        MSTORE          write one to memory at the other
 ```
 
-Which is perfectly determinate and tells you **nothing whatsoever about what the contract is for.** It happens to be the opening move of almost every contract compiled from Solidity — bookkeeping, performed before any of the contract's actual business begins.
+Three instructions, entirely unambiguous — and they tell you **nothing about what the contract is for.** They are the opening move of almost every Solidity contract: housekeeping, done before any of its actual business starts.
 
-That gap, between what the code *does* and what it is *for*, is this page's whole subject.
+That gap — between what the code *does* and what it is *for* — is this page's subject.
+
+## Where the bytecode is kept
+
+A fair question the page has been skipping, and it closes a loop from two parts back.
+
+The [accounts](../accounts/accounts.md) page said an account holds four fields, one of which is `codeHash` — **a 32-byte hash, not the code itself.** So where is the code?
+
+**Stored separately, and found by its hash.** A node keeps a table from code hashes to code, and the account entry holds the key to it. Ask for the code at an address and the node reads the account, takes the `codeHash`, and looks the bytes up [(Wood, 2014)](#ref-wood-2014).
+
+### How a node knows it has the right code
+
+By hashing what it holds. If a node is handed some bytes claiming to be a contract's code, it hashes them and compares against the `codeHash` in the account — and if they differ, the bytes are wrong. Nothing has to be trusted.
+
+And that `codeHash` is itself covered by the [state root](../accounts/state.md), which the block header commits to. So the chain of commitment runs all the way down:
+
+```
+block header → state root → the account entry → codeHash → the code
+```
+
+Alter one byte of a contract's code and its hash changes, so the account entry changes, so the state root changes, so the block header is wrong. **A contract's code is as firmly committed to as anybody's balance** — which is the same argument as the storage roots on the state page, applied to code.
+
+It also means **identical contracts share one stored copy.** Two deployments of the same bytecode have the same `codeHash`, so there is nothing to store twice. The account entries differ; the code they point at does not.
+
+??? note "And how does it get called?"
+
+    Mechanically: a transaction naming the contract's address as its
+    recipient, carrying some bytes as input. The node looks up the account,
+    fetches the code by its `codeHash`, and runs it with those input bytes
+    available to it.
+
+    Which bytes mean which function is the **ABI** convention from the
+    [previous page](smart-contracts.md) — the protocol just hands the code
+    whatever was sent. The anatomy of the transaction that does this belongs
+    with [transactions](../transactions/transactions.md).
 
 ## Where the source went
 
@@ -63,7 +106,7 @@ That is genuinely useful — it is very strong evidence that the source you are 
 
 But notice what it is not. It is not the protocol telling you anything. **The chain holds bytecode and has no opinion about source**, so verification happens entirely off to one side, performed by a party who chose to do it.
 
-??? abstract "Why verification fails for honest code, and the hash hiding in the bytecode"
+??? abstract "Why verification can fail for honest code"
 
     Two details that explain most confusion around this.
 
@@ -146,7 +189,10 @@ Every language that targets Ethereum is an arrangement among people outside the 
 
 ## Recap
 
+- Two things get called "the code": the **source** a person wrote, and the **bytecode** a compiler produced. Only the second has ever been on the chain.
 - A contract's code on-chain is **bytecode**: one byte per instruction, with constants between them. No names, no comments, no types.
+- The account entry holds only a **`codeHash`**; the code is stored separately and found by that hash. A node checks it has the right code by hashing what it holds.
+- `codeHash` is covered by the state root, so **a contract's code is committed to as firmly as anybody's balance** — and identical contracts share one stored copy.
 - **Source was never on the chain.** The compiler uses it and discards everything that made it readable, so the relationship is one-way: source gives bytecode, bytecode cannot give source.
 - Bytecode *is* readable as instructions and tells you nothing about purpose. The opening bytes of nearly every Solidity contract are memory bookkeeping.
 - **"Verified" means somebody produced source that compiles to exactly these bytes.** Strong evidence, performed off-chain by a party who chose to, and not a statement by the protocol.

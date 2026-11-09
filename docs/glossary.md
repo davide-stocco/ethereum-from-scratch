@@ -164,6 +164,9 @@ If you arrived from a search engine and a word on some page made no sense, this 
 **Smart contract**{ #smart-contract }
 : A program stored at an account, run by the network when called. Stateful and general-purpose, but metered and capped. → [What is Ethereum?](foundations/what-is-ethereum.md)
 
+**Solidity**{ #solidity }
+: The language most Ethereum contracts are written in. It is **not part of Ethereum** — the protocol has no notion of any language, and Solidity's output is [bytecode](contracts/what-the-code-is.md) like any other compiler's. A convention among people, in the same position as the [ABI](#abi). → [What the code actually is](contracts/what-the-code-is.md)
+
 **State**{ #state }
 : Everything Ethereum stores right now: every account and what it holds. → [What is Ethereum?](foundations/what-is-ethereum.md)
 
