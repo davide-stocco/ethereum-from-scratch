@@ -56,8 +56,6 @@ The [accounts](../accounts/accounts.md) page said an account holds four fields, 
 
 Code is part of the [state](../accounts/state.md), and the state is the thing every node holds a complete copy of. So every node that can check a block holds the bytecode of every contract that exists — exactly as it holds every balance and every storage slot. Nothing is kept on one special machine, nothing has to be fetched from anybody, and there is no question of *which* node has it. They all do.
 
-That is worth being emphatic about, because the word "hash" invites the wrong picture. `codeHash` is **not** a reference to somewhere else on the network. It is a key into the node's **own** storage, on its own disk, a few millimetres from the account entry that mentions it.
-
 ??? abstract "Then why keep the code out of the account entry at all?"
 
     Three reasons, all about size.
