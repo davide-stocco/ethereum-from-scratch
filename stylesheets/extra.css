@@ -449,14 +449,14 @@
 /* ---------------------------------------------------------------------------
    THE CONCEPT MAP
    ---------------------------------------------------------------------------
-   Two levels, on one page, with no JavaScript. The layout is arithmetic done
+   Two levels on one page, with no JavaScript. The layout is arithmetic done
    by tools/conceptmap.py; everything interactive here is CSS.
 
-     hover a box     -> its own lines are drawn over the rest
-     click a box     -> :target opens the granular network inside that page
+     hover a bubble  -> it grows, the rest fade, its own lines are drawn
+     click a bubble  -> :target opens the network of concepts inside that page
 
    The hover trick looks redundant but is not. CSS cannot select "the line
-   whose endpoint is the box I am hovering", so each box carries hidden
+   whose endpoint is the bubble I am hovering", so each bubble carries hidden
    COPIES of the lines touching it and reveals them. Hence roughly two halo
    paths per edge in the generated file.
 
@@ -466,7 +466,7 @@
 
 .cm-fig {
   margin: 1.6em 0;
-  overflow-x: auto;          /* the map is 780px wide; phones scroll */
+  overflow-x: auto;          /* the drawing is 780 units wide; phones scroll */
 }
 
 .cm-svg {
@@ -476,14 +476,15 @@
   max-width: 48rem;
   margin: 0 auto;
   height: auto;
+  overflow: visible;         /* a bubble at the edge may grow past the frame */
   color: var(--md-default-fg-color);
 }
 
-.cm-box {
+.cm-bub {
   fill: var(--md-default-bg-color);   /* hides the lines running behind it */
   stroke: currentColor;
   stroke-width: 1;
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
 .cm-label,
@@ -503,7 +504,7 @@
 .cm-count { font-weight: 400; letter-spacing: 0; }
 
 /* Faint on purpose: every line at full strength is a hairball, and the
-   picture is meant to be read one box at a time. */
+   picture is meant to be read one bubble at a time. */
 .cm-edge {
   fill: none;
   stroke: currentColor;
@@ -511,31 +512,58 @@
   opacity: 0.16;
 }
 
-/* Hidden until the box they belong to is hovered, or reached by keyboard. */
+/* Hidden until the bubble they belong to is hovered, or reached by keyboard. */
 .cm-halo {
   fill: none;
   stroke: var(--md-accent-fg-color, currentColor);
   stroke-width: 1.6;
   opacity: 0;
-  pointer-events: none;      /* a line must never swallow a click on a box */
+  pointer-events: none;      /* a line must never swallow a click on a bubble */
 }
+
+/* ---------------------------------------------------------------------------
+   Hovering.
+
+   The growth is on the <a>, not on the <g>: the <g> also contains the halo
+   lines, which sprawl across the whole picture, so scaling it from the centre
+   of THAT box would fling the bubble across the drawing. The <a> wraps only
+   the ellipse and its label, which is exactly what should grow.
+   --------------------------------------------------------------------------- */
+
+.cm-node a {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.13s ease-out;
+}
+
+.cm-node { transition: opacity 0.13s ease-out; }
+
+.cm-node:hover a,
+.cm-node:focus-within a { transform: scale(1.18); }
 
 .cm-node:hover .cm-halo,
 .cm-node:focus-within .cm-halo { opacity: 0.9; }
 
-.cm-node:hover .cm-box,
-.cm-node:focus-within .cm-box {
+.cm-node:hover .cm-bub,
+.cm-node:focus-within .cm-bub {
   opacity: 1;
-  stroke-width: 1.8;
+  stroke-width: 1.6;
   stroke: var(--md-accent-fg-color, currentColor);
 }
 
-/* A box that opens a zoom rather than a page is marked, faintly, by a
-   heavier border — otherwise clicking is a lottery. */
-.cm-has-zoom .cm-box { stroke-width: 2; opacity: 0.8; }
+/* Everything else steps back while one bubble is held, so the one that grew
+   is legible even where it overlaps a neighbour. Without :has() support this
+   simply does not happen, which costs nothing. */
+.cm-svg:has(.cm-node:hover) .cm-node { opacity: 0.3; }
+.cm-svg:has(.cm-node:hover) .cm-node:hover { opacity: 1; }
+.cm-svg:has(.cm-node:hover) .cm-edge { opacity: 0.07; }
+
+/* A bubble that opens a zoom rather than a page, marked faintly — otherwise
+   clicking is a lottery. */
+.cm-has-zoom .cm-bub { stroke-width: 2; opacity: 0.85; }
 
 .cm-svg a { text-decoration: none; cursor: pointer; }
-.cm-svg a:focus-visible .cm-box {
+.cm-svg a:focus-visible .cm-bub {
   stroke: var(--md-accent-fg-color, currentColor);
   stroke-width: 2.2;
   opacity: 1;
@@ -544,10 +572,10 @@
 /* ---------------------------------------------------------------------------
    The zoom: the concepts inside one page.
 
-   Each is a <section> that is hidden until its id is the fragment in the
-   address bar, which is what clicking a box on the map puts there. "Back to
-   the map" points at the map's own id, which stops matching every zoom and
-   closes it again. No script, and the browser's back button works.
+   Each is a <section> hidden until its id is the fragment in the address bar,
+   which is what clicking a bubble on the map puts there. "Back to the map"
+   points at the map's own id, which stops matching every zoom and closes it.
+   No script, and the browser's back button works.
    --------------------------------------------------------------------------- */
 
 .cm-zoom { display: none; }
@@ -566,26 +594,20 @@
   color: var(--md-default-fg-color--light);
 }
 
-.cm-zoomsvg { max-width: 44rem; min-width: 28rem; }
-
-/* A concept borrowed from an earlier page's zoom: drawn dashed, because it
-   is a prerequisite this page uses and does not explain. Clicking it opens
-   the zoom it came from. */
-.cm-outside .cm-box {
+/* A concept borrowed from an earlier page's zoom: dashed, because it is a
+   prerequisite this page uses and does not explain. */
+.cm-outside .cm-bub {
   stroke-dasharray: 4 3;
-  opacity: 0.4;
+  opacity: 0.45;
 }
 
-.cm-outside .cm-label { opacity: 0.75; font-style: italic; }
+.cm-outside .cm-label { opacity: 0.8; font-style: italic; }
+.cm-outside:hover .cm-bub { opacity: 1; }
 
-.cm-outside:hover .cm-box,
-.cm-outside:focus-within .cm-box { opacity: 1; }
-
-/* The line from a borrowed concept, dashed to match it. */
 .cm-crossing { stroke-dasharray: 4 3; }
 
 @media (max-width: 30rem) {
-  /* Hover does not exist on a touch screen. Nothing to fall back to here —
-     the pictures still read, and tapping a box still follows its link. */
+  /* Hover does not exist on a touch screen; tapping a bubble follows its
+     link, which is the whole of what it offers there. */
   .cm-svg { min-width: 26rem; }
 }
