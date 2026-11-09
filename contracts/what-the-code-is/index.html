@@ -1314,6 +1314,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#which-is-why-code-has-a-size-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which is why code has a size limit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#how-a-node-knows-it-has-the-right-code" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2377,6 +2388,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#which-is-why-code-has-a-size-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which is why code has a size limit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#how-a-node-knows-it-has-the-right-code" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2544,6 +2566,12 @@ The account entries differ; the code they point at is one object.</p>
 it never needs rewriting — which makes it exactly the sort of thing to
 keep to one side and refer to, rather than carry around.</p>
 </details>
+<h3 id="which-is-why-code-has-a-size-limit">Which is why code has a size limit</h3>
+<p>Because every node holds the code, and every node loads it whenever the contract is called, <strong>a contract's size is not its author's private cost.</strong> It lands on every machine in the network, every time anybody calls it.</p>
+<p>So there is a cap. <strong>A contract's bytecode cannot exceed 24,576 bytes</strong> — a consensus rule since 2016, and a deployment producing more is rejected outright. The motivation was exactly the arithmetic above: calling a contract costs work in proportion to its code size, so without a limit a single contract could make every node do unbounded work, with the lightest clients suffering worst <a href="#ref-eip170">(Buterin, 2016)</a>.</p>
+<p>Two consequences worth having.</p>
+<p><strong>Long source is free; complex logic is not.</strong> Comments, descriptive names, whitespace and documentation are all discarded by the compiler, so they cost nothing on chain. What produces bytecode is branching, arithmetic and storage work. The cap constrains <strong>complexity</strong>, not verbosity.</p>
+<p><strong>And it is part of why Ethereum systems are many contracts rather than one.</strong> Split the logic across several that call each other; put shared routines in one and delegate to it; keep heavy computation off-chain and have the contract check the result. The composability this site keeps describing as an elegance is also a <strong>constraint</strong> — you compose partly because you must.</p>
 <h3 id="how-a-node-knows-it-has-the-right-code">How a node knows it has the right code</h3>
 <p>By hashing it.</p>
 <p>Hand a node some bytes claiming to be a contract's code and it hashes them, compares the result with the <code>codeHash</code> in that contract's account, and rejects them if they differ. Nothing is taken on trust, which is the same move as everywhere else on this site.</p>
@@ -2654,6 +2682,7 @@ useful one.</p>
 <li>Reading verified source means trusting the explorer's comparison; you can repeat it yourself, which is what makes it trustworthy.</li>
 <li><strong>Unverified is a cost, not a confession.</strong> The contract works identically; you just have to read machine code.</li>
 <li>Decompilers recover <strong>structure, never meaning</strong>. So: you can always read what a contract <strong>does</strong>, and never what it was <strong>for</strong>.</li>
+<li>Code is <strong>capped at 24,576 bytes</strong>, because every node must load it when the contract is called. Verbosity is free; complexity is not — which is part of why systems are built from many contracts rather than one.</li>
 <li>The protocol has <strong>no notion of any language.</strong> Solidity is a convention among people, like the ABI.</li>
 </ul>
 <p><strong>Next:</strong> <a href="../events-and-logs/">Events and logs</a> — the one thing a contract can write and cannot read.</p>
@@ -2661,6 +2690,7 @@ useful one.</p>
 <h2 id="references">References</h2>
 <div class="sources">
 <ul>
+<li><a id="ref-eip170"></a><strong>Buterin, V.</strong> (2016). <em>EIP-170: Contract code size limit.</em> Ethereum Improvement Proposals. Caps a contract's code at 24,576 bytes, on the grounds that calling a contract costs work proportional to its code size and an uncapped contract would impose unbounded work on every node.  <a href="https://eips.ethereum.org/EIPS/eip-170">https://eips.ethereum.org/EIPS/eip-170</a></li>
 <li><a id="ref-solidity-metadata"></a><strong>Solidity documentation</strong>, v0.8.26. <em>Contract metadata.</em> States that the compiler appends the IPFS hash of the canonical metadata file and the compiler version to the end of the runtime bytecode, encoded in CBOR with its length in the final two bytes. Version-pinned deliberately: the <code>latest</code> URL moves, and the default behaviour has changed between versions. <a href="https://docs.soliditylang.org/en/v0.8.26/metadata.html">https://docs.soliditylang.org/en/v0.8.26/metadata.html</a></li>
 <li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Specifies code as a byte array and the machine's behaviour over it, with no reference to any source language — Appendix H lists the instruction set that gives each byte its meaning. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
 </ul>
