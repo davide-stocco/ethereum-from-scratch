@@ -2,20 +2,23 @@
 
 Two levels.
 
-  the map    every page as a box, in reading order, with a line to each page
-             it depends on — from concepts.yml
+  the map    every page as a bubble, in reading order, with a line to each
+             page it depends on — from concepts.yml
 
-  the zoom   click a box and a second, granular network opens: the concepts
-             INSIDE that page and how they depend on each other — from
-             inside.yml, which is hand-authored
+  the zoom   click a bubble and a second, granular network opens: the
+             concepts INSIDE that page and how they depend on each other —
+             from inside.yml, which is hand-authored
 
 The layout is computed here, in Python, not in the browser. That is
 deliberate: there is no JavaScript on this page at all. Coordinates are
-arithmetic that can be checked here, and every interaction — hover to light
-up a box's own lines, click to open a zoom — is CSS `:hover` and `:target`.
+arithmetic that can be checked here, and every interaction — hover to grow a
+bubble and light up its lines, click to open a zoom — is CSS.
 
     python3 tools/conceptmap.py          report, write nothing
     python3 tools/conceptmap.py --write  regenerate the page
+
+Bubbles are sized to their text rather than being a fixed grid, so a row
+holds as many as fit. That is why the layout packs by width.
 
 No line in either picture ever points upward. In the map that is the site's
 reading order, enforced by tools/conceptcheck.py. In a zoom it is the order
@@ -26,6 +29,7 @@ index.md is left out: a prerequisite for nothing, connected to everything.
 
 import re
 import sys
+import math
 import pathlib
 import collections
 
@@ -34,16 +38,15 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PAGE = ROOT / "docs" / "concept-map.md"
 
-NODE_W, NODE_H = 170, 40          # a page box, on the map
-GAP_X, GAP_Y = 20, 16
-PER_ROW = 4
-LABEL_H = 28
-BAND_GAP = 40
+WIDTH = 780                       # the drawing's width, in user units
 MARGIN = 20
+LABEL_H = 28                      # the part's name, above its bubbles
+BAND_GAP = 34
 
-ZW, ZH = 152, 38                  # a concept box, inside a zoom
-ZGX, ZGY = 18, 22
-ZPER_ROW = 4
+CHAR = 0.54                       # width of a character, as a fraction of size
+MAP_SIZE, MAP_RY = 11.5, 29       # the map: font size and bubble half-height
+ZOOM_SIZE, ZOOM_RY = 11, 28
+GAP_X, GAP_Y = 14, 26
 
 
 # --------------------------------------------------------------------------
@@ -81,7 +84,7 @@ def slug(path):
 
 
 def href(link):
-    """A zoom's link: '#zoom-...', or 'page.md', or 'page.md#anchor'."""
+    """A node's link: '#zoom-...', or 'page.md', or 'page.md#anchor'."""
     if link.startswith("#"):
         return link
     target, hashmark, frag = link.partition("#")
@@ -93,94 +96,121 @@ def esc(s):
                   .replace('"', "&quot;").replace("'", "&#39;"))
 
 
-def wrap(title, limit):
-    """At most two lines, because a third does not fit in a box this high."""
-    lines, cur = [], ""
-    for w in title.split():
-        if len(cur) + len(w) + 1 <= limit or not cur:
-            cur = (cur + " " + w).strip()
-        else:
-            lines.append(cur)
-            cur = w
-    lines.append(cur)
-    if len(lines) > 2:
-        lines = [lines[0], " ".join(lines[1:])]
-        if len(lines[1]) > limit + 3:
-            lines[1] = lines[1][:limit + 2].rstrip() + "…"
-    return lines
+# --------------------------------------------------------------------------
+# bubbles
+
+def split(text):
+    """One or two lines, balanced, so the bubble stays round rather than long."""
+    words = text.split()
+    if len(words) < 2 or len(text) <= 13:
+        return [text]
+    best, score = None, None
+    for i in range(1, len(words)):
+        a, b = " ".join(words[:i]), " ".join(words[i:])
+        s = max(len(a), len(b)) + abs(len(a) - len(b)) * 0.4
+        if score is None or s < score:
+            best, score = (a, b), s
+    return list(best)
 
 
-def label(x, y, w, h, lines, size):
-    cx, out = x + w / 2, []
-    ys = [y + h / 2 + 4] if len(lines) == 1 else [y + h / 2 - 4, y + h / 2 + 10]
-    for line, ty in zip(lines, ys):
-        out.append(f'<text class="cm-label" x="{cx:g}" y="{ty:g}" font-size="{size}" '
-                   f'text-anchor="middle">{esc(line)}</text>')
-    return "".join(out)
+def bubble_rx(lines, size, ry):
+    """Half-width that fits the text inside the ellipse, not inside its box.
+
+    An ellipse is narrower than its bounding box everywhere except the middle,
+    so a two-line label has to be measured at the height its lines actually
+    sit at — otherwise the ends of the longer line fall outside the curve.
+    """
+    rx = 0
+    for i, line in enumerate(lines):
+        half = len(line) * size * CHAR / 2
+        dy = 0 if len(lines) == 1 else (7 if i == 0 else 7)
+        room = math.sqrt(max(0.15, 1 - (dy / ry) ** 2))     # fraction of rx here
+        rx = max(rx, half / room)
+    return max(44, rx + 11)
+
+
+def draw(cx, cy, rx, ry, lines, size, cls, link, note, halo):
+    """One bubble: an ellipse, its label, its hidden halo, wrapped in a link."""
+    ys = [cy + 4] if len(lines) == 1 else [cy - 3, cy + 11]
+    text = "".join(
+        f'<text class="cm-label" x="{cx:g}" y="{ty:g}" font-size="{size}" '
+        f'text-anchor="middle">{esc(line)}</text>'
+        for line, ty in zip(lines, ys))
+    return (f'<g class="{cls}"><title>{esc(note)}</title>{halo}'
+            f'<a href="{link}"><ellipse class="cm-bub" cx="{cx:g}" cy="{cy:g}" '
+            f'rx="{rx:g}" ry="{ry}"/>{text}</a></g>')
+
+
+def pack(items, widths, maxw):
+    """Greedy rows: as many bubbles as fit across, then wrap."""
+    rows, row, used = [], [], 0.0
+    for it in items:
+        w = widths[it]
+        if row and used + GAP_X + w > maxw:
+            rows.append(row)
+            row, used = [], 0.0
+        used += w + (GAP_X if row else 0)
+        row.append(it)
+    if row:
+        rows.append(row)
+    return rows
+
+
+def link_path(a, b, ra, rb, ry):
+    """A dependency, drawn downward, leaving and arriving on the bubble's rim."""
+    (x1, y1), (x2, y2) = a, b
+    # Spread the attachment point towards the other end, so several lines
+    # leaving one bubble do not come out of a single point.
+    off1 = max(-ra * 0.62, min(ra * 0.62, (x2 - x1) / 3))
+    off2 = max(-rb * 0.62, min(rb * 0.62, (x1 - x2) / 3))
+    ey1 = y1 + ry * math.sqrt(max(0.0, 1 - (off1 / ra) ** 2))
+    ey2 = y2 - ry * math.sqrt(max(0.0, 1 - (off2 / rb) ** 2))
+    sx, ex = x1 + off1, x2 + off2
+    if ey2 > ey1:
+        dy = (ey2 - ey1) / 2
+        return (f"M{sx:.1f},{ey1:.1f} C{sx:.1f},{ey1 + dy:.1f} "
+                f"{ex:.1f},{ey2 - dy:.1f} {ex:.1f},{ey2:.1f}")
+    # Same row: dip below both bubbles rather than drawing a loop between them.
+    sag = 26
+    return (f"M{x1:.1f},{y1 + ry:.1f} C{x1:.1f},{y1 + ry + sag:.1f} "
+            f"{x2:.1f},{y2 + ry + sag:.1f} {x2:.1f},{y2 + ry:.1f}")
 
 
 # --------------------------------------------------------------------------
 # the map
 
-def port(box, col, row):
-    """Where along a box's edge a line leaves or arrives.
-
-    Not the centre. Every line leaving from the same point makes one thick
-    stripe that says nothing about how many there are, and two boxes in the
-    same column make a vertical indistinguishable from a box border. So the
-    attachment point is spread by the column at the other end, and nudged by
-    that end's row to separate the ties.
-    """
-    frac = 0.22 + 0.56 * col / (PER_ROW - 1)
-    return box[0] + NODE_W * frac + (row % 3 - 1) * 5
-
-
-def curve(src, dst):
-    """A dependency, drawn downward. src and dst are (x, y, column, row)."""
-    if dst[1] > src[1]:
-        x1, y1 = port(src, dst[2], dst[3]), src[1] + NODE_H
-        x2, y2 = port(dst, src[2], src[3]), dst[1]
-        dy = (y2 - y1) / 2
-        return f"M{x1:g},{y1:g} C{x1:g},{y1 + dy:g} {x2:g},{y2 - dy:g} {x2:g},{y2:g}"
-    # Same row: both boxes sit at one height, so dip below them in a shallow
-    # U. Anything else here draws a loop, which reads as a knot.
-    x1, x2 = src[0] + NODE_W * 0.7, dst[0] + NODE_W * 0.3
-    y = src[1] + NODE_H
-    sag = 20 + 6 * ((dst[0] - src[0]) / (NODE_W + GAP_X) - 1)
-    return f"M{x1:g},{y:g} C{x1:g},{y + sag:g} {x2:g},{y + sag:g} {x2:g},{y:g}"
-
-
 def the_map(data, bands, edges, insides):
-    """Every page as a box, parts as horizontal bands, every edge drawn."""
-    inner = PER_ROW * NODE_W + (PER_ROW - 1) * GAP_X
-    pos, band_of, band_box, y = {}, {}, [], MARGIN
-    for bi, (name, pages) in enumerate(bands.items()):
-        rows = -(-len(pages) // PER_ROW)
+    """Every page as a bubble, parts as horizontal bands."""
+    maxw = WIDTH - 2 * MARGIN
+    lines = {p: split(data[p]["title"]) for b in bands.values() for p in b}
+    rx = {p: bubble_rx(lines[p], MAP_SIZE, MAP_RY) for p in lines}
+    widths = {p: 2 * rx[p] for p in rx}
+
+    pos, band_box, y = {}, [], MARGIN
+    for name, pages in bands.items():
         top = y
-        row_no = sum(-(-len(v) // PER_ROW) for v in list(bands.values())[:bi])
-        y += LABEL_H
-        for i, p in enumerate(pages):
-            r, c = divmod(i, PER_ROW)
-            n = min(PER_ROW, len(pages) - r * PER_ROW)
-            row_w = n * NODE_W + (n - 1) * GAP_X
-            x = MARGIN + (inner - row_w) / 2 + c * (NODE_W + GAP_X)
-            pos[p] = (x, y + r * (NODE_H + GAP_Y), c, row_no + r)
-            band_of[p] = bi
-        y += rows * NODE_H + (rows - 1) * GAP_Y
+        y += LABEL_H + MAP_RY
+        for row in pack(pages, widths, maxw):
+            total = sum(widths[i] for i in row) + GAP_X * (len(row) - 1)
+            x = MARGIN + (maxw - total) / 2
+            for p in row:
+                pos[p] = (x + rx[p], y)
+                x += widths[p] + GAP_X
+            y += 2 * MAP_RY + GAP_Y
+        y += -GAP_Y - MAP_RY + BAND_GAP
         band_box.append((name, top, len(pages)))
-        y += BAND_GAP
-    w, h = inner + 2 * MARGIN, y - BAND_GAP + MARGIN
+    h = y - BAND_GAP + MARGIN
 
     paths, incident = [], collections.defaultdict(list)
     for s, t in edges:
-        d = curve(pos[s], pos[t])
+        d = link_path(pos[s], pos[t], rx[s], rx[t], MAP_RY)
         paths.append(f'<path class="cm-edge" d="{d}"/>')
         incident[s].append(d)
         incident[t].append(d)
 
-    out = [f'<svg class="cm-svg" viewBox="0 0 {w:g} {h:g}" role="group" '
-           f'aria-label="Every written page as a box, grouped into parts, with '
-           f'{len(edges)} dependency lines. No line points upward.">']
+    out = [f'<svg class="cm-svg" viewBox="0 0 {WIDTH} {h:g}" role="group" '
+           f'aria-label="Every written page as a bubble, grouped into parts, '
+           f'with {len(edges)} dependency lines. No line points upward.">']
     out += paths
     # Part names go ON TOP of the lines, on opaque chips: underneath, a dozen
     # dependencies cross the words and the label stops being readable.
@@ -191,21 +221,16 @@ def the_map(data, bands, edges, insides):
             f'y="{top + 2}" width="{len(text) * 10.5 * 0.52 + 10:.0f}" height="16"/>'
             f'<text class="cm-band" x="{MARGIN}" y="{top + 13}" font-size="10.5">'
             f'{esc(name.upper())} <tspan class="cm-count">· {n}</tspan></text>')
-    for p, (x, yy, _c, _r) in pos.items():
-        title = data[p]["title"]
-        zoom = p in insides
-        target = f"#zoom-{slug(p)}" if zoom else url(p)
-        note = ("open the concepts inside it" if zoom
+    for p, (cx, cy) in pos.items():
+        zoomed = p in insides
+        note = ("open the concepts inside it" if zoomed
                 else f'{len(data[p].get("needs") or [])} prerequisite(s)')
-        # Each box carries hidden COPIES of its own lines. CSS cannot select
-        # "the line ending where I am pointing", so the box owns them.
         halo = "".join(f'<path class="cm-halo" d="{d}"/>' for d in incident[p])
-        out.append(
-            f'<g class="cm-node{" cm-has-zoom" if zoom else ""}">'
-            f'<title>{esc(title)} — {note}</title>{halo}<a href="{target}">'
-            f'<rect class="cm-box" x="{x:g}" y="{yy:g}" width="{NODE_W}" '
-            f'height="{NODE_H}" rx="5"/>'
-            f'{label(x, yy, NODE_W, NODE_H, wrap(title, 23), 11.5)}</a></g>')
+        out.append(draw(
+            cx, cy, rx[p], MAP_RY, lines[p], MAP_SIZE,
+            "cm-node cm-has-zoom" if zoomed else "cm-node",
+            f"#zoom-{slug(p)}" if zoomed else url(p),
+            f'{data[p]["title"]} — {note}', halo))
     out.append("</svg>")
     return "".join(out)
 
@@ -216,14 +241,13 @@ def the_map(data, bands, edges, insides):
 def zoom(path, data, insides):
     """The concepts inside one page, laid out by how deep they sit.
 
-    Prerequisites borrowed from an earlier page's zoom are drawn too, in a
-    row above everything, dashed: things this page leans on but does not
-    explain. Clicking one opens that page's zoom.
+    Prerequisites borrowed from an earlier page's zoom are drawn too, dashed:
+    things this page leans on but does not explain. Clicking one opens the
+    zoom it came from.
     """
     nodes = list(insides[path]["inside"])
     local = {n["id"] for n in nodes}
 
-    # Pull in the foreign prerequisites as extra, dashed boxes.
     outside = []
     for n in nodes:
         for d in n.get("needs") or []:
@@ -237,8 +261,8 @@ def zoom(path, data, insides):
                 })
     nodes = outside + nodes
 
-    # Depth is the longest path from a root, so a box always sits below
-    # everything it needs. The borrowed ones are the roots by construction.
+    # Depth is the longest path from a root, so a bubble always sits below
+    # everything it needs. The borrowed ones are roots by construction.
     need = {n["id"]: list(n.get("needs") or []) for n in nodes}
     depth = {}
 
@@ -250,47 +274,44 @@ def zoom(path, data, insides):
     for n in nodes:
         walk(n["id"])
 
-    inner = ZPER_ROW * ZW + (ZPER_ROW - 1) * ZGX
-    pos, y = {}, MARGIN
+    maxw = WIDTH - 2 * MARGIN
+    lines = {n["id"]: split(n["label"]) for n in nodes}
+    rx = {i: bubble_rx(lines[i], ZOOM_SIZE, ZOOM_RY) for i in lines}
+    widths = {i: 2 * rx[i] for i in rx}
+
+    pos, y = {}, MARGIN + ZOOM_RY
     for d in sorted(set(depth.values())):
         tier = [n["id"] for n in nodes if depth[n["id"]] == d]
-        for r in range(-(-len(tier) // ZPER_ROW)):
-            row = tier[r * ZPER_ROW:(r + 1) * ZPER_ROW]
-            row_w = len(row) * ZW + (len(row) - 1) * ZGX
-            for c, i in enumerate(row):
-                pos[i] = (MARGIN + (inner - row_w) / 2 + c * (ZW + ZGX), y)
-            y += ZH + ZGY
-    w, h = inner + 2 * MARGIN, y - ZGY + MARGIN
+        for row in pack(tier, widths, maxw):
+            total = sum(widths[i] for i in row) + GAP_X * (len(row) - 1)
+            x = MARGIN + (maxw - total) / 2
+            for i in row:
+                pos[i] = (x + rx[i], y)
+                x += widths[i] + GAP_X
+            y += 2 * ZOOM_RY + GAP_Y
+    h = y - GAP_Y - ZOOM_RY + MARGIN
 
     paths, incident = [], collections.defaultdict(list)
     for n in nodes:
         for dep in n.get("needs") or []:
-            (x1, y1), (x2, y2) = pos[dep], pos[n["id"]]
-            x1, x2 = x1 + ZW / 2, x2 + ZW / 2
-            y1, y2 = y1 + ZH, y2
-            dy = (y2 - y1) / 2
-            d = (f"M{x1:g},{y1:g} C{x1:g},{y1 + dy:g} "
-                 f"{x2:g},{y2 - dy:g} {x2:g},{y2:g}")
+            d = link_path(pos[dep], pos[n["id"]], rx[dep], rx[n["id"]], ZOOM_RY)
             cls = "cm-edge cm-crossing" if ":" in dep else "cm-edge"
             paths.append(f'<path class="{cls}" d="{d}"/>')
             incident[dep].append(d)
             incident[n["id"]].append(d)
 
-    out = [f'<svg class="cm-svg cm-zoomsvg" viewBox="0 0 {w:g} {h:g}" role="group" '
-           f'aria-label="The {len(local)} concepts inside '
+    out = [f'<svg class="cm-svg cm-zoomsvg" viewBox="0 0 {WIDTH} {h:g}" '
+           f'role="group" aria-label="The {len(local)} concepts inside '
            f'{esc(data[path]["title"])}, with a line from each to the ones it '
            f'needs first, and {len(outside)} borrowed from earlier pages.">']
     out += paths
     for n in nodes:
-        x, yy = pos[n["id"]]
+        cx, cy = pos[n["id"]]
         halo = "".join(f'<path class="cm-halo" d="{d}"/>' for d in incident[n["id"]])
-        cls = "cm-node cm-outside" if n.get("foreign") else "cm-node"
-        out.append(
-            f'<g class="{cls}"><title>{esc(n["note"])}</title>{halo}'
-            f'<a href="{href(n["link"])}">'
-            f'<rect class="cm-box" x="{x:g}" y="{yy:g}" width="{ZW}" '
-            f'height="{ZH}" rx="5"/>'
-            f'{label(x, yy, ZW, ZH, wrap(n["label"], 21), 11)}</a></g>')
+        out.append(draw(
+            cx, cy, rx[n["id"]], ZOOM_RY, lines[n["id"]], ZOOM_SIZE,
+            "cm-node cm-outside" if n.get("foreign") else "cm-node",
+            href(n["link"]), n["note"], halo))
     out.append("</svg>")
     return "".join(out), len(local), len(paths), len(outside)
 
@@ -310,13 +331,13 @@ def build():
             f'<section class="cm-zoom" id="zoom-{slug(p)}">'
             f'<p class="cm-zoomhead"><strong>Inside {esc(data[p]["title"])}</strong> — '
             f'{n} concepts, {e} lines'
-            f'{f", and {borrowed} dashed boxes borrowed from earlier pages" if borrowed else ""}. '
-            f'Every box is a link. <a href="{url(p)}">Open the page</a> · '
+            f'{f", and {borrowed} dashed bubbles borrowed from earlier pages" if borrowed else ""}. '
+            f'Every bubble is a link. <a href="{url(p)}">Open the page</a> · '
             f'<a href="#the-map">Back to the map</a></p>{svg}</section>')
 
     body = f"""---
 tier: meta
-description: Every page on the site as a box, with a line to each page you need first — and a second, granular network inside each one.
+description: Every page on the site as a bubble, with a line to each page you need first — and a second, granular network inside each one.
 ---
 
 <!-- GENERATED by tools/conceptmap.py from concepts.yml and inside.yml. Do not
@@ -327,8 +348,9 @@ description: Every page on the site as a box, with a line to each page you need 
 Every page on the site, with a line to each page you have to read first. The
 menu down the side can only be a list; this is the shape underneath it.
 
-**Hover a box** to light up its own lines. **Click one** to open the page —
-or, where the zoom exists, the granular network of concepts inside it.
+**Hover a bubble** to read it and light up its own lines. **Click one** to
+open the page — or, where the zoom exists, the granular network of concepts
+inside it.
 
 <figure class="cm-fig" id="the-map">{m}</figure>
 

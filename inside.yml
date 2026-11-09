@@ -29,7 +29,7 @@ pages:
   crypto/addresses.md:
     inside:
       - id: derivation
-        label: The derivation
+        label: Keccak of the public key
         note: Public key, hashed with Keccak-256, last 20 bytes kept.
         link: crypto/addresses.md#the-derivation
         needs: []
@@ -41,31 +41,31 @@ pages:
         needs: [derivation]
 
       - id: why-20-bytes
-        label: Why only 20 bytes
+        label: Only 20 bytes are kept
         note: Half the hash is thrown away, and 160 bits is still far beyond reach.
         link: crypto/addresses.md#why-keep-only-20-bytes
         needs: [derivation]
 
       - id: already-exists
-        label: They all exist already
+        label: Every address exists
         note: Every 20-byte string is an address. None of them is created; most have no key anyone holds.
         link: crypto/addresses.md#every-address-already-exists
         needs: [why-20-bytes]
 
       - id: checksum
-        label: Capitals are a check
+        label: Capitals are a checksum
         note: The mix of upper and lower case encodes a checksum over the address itself.
         link: crypto/addresses.md#the-capitalisation-is-a-checksum
         needs: [derivation]
 
       - id: what-it-catches
-        label: What it catches
+        label: Catches typos, not swaps
         note: Typos, yes. An address someone else chose to send you, no.
         link: crypto/addresses.md#what-it-catches-and-what-it-doesnt
         needs: [checksum]
 
       - id: contract-addresses
-        label: Contract addresses
+        label: Addresses without a key
         note: Not derived from a key at all — computed from the creator and a counter.
         link: crypto/addresses.md#contract-addresses
         needs: [derivation, one-key-one-address]
@@ -79,19 +79,19 @@ pages:
         needs: []
 
       - id: where-things-live
-        label: Where each thing lives
+        label: Only the key is off-chain
         note: The key is off the chain; everything else, including an EOA, is on it.
         link: accounts/accounts.md#where-each-thing-lives
         needs: [entry]
 
       - id: contract-account
-        label: Contract account
+        label: Controlled by its code
         note: Controlled by code that lives on the chain, where anyone can read it.
         link: contracts/smart-contracts.md
         needs: [where-things-live]
 
       - id: four-fields
-        label: The four fields
+        label: Exactly four fields
         note: Every account, of either kind, holds exactly these four and nothing else.
         link: accounts/accounts.md#the-four-fields
         needs: [entry]
@@ -109,7 +109,7 @@ pages:
         needs: [four-fields]
 
       - id: fingerprints
-        label: The two fingerprints
+        label: Two hashes, not the data
         note: storageRoot and codeHash are hashes of things kept elsewhere, not the things.
         link: accounts/accounts.md#the-two-fingerprints
         needs: [four-fields]
@@ -127,7 +127,7 @@ pages:
         needs: [fingerprints]
 
       - id: code-and-storage
-        label: Code and storage
+        label: One account holds both
         note: One account can hold both, because the two fields are independent.
         link: accounts/accounts.md#so-one-account-can-hold-code-and-storage
         needs: [storage-root, code-hash]
@@ -139,13 +139,13 @@ pages:
         needs: [balance, contract-account]
 
       - id: which-kind
-        label: Which kind is it?
+        label: codeHash decides the kind
         note: One field answers it — an empty codeHash means no code, so no contract.
         link: accounts/accounts.md#which-kind-is-it-look-at-one-field
         needs: [code-hash, contract-account]
 
       - id: address-finds
-        label: Finding the entry
+        label: The address is the key
         note: The address is the key into the state. The address is not the account.
         link: accounts/accounts.md#how-an-address-finds-an-account
         needs: [entry, "crypto/addresses.md:derivation"]
@@ -157,19 +157,19 @@ pages:
         needs: [address-finds]
 
       - id: nothing-creates
-        label: Nothing creates one
+        label: Nothing creates an account
         note: An entry appears the moment something is put at an address. No act of creation.
         link: accounts/accounts.md#nothing-creates-an-account
         needs: [balance, "crypto/addresses.md:already-exists"]
 
       - id: only-eoa-acts
-        label: Only an EOA starts
+        label: Only an EOA can start
         note: Nothing happens by itself. Every chain of execution begins with a signature.
         link: accounts/accounts.md#only-an-eoa-can-start-anything
         needs: [where-things-live, contract-account]
 
       - id: needs-a-nonce
-        label: Why it needs a nonce
+        label: Balances allow replay
         note: Balances make a signed transaction reusable, which is the hole the counter fills.
         link: accounts/accounts.md#why-this-design-needs-a-nonce
         needs: [nonce, only-eoa-acts]
@@ -177,55 +177,55 @@ pages:
   accounts/nonce.md:
     inside:
       - id: concretely
-        label: The counter itself
+        label: A counter from zero
         note: Starts at zero, rises by one per transaction sent. Nothing more.
         link: accounts/nonce.md#the-account-nonce-concretely
         needs: ["accounts/accounts.md:four-fields"]
 
       - id: problem
-        label: The problem it solves
+        label: A signature stays valid
         note: Without it a signature stays valid, so a payment could be replayed forever.
         link: accounts/nonce.md#the-problem-it-solves
         needs: [concretely, "accounts/accounts.md:needs-a-nonce"]
 
       - id: bitcoin
-        label: Why Bitcoin differs
+        label: Bitcoin consumes the coin
         note: Spending a coin consumes it, so there is nothing left to replay.
         link: accounts/nonce.md#why-bitcoin-needs-no-such-thing
         needs: [problem]
 
       - id: in-order
-        label: Strictly in order
+        label: Strictly in order, no gaps
         note: No gaps. Nonce 5 waits until 4 is included, however much it pays.
         link: accounts/nonce.md#strictly-in-order-no-gaps
         needs: [problem]
 
       - id: stuck
-        label: Why they get stuck
+        label: One cheap one blocks all
         note: One cheap transaction low in the queue holds up every later one.
         link: accounts/nonce.md#why-transactions-get-stuck
         needs: [in-order]
 
       - id: unsticking
-        label: Unsticking one
+        label: Replace, never cancel
         note: Replace it at the same nonce — you cannot cancel, only overwrite.
         link: accounts/nonce.md#unsticking-one
         needs: [stuck]
 
       - id: contract-nonce
-        label: Contracts have one
+        label: Contracts count deploys
         note: For a contract the counter records deployments, not transactions sent.
         link: accounts/nonce.md#contract-accounts-have-a-nonce-too
         needs: [concretely, "crypto/addresses.md:contract-addresses"]
 
       - id: not-random
-        label: What it is not
+        label: Not secret, not random
         note: Not secret, not random, not a fee, not a position in a block.
         link: accounts/nonce.md#what-the-nonce-is-not
         needs: [concretely]
 
       - id: other-nonces
-        label: The other nonces
+        label: Five unrelated nonces
         note: Five unrelated mechanisms share the word. Only this one counts transactions.
         link: accounts/nonce.md#other-things-called-a-nonce
         needs: [not-random]
