@@ -449,26 +449,24 @@
 /* ---------------------------------------------------------------------------
    THE CONCEPT MAP
    ---------------------------------------------------------------------------
-   Styling for the two generated pictures on /concept-map/. There is no
-   JavaScript on that page: the layout is arithmetic done by
-   tools/conceptmap.py, and both interactions are CSS.
+   Two levels, on one page, with no JavaScript. The layout is arithmetic done
+   by tools/conceptmap.py; everything interactive here is CSS.
 
-     hover a page box   -> its own dependency lines are drawn over the rest
-     click a part box   -> :target isolates that band below
+     hover a box     -> its own lines are drawn over the rest
+     click a box     -> :target opens the granular network inside that page
 
-   The hover trick needs explaining, because it looks redundant. Each page
-   box carries hidden COPIES of the lines touching it, inside its own <g>.
-   CSS cannot select "the line whose endpoint is the box I am hovering", so
-   instead each box owns its lines and reveals them. That is why the
-   generated file has 158 .cm-halo paths for 79 .cm-edge ones.
+   The hover trick looks redundant but is not. CSS cannot select "the line
+   whose endpoint is the box I am hovering", so each box carries hidden
+   COPIES of the lines touching it and reveals them. Hence roughly two halo
+   paths per edge in the generated file.
 
-   Everything is drawn in currentColor, so the picture follows the theme
+   Everything is drawn in currentColor, so both pictures follow the theme
    into dark mode without a second palette.
    --------------------------------------------------------------------------- */
 
 .cm-fig {
-  margin: 1.4em 0;
-  overflow-x: auto;          /* the detail picture is 780px wide; phones scroll */
+  margin: 1.6em 0;
+  overflow-x: auto;          /* the map is 780px wide; phones scroll */
 }
 
 .cm-svg {
@@ -481,41 +479,20 @@
   color: var(--md-default-fg-color);
 }
 
-.cm-svg.cm-overview {
-  max-width: 32rem;
-  min-width: 20rem;
-}
-
-.cm-fig figcaption {
-  margin-top: 0.5em;
-  font-size: 0.75rem;
-  line-height: 1.5;
-  text-align: center;
-  color: var(--md-default-fg-color--light);
-}
-
-/* A box: filled with the page background so the lines behind it are hidden
-   rather than showing through the label. */
 .cm-box {
-  fill: var(--md-default-bg-color);
+  fill: var(--md-default-bg-color);   /* hides the lines running behind it */
   stroke: currentColor;
   stroke-width: 1;
   opacity: 0.55;
 }
 
 .cm-label,
-.cm-partname,
-.cm-partmeta,
-.cm-band,
-.cm-lanenum {
+.cm-band {
   fill: currentColor;
   font-family: var(--md-text-font-family, sans-serif);
 }
 
 .cm-label { font-weight: 500; }
-.cm-partname { font-weight: 600; }
-.cm-partmeta { opacity: 0.6; }
-.cm-lanenum { opacity: 0.75; font-weight: 600; }
 
 .cm-band {
   letter-spacing: 0.1em;
@@ -525,8 +502,8 @@
 
 .cm-count { font-weight: 400; letter-spacing: 0; }
 
-/* The 79 dependencies. Faint on purpose: all of them at full strength is a
-   hairball, and the picture is meant to be read one box at a time. */
+/* Faint on purpose: every line at full strength is a hairball, and the
+   picture is meant to be read one box at a time. */
 .cm-edge {
   fill: none;
   stroke: currentColor;
@@ -534,14 +511,7 @@
   opacity: 0.16;
 }
 
-.cm-lane {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.2;
-  opacity: 0.35;
-}
-
-/* Hidden until the box they belong to is hovered or focused by keyboard. */
+/* Hidden until the box they belong to is hovered, or reached by keyboard. */
 .cm-halo {
   fill: none;
   stroke: var(--md-accent-fg-color, currentColor);
@@ -551,9 +521,7 @@
 }
 
 .cm-node:hover .cm-halo,
-.cm-node:focus-within .cm-halo {
-  opacity: 0.9;
-}
+.cm-node:focus-within .cm-halo { opacity: 0.9; }
 
 .cm-node:hover .cm-box,
 .cm-node:focus-within .cm-box {
@@ -562,10 +530,10 @@
   stroke: var(--md-accent-fg-color, currentColor);
 }
 
-.cm-partbox:hover .cm-box { opacity: 1; stroke-width: 1.8; }
+/* A box that opens a zoom rather than a page is marked, faintly, by a
+   heavier border — otherwise clicking is a lottery. */
+.cm-has-zoom .cm-box { stroke-width: 2; opacity: 0.8; }
 
-/* Links inside the pictures: no underline, no external-link arrow, and a
-   visible focus ring so the map is usable from the keyboard. */
 .cm-svg a { text-decoration: none; cursor: pointer; }
 .cm-svg a:focus-visible .cm-box {
   stroke: var(--md-accent-fg-color, currentColor);
@@ -574,54 +542,34 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Isolating one part, with no script.
+   The zoom: the concepts inside one page.
 
-   The page emits an empty <span id="part-N"> before the detail figure. The
-   links above it point at those ids, so clicking one makes that span
-   :target, and the sibling combinator reaches forward into the figure. The
-   "everything" link points elsewhere, which clears the targeting.
+   Each is a <section> that is hidden until its id is the fragment in the
+   address bar, which is what clicking a box on the map puts there. "Back to
+   the map" points at the map's own id, which stops matching every zoom and
+   closes it again. No script, and the browser's back button works.
    --------------------------------------------------------------------------- */
 
-.cm-target { display: block; height: 0; scroll-margin-top: 4rem; }
+.cm-zoom { display: none; }
 
-.cm-target:target ~ .cm-detail .cm-node { opacity: 0.16; }
-.cm-target:target ~ .cm-detail .cm-edge { opacity: 0.04; }
-.cm-target:target ~ .cm-detail .cm-band { opacity: 0.2; }
+.cm-zoom:target {
+  display: block;
+  scroll-margin-top: 4rem;
+  margin: 1.5em 0;
+  padding: 1.2em 0 0.4em;
+  border-top: 1px solid var(--md-default-fg-color--lightest, rgba(0,0,0,.1));
+}
 
-/* Written out per part rather than generated, because CSS has no loops.
-   Seven is the number of parts the site will ever have. */
-#part-0:target ~ .cm-detail .cm-part-0,
-#part-1:target ~ .cm-detail .cm-part-1,
-#part-2:target ~ .cm-detail .cm-part-2,
-#part-3:target ~ .cm-detail .cm-part-3,
-#part-4:target ~ .cm-detail .cm-part-4,
-#part-5:target ~ .cm-detail .cm-part-5,
-#part-6:target ~ .cm-detail .cm-part-6 { opacity: 1; }
+.md-typeset .cm-zoomhead {
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: var(--md-default-fg-color--light);
+}
 
-#part-0:target ~ .cm-detail .cm-edge.cm-from-0,
-#part-0:target ~ .cm-detail .cm-edge.cm-to-0,
-#part-1:target ~ .cm-detail .cm-edge.cm-from-1,
-#part-1:target ~ .cm-detail .cm-edge.cm-to-1,
-#part-2:target ~ .cm-detail .cm-edge.cm-from-2,
-#part-2:target ~ .cm-detail .cm-edge.cm-to-2,
-#part-3:target ~ .cm-detail .cm-edge.cm-from-3,
-#part-3:target ~ .cm-detail .cm-edge.cm-to-3,
-#part-4:target ~ .cm-detail .cm-edge.cm-from-4,
-#part-4:target ~ .cm-detail .cm-edge.cm-to-4,
-#part-5:target ~ .cm-detail .cm-edge.cm-from-5,
-#part-5:target ~ .cm-detail .cm-edge.cm-to-5,
-#part-6:target ~ .cm-detail .cm-edge.cm-from-6,
-#part-6:target ~ .cm-detail .cm-edge.cm-to-6 { opacity: 0.45; }
-
-/* A dimmed box is still a link, and a keyboard tab into one has to show
-   itself. Hover and focus override the dimming. */
-.cm-target:target ~ .cm-detail .cm-node:hover,
-.cm-target:target ~ .cm-detail .cm-node:focus-within { opacity: 1; }
+.cm-zoomsvg { max-width: 44rem; min-width: 28rem; }
 
 @media (max-width: 30rem) {
-  /* Hover does not exist on a touch screen, so the dimming would strand a
-     reader with a half-faded picture. Show everything instead. */
-  .cm-target:target ~ .cm-detail .cm-node,
-  .cm-target:target ~ .cm-detail .cm-band { opacity: 1; }
-  .cm-target:target ~ .cm-detail .cm-edge { opacity: 0.16; }
+  /* Hover does not exist on a touch screen. Nothing to fall back to here —
+     the pictures still read, and tapping a box still follows its link. */
+  .cm-svg { min-width: 26rem; }
 }

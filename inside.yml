@@ -1,0 +1,114 @@
+# What is INSIDE each page: the granular concepts it contains, and how they
+# depend on each other within that page. This is the second level of the
+# concept map — the map itself shows pages, and clicking one zooms in here.
+#
+# Hand-authored, unlike concepts.yml. There is no honest way to generate it:
+# the bold terms on a page are not its concepts, and the order they appear in
+# is not the order they depend on each other.
+#
+#   id     short, stable, used only to join the edges up
+#   label  what the box says; keep it under about 22 characters
+#   note   one line, shown on hover
+#   needs  ids on this same page that must come first
+#   page   optional: the page where this concept gets a full treatment
+#
+# One page is authored so far, as a prototype. The rest follow if the shape
+# turns out to be worth it.
+
+pages:
+
+  accounts/accounts.md:
+    inside:
+      - id: state
+        label: The state
+        note: The complete record of every account, held by every node.
+        page: accounts/state.md
+        needs: []
+
+      - id: entry
+        label: An entry in it
+        note: An account is one entry in that record — not an object, not a file.
+        needs: [state]
+
+      - id: address
+        label: Address
+        note: The 20 bytes that find the entry. The address is not the account.
+        page: crypto/addresses.md
+        needs: [entry]
+
+      - id: four-fields
+        label: The four fields
+        note: Every account, of either kind, holds exactly these four.
+        needs: [entry]
+
+      - id: nonce
+        label: nonce
+        note: A sequential counter of transactions sent. Public and predictable on purpose.
+        page: accounts/nonce.md
+        needs: [four-fields]
+
+      - id: balance
+        label: balance
+        note: Ether held by the account, counted in wei.
+        page: foundations/ether.md
+        needs: [four-fields]
+
+      - id: storage-root
+        label: storageRoot
+        note: A fingerprint of everything the account has stored.
+        page: encoding/merkle-patricia-trie.md
+        needs: [four-fields]
+
+      - id: code-hash
+        label: codeHash
+        note: A fingerprint of the account's code. The field that decides the kind.
+        page: contracts/what-the-code-is.md
+        needs: [four-fields]
+
+      - id: eoa
+        label: EOA
+        note: Controlled by a key that lives off the chain. On-chain exactly as much as any account.
+        needs: [entry]
+
+      - id: contract-account
+        label: Contract account
+        note: Controlled by code that lives on the chain, where anyone can read it.
+        page: contracts/smart-contracts.md
+        needs: [entry]
+
+      - id: which-kind
+        label: Which kind is it?
+        note: One field answers it — an empty codeHash means no code, so no contract.
+        needs: [code-hash, eoa, contract-account]
+
+      - id: holds-ether
+        label: Contracts hold ether
+        note: The balance field is the same field for both kinds. Code can own money.
+        needs: [balance, contract-account]
+
+      - id: not-a-wallet
+        label: Not your wallet
+        note: The wallet is software holding keys. Losing it does not touch the account.
+        page: wallets/seed-phrases.md
+        needs: [eoa, address]
+
+      - id: only-eoa-acts
+        label: Only an EOA starts
+        note: Nothing happens by itself. Every chain of execution begins with a signature.
+        needs: [eoa, contract-account]
+
+      - id: nothing-creates
+        label: Nothing creates one
+        note: An entry appears the moment something is put at an address. No act of creation.
+        needs: [entry, balance]
+
+      - id: hashed-key
+        label: keccak256(address)
+        note: The lookup key is the hash of the address, not the address itself.
+        page: crypto/keccak256.md
+        needs: [address]
+
+      - id: cannot-choose
+        label: You cannot choose
+        note: Hashing the key is what stops anyone picking where in the structure they land.
+        needs: [hashed-key, nothing-creates]
