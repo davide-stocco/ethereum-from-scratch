@@ -50,25 +50,43 @@ That gap — between what the code *does* and what it is *for* — is this page'
 
 ## Where the bytecode is kept
 
-A fair question the page has been skipping, and it closes a loop from two parts back.
-
 The [accounts](../accounts/accounts.md) page said an account holds four fields, one of which is `codeHash` — **a 32-byte hash, not the code itself.** So where is the code?
 
-**Stored separately, and found by its hash.** A node keeps a table from code hashes to code, and the account entry holds the key to it. Ask for the code at an address and the node reads the account, takes the `codeHash`, and looks the bytes up [(Wood, 2014)](#ref-wood-2014).
+**On every node.** All of it, on each of them.
+
+Code is part of the [state](../accounts/state.md), and the state is the thing every node holds a complete copy of. So every node that can check a block holds the bytecode of every contract that exists — exactly as it holds every balance and every storage slot. Nothing is kept on one special machine, nothing has to be fetched from anybody, and there is no question of *which* node has it. They all do.
+
+That is worth being emphatic about, because the word "hash" invites the wrong picture. `codeHash` is **not** a reference to somewhere else on the network. It is a key into the node's **own** storage, on its own disk, a few millimetres from the account entry that mentions it.
+
+??? abstract "Then why keep the code out of the account entry at all?"
+
+    Three reasons, all about size.
+
+    **The entry stays small.** An account is four fields and must be a fixed,
+    tidy size whether its code is fifty bytes or fifty thousand. Holding a
+    32-byte hash achieves that; holding the code would not.
+
+    **Identical contracts share one copy.** Two deployments of the same
+    bytecode have the same `codeHash`, so there is nothing to store twice.
+    The account entries differ; the code they point at is one object.
+
+    **And code never changes.** Once deployed it is fixed, so unlike a balance
+    it never needs rewriting — which makes it exactly the sort of thing to
+    keep to one side and refer to, rather than carry around.
 
 ### How a node knows it has the right code
 
-By hashing what it holds. If a node is handed some bytes claiming to be a contract's code, it hashes them and compares against the `codeHash` in the account — and if they differ, the bytes are wrong. Nothing has to be trusted.
+By hashing it.
 
-And that `codeHash` is itself covered by the [state root](../accounts/state.md), which the block header commits to. So the chain of commitment runs all the way down:
+Hand a node some bytes claiming to be a contract's code and it hashes them, compares the result with the `codeHash` in that contract's account, and rejects them if they differ. Nothing is taken on trust, which is the same move as everywhere else on this site.
+
+And `codeHash` is itself covered by the [state root](../accounts/state.md), which the block header commits to. So the commitment runs all the way down:
 
 ```
 block header → state root → the account entry → codeHash → the code
 ```
 
-Alter one byte of a contract's code and its hash changes, so the account entry changes, so the state root changes, so the block header is wrong. **A contract's code is as firmly committed to as anybody's balance** — which is the same argument as the storage roots on the state page, applied to code.
-
-It also means **identical contracts share one stored copy.** Two deployments of the same bytecode have the same `codeHash`, so there is nothing to store twice. The account entries differ; the code they point at does not.
+Alter one byte of a contract's code and its hash changes, so the account entry changes, so the state root changes, so the block header is wrong. **A contract's code is committed to exactly as firmly as anybody's balance** [(Wood, 2014)](#ref-wood-2014).
 
 ??? note "And how does it get called?"
 
@@ -191,8 +209,8 @@ Every language that targets Ethereum is an arrangement among people outside the 
 
 - Two things get called "the code": the **source** a person wrote, and the **bytecode** a compiler produced. Only the second has ever been on the chain.
 - A contract's code on-chain is **bytecode**: one byte per instruction, with constants between them. No names, no comments, no types.
-- The account entry holds only a **`codeHash`**; the code is stored separately and found by that hash. A node checks it has the right code by hashing what it holds.
-- `codeHash` is covered by the state root, so **a contract's code is committed to as firmly as anybody's balance** — and identical contracts share one stored copy.
+- **Every node holds every contract's code**, because code is part of the state. The account entry holds only a `codeHash`, which is a key into that node's own storage rather than a reference to anywhere else.
+- A node checks it has the right code by **hashing it** and comparing. `codeHash` is covered by the state root, so **a contract's code is committed to as firmly as anybody's balance** — and identical contracts share one stored copy.
 - **Source was never on the chain.** The compiler uses it and discards everything that made it readable, so the relationship is one-way: source gives bytecode, bytecode cannot give source.
 - Bytecode *is* readable as instructions and tells you nothing about purpose. The opening bytes of nearly every Solidity contract are memory bookkeeping.
 - **"Verified" means somebody produced source that compiles to exactly these bytes.** Strong evidence, performed off-chain by a party who chose to, and not a statement by the protocol.
