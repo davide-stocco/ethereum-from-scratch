@@ -2528,16 +2528,30 @@ and has never been on the chain at all.</p>
 <p>Three instructions, entirely unambiguous — and they tell you <strong>nothing about what the contract is for.</strong> They are the opening move of almost every Solidity contract: housekeeping, done before any of its actual business starts.</p>
 <p>That gap — between what the code <em>does</em> and what it is <em>for</em> — is this page's subject.</p>
 <h2 id="where-the-bytecode-is-kept">Where the bytecode is kept</h2>
-<p>A fair question the page has been skipping, and it closes a loop from two parts back.</p>
 <p>The <a href="../../accounts/accounts/">accounts</a> page said an account holds four fields, one of which is <code>codeHash</code> — <strong>a 32-byte hash, not the code itself.</strong> So where is the code?</p>
-<p><strong>Stored separately, and found by its hash.</strong> A node keeps a table from code hashes to code, and the account entry holds the key to it. Ask for the code at an address and the node reads the account, takes the <code>codeHash</code>, and looks the bytes up <a href="#ref-wood-2014">(Wood, 2014)</a>.</p>
+<p><strong>On every node.</strong> All of it, on each of them.</p>
+<p>Code is part of the <a href="../../accounts/state/">state</a>, and the state is the thing every node holds a complete copy of. So every node that can check a block holds the bytecode of every contract that exists — exactly as it holds every balance and every storage slot. Nothing is kept on one special machine, nothing has to be fetched from anybody, and there is no question of <em>which</em> node has it. They all do.</p>
+<p>That is worth being emphatic about, because the word "hash" invites the wrong picture. <code>codeHash</code> is <strong>not</strong> a reference to somewhere else on the network. It is a key into the node's <strong>own</strong> storage, on its own disk, a few millimetres from the account entry that mentions it.</p>
+<details class="abstract">
+<summary>Then why keep the code out of the account entry at all?</summary>
+<p>Three reasons, all about size.</p>
+<p><strong>The entry stays small.</strong> An account is four fields and must be a fixed,
+tidy size whether its code is fifty bytes or fifty thousand. Holding a
+32-byte hash achieves that; holding the code would not.</p>
+<p><strong>Identical contracts share one copy.</strong> Two deployments of the same
+bytecode have the same <code>codeHash</code>, so there is nothing to store twice.
+The account entries differ; the code they point at is one object.</p>
+<p><strong>And code never changes.</strong> Once deployed it is fixed, so unlike a balance
+it never needs rewriting — which makes it exactly the sort of thing to
+keep to one side and refer to, rather than carry around.</p>
+</details>
 <h3 id="how-a-node-knows-it-has-the-right-code">How a node knows it has the right code</h3>
-<p>By hashing what it holds. If a node is handed some bytes claiming to be a contract's code, it hashes them and compares against the <code>codeHash</code> in the account — and if they differ, the bytes are wrong. Nothing has to be trusted.</p>
-<p>And that <code>codeHash</code> is itself covered by the <a href="../../accounts/state/">state root</a>, which the block header commits to. So the chain of commitment runs all the way down:</p>
+<p>By hashing it.</p>
+<p>Hand a node some bytes claiming to be a contract's code and it hashes them, compares the result with the <code>codeHash</code> in that contract's account, and rejects them if they differ. Nothing is taken on trust, which is the same move as everywhere else on this site.</p>
+<p>And <code>codeHash</code> is itself covered by the <a href="../../accounts/state/">state root</a>, which the block header commits to. So the commitment runs all the way down:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>block header → state root → the account entry → codeHash → the code
 </code></pre></div>
-<p>Alter one byte of a contract's code and its hash changes, so the account entry changes, so the state root changes, so the block header is wrong. <strong>A contract's code is as firmly committed to as anybody's balance</strong> — which is the same argument as the storage roots on the state page, applied to code.</p>
-<p>It also means <strong>identical contracts share one stored copy.</strong> Two deployments of the same bytecode have the same <code>codeHash</code>, so there is nothing to store twice. The account entries differ; the code they point at does not.</p>
+<p>Alter one byte of a contract's code and its hash changes, so the account entry changes, so the state root changes, so the block header is wrong. <strong>A contract's code is committed to exactly as firmly as anybody's balance</strong> <a href="#ref-wood-2014">(Wood, 2014)</a>.</p>
 <details class="note">
 <summary>And how does it get called?</summary>
 <p>Mechanically: a transaction naming the contract's address as its
@@ -2624,8 +2638,8 @@ useful one.</p>
 <ul>
 <li>Two things get called "the code": the <strong>source</strong> a person wrote, and the <strong>bytecode</strong> a compiler produced. Only the second has ever been on the chain.</li>
 <li>A contract's code on-chain is <strong>bytecode</strong>: one byte per instruction, with constants between them. No names, no comments, no types.</li>
-<li>The account entry holds only a <strong><code>codeHash</code></strong>; the code is stored separately and found by that hash. A node checks it has the right code by hashing what it holds.</li>
-<li><code>codeHash</code> is covered by the state root, so <strong>a contract's code is committed to as firmly as anybody's balance</strong> — and identical contracts share one stored copy.</li>
+<li><strong>Every node holds every contract's code</strong>, because code is part of the state. The account entry holds only a <code>codeHash</code>, which is a key into that node's own storage rather than a reference to anywhere else.</li>
+<li>A node checks it has the right code by <strong>hashing it</strong> and comparing. <code>codeHash</code> is covered by the state root, so <strong>a contract's code is committed to as firmly as anybody's balance</strong> — and identical contracts share one stored copy.</li>
 <li><strong>Source was never on the chain.</strong> The compiler uses it and discards everything that made it readable, so the relationship is one-way: source gives bytecode, bytecode cannot give source.</li>
 <li>Bytecode <em>is</em> readable as instructions and tells you nothing about purpose. The opening bytes of nearly every Solidity contract are memory bookkeeping.</li>
 <li><strong>"Verified" means somebody produced source that compiles to exactly these bytes.</strong> Strong evidence, performed off-chain by a party who chose to, and not a statement by the protocol.</li>
