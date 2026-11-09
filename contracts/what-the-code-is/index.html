@@ -2531,7 +2531,6 @@ and has never been on the chain at all.</p>
 <p>The <a href="../../accounts/accounts/">accounts</a> page said an account holds four fields, one of which is <code>codeHash</code> — <strong>a 32-byte hash, not the code itself.</strong> So where is the code?</p>
 <p><strong>On every node.</strong> All of it, on each of them.</p>
 <p>Code is part of the <a href="../../accounts/state/">state</a>, and the state is the thing every node holds a complete copy of. So every node that can check a block holds the bytecode of every contract that exists — exactly as it holds every balance and every storage slot. Nothing is kept on one special machine, nothing has to be fetched from anybody, and there is no question of <em>which</em> node has it. They all do.</p>
-<p>That is worth being emphatic about, because the word "hash" invites the wrong picture. <code>codeHash</code> is <strong>not</strong> a reference to somewhere else on the network. It is a key into the node's <strong>own</strong> storage, on its own disk, a few millimetres from the account entry that mentions it.</p>
 <details class="abstract">
 <summary>Then why keep the code out of the account entry at all?</summary>
 <p>Three reasons, all about size.</p>
