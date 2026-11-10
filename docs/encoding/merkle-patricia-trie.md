@@ -82,71 +82,6 @@ What matters is that **the rule is fixed and the same everywhere.** If one imple
     the two halves of a node differ, on top of the encodings the [RLP](rlp.md)
     page mentioned.)
 
-??? abstract "The two rules, in the code that defines them"
-
-    Both rules are conventions rather than consequences, so the only
-    authority for either one is the implementation. Here is each, abridged.
-
-    **Bitcoin** — `src/consensus/merkle.cpp`, MIT licensed
-    [(Bitcoin Core)](#ref-bitcoin-merkle). The odd case is a single line:
-
-    ``` cpp
-    while (hashes.size() > 1) {
-        if (hashes.size() & 1) {
-            hashes.push_back(hashes.back());   // no partner: pair it with itself
-        }
-        SHA256D64(hashes[0].begin(), hashes[0].begin(), hashes.size() / 2);
-        hashes.resize(hashes.size() / 2);
-    }
-    ```
-
-    **Ethereum** — `trie/hasher.go` in go-ethereum, LGPL-3.0 licensed
-    [(go-ethereum)](#ref-geth-hasher). Hashing a branch node:
-
-    ``` go
-    for i := 0; i < 16; i++ {
-        if child := n.Children[i]; child != nil {
-            fn.Children[i] = h.hash(child, false)
-        }
-    }
-    if n.Children[16] != nil {
-        fn.Children[16] = n.Children[16].(valueNode)
-    }
-    ```
-
-    **The comparison is the absence.** There is no odd case in the second
-    one, and no line elsewhere that supplies it, because nothing is being
-    paired. The loop walks sixteen fixed slots, hashes the children that are
-    there, skips the ones that are not, and a seventeenth slot holds a value
-    if the node has one.
-
-    **A missing child is not an unpaired child.** It is an empty slot, which
-    encodes as empty and affects the node's hash exactly as any other
-    content does. Bitcoin needs a rule because it pairs a count it does not
-    control; Ethereum needs none because the count is always sixteen.
-
-    (The Go quoted is the sequential path. The same function has a parallel
-    version above it, doing identical work on several children at once —
-    which is a speed decision and changes no hash.)
-
-## Second, the trie part
-
-A Merkle tree commits to a *list*. Ethereum needs a **mapping**: given an address, find its account. So the second ingredient is a structure for looking things up.
-
-Forget hashes for a moment and forget Ethereum. Suppose you want to store three words — `cats`, `cars`, `dog` — so that you can find any of them again.
-
-A **trie** stores them by **spelling them out**. Start at the root. Take the first letter of your key and follow the branch marked with that letter. Take the second letter, follow that branch. Carry on until the key runs out, and whatever you find there is the value.
-
-<svg viewBox="0 0 470 300" role="img" aria-label="A plain trie holding cats, cars and dog. From the root, c leads to a, which divides into t and r, each leading to an s that ends a key. Separately d leads to o, which leads to g. Ten nodes in total, and five of them have a single child and carry no information." style="width:100%;max-width:27rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="160" y="10" width="76" height="26" rx="4"/><rect x="76" y="60" width="40" height="26" rx="4" stroke-dasharray="4 3"/><rect x="300" y="60" width="40" height="26" rx="4" stroke-dasharray="4 3"/><rect x="76" y="110" width="40" height="26" rx="4"/><rect x="300" y="110" width="40" height="26" rx="4" stroke-dasharray="4 3"/><rect x="28" y="160" width="40" height="26" rx="4" stroke-dasharray="4 3"/><rect x="124" y="160" width="40" height="26" rx="4" stroke-dasharray="4 3"/><rect x="300" y="160" width="40" height="26" rx="4"/><rect x="14" y="212" width="68" height="40" rx="4"/><rect x="110" y="212" width="68" height="40" rx="4"/><rect x="286" y="212" width="68" height="40" rx="4"/><path d="M180 36 L96 56"/><path d="M216 36 L320 56"/><path d="M96 86 L96 106"/><path d="M320 86 L320 106"/><path d="M86 136 L58 156"/><path d="M106 136 L134 156"/><path d="M320 136 L320 156"/><path d="M48 186 L48 208"/><path d="M144 186 L144 208"/><path d="M320 186 L320 208"/></g><g fill="currentColor" stroke="none"><text x="198" y="28" font-size="11" text-anchor="middle" font-weight="700">root</text><text x="96" y="78" font-size="12" text-anchor="middle" font-family="monospace">c</text><text x="320" y="78" font-size="12" text-anchor="middle" font-family="monospace">d</text><text x="96" y="128" font-size="12" text-anchor="middle" font-family="monospace">a</text><text x="320" y="128" font-size="12" text-anchor="middle" font-family="monospace">o</text><text x="48" y="178" font-size="12" text-anchor="middle" font-family="monospace">t</text><text x="144" y="178" font-size="12" text-anchor="middle" font-family="monospace">r</text><text x="320" y="178" font-size="12" text-anchor="middle" font-family="monospace">g</text><text x="48" y="230" font-size="12" text-anchor="middle" font-family="monospace">s</text><text x="48" y="245" font-size="8" text-anchor="middle" opacity="0.8">ends cats</text><text x="144" y="230" font-size="12" text-anchor="middle" font-family="monospace">s</text><text x="144" y="245" font-size="8" text-anchor="middle" opacity="0.8">ends cars</text><text x="320" y="230" font-size="8" text-anchor="middle" opacity="0.8">ends dog</text><text x="14" y="276" font-size="10" opacity="0.85">Ten nodes. The five dashed ones have a single child and say only &#8220;keep going&#8221;.</text><text x="14" y="290" font-size="9" opacity="0.7">With 64-nibble keys, almost every node in the tree looks like one of those.</text></g></svg>
-
-Two things to notice, and they're the reasons Ethereum wants this.
-
-**Nothing is ever searched for.** You don't look through the structure comparing keys — you *spell* your key and the spelling walks you there. `cars` means: root, then `c`, then `a`, then `r`, then `s`. Four steps, no comparisons — and it would still be four steps with a billion other words in the tree.
-
-**And the shape comes from the keys alone.** Insert the same three words in any order and you get the identical tree, because where a word sits is decided by its letters and nothing else. There is no rebalancing, no first-come advantage, no history.
-
-That second point is **requirement (4), met for free** — and it is why two nodes that have never communicated compute the same root. Not by agreeing on anything: there was only ever one possible shape for those keys.
-
 ### What Ethereum does instead of letters
 
 Same idea, two substitutions.
@@ -305,7 +240,6 @@ The first two are the ones this site has been building towards: the state root i
 
 - <a id="ref-bitcoin-merkle"></a>**Bitcoin Core.** *consensus/merkle.cpp — `ComputeMerkleRoot`.* The duplication rule, in the implementation that defines it: when a level holds an odd number of hashes, the last is appended to itself before pairing. The same function carries mutation detection, because that duplication is what made CVE-2012-2459 possible — two different transaction lists producing one root. Cited because the rule is a convention, not a derivation, so the only authority for it is the code. <https://github.com/bitcoin/bitcoin/blob/master/src/consensus/merkle.cpp>
 - <a id="ref-eip6800"></a>**Buterin, V., Feist, D., Wedderburn, K., Ballet, G., Merriam, P., Herold, G., Hagopian, I., Jasoria, T., Singh, G., & Ferrin, D.** (2023). *EIP-6800: Ethereum state using a unified verkle tree.* Ethereum Improvement Proposals. The proposed replacement, aimed at far smaller proofs; marked *Stagnant* at the time of writing, which is the reason this page describes it as a direction rather than a plan. <https://eips.ethereum.org/EIPS/eip-6800>
-- <a id="ref-geth-hasher"></a>**go-ethereum.** *trie/hasher.go — `encodeFullNode`.* The branch node's sixteen slots, hashed one by one with empty ones skipped, and a seventeenth for a value. Cited beside the Bitcoin rule because the contrast is what makes the point: there is no odd-number case here to find. LGPL-3.0. <https://github.com/ethereum/go-ethereum/blob/master/trie/hasher.go>
 - <a id="ref-merkle-1988"></a>**Merkle, R. C.** (1988). *A digital signature based on a conventional encryption function.* *Advances in Cryptology — CRYPTO '87*, 369–378. Springer. The origin of the hash tree: many values committed to by one, with membership provable from the hashes along a single path. <https://doi.org/10.1007/3-540-48184-2_32>
 - <a id="ref-morrison-1968"></a>**Morrison, D. R.** (1968). *PATRICIA — Practical Algorithm To Retrieve Information Coded In Alphanumeric.* *Journal of the ACM*, 15(4), 514–534. The path-compressed trie Ethereum's structure takes its middle name from, published twenty-six years before the web. <https://doi.org/10.1145/321479.321481>
 - <a id="ref-wood-2014"></a>**Wood, G.** (2014). *Ethereum: A secure decentralised generalised transaction ledger.* Ethereum project yellow paper. Appendix D specifies the trie, including the node types, the hex-prefix encoding and the rule that nodes under 32 bytes are inlined. <https://ethereum.github.io/yellowpaper/paper.pdf>
