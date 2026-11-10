@@ -224,6 +224,22 @@ pages:
     summary: A node is a computer that holds the state and checks every block against the rules itself
       — which is what makes trusting anyone unnecessary.
     title: What a node is
+  transactions/transactions.md:
+    needs:
+    - accounts/accounts.md
+    - accounts/nonce.md
+    - accounts/state.md
+    - contracts/smart-contracts.md
+    - crypto/addresses.md
+    - crypto/keccak256.md
+    - crypto/signatures.md
+    - encoding/rlp.md
+    - foundations/ether.md
+    - foundations/what-is-ethereum.md
+    part: How it changes
+    summary: A signed instruction from an account, and the only thing that makes Ethereum do anything.
+      Here is a real one, decoded byte by byte.
+    title: Transactions
   wallets/losing-your-keys.md:
     needs:
     - crypto/addresses.md
