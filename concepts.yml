@@ -89,6 +89,20 @@ pages:
     summary: A smart contract is a program stored at an account — and the interesting thing about it is
       everything it has been forbidden to do.
     title: What a smart contract is
+  contracts/tokens.md:
+    needs:
+    - accounts/accounts.md
+    - contracts/events-and-logs.md
+    - contracts/smart-contracts.md
+    - crypto/addresses.md
+    - crypto/signatures.md
+    - foundations/ether.md
+    - foundations/what-is-ethereum.md
+    - wallets/seed-phrases.md
+    part: What it holds
+    summary: A token is not a protocol feature. It is a contract keeping a list of numbers, and owning
+      one means a number in somebody else's storage.
+    title: Tokens aren't special
   contracts/what-the-code-is.md:
     needs:
     - accounts/accounts.md
