@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="How Ethereum works, built up from first principles — starting with the parts that have never changed.">
+        <meta name="description" content="A signed instruction from an account, and the only thing that makes Ethereum do anything. Here is a real one, decoded byte by byte.">
       
       
         <meta name="author" content="Davide">
@@ -1546,10 +1546,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#what-is-in-one" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        What is in one
       
     </span>
   </a>
@@ -1557,18 +1557,72 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#already-written-moved-here-from-the-state-page" class="md-nav__link">
+  <a href="#one-real-transaction-decoded" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Already written: moved here from the state page
+        One real transaction, decoded
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Already written: moved here from the state page">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sender-is-nowhere-in-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The sender is nowhere in it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-things-it-can-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three things it can do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#it-has-a-hash-before-anybody-accepts-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        It has a hash before anybody accepts it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failing-is-not-the-same-as-not-happening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failing is not the same as not happening
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#there-is-more-than-one-kind-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        There is more than one kind now
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#a-transaction-doesnt-name-the-state-it-expects" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1606,17 +1660,12 @@
     </nav>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#recap" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        Recap
       
     </span>
   </a>
@@ -2341,10 +2390,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#questions-this-page-should-answer" class="md-nav__link">
+  <a href="#what-is-in-one" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Questions this page should answer
+        What is in one
       
     </span>
   </a>
@@ -2352,18 +2401,72 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#already-written-moved-here-from-the-state-page" class="md-nav__link">
+  <a href="#one-real-transaction-decoded" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Already written: moved here from the state page
+        One real transaction, decoded
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Already written: moved here from the state page">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-sender-is-nowhere-in-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The sender is nowhere in it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#three-things-it-can-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Three things it can do
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#it-has-a-hash-before-anybody-accepts-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        It has a hash before anybody accepts it
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failing-is-not-the-same-as-not-happening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Failing is not the same as not happening
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#there-is-more-than-one-kind-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        There is more than one kind now
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#a-transaction-doesnt-name-the-state-it-expects" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2401,17 +2504,12 @@
     </nav>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
       
         <li class="md-nav__item">
-  <a href="#notes-to-self" class="md-nav__link">
+  <a href="#recap" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Notes to self
+        Recap
       
     </span>
   </a>
@@ -2447,38 +2545,190 @@
 
 
 <h1 id="transactions">Transactions</h1>
-<div class="admonition warning">
-<p class="admonition-title">Stub — not written yet</p>
-<p>This page is an outline. Delete this box when you fill it in.</p>
+<p><strong><a href="../../about/forks/">Permanent, except one part</a>.</strong> That a transaction is a signed instruction from an account, that the sender is recovered rather than stated, and that a failed one still costs money, have held since 2015. The <em>fee fields</em> changed in 2021, and the format now allows new kinds to be added — both covered below.</p>
+<p>Nothing on Ethereum happens by itself. The <a href="../../accounts/accounts/">accounts</a> page put it flatly: there are no timers, no scheduled jobs, no background processes, and every chain of execution begins with somebody signing something.</p>
+<p><strong>This page is that something.</strong></p>
+<div class="admonition definition">
+<p class="admonition-title">Transaction</p>
+<p>A signed instruction from an <a href="../../glossary/#eoa">externally owned account</a>,
+asking the network to change the state in a particular way. It is the only
+way anything on Ethereum begins. A transaction is not a request to be
+considered — it is an instruction that will be carried out <strong>if it is
+valid and somebody includes it</strong>, and whose effects are then permanent.</p>
 </div>
-<h2 id="questions-this-page-should-answer">Questions this page should answer</h2>
+<h2 id="what-is-in-one">What is in one</h2>
+<p>Seven things you choose, and three the signature leaves behind.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nonce</code></td>
+<td>Which transaction of yours this is — the counter from the <a href="../../accounts/nonce/">nonce</a> page</td>
+</tr>
+<tr>
+<td><code>gasLimit</code></td>
+<td>The most work you are willing to pay for</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td>The recipient — or <strong>empty</strong>, which means <em>create a contract</em></td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>How much ether to send, in <a href="../../foundations/ether/">wei</a></td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>Arbitrary bytes. Empty for a plain payment; for a contract, this is the call</td>
+</tr>
+<tr>
+<td><code>maxFeePerGas</code><br><code>maxPriorityFeePerGas</code></td>
+<td>What you are prepared to pay per unit of work <a href="#ref-eip1559">(Buterin et al., 2019)</a></td>
+</tr>
+<tr>
+<td><code>chainId</code></td>
+<td>Which chain this is for, so a signature valid here is not valid elsewhere <a href="#ref-eip155">(Buterin, 2016)</a></td>
+</tr>
+<tr>
+<td><code>v</code>, <code>r</code>, <code>s</code></td>
+<td>The <a href="../../crypto/signatures/">signature</a></td>
+</tr>
+</tbody>
+</table>
+<p>Two of those deserve attention before anything else.</p>
+<p><strong><code>to</code> being empty is not an omission.</strong> It is the instruction <em>create a contract</em>, and it is the only way contracts come into existence — which is why the <a href="../../contracts/smart-contracts/">smart contracts</a> page could say a contract is deployed by a transaction with nowhere to send it.</p>
+<p><strong><code>data</code> is the entire rest of the subject.</strong> For a payment it is empty. For anything else it carries the function being called and its arguments, laid out by the <a href="../../contracts/smart-contracts/">ABI</a> convention. Everything the EVM does begins as bytes in this field.</p>
+<h2 id="one-real-transaction-decoded">One real transaction, decoded</h2>
+<p>Here is a complete, valid, signed transaction. It is 110 bytes:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>0xf86c098504a817c800825208943535353535353535353535353535353535353535
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  880de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d3c
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf555c9f3dc
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  64214b297fb1966a3b6d83
+</code></pre></div>
+<p>That is the whole thing — everything a node receives. Run it through <a href="../../encoding/rlp/">RLP</a> and nine fields fall out:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Bytes</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nonce</code></td>
+<td><code>09</code></td>
+<td>9</td>
+</tr>
+<tr>
+<td><code>gasPrice</code></td>
+<td><code>04a817c800</code></td>
+<td>20,000,000,000 wei = 20 gwei</td>
+</tr>
+<tr>
+<td><code>gasLimit</code></td>
+<td><code>5208</code></td>
+<td>21,000</td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td><code>3535…3535</code></td>
+<td><code>0x3535353535353535353535353535353535353535</code></td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td><code>0de0b6b3a7640000</code></td>
+<td>1,000,000,000,000,000,000 wei = <strong>1 ether</strong></td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>—</td>
+<td>empty: this is a plain payment</td>
+</tr>
+<tr>
+<td><code>v</code></td>
+<td><code>25</code></td>
+<td>37</td>
+</tr>
+<tr>
+<td><code>r</code></td>
+<td><code>28ef6134…aa636276</code></td>
+<td>the signature's first half</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td><code>67cbe9d8…6a3b6d83</code></td>
+<td>the signature's second half</td>
+</tr>
+</tbody>
+</table>
+<p>Three things worth stopping on.</p>
+<p><strong><code>5208</code> is 21,000</strong> — the cost of a plain transfer, which is where that number comes from. <strong><code>0de0b6b3a7640000</code> is 10<sup>18</sup></strong>, exactly one ether in wei, and it takes eight bytes because ether is counted in units that small. And <strong><code>data</code> is empty</strong>, so this transaction does nothing but move money.</p>
+<p>This one is an old-style transaction, from the worked example in the EIP that introduced chain ids <a href="#ref-eip155">(Buterin, 2016)</a>. That is deliberate: it is published, anyone can check it, and nothing here depends on taking this page's word for anything.</p>
+<details class="abstract">
+<summary>How this example was verified, and why that matters</summary>
+<p>The EIP publishes the bytes that get signed, and the hash of those bytes
+— the value the signature is actually over:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53
+</code></pre></div>
+<p>Hashing the signing bytes with <a href="../../crypto/keccak256/">Keccak-256</a>
+reproduces exactly that value, and decoding the signed transaction
+reproduces every field the EIP states, including <code>r</code> and <code>s</code> as decimal
+numbers hundreds of digits long.</p>
+<p>So the table above is not transcribed from somewhere. The bytes were
+decoded, the hash recomputed, and both agreed with a document published
+in 2016 by someone who had no idea this page would exist. That is the
+only kind of claim this site is willing to make about a concrete
+example.</p>
+<p>(Its <strong>transaction hash</strong> — the thing you would paste into a block
+explorer — is <code>keccak256</code> of the 110 bytes above, which comes to
+<code>0x33469b22e9f636356c4160a87eb19df52b7412e8eac32a4a55ffe88ea8350788</code>.)</p>
+</details>
+<h2 id="the-sender-is-nowhere-in-it">The sender is nowhere in it</h2>
+<p>Go back through those nine fields and look for the sender's address.</p>
+<p><strong>It is not there.</strong> <code>to</code> is present; there is no <code>from</code>. A transaction never states who sent it.</p>
+<p>The sender is <strong>recovered</strong> from the signature. Given the hash of what was signed, plus <code>v</code>, <code>r</code> and <code>s</code>, anyone can compute the public key that must have produced that signature, and from it the <a href="../../crypto/addresses/">address</a> — the recovery the <a href="../../crypto/signatures/">signatures</a> page described. Every node does this for every transaction, and it is where the sender comes from.</p>
+<p>This is not a space-saving trick, though it saves twenty bytes. <strong>A stated sender would be a claim; a recovered one is a proof.</strong> If the field existed, a node would have to check that the signature matched it, and a mismatch would be a case to handle. There is no mismatch to handle when the address is <em>derived from</em> the signature: an invalid signature does not produce the wrong sender, it produces a different sender — some address nobody controls, whose nonce and balance will not satisfy the rules.</p>
+<p>The consequence is one the <a href="../../accounts/accounts/">accounts</a> page needed and could not yet explain: <strong>a transaction's sender is whoever holds the key, and nothing else about the sender is ever asserted.</strong> Identity here is not stated and checked. It is computed.</p>
+<h2 id="three-things-it-can-do">Three things it can do</h2>
+<p>Every transaction is one of three, decided entirely by <code>to</code> and <code>data</code>:</p>
 <ul>
-<li>What is a transaction, in one sentence? (A signed instruction from an EOA to change the state.)</li>
-<li>What's inside one?<ul>
-<li><code>nonce</code> — a counter for the sender</li>
-<li><code>gasLimit</code> — the most work you'll pay for</li>
-<li><code>to</code> — the recipient, or empty to deploy a contract</li>
-<li><code>value</code> — how much ether to send, in wei</li>
-<li><code>data</code> — arbitrary bytes; this is how you call a contract</li>
-<li><code>maxFeePerGas</code> / <code>maxPriorityFeePerGas</code> — what you'll pay</li>
-<li><code>v</code>, <code>r</code>, <code>s</code> — the signature</li>
+<li><strong>Send ether.</strong> <code>to</code> is an address, <code>data</code> is empty. Two numbers change.</li>
+<li><strong>Call a contract.</strong> <code>to</code> is a contract's address, <code>data</code> says which function and with what arguments. Code runs.</li>
+<li><strong>Create a contract.</strong> <code>to</code> is <strong>empty</strong>, and <code>data</code> is the code that will produce the contract's code. The new address is computed from the sender and their nonce, which is what the <a href="../../accounts/nonce/">nonce</a> page meant about deployments.</li>
 </ul>
-</li>
-<li>Where does the <em>sender's</em> address live in all that? (Nowhere! It's recovered from the signature. Worth making a point of — it surprises everyone.)</li>
-<li>What are the three things a transaction can do? (Send ether, call a contract, create a contract.)</li>
-<li>What's a transaction <em>hash</em>, and when does it exist? (As soon as it's signed — before anyone has accepted it.)</li>
-<li>What does it mean for a transaction to fail? (It still happened, still cost gas, but the state changes were reverted.)</li>
+<p>There is no fourth. Anything more elaborate is one of these three with a contract doing the elaboration.</p>
+<h2 id="it-has-a-hash-before-anybody-accepts-it">It has a hash before anybody accepts it</h2>
+<p>A transaction's hash is <code>keccak256</code> of its bytes, and those bytes exist the moment it is signed. So the hash exists <strong>before</strong> any node has seen it, before any block contains it, and before anyone has decided whether it is valid.</p>
+<p>Which is why a wallet can show you a transaction hash instantly and the explorer you paste it into says <em>not found</em>. Nothing is wrong. You have the name of something that so far exists only on your machine.</p>
+<p><strong>A hash is an identifier, not a receipt.</strong> It tells you what you signed. It tells you nothing about whether it happened.</p>
+<h2 id="failing-is-not-the-same-as-not-happening">Failing is not the same as not happening</h2>
+<p>A transaction can be included in a block, execute, run out of gas or hit an error, and <strong>fail</strong> — and this is the part that surprises people:</p>
+<p><strong>It still happened.</strong> It is in the block, permanently. It still consumed gas, and you still paid for it. The sender's nonce still went up. What gets undone is only the <strong>state changes the execution made</strong>: balances and storage revert to what they were before it ran.</p>
+<p>So failure is not rejection. The two are completely different:</p>
+<ul>
+<li><strong>Rejected</strong> — the transaction was never valid (bad signature, wrong nonce, cannot cover its own fee). It never enters a block, costs nothing, and leaves no trace.</li>
+<li><strong>Failed</strong> — it was valid, it ran, and it did not finish successfully. It is on the chain forever, it was paid for, and it changed nothing except the sender's nonce and balance.</li>
 </ul>
-<h2 id="already-written-moved-here-from-the-state-page">Already written: moved here from the state page</h2>
-<p>This was on <a href="../../accounts/state/">state</a>, where it needed a mempool to make
-its argument and so arrived before the reader had one. It belongs here. Build
-the surrounding section around it; the heading can stay as it is.</p>
-<h3 id="a-transaction-doesnt-name-the-state-it-expects">A transaction doesn't name the state it expects</h3>
-<p>The natural question, once roots are in view: when you sign a transaction, which state root is it computed against? And should it carry that root, so the network knows what you assumed?</p>
-<p><strong>It carries no state root, and no reference to one.</strong> A transaction holds a nonce, a recipient, a value, some data, gas limits, fee terms, a chain id and a signature — the field list above goes through them. Nothing in it describes the state it expects to meet.</p>
+<p>That distinction is visible in the <a href="../../glossary/#receipt">receipt</a>, which carries a status code — <code>1</code> for success, <code>0</code> for failure — put there by the same change that took the intermediate state root out, described in the box further down <a href="#ref-eip658">(Johnson, 2017)</a>.</p>
+<p>The reason is the same one that makes <a href="../why-metering/">metering</a> necessary at all, which is the next page: <strong>the work was done.</strong> Nodes executed the code to discover it would fail. Somebody has to pay for work that has already happened, and letting failed transactions be free would make failing deliberately into a free denial of service.</p>
+<h2 id="there-is-more-than-one-kind-now">There is more than one kind now</h2>
+<p>The transaction above is a <strong>legacy</strong> transaction, and if a format were going to be permanent, that would be the one. It is not.</p>
+<p>Since 2021 a transaction can begin with a <strong>type byte</strong>, declaring which of several formats follows <a href="#ref-eip2718">(Zoltu, 2020)</a>. The current ordinary kind replaces the single <code>gasPrice</code> above with the two fee fields in the table <a href="#ref-eip1559">(Buterin et al., 2019)</a>; others add further fields.</p>
+<p>The way old and new are told apart is a small piece of elegance that the <a href="../../encoding/rlp/">RLP</a> page already set up. <strong>Look at the first byte.</strong> RLP can only ever begin a list with a byte from <code>0xc0</code> upward, so every legacy transaction starts in that range — and the values from <code>0x00</code> to <code>0x7f</code>, which RLP would never produce for a list, were free. A transaction starting with one of those is a typed transaction, and the byte says which type <a href="#ref-eip2718">(Zoltu, 2020)</a>.</p>
+<p><strong>Nothing had to be renegotiated to make room.</strong> The space was already unused, because the encoding was specified tightly enough to leave a gap that meant nothing — and that is the practical value of the canonicality the RLP page spent so long on.</p>
+<p>What does not change across any of this: a signed instruction, a recovered sender, a nonce, a gas limit, and the three things it can do.</p>
+<h2 id="a-transaction-doesnt-name-the-state-it-expects">A transaction doesn't name the state it expects</h2>
+<p>The natural question, once <a href="../../accounts/state/">state roots</a> are in view: when you sign a transaction, which one is it computed against? And should it carry that root, so the network knows what you assumed?</p>
+<p><strong>It carries no state root, and no reference to one.</strong> A transaction holds a nonce, a recipient, a value, some data, gas limits, fee terms, a chain id and a signature — the table above goes through them. Nothing in it describes the state it expects to meet.</p>
 <p>So a transaction is an <strong>instruction, not a statement about the world.</strong> It says what to do. It says nothing about what it assumes.</p>
 <p>The single exception is the <a href="../../accounts/nonce/">nonce</a>, and it's a revealing one. The nonce <em>is</em> a claim about state — "my account has sent exactly this many transactions" — but it constrains only your own account's position in its own sequence. About every other account, every balance and every contract's storage, your transaction is silent.</p>
-<h4 id="what-yours-actually-runs-against">What yours actually runs against</h4>
+<h3 id="what-yours-actually-runs-against">What yours actually runs against</h3>
 <p>If it lands in block N, it executes against the state at the end of block N−1, plus the effects of every transaction ordered before it <strong>within</strong> block N.</p>
 <p>That intermediate state is perfectly real, and <strong>no root is published for it.</strong> Ethereum commits to the state once per block, after all of it has run — which is the second of the two simplifications flagged back on <a href="../../foundations/what-is-ethereum/">What is Ethereum?</a>.</p>
 <details class="info">
@@ -2497,7 +2747,7 @@ actually asked and previously had to infer.</p>
 section says doesn't exist, looked at the price, and sold it for a single
 bit of far more useful information.</p>
 </details>
-<h4 id="why-you-shouldnt-want-to-send-one">Why you shouldn't want to send one</h4>
+<h3 id="why-you-shouldnt-want-to-send-one">Why you shouldn't want to send one</h3>
 <p>It sounds safer to pin the state you signed against. It would be close to unusable.</p>
 <p>A transaction naming a required state root would be invalidated by <strong>any</strong> change anywhere in the state — one unrelated transfer, by a stranger, in the same block. Since the state changes every block and thousands of transactions compete for each one, yours would have a useful life of a few seconds and would usually miss. A <strong>mempool</strong> — the pool of broadcast transactions waiting their turn — could not work at all, because waiting is exactly what would kill them.</p>
 <p>So state-agnosticism is deliberate: it's what lets a transaction sit in a queue and remain valid. The bill arrives elsewhere, though, and it's worth knowing where:</p>
@@ -2506,47 +2756,26 @@ bit of far more useful information.</p>
 <li><strong>Which is why contracts add their own guards.</strong> Deadlines after which a call reverts, minimum amounts a trade must return — those exist because the protocol declines to offer them.</li>
 <li><strong>And it's the gap between simulating and executing.</strong> A wallet shows you the outcome against the state as it stands now; the real outcome is against the state at inclusion, which nobody can predict. Much of what gets called front-running lives in that gap — which is this page's territory.</li>
 </ul>
-<h2 id="notes-to-self">Notes to self</h2>
+<h2 id="recap">Recap</h2>
 <ul>
-<li>
-<p>Decode one real transaction field by field. That single worked example
-  teaches more than any amount of prose.</p>
-</li>
-<li>
-<p><strong>Make it a tool, and make it prove itself.</strong> Embed the raw bytes of an
-  actual transaction, decode them in the browser with the <a href="../../encoding/rlp/">RLP</a>
-  decoder, then <strong>hash the bytes and show the result equals the published
-  transaction hash</strong>. The reader isn't told the example is real — they watch
-  it check out. Nothing else on the site can do that.</p>
-</li>
+<li>A transaction is a <strong>signed instruction from an account</strong>, and the only way anything on Ethereum starts.</li>
+<li>It holds a nonce, gas limit, recipient, value, data, fee terms, a chain id and a signature. <strong><code>to</code> empty means create a contract</strong>, and <code>data</code> is where every contract call lives.</li>
+<li><strong>The sender is not in it.</strong> It is recovered from the signature — a proof rather than a claim, which is why no mismatch between stated and actual sender is possible.</li>
+<li>Three things it can do: <strong>send ether, call a contract, create a contract.</strong> There is no fourth.</li>
+<li>Its <strong>hash exists as soon as it is signed</strong>, before any node has seen it. A hash is an identifier, not a receipt.</li>
+<li><strong>Failed is not rejected.</strong> A failed transaction is on the chain forever and was paid for; only its state changes are reverted. A rejected one never existed.</li>
+<li><strong>It names no state.</strong> It says what to do, never what it assumes — which is what lets it wait in a queue, and why contracts have to write their own guards.</li>
+<li>Since 2021 a leading <strong>type byte</strong> distinguishes formats, using a range of values RLP could never produce for a list. The old encoding left a gap because it was specified tightly.</li>
 </ul>
-<p>Hard-coded bytes, not a live API: it then works offline, cannot break when
-  somebody's endpoint dies, and makes no request that reveals who is reading.</p>
-<ul>
-<li>
-<p><strong>Second tool: validation, split by what it needs.</strong> This is the stronger
-  one, because the split is the lesson.</p>
-<ul>
-<li><strong>Stateless checks</strong> compute for real in the browser — does the RLP
-  parse, does the signature recover to an address, is the chain id right,
-  does it cover intrinsic gas?</li>
-<li><strong>Stateful checks</strong> need the state, which a static site doesn't have. So
-  let the reader <em>supply</em> it: two inputs for the account's nonce and
-  balance.</li>
-</ul>
-<p>The tool then reports <strong>accept or reject, and which check failed</strong> — which
-turns the four steps on <a href="../../nodes/what-a-node-is/">what a node is</a> into
-something you operate, and teaches the stateless/stateful distinction by
-making you provide one half of it.
-- Don't explain the signature maths here — point at the signatures page.
-- The <code>data</code> field is the gateway to the whole EVM section. Flag it as important and move on.</p>
-</li>
-</ul>
-<p><strong>Next:</strong> <a href="../why-metering/">Why metering is necessary</a></p>
+<p><strong>Next:</strong> <a href="../why-metering/">Why metering is necessary</a> — why the work has to be paid for, and counted.</p>
+<hr />
 <h2 id="references">References</h2>
 <div class="sources">
 <ul>
-<li><a id="ref-eip658"></a><strong>Johnson, N.</strong> (2017). <em>EIP-658: Embedding transaction status code in receipts.</em> Ethereum Improvement Proposals. Activated in Byzantium; replaced the per-transaction intermediate state root in receipts with a status code. <a href="https://eips.ethereum.org/EIPS/eip-658">https://eips.ethereum.org/EIPS/eip-658</a></li>
+<li><a id="ref-eip155"></a><strong>Buterin, V.</strong> (2016). <em>EIP-155: Simple replay attack protection.</em> Ethereum Improvement Proposals, no. 155. Status: Final. Introduces the chain id into the signed data, so a signature valid on one chain is invalid on another. Its worked example — fields, signing bytes, signing hash, and the resulting signed transaction — is the one decoded on this page. <a href="https://eips.ethereum.org/EIPS/eip-155">https://eips.ethereum.org/EIPS/eip-155</a></li>
+<li><a id="ref-eip1559"></a><strong>Buterin, V., Conner, E., Dudley, R., Slipper, M., Norden, I., &amp; Bakhta, A.</strong> (2019). <em>EIP-1559: Fee market change for ETH 1.0 chain.</em> Ethereum Improvement Proposals, no. 1559. Status: Final. Replaces the single <code>gasPrice</code> field with a maximum total fee and a maximum priority fee, separating what the protocol burns from what the proposer receives. <a href="https://eips.ethereum.org/EIPS/eip-1559">https://eips.ethereum.org/EIPS/eip-1559</a></li>
+<li><a id="ref-eip658"></a><strong>Johnson, N.</strong> (2017). <em>EIP-658: Embedding transaction status code in receipts.</em> Ethereum Improvement Proposals, no. 658. Activated in Byzantium; replaced the per-transaction intermediate state root in receipts with a status code. <a href="https://eips.ethereum.org/EIPS/eip-658">https://eips.ethereum.org/EIPS/eip-658</a></li>
+<li><a id="ref-eip2718"></a><strong>Zoltu, M.</strong> (2020). <em>EIP-2718: Typed transaction envelope.</em> Ethereum Improvement Proposals, no. 2718. Status: Final. Defines the leading type byte, and specifies that values from <code>0x00</code> to <code>0x7f</code> indicate a typed transaction while <code>0xc0</code> to <code>0xfe</code> indicate a legacy RLP-encoded one — a range RLP leaves free. <a href="https://eips.ethereum.org/EIPS/eip-2718">https://eips.ethereum.org/EIPS/eip-2718</a></li>
 </ul>
 </div>
 
