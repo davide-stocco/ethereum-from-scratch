@@ -2635,6 +2635,44 @@ binary construction, padded out to a power of two. Which is one more way
 the two halves of a node differ, on top of the encodings the <a href="../rlp/">RLP</a>
 page mentioned.)</p>
 </details>
+<details class="abstract">
+<summary>The two rules, in the code that defines them</summary>
+<p>Both rules are conventions rather than consequences, so the only
+authority for either one is the implementation. Here is each, abridged.</p>
+<p><strong>Bitcoin</strong> — <code>src/consensus/merkle.cpp</code>, MIT licensed
+<a href="#ref-bitcoin-merkle">(Bitcoin Core)</a>. The odd case is a single line:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">hashes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hashes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="n">hashes</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">hashes</span><span class="p">.</span><span class="n">back</span><span class="p">());</span><span class="w">   </span><span class="c1">// no partner: pair it with itself</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">SHA256D64</span><span class="p">(</span><span class="n">hashes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">hashes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">hashes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">hashes</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">hashes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>Ethereum</strong> — <code>trie/hasher.go</code> in go-ethereum, LGPL-3.0 licensed
+<a href="#ref-geth-hasher">(go-ethereum)</a>. Hashing a branch node:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">child</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span><span class="w"> </span><span class="nx">child</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">        </span><span class="nx">fn</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">h</span><span class="p">.</span><span class="nx">hash</span><span class="p">(</span><span class="nx">child</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">if</span><span class="w"> </span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="nx">fn</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">n</span><span class="p">.</span><span class="nx">Children</span><span class="p">[</span><span class="mi">16</span><span class="p">].(</span><span class="nx">valueNode</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>The comparison is the absence.</strong> There is no odd case in the second
+one, and no line elsewhere that supplies it, because nothing is being
+paired. The loop walks sixteen fixed slots, hashes the children that are
+there, skips the ones that are not, and a seventeenth slot holds a value
+if the node has one.</p>
+<p><strong>A missing child is not an unpaired child.</strong> It is an empty slot, which
+encodes as empty and affects the node's hash exactly as any other
+content does. Bitcoin needs a rule because it pairs a count it does not
+control; Ethereum needs none because the count is always sixteen.</p>
+<p>(The Go quoted is the sequential path. The same function has a parallel
+version above it, doing identical work on several children at once —
+which is a speed decision and changes no hash.)</p>
+</details>
 <h2 id="second-the-trie-part">Second, the trie part</h2>
 <p>A Merkle tree commits to a <em>list</em>. Ethereum needs a <strong>mapping</strong>: given an address, find its account. So the second ingredient is a structure for looking things up.</p>
 <p>Forget hashes for a moment and forget Ethereum. Suppose you want to store three words — <code>cats</code>, <code>cars</code>, <code>dog</code> — so that you can find any of them again.</p>
@@ -2716,7 +2754,7 @@ uniformly hash-linked, and a node's encoding can contain whole subtrees
 rather than references to them.</p>
 <p><strong>The empty trie has a root anyway.</strong> It is the hash of RLP's empty
 string — <code>keccak256(0x80)</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421
 </code></pre></div>
 <p>That constant is the <code>storageRoot</code> of every account with nothing stored,
 which is where the <a href="../../accounts/accounts/">accounts</a> page met it. It is
@@ -2802,6 +2840,7 @@ stored" could not be distinguished from "anything at all".</p>
 <ul>
 <li><a id="ref-bitcoin-merkle"></a><strong>Bitcoin Core.</strong> <em>consensus/merkle.cpp — <code>ComputeMerkleRoot</code>.</em> The duplication rule, in the implementation that defines it: when a level holds an odd number of hashes, the last is appended to itself before pairing. The same function carries mutation detection, because that duplication is what made CVE-2012-2459 possible — two different transaction lists producing one root. Cited because the rule is a convention, not a derivation, so the only authority for it is the code. <a href="https://github.com/bitcoin/bitcoin/blob/master/src/consensus/merkle.cpp">https://github.com/bitcoin/bitcoin/blob/master/src/consensus/merkle.cpp</a></li>
 <li><a id="ref-eip6800"></a><strong>Buterin, V., Feist, D., Wedderburn, K., Ballet, G., Merriam, P., Herold, G., Hagopian, I., Jasoria, T., Singh, G., &amp; Ferrin, D.</strong> (2023). <em>EIP-6800: Ethereum state using a unified verkle tree.</em> Ethereum Improvement Proposals. The proposed replacement, aimed at far smaller proofs; marked <em>Stagnant</em> at the time of writing, which is the reason this page describes it as a direction rather than a plan. <a href="https://eips.ethereum.org/EIPS/eip-6800">https://eips.ethereum.org/EIPS/eip-6800</a></li>
+<li><a id="ref-geth-hasher"></a><strong>go-ethereum.</strong> <em>trie/hasher.go — <code>encodeFullNode</code>.</em> The branch node's sixteen slots, hashed one by one with empty ones skipped, and a seventeenth for a value. Cited beside the Bitcoin rule because the contrast is what makes the point: there is no odd-number case here to find. LGPL-3.0. <a href="https://github.com/ethereum/go-ethereum/blob/master/trie/hasher.go">https://github.com/ethereum/go-ethereum/blob/master/trie/hasher.go</a></li>
 <li><a id="ref-merkle-1988"></a><strong>Merkle, R. C.</strong> (1988). <em>A digital signature based on a conventional encryption function.</em> <em>Advances in Cryptology — CRYPTO '87</em>, 369–378. Springer. The origin of the hash tree: many values committed to by one, with membership provable from the hashes along a single path. <a href="https://doi.org/10.1007/3-540-48184-2_32">https://doi.org/10.1007/3-540-48184-2_32</a></li>
 <li><a id="ref-morrison-1968"></a><strong>Morrison, D. R.</strong> (1968). <em>PATRICIA — Practical Algorithm To Retrieve Information Coded In Alphanumeric.</em> <em>Journal of the ACM</em>, 15(4), 514–534. The path-compressed trie Ethereum's structure takes its middle name from, published twenty-six years before the web. <a href="https://doi.org/10.1145/321479.321481">https://doi.org/10.1145/321479.321481</a></li>
 <li><a id="ref-wood-2014"></a><strong>Wood, G.</strong> (2014). <em>Ethereum: A secure decentralised generalised transaction ledger.</em> Ethereum project yellow paper. Appendix D specifies the trie, including the node types, the hex-prefix encoding and the rule that nodes under 32 bytes are inlined. <a href="https://ethereum.github.io/yellowpaper/paper.pdf">https://ethereum.github.io/yellowpaper/paper.pdf</a></li>
