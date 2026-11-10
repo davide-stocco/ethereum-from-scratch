@@ -15,7 +15,11 @@ def texts(svg):
         txt=re.sub(r'<[^>]+>','',raw)
         txt=re.sub(r'&#\d+;','X',txt); txt=re.sub(r'&\w+;','X',txt)
         fs=float(at('font-size','12')); x=float(at('x','0')); y=float(at('y','0'))
-        w=len(txt)*fs*0.52
+        # Monospace is wider per character than the proportional body font.
+        # Estimating both at 0.52 let a label sit flush against a box border
+        # on the merkle diagram and still pass.
+        per = 0.60 if (at('font-family','') or '').startswith('mono') else 0.52
+        w=len(txt)*fs*per
         anch=at('text-anchor','start')
         x0 = x-w/2 if anch=='middle' else (x-w if anch=='end' else x)
         out.append(dict(t=txt.strip()[:40], x0=x0, x1=x0+w, y0=y-fs*0.78, y1=y+fs*0.22, fs=fs))
