@@ -11,7 +11,9 @@ Ethereum has **one** native asset: [ether](../foundations/ether.md). Everything 
 
 It is a [contract](smart-contracts.md) keeping a list of numbers. Owning a token means **there is a number recorded against your address in somebody else's storage.**
 
-That sounds reductive. It is the literal mechanism, and almost everything that surprises people about holding tokens falls out of it.
+That sounds reductive. It is the literal mechanism, and almost everything that surprises people falls out of it.
+
+A note on the word *hold*, which this page is about to use anyway because English offers nothing better. **You do not hold a token.** There is no object to hold. A list somebody else keeps has a row with your address on it, and everyone involved — you, your wallet, the contract's author — agrees to call that holding. The agreement is useful and the rest of this page is about where it stops being accurate.
 
 !!! definition "Token"
 
@@ -70,7 +72,7 @@ Two consequences follow, and both confuse people regularly.
 
 **A token you have never heard of can appear in your wallet.** Somebody wrote your address into their contract and emitted a log saying so. You did not receive anything, you were not consulted, and nothing entered your account. Someone else's storage mentions you — which anyone can arrange, for anyone, since addresses [all exist already](../crypto/addresses.md) and need nobody's permission to be written down.
 
-**A token you do hold can be invisible.** If your wallet does not know the contract exists, it never asks, and nothing appears. The balance is unaffected; it was never in the wallet to begin with.
+**And a balance genuinely recorded against you can be invisible.** If your wallet does not know the contract exists, it never asks, and nothing appears. The row is unaffected, because it was never in the wallet to begin with. Both cases are the same fact seen from two sides: what your wallet shows you is not what you own, it is what your wallet thought to go and ask.
 
 The [events and logs](events-and-logs.md) page is what makes this workable in practice: the `Transfer` log is how any watcher learns that a row changed, since storage itself cannot be searched. **The log is the announcement; the storage row is the fact.** They are produced together by honest contracts, and nothing in the protocol requires a contract to be honest about it.
 
@@ -78,7 +80,7 @@ The [events and logs](events-and-logs.md) page is what makes this workable in pr
 
 The fee for any transaction is payable in ether, as the [ether](../foundations/ether.md) page said, and only in ether. Moving a token requires a transaction. So:
 
-**An account holding a fortune in tokens and no ether can receive anything and send nothing.** Not the tokens, not anything else. Receiving needs no transaction from you, so things can keep arriving, and the holdings sit there — visible, genuinely yours, and immovable — until somebody sends a little ether to the account.
+**An account holding a fortune in tokens and no ether can receive anything and send nothing.** Not the tokens, not anything else. Receiving needs no transaction from you, so things can keep arriving, and the rows sit there — recorded against you, uncontested, and immovable — until somebody sends a little ether to the account.
 
 The [why accounts](../accounts/why-accounts.md) page listed this among the costs of the account model, and here is the full reason. The protocol charges for work in the one asset it has any concept of. Everything else is a number in a contract, and a number in a contract cannot pay for the computation that changes it. Arrangements exist to have a third party supply the ether on your behalf, and all of them are machinery built to compensate for this one fact.
 
@@ -115,11 +117,13 @@ Which makes the standard the same species of thing as the [ABI](smart-contracts.
 
 `decimals` is worth a sentence, because it is purely cosmetic. A token contract stores whole numbers; `decimals` tells software where to draw a decimal point when displaying one. A balance of `240000000000000000000` with `decimals` of 18 is shown as 240. Nothing in the contract's arithmetic knows about it — the same arrangement as [wei and ether](../foundations/ether.md), which is where the convention of 18 came from in the first place.
 
-## Approvals, and why they are the real hazard
+## Approvals: a permission that outlives the transaction
 
 `transfer` moves your own tokens. The other function, `transferFrom`, lets **somebody else** move them — which is how any contract you interact with gets paid, since a contract cannot reach into a token contract on your behalf without being allowed to.
 
-Permission is granted by `approve`, and this is where loss actually happens.
+Permission is granted by `approve`, and it deserves its own section for a reason this page can actually support.
+
+Several things on this page can move a balance recorded against you without your signing anything at that moment: the issuer minting, freezing or replacing the code, if the contract was written to allow it. **An approval is the only one of them you grant yourself.** You hand the power over deliberately, in a single transaction, having read something about the contract you handed it to — and then it stays handed over, long after the transaction that granted it is forgotten and whatever you read has stopped being true.
 
 <svg viewBox="0 0 470 236" role="img" aria-label="You call approve on the token contract, which records an allowance for another contract. At any later time that contract calls transferFrom, and the token contract moves your balance without asking you again." style="width:100%;max-width:30rem;height:auto"><g fill="none" stroke="currentColor" stroke-width="1"><rect x="10" y="44" width="116" height="34" rx="4"/><rect x="10" y="140" width="116" height="34" rx="4"/><rect x="286" y="34" width="174" height="146" rx="4"/><path d="M126 61 L270 61"/><path d="M126 157 L270 157"/></g><g fill="currentColor" stroke="none"><path d="M284 61 L270 56 L270 66 Z"/><path d="M284 157 L270 152 L270 162 Z"/><text x="68" y="65" font-size="10" text-anchor="middle">You</text><text x="68" y="161" font-size="10" text-anchor="middle">Another contract</text><text x="286" y="26" font-size="10" opacity="0.8">THE TOKEN CONTRACT</text><text x="300" y="60" font-size="10" opacity="0.65">balances</text><text x="312" y="78" font-size="10">you: 1000</text><text x="300" y="110" font-size="10" opacity="0.65">allowances</text><text x="312" y="128" font-size="10" font-weight="700">you &#8594; them: 1000</text><text x="300" y="160" font-size="10" opacity="0.65">&#8230; balances change</text><text x="132" y="52" font-size="10">1 &#183; approve(them, 1000)</text><text x="132" y="148" font-size="10">2 &#183; transferFrom(you, &#8230;)</text><text x="10" y="206" font-size="10">Step 2 can happen <tspan font-weight="700">at any time after step 1</tspan>, as many times as the</text><text x="10" y="220" font-size="10">allowance permits, and needs nothing further from you.</text></g></svg>
 
@@ -158,8 +162,8 @@ And the standard is explicit that the pointer need not be stable: *"The URI MAY 
 - **Your ether is a field of your own account. A token balance is a row in someone else's storage.** That single difference generates everything else here.
 - A transfer is **two numbers changed in one contract's storage**, plus a log announcing it. Nothing moves.
 - **Your ownership is as good as that contract's code** — minting, freezing and upgrading are possible exactly when the code allows them, and Ethereum has no opinion on the matter.
-- **Your wallet asks `balanceOf` and displays the answers.** So an unknown token can appear without your receiving anything, and a real holding can stay invisible.
-- **Moving a token requires ether**, because fees are payable in nothing else. Tokens plus no ether is a holding you cannot move.
+- **Your wallet asks `balanceOf` and displays the answers.** So an unknown token can appear without your receiving anything, and a balance genuinely recorded against you can stay invisible.
+- **Moving a token requires ether**, because fees are payable in nothing else. Tokens plus no ether is a balance you cannot move.
 - **ERC-20 is six functions, two events and three optional extras** — an agreement, not a rule. Ignoring it produces a valid contract that no wallet can read.
 - **An approval is a standing permission bound to an address**, lasting until revoked, and the token contract cannot assess who you gave it to.
 - **A collectible is the same shape**, with a URI that the standard permits to change, pointing at something the chain never held.
