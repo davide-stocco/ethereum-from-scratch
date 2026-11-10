@@ -1374,6 +1374,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#where-a-log-actually-sits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where a log actually sits
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2436,6 +2447,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#where-a-log-actually-sits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where a log actually sits
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2543,7 +2565,8 @@ contract's, not even its own.</p>
 <h2 id="why-the-rule-exists">Why the rule exists</h2>
 <p>Work backwards from what reading logs would require.</p>
 <p>If a contract's behaviour could depend on a log, then <strong>every node would have to keep every log forever</strong> — because any call might consult one, and a node that had discarded old logs could no longer compute the same answer as a node that hadn't. Logs would become part of the state in all but name: permanent, universally replicated, and necessary for execution.</p>
-<p>That is precisely the cost the design refuses. Keeping logs <em>outside</em> execution means a node needs <strong>none of them</strong> in order to validate a block. It can store them, serve them, prune them, or never keep them at all, and its ability to check the chain is unaffected.</p>
+<p>That is precisely the cost the design refuses. Keeping logs <strong>outside execution</strong> means a node needs <strong>none of them</strong> in order to validate a block. It can store them, serve them, prune them, or never keep them at all, and its ability to check the chain is unaffected.</p>
+<p><strong>Outside execution is not outside the chain.</strong> A log is still committed to, permanently, in a way nobody can alter afterwards — the next section says exactly where. What it is outside of is the set of things a node must <em>have</em> in order to check that the chain is correct. Those are different questions, and conflating them is the easiest mistake to make here.</p>
 <p>Which is why <a href="../../nodes/what-a-node-is/">pruning</a> is possible, and why the three sizes of node on the <a href="../../accounts/state/">state</a> page differ in history without differing in what they can verify. <strong>Logs are on the discardable side of that line, and a contract being able to read them would have moved them.</strong></p>
 <h2 id="event-or-log">Event or log?</h2>
 <p>The two words are used interchangeably and mean different things, one level apart. Worth taking slowly, because the difference is the same one the <a href="../what-the-code-is/">previous page</a> was about.</p>
@@ -2582,10 +2605,20 @@ contract's, not even its own.</p>
 <tr>
 <td><strong>Log</strong></td>
 <td>the bytes that result</td>
-<td>in a block, on every node that kept it</td>
+<td>in a receipt, fingerprinted by the block header</td>
 </tr>
 </tbody>
 </table>
+<h3 id="where-a-log-actually-sits">Where a log actually sits</h3>
+<p>"In a block" is loose enough to mislead, and it is worth being exact, because it is the answer to an obvious objection: <em>if a node can throw logs away, in what sense are they on the chain at all?</em></p>
+<p>A log is not in the block body. The body holds the transactions. A log is produced by <em>running</em> one of them, and it is written into that transaction's <strong><a href="../../glossary/#receipt">receipt</a></strong> — the record of what the transaction did: gas used, logs emitted, succeeded or failed.</p>
+<p>The block header then carries <strong>a fingerprint of all that block's receipts</strong>, in the same way and for the same reason it carries <a href="../../accounts/state/">one of the state</a>. So:</p>
+<ul>
+<li><strong>The commitment is permanent.</strong> Once the block exists, what its logs were is fixed. Nobody can add one, remove one, or alter one afterwards, because any change would contradict the fingerprint in the header.</li>
+<li><strong>The bytes are optional.</strong> A node may keep the receipts, or discard them and still validate everything.</li>
+<li><strong>Discarding is safe because of the commitment.</strong> A node that threw them away can ask any peer for them later and check what comes back against the fingerprint it already has. It does not have to trust the peer, which is why it was free to discard them in the first place.</li>
+</ul>
+<p>That is the whole reconciliation. <strong>Permanently committed, optionally stored</strong> — and neither half contradicts the other. Nothing about a log is off-chain. What is off-chain is the declaration that tells you what its bytes mean.</p>
 <p>The protocol has never heard of events, in precisely the way it has never heard of <a href="../../glossary/#solidity">Solidity</a> or of functions. <strong>A log is bytes with meaning attached by convention</strong> — the same arrangement as the <a href="../smart-contracts/">ABI</a>, and as <a href="../../encoding/rlp/">RLP</a>, where position carries the meaning and nothing in the encoding says what the positions are for.</p>
 <h2 id="why-they-are-cheap">Why they are cheap</h2>
 <p>Because nothing has to be able to find them later.</p>
@@ -2640,6 +2673,7 @@ merely consistent with presence.</strong></p>
 <li>The reason: if execution could depend on logs, <strong>every node would have to keep every log forever.</strong> Keeping them outside execution means a node needs none of them to validate a block, which is what makes pruning possible.</li>
 <li>An <strong>event</strong> is a declaration in source code — a schema naming the fields and marking which are searchable. A <strong>log</strong> is the bytes that result. The protocol has never heard of events.</li>
 <li>The declaration decides the layout: <strong>topic zero is the hash of the event's name and argument types</strong>, indexed fields become the remaining topics, and the rest goes in the data.</li>
+<li><strong>A log is permanently committed but optionally stored.</strong> It sits in the transaction's receipt, and the block header fingerprints the receipts — so nobody can alter a log, and no node is obliged to keep one. Outside execution is not outside the chain.</li>
 <li><strong>The field names never reach the log.</strong> Reading one as anything but blobs requires the declaration, which is off-chain source — the previous page's problem exactly.</li>
 <li>Logs are <strong>cheap because they commit nobody to anything.</strong> Storage is dear because it obliges every node to hold a value retrievably, forever. <strong>Cost follows structure.</strong></li>
 <li>So: if only software outside Ethereum will need a value, <strong>emit it rather than storing it.</strong></li>
